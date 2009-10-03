@@ -1,0 +1,74 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * This is an example of how to implement XML-RPC callbacks by implementing a
+ * validation suite.
+ *
+ * Information on the test in this suite can be found at:
+ * http://www.xmlrpc.com/validator1Docs
+ */
+
+/**
+ * Implementation of hook_xmlrpc().
+ *
+ * This function provides Drupal with an array to map XML-RPC callbacks to the
+ * functions implemented by this module.
+ */
+function xmlrpc_example_xmlrpc() {
+  return (array(
+    'validator1.arrayOfStructsTest' => 'xmlrpc_example_arrayOfStructsTest',
+    'validator1.countTheEntities' => 'xmlrpc_example_countTheEntities',
+    'validator1.easyStructTest' => 'xmlrpc_example_easyStructTest',
+    'validator1.echoStructTest' => 'xmlrpc_example_echoStructTest',
+    'validator1.manyTypesTest' => 'xmlrpc_example_manyTypesTest',
+    'validator1.moderateSizeArrayCheck' => 'xmlrpc_example_moderateSizeArrayCheck',
+    'validator1.nestedStructTest' => 'xmlrpc_example_nestedStructTest',
+    'validator1.simpleStructReturnTest' => 'xmlrpc_example_simpleStructReturnTest'
+  ));
+}
+
+function xmlrpc_example_arrayOfStructsTest($array) {
+  $sum = 0;
+  foreach ($array as $struct) {
+    $sum += $struct['curly'];
+  }
+  return $sum;
+}
+
+function xmlrpc_example_countTheEntities($string) {
+  return array(
+    'ctLeftAngleBrackets' => substr_count($string, '<'),
+    'ctRightAngleBrackets' => substr_count($string, '>'),
+    'ctAmpersands' => substr_count($string, '&'),
+    'ctApostrophes' => substr_count($string, "'"),
+    'ctQuotes' => substr_count($string, '"'),
+    );
+}
+
+function xmlrpc_example_easyStructTest($array) {
+  return $array["curly"] + $array["moe"] + $array["larry"];
+}
+
+function xmlrpc_example_echoStructTest($array) {
+  return $array;
+}
+
+function xmlrpc_example_manyTypesTest($args) {
+  $timestamp = mktime($args[4]->hour, $args[4]->minute, $args[4]->second, $args[4]->month, $args[4]->day, $args[4]->year);
+  return array($args[0], $args[1], $args[2], $args[3], xmlrpc_date($timestamp), xmlrpc_base64($args[5]));
+}
+
+function xmlrpc_example_moderateSizeArrayCheck($array) {
+  return array_shift($array) . array_pop($array);
+}
+
+function xmlrpc_example_nestedStructTest($array) {
+  return $array["2000"]["04"]["01"]["larry"] + $array["2000"]["04"]["01"]["moe"] + $array["2000"]["04"]["01"]["curly"];
+}
+
+function xmlrpc_example_simpleStructReturnTest($number) {
+  return array("times10" => ($number*10), "times100" => ($number*100), "times1000" => ($number*1000));
+}
+

@@ -1,0 +1,158 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * This is an example outlining how a module can be used to extend existing
+ * content types.
+ *
+ * We will add the ability for each node to have a "rating," which will be a
+ * number from one to five.
+ */
+
+/**
+ * Implementation of hook_form_alter().
+ *
+ * By implementing this hook, we're able to modify any form. We'll only make
+ * changes to two types: a node's content type configuration and edit forms.
+ *
+ * We need to have a way for administrators to indicate which content types
+ * should have our rating field added. This is done by inserting a checkbox in
+ * the node's content type configuration page.
+ */
+function nodeapi_example_form_alter(&$form, $form_state, $form_id) {
+  if ($form_id == 'node_type_form' && isset($form['identity']['type'])) {
+    // Alter the node type's configuration form to add our setting. We don't
+    // need to worry about saving this value back to the variable, the form
+    // we're altering will do it for us.
+    $form['workflow']['nodeapi_example'] = array(
+      '#type' => 'radios',
+      '#title' => t('NodeAPI Example Rating'),
+      '#default_value' => variable_get('nodeapi_example_'. $form['#node_type']->type, 0),
+      '#options' => array(0 => t('Disabled'), 1 => t('Enabled')),
+      '#description' => t('Should this node have a rating attached to it?'),
+    );
+  }
+  // If the type and node field are set this may be a node edit form.
+  elseif (isset($form['type']) && isset($form['#node']) && $form['type']['#value'] .'_node_form' == $form_id) {
+    // If the rating is enabled for this node type, we insert our control
+    // into the form.
+    $node = $form['#node'];
+    if (variable_get('nodeapi_example_'. $form['type']['#value'], 0)) {
+      $form['nodeapi_example_rating'] = array(
+        '#type' => 'select',
+        '#title' => t('Rating'),
+        '#default_value' => isset($node->nodeapi_example_rating) ? $node->nodeapi_example_rating : '',
+        '#options' => array(0 => t('Unrated'), 1, 2, 3, 4, 5),
+        '#required' => TRUE,
+        '#weight' => 0,
+      );
+    }
+  }
+}
+
+/**
+ * Implementation of hook_nodeapi().
+ *
+ * We will implement several node API operations here. This hook allows us to
+ * act on all major node operations, so we can manage our additional data
+ * appropriately.
+ */
+function nodeapi_example_nodeapi(&$node, $op, $teaser, $page) {
+  switch ($op) {
+    // When the content editing form is submitted, we need to validate the input
+    // to make sure the user made a selection, since we are requiring the rating
+    // field. We have to check that the value has been set to avoid showing an
+    // error message when a new blank form is presented. Calling form_set_error()
+    // when the field is set but zero ensures not only that an error message is
+    // presented, but also that the user must correct the error before being able
+    // to submit the node.
+    case 'validate':
+      if (variable_get('nodeapi_example_'. $node->type, TRUE)) {
+        if (isset($node->nodeapi_example_rating) && !$node->nodeapi_example_rating) {
+          form_set_error('nodeapi_example_rating', t('You must rate this content.'));
+        }
+      }
+      break;
+
+    // Now we need to take care of loading one of the extended nodes from the
+    // database. An array containing our extra field needs to be returned.
+    case 'load':
+      $rating = db_result(db_query('SELECT rating FROM {nodeapi_example} WHERE nid = %d', $node->nid));
+      return array('nodeapi_example_rating' => $rating);
+      break;
+
+    // Insert is called after the node has been validated and saved to the
+    // database. It gives us a chance to create our own record in the database.
+    case 'insert':
+      db_query('INSERT INTO {nodeapi_example} (nid, rating) VALUES (%d, %d)', $node->nid, $node->nodeapi_example_rating);
+      break;
+
+    // Update is called when an existing node has been changed. Here, we use a
+    // DELETE then an INSERT rather than an UPDATE. The reason is that a node
+    // created before this module was installed won't already have a rating
+    // saved so there would be nothing to update.
+    case 'update':
+      db_query('DELETE FROM {nodeapi_example} WHERE nid = %d', $node->nid);
+      db_query('INSERT INTO {nodeapi_example} (nid, rating) VALUES (%d, %d)', $node->nid, $node->nodeapi_example_rating);
+      break;
+
+    // Delete is called whn the node is being deleted, it gives us a chance
+    // to delete the rating too.
+    case 'delete':
+      db_query('DELETE FROM {nodeapi_example} WHERE nid = %d', $node->nid);
+      break;
+
+    // Finally, we need to take care of displaying our rating when the node is
+    // viewed. This operation is called after the node has already been prepared
+    // into HTML and filtered as necessary, so we know we are dealing with an
+    // HTML teaser and body. We will inject our additional information at the front
+    // of the node copy.
+    //
+    // Using nodeapi('view') is more appropriate than using a filter here, because
+    // filters transform user-supplied content, whereas we are extending it with
+    // additional information.
+    case 'view':
+      $node->content['nodeapi_example'] = array(
+        '#value' => theme('nodeapi_example_rating', $node->nodeapi_example_rating),
+        '#weight' => -1,
+      );
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_theme().
+ *
+ * This lets us tell Drupal about our theme functions and their arguments.
+ */
+function nodeapi_example_theme() {
+  return array(
+    'nodeapi_example_rating' => array(
+      'arguments' => array('rating'),
+    ),
+  );
+}
+
+/**
+ * A custom theme function.
+ *
+ * By using this function to format our rating, themes can override this presentation
+ * if they wish; for example, they could provide a star graphic for the rating. We
+ * also wrap the default presentation in a CSS class that is prefixed by the module
+ * name. This way, style sheets can modify the output without requiring theme code.
+ */
+function theme_nodeapi_example_rating($rating) {
+  $options = array(
+    0 => t('Unrated'),
+    1 => t('Poor'),
+    2 => t('Needs improvement'),
+    3 => t('Acceptable'),
+    4 => t('Good'),
+    5 => t('Excellent'));
+  $output = '<div class="nodeapi_example_rating">';
+  $output .= t('Rating: %rating', array('%rating' => $options[(int) $rating]));
+  $output .= '</div>';
+  return $output;
+}
+

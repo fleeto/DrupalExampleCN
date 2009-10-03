@@ -1,0 +1,5 @@
+; $Id$
+name = XMLRPC Example
+description = This is an example of how to implement XML-RPC callbacks by implementing a validation suite.
+package = Example modules
+core = 6.x

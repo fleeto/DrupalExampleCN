@@ -1,0 +1,140 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * This is an example outlining how a module can be used to define a filter
+ * to be run on user-submitted content before it is output to the browser.
+ *
+ * To show all the capabilities of the filter system, we will define two filters
+ * in this module. One will substitute the string "foo" with an administratively-
+ * defined replacement string. The other will find a custom XML tag, <time />, and
+ * replace it by the current time.
+ */
+
+/**
+ * Implementation of hook_filter_tips().
+ *
+ * This hook allows filters to provide help text to users during the content
+ * editing process. Short tips are provided on the content editing screen, while
+ * long tips are provided on a separate linked page. Short tips are optional,
+ * but long tips are highly recommended.
+ */
+function filter_example_filter_tips($delta, $format, $long = FALSE) {
+  switch ($delta) {
+    case 0:
+      if ($long) {
+        return t('Every instance of "foo" in the input text will be replaced with "%replacement".', array('%replacement' => variable_get('filter_example_foo_' . $format, 'bar')));
+      }
+      break;
+
+    case 1:
+      if ($long) {
+        return t('Every instance of the special &lt;time /&gt; tag will be replaced with the current date and time in the user\'s specified time zone.');
+      }
+      else {
+        return t('Use &lt;time /&gt; to display the current date/time.');
+      }
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_filter().
+ *
+ * The bulk of filtering work is done here. This hook is quite complicated, so
+ * we'll discuss each operation it defines.
+ */
+function filter_example_filter($op, $delta = 0, $format = -1, $text = '') {
+  // The "list" operation provides the module an opportunity to declare both how
+  // many filters it defines and a human-readable name for each filter. Note that
+  // the returned name should be passed through t() for translation.
+  if ($op == 'list') {
+    return array(
+      0 => t('Substitute "foo"'),
+      1 => t('Current time'));
+  }
+
+  // All operations besides "list" provide a $delta argument so we know which
+  // filter they refer to. We'll switch on that argument now so that we can
+  // discuss each filter in turn.
+  switch ($delta) {
+
+    // First we define the simple string substitution filter.
+    case 0:
+
+      switch ($op) {
+        // This description is shown in the administrative interface, unlike the
+        // filter tips which are shown in the content editing interface.
+        case 'description':
+          return t('Substitutes a custom string for the string "foo" in the text.');
+
+        // We don't need the "prepare" operation for this filter, but it's required
+        // to at least return the input text as-is.
+        case 'prepare':
+          return $text;
+
+        // The actual filtering is performed here. The supplied text should be
+        // returned, once any necessary substitutions have taken place.
+        case 'process':
+          return str_replace('foo', variable_get("filter_example_foo_$format", 'bar'), $text);
+
+        // Since we allow the administrator to define the string that gets
+        // substituted when "foo" is encountered, we need to provide an
+        // interface for this customization. Note that the value of $format
+        // needs to be provided as part of the form name, so that different
+        // customization can be done for this filter in each of the different
+        // input formats that may use it.
+        case 'settings':
+          $form['filter_example'] = array(
+            '#type' => 'fieldset',
+            '#title' => t('Foo filter'),
+            '#collapsible' => TRUE,
+            '#collapsed' => TRUE,
+          );
+          $form['filter_example']["filter_example_foo_$format"] = array(
+            '#type' => 'textfield',
+            '#title' => t('Substitution string'),
+            '#default_value' => variable_get("filter_example_foo_$format", 'bar'),
+            '#description' => t('The string to substitute for "foo" everywhere in the text.')
+          );
+          return $form;
+      }
+      break;
+
+    // Next is our "time tag" filter.
+    case 1:
+
+      switch ($op) {
+        // This description is shown in the administrative interface, unlike the
+        // filter tips which are shown in the content editing interface.
+        case 'description':
+          return t('Inserts the current time in the place of a &lt;time /&gt; tags.');
+
+        // Since this filter will return a different result on each page load, we
+        // need to return TRUE for "no cache" to ensure that the filter is run
+        // every time the text is requested.
+        case 'no cache':
+          return TRUE;
+
+        // This filter is a little trickier to implement than the previous one.
+        // Since the input involves special HTML characters (< and >) we have to
+        // run the filter before HTML is escaped/stripped by other filters. But
+        // we want to use HTML in our result as well, and so if we run this filter
+        // first our replacement string could be escaped or stripped. The solution
+        // is to use the "prepare" operation to escape the special characters, and
+        // to later replace our escaped version in the "process" step.
+        //
+        // We'll use the bytes 0xFE and 0xFF to replace < and > here. These bytes
+        // are not valid in UTF-8 data and thus unlikely to cause problems.
+        case 'prepare':
+          return preg_replace('!<time ?/>!', '\xFEtime /\xFF', $text);
+
+        // Now, in the "process" step, we'll search for our escaped time tags and
+        // to the real filtering.
+        case 'process':
+          return str_replace('\xFEtime /\xFF', '<em>' . format_date(REQUEST_TIME) . '</em>', $text);
+      }
+      break;
+  }
+}

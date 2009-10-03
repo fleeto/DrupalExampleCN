@@ -1,0 +1,154 @@
+<?php
+// $Id$
+
+/**
+ * Implementation of hook_help().
+ */
+function trigger_example_help($path, $arg) {
+  switch ($path) {
+    case 'trigger_example':
+      return '<p>'. t('Use this page to call hook_trigger_example() with the ping and pong operations. You can create actions to display a message or email the user on the <a href="@actions-url">Actions settings page</a> and assign these actions with the ping and pong events on the <a href="@triggers-url">Triggers settings page</a>.', array('@actions-url' => url('admin/settings/actions'), '@triggers-url' => url('admin/build/trigger/trigger_example'))) .'</p>';
+    case 'admin/build/trigger/trigger_example':
+      $explanation = '<p>'. t('Triggers are system events, such as when new content is added or when a user logs in. Trigger module combines these triggers with actions (functional tasks), such as unpublishing content or e-mailing an administrator. The <a href="@url">Actions settings page</a> contains a list of existing actions and provides the ability to create and configure additional actions.', array('@url' => url('admin/settings/actions'))) .'</p>';
+      return $explanation .'<p>'. t('Below you can assign actions to run when certain comment-related triggers happen. For example, you could promote a post to the front page when a comment is added.') .'</p>';
+  }
+}
+
+/**
+ * Implementation of hook_menu().
+ *
+ * Provide a form that can be used to fire the module's triggers.
+ */
+function trigger_example_menu() {
+  $items['trigger_example'] = array(
+    'title' => t('Trigger Example'),
+    'description' => t('Provides a form to test the triggers.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('trigger_example_form'),
+    'access callback' => TRUE,
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_hook_info().
+ *
+ * This hook is used to tell Drupal which hooks we provide that can be used
+ * as triggers for actions. We provide a text description of when each of the
+ * operations occurs.
+ */
+function trigger_example_hook_info() {
+  return array(
+    'trigger_example' => array(
+      // One important thing to note here. If you want to use the trigger
+      // module's default menu and forms handlers your hook needs to have the
+      // same name as your module. If you've got the "foo" module with a hook
+      // "hook_fooapi" then you're going to have to implement hook_forms and
+      // map the form ids back to the trigger_assign_form callback.
+      'trigger_example' => array(
+        'ping' => array(
+          'runs when' => t('A ping happens'),
+        ),
+        'pong' => array(
+          'runs when' => t('A pong happens'),
+        ),
+      ),
+    ),
+  );
+}
+
+/**
+ * Function to generate ping events and invoke hook_trigger_example().
+ */
+function trigger_example_ping() {
+  $count = variable_get('trigger_example_pings', 0) + 1;
+
+  // Invoke hook_trigger_example() with the ping operation.
+  module_invoke_all('trigger_example', 'ping', $count);
+
+  variable_set('trigger_example_pings', $count);
+}
+
+/**
+ * Function to generate pong events and invoke hook_trigger_example().
+ */
+function trigger_example_pong() {
+  $count = variable_get('trigger_example_pings', 0);
+
+  // Invoke hook_trigger_example() with the pong operation.
+  module_invoke_all('trigger_example', 'pong', $count);
+
+  variable_set('trigger_example_pings', max(0, $count - 1));
+}
+
+/**
+ * Implementation of hook_trigger_example().
+ */
+function trigger_example_trigger_example($op, $count) {
+  // Our module is dependent on the trigger module but other modules that this
+  // code get's copied into might not so it's a good idea to check first.
+  if (!module_exists('trigger')) {
+    break;
+  }
+
+  // Find any the ids of any actions associated with this hook/operation pair.
+  if ($aids = _trigger_get_hook_aids('trigger_example', $op)) {
+    // Setup the context for our trigger.
+    $context = array(
+      'hook' => 'trigger_example',
+      'op' => $op,
+      'count' => $count
+    );
+
+    // Since we're not operating on an object we need to create a dummy.
+    $dummy = new stdClass();
+    foreach ($aids as $aid => $action_info) {
+      actions_do($aid, $dummy, $context);
+    }
+  }
+}
+
+/**
+* Implementation of hook_action_info_alter().
+*
+* None of the built-in actions will be enabled for our hook by default. We
+* need to implement hook_action_info_alter() so that we can enable a couple.
+*/
+function trigger_example_action_info_alter(&$info) {
+  if (isset($info['system_message_action']['hooks'])) {
+    $info['system_message_action']['hooks']['trigger_example'] = array('ping', 'pong');
+  }
+  if (isset($info['system_send_email_action']['hooks'])) {
+    $info['system_send_email_action']['hooks']['trigger_example'] = array('ping', 'pong');
+  }
+}
+
+/**
+ * A form to help fire our triggers.
+ */
+function trigger_example_form(&$form_state) {
+  $form['help'] = array(
+    '#type' => 'item',
+    '#value' => format_plural(variable_get('trigger_example_pings', 0), 'There is only @count ping out there.', 'There are @count pings out there. Come on pong them back.'),
+  );
+  $form['ping'] = array(
+    '#type' => 'submit',
+    '#value' => t('Ping'),
+  );
+  if (variable_get('trigger_example_pings', 0)) {
+    $form['pong'] = array(
+      '#type' => 'submit',
+      '#value' => t('Pong'),
+    );
+  }
+  return $form;
+}
+
+function trigger_example_form_submit($form, &$form_state) {
+  if ($form_state['values']['op'] == t('Ping')) {
+    trigger_example_ping();
+  }
+  else {
+    trigger_example_pong();
+  }
+}

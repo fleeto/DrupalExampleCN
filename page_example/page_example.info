@@ -1,0 +1,5 @@
+; $Id$
+name = Page Example
+description = An example module showing how to define a page to be displayed to the user at a given URL.
+package = Example modules
+core = 6.x
