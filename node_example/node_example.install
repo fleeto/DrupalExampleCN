@@ -1,0 +1,33 @@
+<?php
+// $Id$
+
+/**
+ * Implementation of hook_install().
+ */
+function node_example_install() {
+  drupal_install_schema('node_example');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function node_example_uninstall() {
+  drupal_uninstall_schema('node_example');
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function node_example_schema() {
+  $schema['node_example'] = array(
+    'fields' => array(
+      'vid'      => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'nid'      => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+      'color'    => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''),
+      'quantity' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
+    ),
+    'primary key' => array('vid', 'nid'),
+  );
+
+  return $schema;
+}
