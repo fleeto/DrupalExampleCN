@@ -2,4 +2,4 @@
 name = Filter Example
 description = An example module showing how to define a custom filter.
 package = Example modules
-core = 6.x
+core = 7.x

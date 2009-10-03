@@ -2,4 +2,4 @@
 name = Node Example
 description = An example module showing how define a custom content type.
 package = Example modules
-core = 6.x
+core = 7.x
