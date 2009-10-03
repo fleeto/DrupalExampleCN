@@ -1,0 +1,262 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * This is an example outlining how a module can define batches.
+ *
+ * Batches allow heavy processing to be spread out over several page
+ * requests, thus ensuring that the processing does not get interrupted
+ * because of a PHP timeout, while allowing the user to receive feedback
+ * on the progress of the ongoing operations.
+ */
+
+/**
+ * 2 'harmless' batches are defined :
+ * batch 1 : Load 100 times the node with the lowest nid
+ * batch 2 : Load all nodes, 20 times
+ *           (uses a progressive op : load nodes by groups of 5)
+ *
+ * The module defines the following pages :
+ * /batch_example/example_1 :
+ *   Simple form, lets you pick the batch that should be executed
+ * /batch_example/example_2 :
+ *   Multistep form : perform batch 1 and batch 2 as separate submission steps.
+ * /batch_example/example_3
+ *   No form - start a batch simply by clicking a link
+ *   (not really user friendly, should probably be avoided)
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function batch_example_menu() {
+  $items = array();
+  $items['batch_example'] = array(
+    'title' => 'Batch example',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('batch_example_simple_form'),
+    'access callback' => TRUE,
+  );
+  $items['batch_example/example_1'] = array(
+    'title' => 'Simple form',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 0,
+  );
+  $items['batch_example/example_2'] = array(
+    'title' => 'Multistep form',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('batch_example_multistep_form'),
+    'access callback' => TRUE,
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1,
+  );
+  $items['batch_example/example_3'] = array(
+    'title' => 'No form',
+    'page callback' => 'batch_example_page',
+    'access callback' => TRUE,
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2,
+  );
+  return $items;
+}
+
+/**
+ * Test 1 :
+ * Simple form
+ */
+function batch_example_simple_form() {
+  $form['batch'] = array(
+    '#type' => 'select',
+    '#title' => 'Choose batch',
+    '#options' => array(
+      'batch_1' => 'batch 1 - load a node 100 times',
+      'batch_2' => 'batch 2 - load all nodes, 20 times')
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Go',
+  );
+
+  return $form;
+}
+
+function batch_example_simple_form_submit($form, &$form_state) {
+  $values =& $form_state['values'];
+
+  $function = 'batch_example_' . $values['batch'];
+  $batch = $function();
+  batch_set($batch);
+
+  // Redirection takes place as usual.
+  $form_state['redirect'] = 'batch_example/example_2';
+}
+
+/**
+ * Multistep form
+ */
+function batch_example_multistep_form($form_state = NULL) {
+  $step = isset($form_state['storage']['step']) ? $form_state['storage']['step'] : 1;
+
+  $form['step_display'] = array(
+    '#type' => 'item',
+    '#value' => 'step ' . $step,
+  );
+
+  if ($step < 3) {
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => 'Go',
+    );
+  }
+
+  return $form;
+}
+
+function batch_example_multistep_form_submit($form, &$form_state) {
+  $step = isset($form_state['storage']['step']) ? $form_state['storage']['step'] : 1;
+
+  switch ($step) {
+    case 1:
+      drupal_set_message('step 1 submitted');
+      batch_set(batch_example_batch_1());
+      break;
+    case 2:
+      drupal_set_message('step 2 submitted');
+      batch_set(batch_example_batch_2());
+      // this does not seem to work ?
+      $form_state['redirect'] = 'batch_example/example_3';
+      break;
+  }
+
+  $form_state['storage']['step'] = $step + 1;
+}
+
+function batch_example_page() {
+  batch_set(batch_example_batch_1());
+
+  // We're not inside a form submission workflow, so we have to manually
+  // trigger the batch processing - this issues a drupal_goto and thus ends
+  // current request.
+  // We also specify here where we want to redirect after batch processing.
+  batch_process('batch_example/example_1');
+}
+
+/**
+ * @defgroup batch_definitions Example batch definitions
+ * @{
+ * Definitions of the batches used in this module.
+ */
+
+/**
+ * Batch 1 : Load 100 times the node with the lowest nid
+ */
+function batch_example_batch_1() {
+  $nid = db_result(db_query_range("SELECT nid FROM {node} ORDER BY nid ASC", 0, 1));
+
+  $operations = array();
+  for ($i = 0; $i<100; $i++) {
+    $operations[] = array('batch_example_op_1', array($nid));
+  }
+  $batch = array(
+    'operations' => $operations,
+    'finished' => 'batch_example_finished',
+  );
+  return $batch;
+}
+
+/**
+ * Batch operation for batch 1 : lode a node...
+ */
+function batch_example_op_1($nid, &$context) {
+  $node = node_load($nid, NULL, TRUE);
+
+  // Store some result for post-processing in the finished callback.
+  $context['results'][] = $node->nid . ' : ' . $node->title;
+
+  // Optional message displayed under the progressbar.
+  $context['message'] = 'Loading ' . $node->title;
+}
+
+/**
+ * Batch 2 : load all nodes 5 by 5, 20 times (Multipart operation)
+ */
+function batch_example_batch_2() {
+  $operations = array();
+  for ($i = 0; $i<20; $i++) {
+    $operations[] = array('batch_example_op_2', array());
+  }
+  $batch = array(
+    'operations' => $operations,
+    'finished' => 'batch_example_finished',
+    // We can define custom messages instead of the default ones.
+    'title' => t('Processing batch 2'),
+    'init_message' => t('Batch 2 is starting.'),
+    'progress_message' => t('Processed @current out of @total.'),
+    'error_message' => t('Batch 2 has encountered an error.'),
+  );
+  return $batch;
+}
+
+/**
+ * Batch operation for batch 2 : load all nodes, 5 by five
+ * This is a multipart operation, using the
+ */
+function batch_example_op_2(&$context) {
+  // Use the $context['sandbox'] at your convenience to store the
+  // information needed to track progression between successive calls.
+  if (!isset($context['sandbox']['progress'])) {
+    $context['sandbox']['progress'] = 0;
+    $context['sandbox']['current_node'] = 0;
+    $context['sandbox']['max'] = db_result(db_query('SELECT COUNT(DISTINCT nid) FROM {node}'));
+  }
+
+  // Process nodes by groups of 5 (arbitrary value).
+  // When a group of five is processed, the batch update engine determines
+  // whether it should continue processing in the same request or provide
+  // progress feedback to the user and wait for the next request.
+  $limit = 5;
+
+  // Retrieve the next group of nids.
+  $result = db_query_range("SELECT nid FROM {node} WHERE nid > %d ORDER BY nid ASC", $context['sandbox']['current_node'], 0, $limit);
+  while ($row = db_fetch_array($result)) {
+    // Here we actually perform our dummy 'processing' on the current node.
+    $node = node_load($row['nid'], NULL, TRUE);
+
+    // Store some result for post-processing in the finished callback.
+    $context['results'][] = $node->nid . ' : ' . $node->title;
+
+    // Update our progress information.
+    $context['sandbox']['progress']++;
+    $context['sandbox']['current_node'] = $node->nid;
+    $context['message'] = $node->title;
+  }
+
+  // Inform the batch engine that we are not finished,
+  // and provide an estimation of the completion level we reached.
+  if ($context['sandbox']['progress'] != $context['sandbox']['max']) {
+    $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['max'];
+  }
+}
+
+/**
+ * Batch 'finished' callback used by both batch 1 and batch 2
+ */
+function batch_example_finished($success, $results, $operations) {
+  if ($success) {
+    // Here we could do something meaningful with the results.
+    // We just display the number of nodes we processed...
+    $message = count($results) . ' processed.';
+  }
+  else {
+    // An error occurred.
+    // $operations contains the operations that remained unprocessed.
+    $error_operation = reset($operations);
+    $message = 'An error occurred while processing ' . $error_operation[0] . ' with arguments :' . print_r($error_operation[0], TRUE);
+  }
+  drupal_set_message($message);
+}
+
+/**
+ * @} End of "defgroup batch_definitions".
+ */

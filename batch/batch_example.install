@@ -1,0 +1,47 @@
+<?php
+// $Id$
+
+/*
+ * Example of multipart update function.
+ * The only difference with pre-Drupal 6 multipart updates is the existence
+ * of the $sandbox param, which provides a cleaner and safer way to store progression
+ * than the previous use of $_SESSION-sored custom values.
+ *
+ * This dummy 'udpate' function does nothing harmful, simply
+ * loads each node...
+ */
+function batch_test_update_1(&$sandbox) {
+  $ret = array();
+
+  // Use the sandbox at your convenience to store the information needed
+  // to track progression between successive calls to the function.
+  if (!isset($sandbox['progress'])) {
+    $sandbox['progress'] = 0;
+    $sandbox['curr_node'] = 0;
+    $sandbox['max'] = db_result(db_query('SELECT COUNT(DISTINCT nid) FROM {node}'));
+  }
+
+  // Process nodes by groups of 5 (arbitrary value).
+  // When a group of five is processed, the batch update engine determines
+  // whether it should continue processing in the same request or provide
+  // progress feedback to the user and wait for the next request.
+  $limit = 5;
+
+  // Retrieve the next group of nids.
+  $result = db_query_range("SELECT nid FROM {node} WHERE nid > %d ORDER BY nid ASC", $sandbox['curr_node'], 0, $limit);
+  while ($row = db_fetch_array($result)) {
+    // Here we actually perform our dummy 'update' on the current node.
+    $ret[] = update_sql('SELECT * FROM {node} WHERE nid = ' . $row['nid']);
+
+    // Update our progress information.
+    $sandbox['progress']++;
+    $sandbox['curr_node'] = $row['nid'];
+  }
+
+  // Inform the batch update engine that we are not finished,
+  // and provide an estimation of the completion level we reached.
+  if ($sandbox['progress'] != $sandbox['max']) {
+    $ret['#finished'] = $sandbox['progress'] / $sandbox['max'];
+  }
+  return $ret;
+}
