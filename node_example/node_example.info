@@ -1,5 +1,8 @@
 ; $Id$
-name = Node Example
+name = Node example
 description = An example module showing how define a custom content type.
 package = Example modules
+version = VERSION
 core = 7.x
+files[] = node_example.module
+files[] = node_example.install
