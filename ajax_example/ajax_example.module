@@ -1,0 +1,206 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Demonstrate use of #ajax in forms.
+ *
+*/
+
+/**
+ * Implementation of hook_menu().
+ */
+function ajax_example_menu() {
+  $items = array();
+
+  // Automatically generate checkboxes
+  $items['ajax_example/autocheckboxes'] = array(
+    'title' => 'AJAX Example: generate checkboxes',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_autocheckboxes'),
+    'access callback' => TRUE,
+  );
+
+    // Automatically generate textfields
+  $items['ajax_example/autotextfields'] = array(
+    'title' => 'AJAX Example: generate textfields',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_autotextfields'),
+    'access callback' => TRUE,
+  );
+
+  $items['ajax_example/submit_driven_ajax'] = array(
+    'title' => 'AJAX Example: submit-driven AJAX',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('submit_driven_ajax'),
+    'access callback' => TRUE,
+  );
+
+  return $items;
+}
+
+
+
+/**
+ * A Self-configure a form based on a select element.
+ */
+function ajax_example_autocheckboxes($form, &$form_state) {
+
+  $default = !empty($form_state['values']['howmany']) ? $form_state['values']['howmany'] : 1;
+
+  $form['howmany'] = array(
+    '#title' => t('How many checkboxes do you want?'),
+    '#type' => 'select',
+    '#options' => array(1 => 1, 2 => 2, 3 => 3, 4 => 4),
+    '#default_value' => $default,
+    '#ajax' => array(
+      'callback' => 'ajax_example_autocheckboxes_callback',
+      'wrapper' => 'checkboxes',
+      'method' => 'replace',
+      'effect' => 'fade',
+    ),
+
+  );
+
+
+  $form['checkboxes'] = array(
+    '#title' => t("Generated Checkboxes"),
+    '#prefix' => '<div id="checkboxes">',
+    '#suffix' => '</div>',
+    '#type' => 'fieldset',
+    '#description' => t('This is where we get automatically generated checkboxes'),
+  );
+
+  $num_checkboxes = !empty($form_state['values']['howmany']) ? $form_state['values']['howmany'] : 1;
+  for ($i=1; $i<=$num_checkboxes; $i++) {
+    $form['checkboxes']["checkbox$i"] = array(
+      '#type' => 'checkbox',
+      '#title' => "Checkbox $i",
+    );
+  }
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
+
+  return $form;
+}
+
+/**
+ * Callback element needs only select the portion of the form to be updated.
+ * Since #ajax['callback'] return can be HTML or a renderable array (or an
+ * array of commands), we can just return a piece of the form.
+ * @param $form
+ * @param $form_state
+ * @return unknown_type
+ */
+function ajax_example_autocheckboxes_callback($form, $form_state) {
+  return $form['checkboxes'];
+}
+
+/**
+ * A Show/hide textfields based on checkbox clicks.
+ */
+function ajax_example_autotextfields($form, &$form_state) {
+
+  $form['ask_first_name'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Ask me my first name'),
+    '#ajax' => array(
+      'callback' => 'ajax_example_autotextfields_callback',
+      'wrapper' => 'textfields',
+      'effect' => 'fade',
+    )
+  );
+  $form['ask_last_name'] = array(
+   '#type' => 'checkbox',
+   '#title' => t('Ask me my last name'),
+    '#ajax' => array(
+      'callback' => 'ajax_example_autotextfields_callback',
+      'wrapper' => 'textfields',
+      'effect' => 'fade',
+
+    ),
+  );
+
+  $form['textfields'] = array(
+    '#title' => t("Generated text fields for first and last name"),
+    '#prefix' => '<div id="textfields">',
+    '#suffix' => '</div>',
+    '#type' => 'fieldset',
+    '#description' => t('This is where we put automatically generated textfields'),
+  );
+
+   if (!empty($form_state['values']['ask_first_name']) && $form_state['values']['ask_first_name']) {
+    $form['textfields']['first_name'] = array(
+      '#type' => 'textfield',
+      '#title' => t('First Name'),
+    );
+  }
+  if (!empty($form_state['values']['ask_last_name']) && $form_state['values']['ask_last_name']) {
+    $form['textfields']['last_name'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Last Name'),
+    );
+  }
+
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click Me'),
+  );
+
+
+  return $form;
+}
+
+
+/**
+ * Just select the piece of text we want to use as replacement text and return
+ * it as a renderable array.
+ * @param $form
+ * @param $form_state
+ * @return renderable array (the textfields element)
+ */
+function ajax_example_autotextfields_callback($form, $form_state) {
+  return $form['textfields'];
+}
+
+
+/**
+ * A Hello-world AJAX. Just swaps out a markup section on submit.
+ */
+function submit_driven_ajax($form, &$form_state) {
+  $form['box'] = array(
+    '#type' => 'markup',
+    '#prefix' => '<div id="box">',
+    '#suffix' => '</div>',
+    '#markup' => '<h1>Initial markup for box</h1>',
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#ajax' => array(
+      'callback' => 'ajax_example_submit_driven_callback',
+      'wrapper' => 'box',
+      'name' => 'submit1',
+    ),
+    '#value' => t('Submit'),
+  );
+
+  return $form;
+}
+
+/**
+ * Select the 'box' element, change the markup in it, and return it as a
+ * renderable array.
+ * @param $form
+ * @param $form_state
+ * @return unknown_type
+ */
+function ajax_example_submit_driven_callback($form, $form_state) {
+  $element = $form['box'];
+  $element['#markup'] = "Clicked submit ({$form_state['values']['op']}): " . date('c');
+  return $element;
+}
