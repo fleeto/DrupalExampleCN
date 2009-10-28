@@ -1,0 +1,69 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Test case for Testing the block example module.
+ *
+ * This file contains the test cases to check if module is performing as
+ * expected.
+ *
+ */
+class BlockExampleTestCase extends DrupalWebTestCase {
+  protected $web_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Block example functionality',
+      'description' => 'Test the configuration options and veiwing block created by this module.',
+      'group' => 'Block Example',
+    );
+  }
+
+  /**
+   * Enable modules and create user with specific permissions.
+   */
+  function setUp() {
+    parent::setUp('block_example');
+    // Create user.
+    $this->web_user = $this->drupalCreateUser(array('administer blocks'));
+  }
+
+  /**
+   * Login user, create an example node, and test blog functionality through the admin and user interfaces.
+   */
+  function testBlockExampleBasic() {
+    // Login the admin user.
+    $this->drupalLogin($this->web_user);
+
+    // Find the blocks in the settings page
+    $this->drupalGet('admin/structure/block');
+    $this->assertRaw(t('Example: configurable text string'), t('Block cofigurable-string found.'));
+    $this->assertRaw(t('Example: empty block'), t('Block empty-block found.'));
+
+    // Verify the default settings for block are processed.
+    $this->assertFieldByName('block_example_example_empty[region]', 'sidebar_first', t('Empty block is enabled in first sidebar successfully verified.') );
+    $this->assertFieldByName('block_example_example_configurable_text[region]', -1, t('Configurable text block is disabled in first sidebar successfully verified.') );
+
+    // Verify that blocks are not shown
+    $this->drupalGet('/node/3');
+    $this->assertNoRaw( t('Title of block #1'), t('Block configurable test not found.'));
+    $this->assertNoRaw( t('Title of block #2'), t('Block empty not found.'));
+
+    // Enable the Configurable text block and verify
+    $this->drupalPost('admin/structure/block', array('block_example_example_configurable_text[region]' => 'sidebar_first'), t('Save blocks'));
+    $this->assertFieldByName('block_example_example_configurable_text[region]', 'sidebar_first', t('Configurable text block is enabled in first sidebar successfully verified.') );
+
+    // Verify that blocks are there. Empty block will not be shown, becuase it is empty
+    $this->drupalGet('/');
+    $this->assertRaw( t('Title of block #1'), t('Block configurable text found.'));
+
+    // Change content of configurable text block
+    $string = $this->randomString();
+    $this->drupalPost('admin/structure/block/manage/block_example/example_configurable_text/configure', array('block_example_string' => $string), t('Save block'));
+
+    // Verify that new content is shown
+    $this->drupalGet('/');
+    $this->assertRaw( $string, t('Content of configurable text block successfully verified.'));
+  }
+}

@@ -1,8 +1,7 @@
 ; $Id$
-name = Block example
+name = Block Example
 description = An example outlining how a module can define blocks.
 package = Example modules
-version = VERSION
 core = 7.x
-dependencies[] = block
 files[] = block_example.module
+files[] = block_example.test
