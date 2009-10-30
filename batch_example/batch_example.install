@@ -1,6 +1,11 @@
 <?php
 // $Id$
 
+/**
+ * @file
+ * Install/Update/Uninstall functions for batch_example module
+ */
+
 /*
  * Example of multipart update function.
  * The only difference with pre-Drupal 6 multipart updates is the existence
@@ -18,7 +23,7 @@ function batch_test_update_1(&$sandbox) {
   if (!isset($sandbox['progress'])) {
     $sandbox['progress'] = 0;
     $sandbox['curr_node'] = 0;
-    $sandbox['max'] = db_result(db_query('SELECT COUNT(DISTINCT nid) FROM {node}'));
+    $sandbox['max'] = db_query('SELECT COUNT(DISTINCT nid) FROM {node}')->fetchField();
   }
 
   // Process nodes by groups of 5 (arbitrary value).
@@ -28,14 +33,20 @@ function batch_test_update_1(&$sandbox) {
   $limit = 5;
 
   // Retrieve the next group of nids.
-  $result = db_query_range("SELECT nid FROM {node} WHERE nid > %d ORDER BY nid ASC", $sandbox['curr_node'], 0, $limit);
-  while ($row = db_fetch_array($result)) {
+  $result = db_select('node', 'n')
+    ->fields('n', array('nid'))
+    ->orderBy('n.nid', 'ASC')
+    ->where('n.nid > :nid', array(':nid' => $context['sandbox']['current_node']))
+    ->extend('PagerDefault')
+    ->limit($limit)
+    ->execute();
+  foreach ($result as $row) {
     // Here we actually perform our dummy 'update' on the current node.
-    $ret[] = update_sql('SELECT * FROM {node} WHERE nid = ' . $row['nid']);
+    $node = db_query('SELECT nid FROM {node} WHERE nid = :nid', array(':nid' => $row->nid))->fetchField();
 
     // Update our progress information.
     $sandbox['progress']++;
-    $sandbox['curr_node'] = $row['nid'];
+    $sandbox['curr_node'] = $row->nid;
   }
 
   // Inform the batch update engine that we are not finished,
@@ -43,5 +54,6 @@ function batch_test_update_1(&$sandbox) {
   if ($sandbox['progress'] != $sandbox['max']) {
     $ret['#finished'] = $sandbox['progress'] / $sandbox['max'];
   }
-  return $ret;
+
+  return t('The update did what it was supposed to do.');
 }

@@ -6,58 +6,33 @@
  * This is an example outlining how a module can define batches.
  *
  * Batches allow heavy processing to be spread out over several page
- * requests, thus ensuring that the processing does not get interrupted
+m * requests, ensuring that the processing does not get interrupted
  * because of a PHP timeout, while allowing the user to receive feedback
- * on the progress of the ongoing operations.
+ * on the progress of the ongoing operations. It also can prevent out of memory
+ * situations.
  */
 
 /**
  * 2 'harmless' batches are defined :
- * batch 1 : Load 100 times the node with the lowest nid
+ * batch 1 : Load the node with the lowest nid 100 times.
  * batch 2 : Load all nodes, 20 times
  *           (uses a progressive op : load nodes by groups of 5)
  *
- * The module defines the following pages :
- * /batch_example/example_1 :
- *   Simple form, lets you pick the batch that should be executed
- * /batch_example/example_2 :
- *   Multistep form : perform batch 1 and batch 2 as separate submission steps.
- * /batch_example/example_3
- *   No form - start a batch simply by clicking a link
- *   (not really user friendly, should probably be avoided)
  */
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function batch_example_menu() {
   $items = array();
   $items['batch_example'] = array(
     'title' => 'Batch example',
+    'description' => t("Example of Drupal batch processing"),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('batch_example_simple_form'),
     'access callback' => TRUE,
   );
-  $items['batch_example/example_1'] = array(
-    'title' => 'Simple form',
-    'type' => MENU_DEFAULT_LOCAL_TASK,
-    'weight' => 0,
-  );
-  $items['batch_example/example_2'] = array(
-    'title' => 'Multistep form',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('batch_example_multistep_form'),
-    'access callback' => TRUE,
-    'type' => MENU_LOCAL_TASK,
-    'weight' => 1,
-  );
-  $items['batch_example/example_3'] = array(
-    'title' => 'No form',
-    'page callback' => 'batch_example_page',
-    'access callback' => TRUE,
-    'type' => MENU_LOCAL_TASK,
-    'weight' => 2,
-  );
+
   return $items;
 }
 
@@ -70,14 +45,22 @@ function batch_example_simple_form() {
     '#type' => 'select',
     '#title' => 'Choose batch',
     '#options' => array(
-      'batch_1' => 'batch 1 - load a node 100 times',
-      'batch_2' => 'batch 2 - load all nodes, 20 times')
+      'batch_1' => t('batch 1 - 1000 operations, each loading a single node'),
+      'batch_2' => t('batch 2 - 20 operations. each one loads all nodes 5 at a time'),
+    ),
   );
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => 'Go',
   );
 
+  // If no nodes, prevent submission.
+  // Find out if we have a node to work with. Otherwise it won't work.
+  $nid = batch_example_lowest_nid();
+  if (empty($nid)) {
+    drupal_set_message(t("You don't currently have any nodes, and this example requires a node to work with. As a result, this form is disabled."));
+    $form['submit']['#disabled'] = TRUE;
+  }
   return $form;
 }
 
@@ -87,60 +70,8 @@ function batch_example_simple_form_submit($form, &$form_state) {
   $function = 'batch_example_' . $values['batch'];
   $batch = $function();
   batch_set($batch);
-
-  // Redirection takes place as usual.
-  $form_state['redirect'] = 'batch_example/example_2';
 }
 
-/**
- * Multistep form
- */
-function batch_example_multistep_form($form_state = NULL) {
-  $step = isset($form_state['storage']['step']) ? $form_state['storage']['step'] : 1;
-
-  $form['step_display'] = array(
-    '#type' => 'item',
-    '#value' => 'step ' . $step,
-  );
-
-  if ($step < 3) {
-    $form['submit'] = array(
-      '#type' => 'submit',
-      '#value' => 'Go',
-    );
-  }
-
-  return $form;
-}
-
-function batch_example_multistep_form_submit($form, &$form_state) {
-  $step = isset($form_state['storage']['step']) ? $form_state['storage']['step'] : 1;
-
-  switch ($step) {
-    case 1:
-      drupal_set_message('step 1 submitted');
-      batch_set(batch_example_batch_1());
-      break;
-    case 2:
-      drupal_set_message('step 2 submitted');
-      batch_set(batch_example_batch_2());
-      // this does not seem to work ?
-      $form_state['redirect'] = 'batch_example/example_3';
-      break;
-  }
-
-  $form_state['storage']['step'] = $step + 1;
-}
-
-function batch_example_page() {
-  batch_set(batch_example_batch_1());
-
-  // We're not inside a form submission workflow, so we have to manually
-  // trigger the batch processing - this issues a drupal_goto and thus ends
-  // current request.
-  // We also specify here where we want to redirect after batch processing.
-  batch_process('batch_example/example_1');
-}
 
 /**
  * @defgroup batch_definitions Example batch definitions
@@ -149,14 +80,19 @@ function batch_example_page() {
  */
 
 /**
- * Batch 1 : Load 100 times the node with the lowest nid
+ * Batch 1 definition : Load the node with the lowest nid 1000 times.
+ * This creates an operations array defining what batch 1 should do, including
+ * what it should do when it's finished. In this case, each operation is the
+ * same and by chance even has the same $nid to operate on, but we could have
+ * a mix of different types of operations in the operations array.
  */
 function batch_example_batch_1() {
-  $nid = db_result(db_query_range("SELECT nid FROM {node} ORDER BY nid ASC", 0, 1));
+  $nid = batch_example_lowest_nid();
 
   $operations = array();
-  for ($i = 0; $i<100; $i++) {
-    $operations[] = array('batch_example_op_1', array($nid));
+  // Set up an operations array with 1000 elemements, each doing op 1.
+  for ($i = 0; $i<1000; $i++) {
+    $operations[] = array('batch_example_op_1', $nid);
   }
   $batch = array(
     'operations' => $operations,
@@ -166,23 +102,25 @@ function batch_example_batch_1() {
 }
 
 /**
- * Batch operation for batch 1 : lode a node...
+ * Batch operation for batch 1 : load a node.
+ * This is the function that is called on each operation in batch 1.
  */
 function batch_example_op_1($nid, &$context) {
   $node = node_load($nid, NULL, TRUE);
 
   // Store some result for post-processing in the finished callback.
-  $context['results'][] = $node->nid . ' : ' . $node->title;
+  $context['results'][] = $node->nid . ' : ' . $node->title[FIELD_LANGUAGE_NONE][0]['value'];
 
   // Optional message displayed under the progressbar.
-  $context['message'] = 'Loading ' . $node->title;
+  $context['message'] = 'Loading ' . $node->title[FIELD_LANGUAGE_NONE][0]['value'];
 }
 
 /**
- * Batch 2 : load all nodes 5 by 5, 20 times (Multipart operation)
+ * Batch 2 : Prepare a batch definition that will load all nodes 20 times.
  */
 function batch_example_batch_2() {
   $operations = array();
+  // 20 operations, each one loads all nodes.
   for ($i = 0; $i<20; $i++) {
     $operations[] = array('batch_example_op_2', array());
   }
@@ -200,7 +138,8 @@ function batch_example_batch_2() {
 
 /**
  * Batch operation for batch 2 : load all nodes, 5 by five
- * This is a multipart operation, using the
+ * After each group of 5 control is returned to the batch API for later
+ * continuation.
  */
 function batch_example_op_2(&$context) {
   // Use the $context['sandbox'] at your convenience to store the
@@ -208,28 +147,36 @@ function batch_example_op_2(&$context) {
   if (!isset($context['sandbox']['progress'])) {
     $context['sandbox']['progress'] = 0;
     $context['sandbox']['current_node'] = 0;
-    $context['sandbox']['max'] = db_result(db_query('SELECT COUNT(DISTINCT nid) FROM {node}'));
+    $context['sandbox']['max'] = db_query('SELECT COUNT(DISTINCT nid) FROM {node}')->fetchField();
   }
 
   // Process nodes by groups of 5 (arbitrary value).
   // When a group of five is processed, the batch update engine determines
   // whether it should continue processing in the same request or provide
   // progress feedback to the user and wait for the next request.
+  // That way even though we're already processing at the operation level
+  // the operation itself is interruptible.
   $limit = 5;
 
   // Retrieve the next group of nids.
-  $result = db_query_range("SELECT nid FROM {node} WHERE nid > %d ORDER BY nid ASC", $context['sandbox']['current_node'], 0, $limit);
-  while ($row = db_fetch_array($result)) {
+  $result = db_select('node', 'n')
+    ->fields('n', array('nid'))
+    ->orderBy('n.nid', 'ASC')
+    ->where('n.nid > :nid', array(':nid' => $context['sandbox']['current_node']))
+    ->extend('PagerDefault')
+    ->limit($limit)
+    ->execute();
+  foreach ($result as $row) {
     // Here we actually perform our dummy 'processing' on the current node.
-    $node = node_load($row['nid'], NULL, TRUE);
+    $node = node_load($row->nid, NULL, TRUE);
 
     // Store some result for post-processing in the finished callback.
-    $context['results'][] = $node->nid . ' : ' . $node->title;
+    $context['results'][] = $node->nid . ' : ' . $node->title[FIELD_LANGUAGE_NONE][0]['value'];
 
     // Update our progress information.
     $context['sandbox']['progress']++;
     $context['sandbox']['current_node'] = $node->nid;
-    $context['message'] = $node->title;
+    $context['message'] = $node->title[FIELD_LANGUAGE_NONE][0]['value'];
   }
 
   // Inform the batch engine that we are not finished,
@@ -246,17 +193,29 @@ function batch_example_finished($success, $results, $operations) {
   if ($success) {
     // Here we could do something meaningful with the results.
     // We just display the number of nodes we processed...
-    $message = count($results) . ' processed.';
+    drupal_set_message(t('@count processed.', array('@count' => count($results))));
   }
   else {
     // An error occurred.
     // $operations contains the operations that remained unprocessed.
     $error_operation = reset($operations);
-    $message = 'An error occurred while processing ' . $error_operation[0] . ' with arguments :' . print_r($error_operation[0], TRUE);
+    drupal_set_message(t('An error occurred while processing @operation with arguments : @args', array('@operation' => $error_operation[0], '@args' => print_r($error_operation[0], TRUE))));
   }
-  drupal_set_message($message);
 }
 
+/**
+ * Utility function - simply queries and loads the lowest nid.
+ * @return A nid or NULL if there are no nodes.
+ */
+function batch_example_lowest_nid() {
+  $select = db_select('node', 'n')
+  ->fields('n', array('nid'))
+  ->orderBy('n.nid', 'ASC')
+  ->extend('PagerDefault')
+  ->limit(1);
+  $nid = $select->execute()->fetchCol();
+  return $nid;
+}
 /**
  * @} End of "defgroup batch_definitions".
  */

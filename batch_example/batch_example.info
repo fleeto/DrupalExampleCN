@@ -6,3 +6,4 @@ version = VERSION
 core = 7.x
 files[] = batch_example.module
 files[] = batch_example.install
+files[] = batch_example.test
