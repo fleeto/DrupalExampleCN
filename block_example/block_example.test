@@ -15,8 +15,8 @@ class BlockExampleTestCase extends DrupalWebTestCase {
   public static function getInfo() {
     return array(
       'name' => 'Block example functionality',
-      'description' => 'Test the configuration options and veiwing block created by this module.',
-      'group' => 'Block Example',
+      'description' => 'Test the configuration options and veiwing block created by Block Example module.',
+      'group' => 'Examples',
     );
   }
 
@@ -46,20 +46,20 @@ class BlockExampleTestCase extends DrupalWebTestCase {
     $this->assertFieldByName('block_example_example_configurable_text[region]', -1, t('Configurable text block is disabled in first sidebar successfully verified.') );
 
     // Verify that blocks are not shown
-    $this->drupalGet('/node/3');
-    $this->assertNoRaw( t('Title of block #1'), t('Block configurable test not found.'));
-    $this->assertNoRaw( t('Title of block #2'), t('Block empty not found.'));
+    $this->drupalGet('/');
+    $this->assertNoRaw( t('Title of first block'), t('Block configurable test not found.'));
+    $this->assertNoRaw( t('Title of second block'), t('Block empty not found.'));
 
     // Enable the Configurable text block and verify
     $this->drupalPost('admin/structure/block', array('block_example_example_configurable_text[region]' => 'sidebar_first'), t('Save blocks'));
     $this->assertFieldByName('block_example_example_configurable_text[region]', 'sidebar_first', t('Configurable text block is enabled in first sidebar successfully verified.') );
 
-    // Verify that blocks are there. Empty block will not be shown, becuase it is empty
+    // Verify that blocks are there. Empty block will not be shown, because it is empty
     $this->drupalGet('/');
-    $this->assertRaw( t('Title of block #1'), t('Block configurable text found.'));
+    $this->assertRaw( t('Title of first block'), t('Block configurable text found.'));
 
     // Change content of configurable text block
-    $string = $this->randomString();
+    $string = $this->randomName();
     $this->drupalPost('admin/structure/block/manage/block_example/example_configurable_text/configure', array('block_example_string' => $string), t('Save block'));
 
     // Verify that new content is shown
