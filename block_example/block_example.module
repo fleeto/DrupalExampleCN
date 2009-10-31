@@ -4,7 +4,8 @@
 /**
  * @file
  * This is an example outlining how a module can define blocks that can be
- * displayed on various pages of a site.
+ * displayed on various pages of a site, or how to alter blocks provided by
+ * other modules.
  */
 
 /**
@@ -124,5 +125,64 @@ function block_example_contents($which_block) {
       // probably dynamically constructed. In this case, Drupal will not display
       // the block at all. This block will not be displayed.
       return;
+  }
+}
+
+/*
+ * The following hooks can be used to alter blocks
+ * provided by your own or other modules.
+ */
+
+/**
+ * Implement hook_block_info_alter().
+ *
+ * This hook allows you to add, remove or modify blocks in the block list. The
+ * block list contains the block definitions. This example requires
+ * search module and the search block enabled
+ * to see how this hook implementation works.
+ */
+function block_example_block_info_alter(&$blocks) {
+  // We are going to make the search block sticky on bottom of regions. For
+  // this example, we will modify the block list and append the search block at
+  // the end of the list, so even if the administrator configures the block to
+  // be on the top of the region, it will demote to bottom again.
+  foreach ($blocks as $bid => $block) {
+    if (($block->module == 'search') && ($block->delta == 'form')) {
+      // Remove the block from the list and append to the end.
+      unset($blocks[$bid]);
+      $blocks[$bid] = $block;
+      break;
+    }
+  }
+}
+
+/**
+ * Implements hook_block_view_alter().
+ *
+ * This hook allows you to modify the output of any block in the system.
+ *
+ * In addition, instead of hook_block_view_alter(), which is called for all
+ * blocks, you can also use hook_block_view_MODULE_DELTA_alter() to alter a
+ * specific block.
+ *
+ * We are going to uppercase the title of any block if the string "magic string"
+ * is encountered in the content. If we were changing only our block using
+ * hook_block_view_MODULE_DELTA_alter to do this, we would have used the
+ * function:
+ * block_example_block_view_block_example_example_configurable_text_alter()
+ *
+ * To demonstrate the effect of this hook, you can use the
+ * 'configurable_text_string' block created by this module and add the
+ * text 'magic string' into the configuration.
+ */
+function block_example_block_view_alter(&$data, $block) {
+  // Verify the we have raw text content
+  if (!isset($data['content']) || !is_string($data['content'])) {
+    return;
+  }
+
+  // If the content contains the string: 'magic string', uppercase the title.
+  if (strstr($data['content'], 'magic string')) {
+    $data['subject'] = isset($data['subject']) ? drupal_strtoupper($data['subject']) : '';
   }
 }

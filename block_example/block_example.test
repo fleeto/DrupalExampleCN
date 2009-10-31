@@ -24,9 +24,10 @@ class BlockExampleTestCase extends DrupalWebTestCase {
    * Enable modules and create user with specific permissions.
    */
   function setUp() {
-    parent::setUp('block_example');
-    // Create user.
-    $this->web_user = $this->drupalCreateUser(array('administer blocks'));
+    parent::setUp('block_example', 'search');
+    // Create user. Search content permission granted for the search block to
+    // be shown. 
+    $this->web_user = $this->drupalCreateUser(array('administer blocks', 'search content'));
   }
 
   /**
@@ -47,8 +48,8 @@ class BlockExampleTestCase extends DrupalWebTestCase {
 
     // Verify that blocks are not shown
     $this->drupalGet('/');
-    $this->assertNoRaw( t('Title of first block'), t('Block configurable test not found.'));
-    $this->assertNoRaw( t('Title of second block'), t('Block empty not found.'));
+    $this->assertNoRaw( t('Title of first block (example_configurable_text)'), t('Block configurable test not found.'));
+    $this->assertNoRaw( t('Title of second block (example_empty)'), t('Block empty not found.'));
 
     // Enable the Configurable text block and verify
     $this->drupalPost('admin/structure/block', array('block_example_example_configurable_text[region]' => 'sidebar_first'), t('Save blocks'));
@@ -56,7 +57,7 @@ class BlockExampleTestCase extends DrupalWebTestCase {
 
     // Verify that blocks are there. Empty block will not be shown, because it is empty
     $this->drupalGet('/');
-    $this->assertRaw( t('Title of first block'), t('Block configurable text found.'));
+    $this->assertRaw( t('Title of first block (example_configurable_text)'), t('Block configurable text found.'));
 
     // Change content of configurable text block
     $string = $this->randomName();
@@ -65,5 +66,30 @@ class BlockExampleTestCase extends DrupalWebTestCase {
     // Verify that new content is shown
     $this->drupalGet('/');
     $this->assertRaw( $string, t('Content of configurable text block successfully verified.'));
+
+    // Verify the view_alter hook implementation. Change content of our block
+    // to be 'magic string'
+    $string = 'there is a magic string in content';
+    $this->drupalPost('admin/structure/block/manage/block_example/example_configurable_text/configure', array('block_example_string' => $string), t('Save block'));
+
+    // Verify that new content is shown and the title is uppercase
+    $this->drupalGet('/');
+    $this->assertRaw( $string, t('Content of configurable text block successfully verified.'));
+    $this->assertRaw( drupal_strtoupper(t('Title of first block (example_configurable_text)')), t('hook_block_view_alter implementation successfully verified.'));
+
+    // Verify that search block is at the bottom of the region..
+
+    // Enable the search block on top of sidebar_first
+    $block_options = array(
+      'search_form[region]' => 'sidebar_first',
+      'search_form[weight]' => -9,
+    );
+    $this->drupalPost('admin/structure/block', $block_options, t('Save blocks'));
+
+    // The first 'configure block' link should be from our configurable block,
+    // and the second from search block if it was successfully demoted.
+    $this->drupalGet('/');
+    $this->clickLink('Configure block', 1);
+    $this->assertText(t("'@search' block", array('@search' => t('Search form'))), t('hook_block_info_alter successfully verified.') );
   }
 }
