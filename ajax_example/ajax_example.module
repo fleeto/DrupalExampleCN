@@ -8,7 +8,7 @@
 */
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function ajax_example_menu() {
   $items = array();
@@ -35,6 +35,15 @@ function ajax_example_menu() {
     'page arguments' => array('submit_driven_ajax'),
     'access callback' => TRUE,
   );
+
+  $items['ajax_example/advanced_commands'] = array(
+    'title' => 'Ajax Example: Advanced Commands',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_advanced_commands'),
+    'access callback' => TRUE,
+    'file' => 'ajax_example_advanced.inc',
+  );
+
 
   return $items;
 }
@@ -204,3 +213,4 @@ function ajax_example_submit_driven_callback($form, $form_state) {
   $element['#markup'] = "Clicked submit ({$form_state['values']['op']}): " . date('c');
   return $element;
 }
+
