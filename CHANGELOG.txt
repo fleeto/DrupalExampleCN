@@ -1,0 +1,29 @@
+// $Id$
+
+examples x.x-x.x, xxxx-xx-xx
+----------------------------
+
+
+examples 7.x-1.x, xxxx-xx-xx
+----------------------------
+by ilo: added CHANGELOG.txt file.
+#610440 by rfay: Advanced AJAX examples. Not complete, and dependent on 3 core
+patches. Committed so it can be used to look at those patches.
+#618840 by ilo: hook_block_* examples.
+#617478 by ilo, rfay (again) forgot to add .test file.
+#615812 by ilo, rfay: Refinements to example_block test and minor changes to
+module.
+#617478 by ilo, rfay: Update batch_example to D7, simplify, add comments.
+by Dave Reid: Merged DRUPAL-7--1 branch into HEAD.
+#615812 by ilo: Update block example to Drupal 7.
+#611402 by jhodgdon, ewan: Fix minor typo in doc header.
+#610440 by rfay: AJAX forms example for Drupal 7.
+#209560 by bdragon: Fix xss filter to use better Unicode characters in filter
+example module.
+by rfay: trying to get README.txt to stick to 7.x.
+by Dave Reid: Fixed incorrect package information.
+by Dave Reid: Updated and standardized .info files.
+by Dave Reid: Standardize module folder names.
+by rfay: Modules with 7.x info files, some updates, but not many.
+by rfay: initial commit of examples module, a collection of modules that can be
+working, maintained examples. Moving the examples from contrib/docs as well.
