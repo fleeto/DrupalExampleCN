@@ -1,9 +1,5 @@
 // $Id$
 
-examples x.x-x.x, xxxx-xx-xx
-----------------------------
-
-
 examples 7.x-1.x, xxxx-xx-xx
 ----------------------------
 by ilo: added CHANGELOG.txt file.
