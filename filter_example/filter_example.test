@@ -1,0 +1,86 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Test case for Testing the filter example module.
+ *
+ * This file contains the test cases to check if module is performing as
+ * expected.
+ *
+ */
+class FilterExampleTestCase extends DrupalWebTestCase {
+  protected $web_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Filter example functionality',
+      'description' => 'Verify that content is processed by example filter.',
+      'group' => 'Examples',
+    );
+  }
+
+  /**
+   * Enable modules and create user with specific permissions.
+   */
+  function setUp() {
+    parent::setUp('filter_example');
+    // Create user.
+    $this->web_user = $this->drupalCreateUser(array('administer filters', 'use text format 1', 'use text format 2', 'bypass node access'));
+  }
+
+  /**
+   * Login user, create an example node, and test blog functionality through the admin and user interfaces.
+   */
+  function testFilterExampleBasic() {
+    // Login the admin user.
+    $this->drupalLogin($this->web_user);
+
+    // Enable both filters in format id 1 (default format)
+    $edit = array(
+      'filters[time_filter][status]' => 1,
+      'filters[foo_filter][status]' => 1,
+    );
+    $this->drupalPost('admin/config/content/formats/1', $edit, t('Save configuration'));
+
+    // Create a content type to test the filters (with default format)
+    $content_type = $this->drupalCreateContentType();
+
+    // Create a test node
+    $langcode = FIELD_LANGUAGE_NONE;
+    $edit = array(
+      "title[$langcode][0][value]" => $this->randomName(),
+      "body[$langcode][0][value]" => 'What foo is it? it is <time />',
+    );
+    $result = $this->drupalPost('node/add/' . $content_type->type, $edit, t('Save'));
+    $this->assertResponse(200);
+    $time = format_date(time());
+    $this->assertRaw('What bar is it? it is <em>' . $time . '</em>', t('Both filters successfully verified.'));
+
+    // Enable foo filter in other format id 2
+    $edit = array(
+      'filters[foo_filter][status]' => 1,
+    );
+    $this->drupalPost('admin/config/content/formats/2', $edit, t('Save configuration'));
+
+    // Change foo filter replacement with a random string in format id 2
+    $replacement = $this->randomName();
+    $options = array(
+      'settings[foo_filter][filter_example_foo_2]' => $replacement,
+    );
+    $this->drupalPost('admin/config/content/formats/2/configure', $options, t('Save configuration'));
+
+    // Create a test node with content format 2
+    $langcode = FIELD_LANGUAGE_NONE;
+    $edit = array(
+      "title[$langcode][0][value]" => $this->randomName(),
+      "body[$langcode][0][value]" => 'What foo is it? it is <time />',
+      "body[$langcode][0][value_format]" => 2,
+    );
+    $result = $this->drupalPost('node/add/' . $content_type->type, $edit, t('Save'));
+    $this->assertResponse(200);
+
+    // Only foo filter is enabled
+    $this->assertRaw("What " . $replacement . " is it", t('Foo filter successfully verified.'));
+  }
+}

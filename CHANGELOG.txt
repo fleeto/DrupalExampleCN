@@ -2,6 +2,8 @@
 
 examples 7.x-1.x, xxxx-xx-xx
 ----------------------------
+2009-11-09: Added D7 version of filter_example
+
 by ilo: added CHANGELOG.txt file.
 #610440 by rfay: Advanced AJAX examples. Not complete, and dependent on 3 core
 patches. Committed so it can be used to look at those patches.
