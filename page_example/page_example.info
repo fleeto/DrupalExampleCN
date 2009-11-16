@@ -5,3 +5,4 @@ package = Example modules
 version = VERSION
 core = 7.x
 files[] = page_example.module
+files[] = page_example.test
