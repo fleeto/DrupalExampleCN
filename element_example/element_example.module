@@ -1,5 +1,4 @@
 <?php
-
 // $Id$
 
 /**
@@ -9,16 +8,17 @@
  *
  * Form elements are already familiar to anyone who uses Forms API. Examples
  * of core form elements are 'textfield', 'checkbox' and 'fieldset'. Drupal
- * utilizes hook_elements() to define these FAPI types, and this occurs in
- * the core function system_elements().
+ * hook_element_info() is used to define these FAPI types.
  *
- * Each form element has a #type value that determines how it's treated by
- * the Form API and how it's ultimately rendered into HTML. hook_elements()
+ * Each form element has several properties that determines how it's treated by
+ * the Form API and how it's ultimately rendered into HTML. hook_element_info()
  * allows modules to define new element types, and tell the Form API what
  * default values they should automatically be populated with.
  *
- * By implementing hook_elements in your own module, you can create custom
- * form elements with their own properties, validation and theming.
+ * hook_element_info() implemented in your own module allows you to create custom
+ * form elements with their own properties, validation and theming. Each of the
+ * form element types is assumed to have a matching theme function, e.g.
+ * theme_elementtype(), which should be registered with hook_theme() as normal.
  *
  * In this example, we will define a phone number field that is expanded
  * into several text fields for area code, phone number and extention, each
@@ -26,7 +26,7 @@
  */
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  *
  * This just defines a page that we can use to test our form elements.
  */
@@ -41,10 +41,12 @@ function element_example_menu() {
 }
 
 /**
- * Implementation of hook_elements().
+ * Implements hook_element_info().
  */
-function element_example_elements() {
+function element_example_element_info() {
   $type['phonenumber'] = array(
+    '#theme' => 'phonenumber',
+    '#theme_wrappers' => array('form_element'),
     '#input' => TRUE,
     '#process' => array('element_example_phonenumber_expand'),
     '#element_validate' => array('element_example_phonenumber_validate'),
@@ -114,14 +116,14 @@ function element_example_phonenumber_validate($form, &$form_state) {
 }
 
 /**
- * Implementation of hook_theme().
+ * Implements hook_theme().
  *
  * This lets us tell Drupal about our theme functions and their arguments.
  */
 function element_example_theme() {
   return array(
     'phonenumber' => array(
-      'arguments' => array('element'),
+      'render element' => 'element',
     ),
   );
 }
@@ -132,8 +134,16 @@ function element_example_theme() {
  * We use the container-inline class so that all three of the HTML elements
  * are placed next to each other, rather than on separate lines.
  */
-function theme_phonenumber($element) {
-  return theme('form_element', $element, '<div class="container-inline">' . $element['#children'] . '</div>');
+function theme_phonenumber($variables) {
+  $element = $variables['element'];
+
+  // This wrapper is used to apply CSS styling.
+  $output = '';
+  $output .= '<div class="container-inline">';
+  $output .= drupal_render_children($element);
+  $output .= '</div>';
+  return $output;
+
 }
 
 /**

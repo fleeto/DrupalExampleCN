@@ -1,0 +1,96 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Test case for Testing the example module.
+ *
+ * This file contains the test cases to check if module is performing as
+ * expected.
+ *
+ */
+class ElementExampleTestCase extends DrupalWebTestCase {
+  protected $web_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Element example functionality',
+      'description' => 'Define the new form field and test its validation.',
+      'group' => 'Examples',
+    );
+  }
+
+  /**
+   * Enable modules and create user with specific permissions.
+   */
+  function setUp() {
+    parent::setUp('element_example');
+    // Create user.
+    $this->web_user = $this->drupalCreateUser(array('access content'));
+  }
+
+  /**
+   * Text the form element and the validation function
+   */
+  function testElementExampleBasic() {
+    // Login the admin user.
+    $this->drupalLogin($this->web_user);
+
+    // Get the example form
+    $this->drupalGet('example/element');
+
+    // Check default values
+    $this->assertFieldByName('element_example_test_1[areacode]', '123');
+    $this->assertFieldByName('element_example_test_1[number]', '456-7890');
+    $this->assertFieldByName('element_example_test_1[extension]', '');
+    $this->assertFieldByName('element_example_test_2[areacode]', '');
+    $this->assertFieldByName('element_example_test_2[number]', '456-7890');
+    $this->assertFieldByName('element_example_test_2[extension]', '23');
+
+    // Change elements example 1 by submiting the form
+    $elements = array(
+      "element_example_test_1[areacode]" => '111',
+      "element_example_test_1[number]" => '111-1111',
+      "element_example_test_1[extension]" => '111',
+      "element_example_test_2[areacode]" => '222',
+      "element_example_test_2[number]" => '222-2222',
+      "element_example_test_2[extension]" => '222',
+    );
+    $this->drupalPost('example/element', $elements, t('Save configuration'));
+    $this->assertResponse(200);
+    $this->assertText(t('The configuration options have been saved.'));
+
+    // Get the example form again for values to be loaded
+    $this->drupalGet('example/element');
+
+    // Check new values
+    $this->assertFieldByName('element_example_test_1[areacode]', '111');
+    $this->assertFieldByName('element_example_test_1[number]', '111-1111');
+    $this->assertFieldByName('element_example_test_1[extension]', '111');
+    $this->assertFieldByName('element_example_test_2[areacode]', '222');
+    $this->assertFieldByName('element_example_test_2[number]', '222-2222');
+    $this->assertFieldByName('element_example_test_2[extension]', '222');
+
+    // Submit invalid values for each field to verify that all of them are being
+    // validated. Extension has no validation
+
+    // Verify area code
+    $elements = array(
+      "element_example_test_1[areacode]" => '',
+    );
+    $result = $this->drupalPost('example/element', $elements, t('Save configuration'));
+    $this->assertResponse(200);
+    $this->assertNoText(t('The configuration options have been saved.'));
+    $this->assertText(t("The areacode is invalid"), t('Area code validation successfully verified.'));
+
+    // Verify number (put a valid value in areacode again)
+    $elements = array(
+      "element_example_test_1[areacode]" => '111',
+      "element_example_test_1[number]" => '11111111',
+    );
+    $result = $this->drupalPost('example/element', $elements, t('Save configuration'));
+    $this->assertResponse(200);
+    $this->assertNoText(t('The configuration options have been saved.'));
+    $this->assertText(t("The number is invalid"), t('Area code validation successfully verified.'));
+  }
+}
