@@ -3,16 +3,36 @@
 
 /**
  * @file
- * Demonstrate use of #ajax in forms.
+ * AJAX Examples module file with basic examples.
  *
+ */
+
+/**
+ * @defgroup ajax_examples AJAX Examples
+ * @{
+ * These examples show basic AJAX concepts.
+ *
+ * General documentation is available at
+ * @link ajax AJAX Framework documentation @endlink.
+ *
+ * The several examples here demonstrate basic AJAX usage.
+ * @}
 */
 
 /**
+ * Set up calls to drupal_get_form() for all our example cases.
+ *
  * Implements hook_menu().
  */
 function ajax_example_menu() {
   $items = array();
 
+  $items['ajax_example/simplest'] = array(
+    'title' => 'AJAX Example: simplest',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_simplest'),
+    'access callback' => TRUE,
+  );
   // Automatically generate checkboxes
   $items['ajax_example/autocheckboxes'] = array(
     'title' => 'AJAX Example: generate checkboxes',
@@ -32,12 +52,12 @@ function ajax_example_menu() {
   $items['ajax_example/submit_driven_ajax'] = array(
     'title' => 'AJAX Example: submit-driven AJAX',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('submit_driven_ajax'),
+    'page arguments' => array('ajax_example_submit_driven_ajax'),
     'access callback' => TRUE,
   );
 
   $items['ajax_example/advanced_commands'] = array(
-    'title' => 'Ajax Example: Advanced Commands',
+    'title' => 'Ajax Example: AJAX framework commands',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ajax_example_advanced_commands'),
     'access callback' => TRUE,
@@ -48,10 +68,66 @@ function ajax_example_menu() {
   return $items;
 }
 
+/**
+ * @ingroup ajax_examples
+ * @{
+ */
+
+/**
+ * Simple form whose ajax-enabled 'changethis' member causes a text change
+ * in the description of the 'replace_textfield' member.
+ */
+function ajax_example_simplest($form, &$form_state) {
+  $form = array();
+  $form['changethis'] = array(
+    '#title' => t("Choose something and explain why"),
+    '#type' => 'select',
+    '#options' => array(
+      'one' => 'one',
+      'two' => 'two',
+      'three' => 'three',
+    ),
+    '#ajax' => array(
+      'callback' => 'ajax_example_simplest_callback',
+      'wrapper' => 'replace_textfield_div',
+     ),
+  );
+
+  // This entire form element will be replaced with an updated value.
+  // However, it has to have the prefix/suffix to work right, as the entire
+  // div is replaced.
+  // In this example, the description is dynamically updated during form
+  // rebuild.
+
+  $form['replace_textfield'] = array(
+    '#type' => 'textfield',
+    '#title' => t("Why"),
+    '#prefix' => '<div id="replace_textfield_div">',
+    '#suffix' => '</div>',
+  );
+
+  if (!empty($form_state['values']['changethis'])) {
+    $form['replace_textfield']['#description'] = t("Say why you chose") .  " '{$form_state['values']['changethis']}'";
+  }
+  return $form;
+}
+/**
+ * Callback for ajax_example_simplest.
+ *
+ * The form item 'replace_textfield' has already been processed and changed
+ * when the form was submitted and rebuilt during the AJAX call, so now
+ * we just return the piece of the form that changed.
+ */
+function ajax_example_simplest_callback($form, $form_state) {
+  // The form has already been submitted and updated. We can return the replaced
+  // item as it is.
+  return $form['replace_textfield'];
+}
 
 
 /**
- * A Self-configure a form based on a select element.
+ * AJAX-enabled select element causes replacement of a set of checkboxes
+ * based on the selection.
  */
 function ajax_example_autocheckboxes($form, &$form_state) {
 
@@ -100,16 +176,13 @@ function ajax_example_autocheckboxes($form, &$form_state) {
  * Callback element needs only select the portion of the form to be updated.
  * Since #ajax['callback'] return can be HTML or a renderable array (or an
  * array of commands), we can just return a piece of the form.
- * @param $form
- * @param $form_state
- * @return unknown_type
  */
 function ajax_example_autocheckboxes_callback($form, $form_state) {
   return $form['checkboxes'];
 }
 
 /**
- * A Show/hide textfields based on checkbox clicks.
+ * Show/hide textfields based on AJAX-enabled checkbox clicks.
  */
 function ajax_example_autotextfields($form, &$form_state) {
 
@@ -166,10 +239,9 @@ function ajax_example_autotextfields($form, &$form_state) {
 
 
 /**
- * Just select the piece of text we want to use as replacement text and return
- * it as a renderable array.
- * @param $form
- * @param $form_state
+ * Selects the piece of the form we want to use as replacement text and returns
+ * it as a form (renderable array).
+ *
  * @return renderable array (the textfields element)
  */
 function ajax_example_autotextfields_callback($form, $form_state) {
@@ -178,9 +250,11 @@ function ajax_example_autotextfields_callback($form, $form_state) {
 
 
 /**
- * A Hello-world AJAX. Just swaps out a markup section on submit.
+ * A very basic form which with an AJAX-enabled submit.
+ *
+ * On submit, the markup in the #markup element is updated.
  */
-function submit_driven_ajax($form, &$form_state) {
+function ajax_example_submit_driven_ajax($form, &$form_state) {
   $form['box'] = array(
     '#type' => 'markup',
     '#prefix' => '<div id="box">',
@@ -204,9 +278,6 @@ function submit_driven_ajax($form, &$form_state) {
 /**
  * Select the 'box' element, change the markup in it, and return it as a
  * renderable array.
- * @param $form
- * @param $form_state
- * @return unknown_type
  */
 function ajax_example_submit_driven_callback($form, $form_state) {
   $element = $form['box'];
