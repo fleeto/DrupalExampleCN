@@ -64,6 +64,21 @@ function ajax_example_menu() {
     'file' => 'ajax_example_advanced.inc',
   );
 
+  $items['ajax_example/ajax_link'] = array(
+    'title' => 'Ajax Example: Ajax Link',
+    'page callback' => 'ajax_example_render_link',
+    'access callback' => TRUE,
+    'file' => 'ajax_example_misc.inc',
+  );
+
+  $items['ajax_link_callback'] = array(
+    'page callback' => 'ajax_link_response',
+    'access callback' => 'user_access',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'ajax_example_misc.inc',
+  );
+
 
   return $items;
 }
@@ -284,4 +299,6 @@ function ajax_example_submit_driven_callback($form, $form_state) {
   $element['#markup'] = "Clicked submit ({$form_state['values']['op']}): " . date('c');
   return $element;
 }
+
+
 
