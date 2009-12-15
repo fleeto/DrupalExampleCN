@@ -127,7 +127,14 @@ function email_example_mail_alter(&$message) {
   $options = array(
     'langcode' => $message['language']->language,
   );
-  $message['body'][] = t("--\nMail altered by email_example module.", array(), $options);
+
+  $signature = t("\n--\nMail altered by email_example module.", array(), $options);
+  if (is_array($message['body'])) {
+    $message['body'][] = $signature;
+  }
+  else {  // Some modules use the body as a string, erroneously.
+    $message['body'] .= $signature;
+  }
 }
 
 ///// Supporting functions ////
