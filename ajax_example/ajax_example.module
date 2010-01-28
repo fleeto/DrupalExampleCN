@@ -56,6 +56,13 @@ function ajax_example_menu() {
     'access callback' => TRUE,
   );
 
+  $items['ajax_example/dependent_dropdown'] = array(
+    'title' => 'AJAX Example: dependent dropdown',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_dependent_dropdown'),
+    'access callback' => TRUE,
+  );
+
   $items['ajax_example/advanced_commands'] = array(
     'title' => 'Ajax Example: AJAX framework commands',
     'page callback' => 'drupal_get_form',
@@ -301,4 +308,96 @@ function ajax_example_submit_driven_callback($form, $form_state) {
 }
 
 
+/**
+ * A form with a dropdown whose options are dependent on a
+ * choice made in a previous dropdown.
+ *
+ * On changing the first dropdown, the options in the second
+ * are updated.
+ */
+function ajax_example_dependent_dropdown($form, &$form_state) {
+  // get the list of options to populate the first dropdown
+  $options_first = _ajax_example_get_first_dropdown_options();
+  $options_keys = array_keys($options_first);
+  // if we have a value for the first dropdown from $form_state['values'] we use
+  // this both as the default value for the first dropdown and also as a
+  // parameter to pass to the function that retrieves the options for the
+  // second dropdown.
+  $selected = (isset($form_state['values']['dropdown_first']) ? $form_state['values']['dropdown_first'] : (isset($options_keys[0]) ? $options_keys[0] : ''));
+  $form['dropdown_first'] = array(
+    '#type' => 'select',
+    '#title' => 'First Dropdown',
+    '#options' => $options_first,
+    '#default_value' => $selected,
+    // bind an ajax callback to the change event (which is the default for the
+    // select form type) of the first dropdown. It will replace the second
+    // dropdown when rebuilt
+    '#ajax' => array(
+      'callback' => 'ajax_example_dependent_dropdown_callback',
+      'wrapper' => 'dd',
+    ),
+  );
+  $form['dropdown_second'] = array(
+    '#type' => 'select',
+    '#title' => 'Second Dropdown',
+    '#prefix' => '<div id="dd">',
+    '#suffix' => '</div>',
+    // when the form is rebuilt during ajax processing, the $selected variable
+    // will now have the new value and so the options will change
+    '#options' => _ajax_example_get_second_dropdown_options($selected),
+    '#default_value' => isset($form_state['values']['dropdown_second']) ? $form_state['values']['dropdown_second'] : '',
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
 
+  return $form;
+}
+
+/**
+ * Selects just the second dropdown to be returned for re-rendering
+ *
+ * @return renderable array (the second dropdown)
+ */
+function ajax_example_dependent_dropdown_callback($form, $form_state) {
+  return $form['dropdown_second'];
+}
+
+/**
+ * Helper function to populate the first dropdown. This would normally be
+ * pulling data from the database.
+ *
+ * @return array of options
+ */
+function _ajax_example_get_first_dropdown_options() {
+  return array(
+    '100' => 'Strings',
+    '101' => 'Woodwind',
+    '102' => 'Brass',
+    '103' => 'Percussion',
+  );
+}
+
+/**
+ * Helper function to populate the second dropdown. This would normally be
+ * pulling data from the database.
+ *
+ * @param key. This will determine which set of options is returned.
+ *
+ * @return array of options
+ */
+function _ajax_example_get_second_dropdown_options($key = '') {
+  $options = array(
+    '100' => array('200' => 'Violin', '201' => 'Viola', '202' => 'Cello', '203' => 'Double Bass'),
+    '101' => array('204' => 'Flute', '205' => 'Clarinet', '206' => 'Oboe'),
+    '102' => array('207' => 'Trumpet', '208' => 'trombone', '209' => 'French Horn', '210' => 'Tuba'),
+    '103' => array('211' => 'Bass Drum', '212' => 'Timpani', '213' => 'Snare Drum'),
+  );
+  if (isset($options[$key])) {
+    return $options[$key];
+  }
+  else {
+    return array();
+  }
+}
