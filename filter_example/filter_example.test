@@ -47,9 +47,9 @@ class FilterExampleTestCase extends DrupalWebTestCase {
     $content_type = $this->drupalCreateContentType();
 
     // Create a test node
-    $langcode = FIELD_LANGUAGE_NONE;
+    $langcode = LANGUAGE_NONE;
     $edit = array(
-      "title[$langcode][0][value]" => $this->randomName(),
+      "title" => $this->randomName(),
       "body[$langcode][0][value]" => 'What foo is it? it is <time />',
     );
     $result = $this->drupalPost('node/add/' . $content_type->type, $edit, t('Save'));
@@ -66,14 +66,14 @@ class FilterExampleTestCase extends DrupalWebTestCase {
     // Change foo filter replacement with a random string in format id 2
     $replacement = $this->randomName();
     $options = array(
-      'settings[foo_filter][filter_example_foo_2]' => $replacement,
+      'filters[foo_filter][settings][filter_example_foo_2]' => $replacement,
     );
-    $this->drupalPost('admin/config/content/formats/2/configure', $options, t('Save configuration'));
+    $this->drupalPost('admin/config/content/formats/2', $options, t('Save configuration'));
 
     // Create a test node with content format 2
-    $langcode = FIELD_LANGUAGE_NONE;
+    $langcode = LANGUAGE_NONE;
     $edit = array(
-      "title[$langcode][0][value]" => $this->randomName(),
+      "title" => $this->randomName(),
       "body[$langcode][0][value]" => 'What foo is it? it is <time />',
       "body[$langcode][0][value_format]" => 2,
     );

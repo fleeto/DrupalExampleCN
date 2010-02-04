@@ -26,8 +26,8 @@ class BlockExampleTestCase extends DrupalWebTestCase {
   function setUp() {
     parent::setUp('block_example', 'search');
     // Create user. Search content permission granted for the search block to
-    // be shown. 
-    $this->web_user = $this->drupalCreateUser(array('administer blocks', 'search content'));
+    // be shown.
+    $this->web_user = $this->drupalCreateUser(array('administer blocks', 'search content', 'access contextual links'));
   }
 
   /**

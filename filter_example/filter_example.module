@@ -27,7 +27,7 @@ function filter_example_filter_info() {
     'process callback'  => '_filter_example_filter_foo_process',
     'default settings' => array(
       'foo_default_replacement' => 'bar',
-  ),
+    ),
     'settings callback' => '_filter_example_filter_foo_settings',
     'tips callback' => '_filter_example_filter_foo_tips',
   );
@@ -62,7 +62,7 @@ function filter_example_filter_info() {
  * Settings of this form is stored in database by the filter module, and the
  * can be read from $filter argument
  */
-function _filter_example_filter_foo_settings($form, $form_state, $filter, $defaults, $format) {
+function _filter_example_filter_foo_settings($form, $form_state, $filter, $format, $defaults) {
   $filter_form["filter_example_foo_" . $format->format] = array(
             '#type' => 'textfield',
             '#title' => t('Substitution string'),
