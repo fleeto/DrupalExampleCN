@@ -1,33 +1,200 @@
 <?php
 // $Id$
+/**
+ * @file
+ * install file for Node Example module.
+ *
+ * Most of the definition of the node type is in this module.
+ */
 
 /**
- * Implementation of hook_install().
+ * Implements hook_install().
+ *
+ * @see node_type_set_defaults()
+ * @see field_info_instance()
+ * @see field_update_instance()
+ * @see field_create_field()
+ * @see field_create_instance()
  */
 function node_example_install() {
-  drupal_install_schema('node_example');
+  // get the name of our localization function for translation during install
+  // http://api.drupal.org/api/function/get_t/7
+  $t = get_t();
+
+  // Define the node type.  This is similar to hook_node_info() in Drupal 6
+  $node_example = array(
+    'type' => 'node_example',
+    'name' => $t('Example Node'),
+    'base' => 'node_content',
+    'description' => $t('This is an example node type with a few fields.'),
+    'body_label' => $t('Example Description')
+  );
+
+  // Complete the node type definition by setting any defaults not explicitly
+  // declared above.
+  // http://api.drupal.org/api/function/node_type_set_defaults/7
+  $content_type = node_type_set_defaults($node_example);
+
+  // Save the content type
+  node_type_save($content_type);
+
+  // Load the instance definition for our content types body
+  // http://api.drupal.org/api/function/field_info_instance/7
+  $body_instance = field_info_instance('node', 'body', 'node_example');
+
+  // Add our example_node_list view mode to the body instance display by
+  // instructing the body to display as a summary
+  $body_instance['display']['example_node_list'] = array(
+    'label' => 'hidden',
+    'type' => 'text_summary_or_trimmed',
+  );
+
+  // Save our changes to the body field instance.
+  // http://api.drupal.org/api/function/field_update_instance/7
+  field_update_instance($body_instance);
+
+  // Create all the fields we are adding to our content type.
+  // http://api.drupal.org/api/function/field_create_field/7
+  foreach (node_example_installed_fields() as $field) {
+    field_create_field($field);
+  }
+
+  // Create all the instances for our fields.
+  // http://api.drupal.org/api/function/field_create_instance/7
+  foreach (node_example_installed_instances() as $instance) {
+    $instance['object_type'] = 'node';
+    $instance['bundle'] = $node_example['type'];
+    field_create_instance($instance);
+  }
 }
+
+/**
+ * All fields created by this content type.  The field is the default definition
+ * that lets Drupal know that a field exists.
+ *
+ * This is inside its own function so that it can be used in both hook_install()
+ * and hook_uninstall().
+ */
+function node_example_installed_fields() {
+  $t = get_t();
+  return array(
+    'color' => array(
+      'field_name' => 'color',
+      'label'       => $t('The colors available for this object.'),
+      'cardinality' => 3,
+      'type'        => 'text',
+      'settings'    => array(
+        'max_length' => 60,
+      ),
+    ),
+    'quantity' => array(
+      'field_name'  => 'quantity',
+      'type'        => 'text',
+    ),
+    'image' => array(
+      'field_name' => 'image',
+      'type'       => 'image',
+      'cardinality' => 1,
+    ),
+  );
+}
+
+/**
+ * All instances created by this content type.  The instance lets Drupal know
+ * which widget to use to allow the user to enter data and how to react in
+ * different view modes.  We are going to display a page that uses a custom
+ * "node_example_list" view mode.  We will set a cardinality of three allowing
+ * our content type to give the user three color fields to enter data into.
+ *
+ * This is inside its own function so that it can be used in both hook_install()
+ * and hook_uninstall().
+ */
+function node_example_installed_instances() {
+  $t = get_t();
+  return array(
+    'color' => array(
+      'field_name' => 'color',
+      'label'       => $t('The colors available for this object.'),
+      'cardinality' => 3,
+      'widget'      => array(
+        'type'    => 'text_textfield',
+      ),
+      'display' => array(
+        'example_node_list' => array(
+          'label' => 'hidden',
+          'type' => 'node_example_colors',
+        ),
+      ),
+    ),
+    'quantity' => array(
+      'field_name'  => 'quantity',
+      'type'        => 'text',
+      'widget'      => array(
+        'type'    => 'text_textfield',
+      ),
+      'display' => array(
+        'example_node_list' => array(
+          'label' => 'hidden',
+          'type' => 'hidden',
+        ),
+      ),
+    ),
+    'image' => array(
+      'field_name'  => 'image',
+      'label'       => $t('Upload an image:'),
+      'required'    => FALSE,
+      'widget' => array(
+        'type'    => 'image_image',
+        'weight'  => 2.10,
+      ),
+      'display' => array(
+        'example_node_list' => array(
+          'label' => 'hidden',
+          'type' => 'image_link_content__thumbnail',
+        ),
+      ),
+    ),
+  );
+}
+
 
 /**
  * Implementation of hook_uninstall().
+ *
  */
 function node_example_uninstall() {
-  drupal_uninstall_schema('node_example');
-}
+  // Gather all the example content that might have been created while this
+  // module was enabled.  Simple selects still use db_query().
+  // http://api.drupal.org/api/function/db_query/7
+  $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
+  $result = db_query($sql, array(':type' => 'node_example'));
+  $nids = array();
+  foreach ($result as $row) {
+    $nids[] = $row->nid;
+  }
 
-/**
- * Implementation of hook_schema().
- */
-function node_example_schema() {
-  $schema['node_example'] = array(
-    'fields' => array(
-      'vid'      => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
-      'nid'      => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
-      'color'    => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE, 'default' => ''),
-      'quantity' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0),
-    ),
-    'primary key' => array('vid', 'nid'),
-  );
+  // Delete all the nodes at once
+  // http://api.drupal.org/api/function/node_delete_multiple/7
+  node_delete_multiple($nids);
 
-  return $schema;
+  // Loop over each of our fields and delete them individually.
+  // http://api.drupal.org/api/function/field_delete_field/7
+  foreach (array_keys(node_example_installed_fields()) as $field) {
+    field_delete_field($field);
+  }
+
+  // Loop over each of our fields instances and delete them individually.
+  // http://api.drupal.org/api/function/field_delete_field/7
+  $instances = field_info_instances('node', 'node_example');
+  foreach ($instances as $instance_name => $instance) {
+    field_delete_instance($instance);
+  }
+
+  // Delete our content type
+  // http://api.drupal.org/api/function/node_type_delete/7
+  node_type_delete('node_example');
+
+  // Purge all field infromation
+  // http://api.drupal.org/api/function/field_purge_batch/7
+  field_purge_batch(1000);
 }

@@ -1,0 +1,4 @@
+$Id$
+
+#508342 by cyberswat, ilo, torelad, rfay | jhodgdon, c960657, Crell: 
+    node example D7 version.
