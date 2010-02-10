@@ -5,3 +5,4 @@ package = Example modules
 version = VERSION
 core = 7.x
 files[] = xmlrpc_example.module
+files[] = xmlrpc_example.test
