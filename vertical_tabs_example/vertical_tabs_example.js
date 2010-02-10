@@ -8,7 +8,7 @@
 Drupal.behaviors.vertical_tabs_exampleFieldsetSummaries = {
   attach: function (context) {
     // Use the fieldset class to identify the vertical tab element
-    $('fieldset.vertical_tabs_example-custom-form', context).setSummary(function (context) {
+    $('fieldset#edit-vertical-tabs-example', context).setSummary(function (context) {
       // Depending on the checkbox status, the settings will be customized, so
       // update the summary with the custom setting textfield string or a use a
       // default string.
