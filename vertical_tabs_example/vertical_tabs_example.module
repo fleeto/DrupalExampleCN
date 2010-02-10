@@ -33,7 +33,7 @@ function vertical_tabs_example_form_alter(&$form, $form_state, $form_id) {
 
     $form['vertical_tabs_example'] = array(
       '#type' => 'fieldset',
-      '#title' => t('Custom vertical tab'),
+      '#title' => t('Example vertical tab'),
       '#collapsible' => TRUE,
       '#collapsed' => FALSE,
       // The #group value must match the name of the vertical tabs element.
