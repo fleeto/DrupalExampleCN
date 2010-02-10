@@ -2,7 +2,7 @@
 name = Trigger example
 description = An example showing how a module can provide triggers that can have actions associated with them.
 package = Example modules
-version = VERSION
 core = 7.x
 dependencies[] = trigger
 files[] = trigger_example.module
+files[] = trigger_example.test
