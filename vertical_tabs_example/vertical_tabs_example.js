@@ -3,8 +3,7 @@
 (function ($) {
 
 /**
- * Custom summary for the module vertical tab. It will show "Not defined" untill
- * a custom string is entered in the textfield.
+ * Custom summary for the module vertical tab.
  */
 Drupal.behaviors.vertical_tabs_exampleFieldsetSummaries = {
   attach: function (context) {
@@ -13,11 +12,11 @@ Drupal.behaviors.vertical_tabs_exampleFieldsetSummaries = {
       // Depending on the checkbox status, the settings will be customized, so
       // update the summary with the custom setting textfield string or a use a
       // default string.
-      if ($('#edit-vertical_tabs_example-enabled', context).attr('checked')) {
-        return Drupal.checkPlain($('#edit-vertical_tabs_example-custom-setting', context).val());
+      if ($('#edit-vertical-tabs-example-enabled', context).attr('checked')) {
+        return Drupal.checkPlain($('#edit-vertical-tabs-example-custom-setting', context).val());
       }
       else {
-        return Drupal.t('Using default.');
+        return Drupal.t('Using default');
       }
     });
   }
