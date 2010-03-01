@@ -1,8 +1,8 @@
 ; $Id$
 name = Node example
-description = An example module showing how define a custom content type.
+description = Demonstrates a custom content type and uses the field api.
 package = Example modules
-version = VERSION
+
 core = 7.x
 files[] = node_example.module
 files[] = node_example.install

@@ -1,0 +1,233 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * An example field using the Field API.
+ *
+ * This is updated from Barry Jaspan's presentation at Drupalcon Paris,
+ * @link http://acquia.com/community/resources/acquia-tv/intro-field-api-module-developers Video Presentation @endlink
+ *
+ * Providing a field requires:
+ * - Defining a field
+ *   - hook_field_info()
+ *   - hook_field_schema()
+ *   - hook_field_validate()
+ *   - hook_field_is_empty()
+ *
+ * - Defining a formatter for the field (the portion that outputs the field for
+ *   display)
+ *   - hook_field_formatter_info()
+ *   - hook_field_formatter_view()
+ *
+ * - Defining a widget for the edit form
+ *   - hook_field_widget_info()
+ *   - hook_field_widget_form()
+ *
+ * *
+ * See @link field_types Field Types API @endlink
+ */
+
+/***************************************************************
+ * Field Type API hooks
+ ***************************************************************/
+
+/**
+ * Implements hook_field_info() to provide the description of the field.
+ */
+function field_example_field_info() {
+  return array(
+    'field_example_rgb' => array(
+      'label' => t('Example Color RGB'),
+      'description' => t('Demonstrates a field composed of an RGB color.'),
+      'default_widget' => 'field_example_3text',
+      'default_formatter' => 'field_example_helloworld',
+  ),
+  );
+}
+
+/**
+ * Implements hook_field_schema().
+ *
+ * This defines the actual database schema of the field, using the format
+ * used by the Schema API.
+ *
+ * The actual data we store here is just one 7-character element, even
+ * though the widget presents the three portions separately.
+ *
+ * @see hook_field_schema()
+ * @link schemaapi Schema API @endlink
+ */
+function field_example_field_schema($field) {
+  $columns = array(
+    'rgb' => array('type' => 'varchar', 'length' => 7, 'not null' => FALSE),
+  );
+  return array('columns' => $columns);
+}
+
+/**
+ * Implement hook_field_validate().
+ *
+ * Verifies that the RGB field as combined is valid
+ * (6 hex digits with a # at the beginning).
+ */
+function field_example_field_validate($obj_type, $object, $field, $instance, $langcode, &$items, &$errors) {
+  foreach($items as $delta => $item) {
+    if(isset($item['rgb'])) {
+      if(! preg_match('@^#[0-9a-f]{6}$@', $item['rgb'])) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => 'field_example_invalid',
+          'message' => t('Color must by in the HTML format #abcdef.'),
+        );
+      }
+    }
+  }
+}
+
+
+/**
+ * Implements hook_field_is_empty().
+ *
+ */
+function field_example_field_is_empty($item, $field) {
+  return empty($item['rgb']);
+}
+
+/***********************************************************************
+ *  Field Type API: Formatter
+ *
+ *  These are the api hooks that present formatted (themed) output to the
+ *  user.
+ **********************************************************************/
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function field_example_field_formatter_info() {
+  return array(
+    'field_example_helloworld' => array(
+      'label' => t('Example formatter for a color'),
+      'field types' => array('field_example_rgb'),
+  ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function field_example_field_formatter_view($object_type, $object, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  if($display['type']=='field_example_helloworld') {
+    foreach ($items as $delta => $item) {
+      $element[$delta]['#markup'] = '<p style="color: ' . $items[0]['rgb']. '">'
+        . t('The color code in this field is @code', array('@code' => $items[0]['rgb'])) . '</p>';
+    }
+  }
+  return $element;
+}
+
+
+/**************************************************************************
+ * Field Type API: Widget
+ *
+ * The widget is the form element used to receive input from the user
+ * when the field is being populated.
+ **************************************************************************/
+
+/**
+ * Implement hook_field_widget_info().
+ */
+function field_example_field_widget_info() {
+  return array(
+    'field_example_3text' => array(
+       'label' => t('RGB text field'),
+       'field types' => array('field_example_rgb'),
+  ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ *
+ * This widget displays three text fields, one each for red, green,
+ * and blue. However, the field type defines a single text column,
+ * rgb, which needs an HTML color spec. Define an element validate
+ * handler that converts our r, g, and b fields into a simulaed single
+ * 'rgb' form element.
+ */
+function field_example_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta = 0) {
+  // Convert rgb value into r, g, and b for #default_value.
+  if (isset($items[$delta]['rgb'])) {
+    preg_match_all('@..@', substr($items[$delta]['rgb'],1), $match);
+  }
+  else {
+    $match = array(array());
+  }
+
+  // A fieldset to hold the three text fields.
+  $element = array(
+    '#type' => 'fieldset',
+     // Convert r, g, and b to rgb during validation.
+    '#element_validate' => array('_field_example_3text_validate'),
+    // TODO: This should not be necessary.
+    '#langcode' => $langcode,
+  );
+
+  // A text field for Red, Green, and Blue.
+  foreach (array('r' => 'Red', 'g' => 'Green', 'b' => 'Blue') as $key => $title) {
+    $element[$key] = array(
+      '#type' => 'textfield',
+      '#title' => $title,
+      '#default_value' => hexdec(array_shift($match[0])),
+    );
+  }
+  return $element;
+}
+
+/**
+ * Convert form elements r, g, and b into a single HTML RGB value as text. We
+ * could also perform widget-level validation here to get per-color
+ * error reporting, but field-level validation is good enough for now.
+ */
+function _field_example_3text_validate($element, &$form_state) {
+  $field_name = substr($element['r']['#name'],0,strpos($element['r']['#name'],'['));
+  if (isset($form_state['values'][$field_name][$element['#langcode']][0])) {
+    $values = $form_state['values'][$field_name][$element['#langcode']][0];
+    $value = sprintf('#%02s%02s%02s', $values['r'], $values['g'], $values['b']);
+    form_set_value($element, array('rgb' => $value), $form_state);
+  }
+}
+
+/**
+ * Implements hook_field_error().
+ */
+function field_example_field_widget_error($element, $error) {
+  switch ($error['error']) {
+    case 'field_example_invalid':
+      form_error($element, $error['message']);
+      break;
+  }
+}
+
+
+/**
+ * Implements hook_menu() just to provide a simple user interface that
+ * tells the developer where to go.
+ */
+function field_example_menu() {
+  $items['example/field_example'] = array(
+    'title' => 'Field Example',
+    'page callback' => '_field_example_page',
+    'access callback' => TRUE,
+  );
+  return $items;
+}
+
+/**
+ * A simple page to explain to the developer what to do.
+ */
+function _field_example_page() {
+  return t("The Field Example provides a field composed of an HTML RGB value, like #ff00ff.
+           To use it, add the field to a content type.");
+}
