@@ -77,7 +77,7 @@ function field_example_field_validate($obj_type, $object, $field, $instance, $la
       if(! preg_match('@^#[0-9a-f]{6}$@', $item['rgb'])) {
         $errors[$field['field_name']][$langcode][$delta][] = array(
           'error' => 'field_example_invalid',
-          'message' => t('Color must by in the HTML format #abcdef.'),
+          'message' => t('Color must be in the HTML format #abcdef.'),
         );
       }
     }
@@ -120,8 +120,8 @@ function field_example_field_formatter_view($object_type, $object, $field, $inst
 
   if($display['type']=='field_example_helloworld') {
     foreach ($items as $delta => $item) {
-      $element[$delta]['#markup'] = '<p style="color: ' . $items[0]['rgb']. '">'
-        . t('The color code in this field is @code', array('@code' => $items[0]['rgb'])) . '</p>';
+      $element[$delta]['#markup'] = '<p style="color: ' . $item['rgb']. '">'
+        . t('The color code in this field is @code', array('@code' => $item['rgb'])) . '</p>';
     }
   }
   return $element;
@@ -156,7 +156,7 @@ function field_example_field_widget_info() {
  * handler that converts our r, g, and b fields into a simulaed single
  * 'rgb' form element.
  */
-function field_example_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta = 0) {
+function field_example_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
   // Convert rgb value into r, g, and b for #default_value.
   if (isset($items[$delta]['rgb'])) {
     preg_match_all('@..@', substr($items[$delta]['rgb'],1), $match);
@@ -166,20 +166,25 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
   }
 
   // A fieldset to hold the three text fields.
-  $element = array(
+  $element += array(
     '#type' => 'fieldset',
-     // Convert r, g, and b to rgb during validation.
     '#element_validate' => array('_field_example_3text_validate'),
-    // TODO: This should not be necessary.
-    '#langcode' => $langcode,
+
+    // The following two items are set so that the validation function will
+    // be able to access external value information which otherwise would be
+    // unavailable.
+    '#langcode' => $langcode,  // Passed so that validation function can use it.
+    '#delta' => $delta, // Pass the delta to validation function so it can access values.
   );
 
-  // A text field for Red, Green, and Blue.
-  foreach (array('r' => 'Red', 'g' => 'Green', 'b' => 'Blue') as $key => $title) {
+  // Create a textfield for saturation values for Red, Green, and Blue.
+  foreach (array('r' => t('Red'), 'g' => t('Green'), 'b' => t('Blue')) as $key => $title) {
     $element[$key] = array(
       '#type' => 'textfield',
       '#title' => $title,
-      '#default_value' => hexdec(array_shift($match[0])),
+      '#size' => 2,
+      '#default_value' => array_shift($match[0]),
+      '#description' => t('The 2-digit hexadecimal representation of the @color saturation, like "a1" or "ff"', array('@color' => $title)),
     );
   }
   return $element;
@@ -189,11 +194,28 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
  * Convert form elements r, g, and b into a single HTML RGB value as text. We
  * could also perform widget-level validation here to get per-color
  * error reporting, but field-level validation is good enough for now.
+ *
+ * The validate function seems to be required to populate the correct
+ * schema member.
  */
 function _field_example_3text_validate($element, &$form_state) {
+  $delta = $element['#delta']; // TODO: Isn't there a better way to find out which element?
   $field_name = substr($element['r']['#name'],0,strpos($element['r']['#name'],'['));
-  if (isset($form_state['values'][$field_name][$element['#langcode']][0])) {
-    $values = $form_state['values'][$field_name][$element['#langcode']][0];
+  if (isset($form_state['values'][$field_name][$element['#langcode']][$delta])) {
+    $values = $form_state['values'][$field_name][$element['#langcode']][$delta];
+    foreach (array('r', 'g', 'b') as $colorfield) {
+      $val = hexdec($values[$colorfield]);
+      // If they left any empty, we'll set the value empty and quit.
+      if (strlen($values[$colorfield]) == 0) {
+        form_set_value($element, array('rgb' => NULL), $form_state);
+        return;
+      }
+      // If they gave us anything that's not hex, reject it.
+      if ( (strlen($values[$colorfield]) != 2) || $val < 0 || $val > 255) {
+        form_error($element[$colorfield], t("Saturation value must be a 2-digit hexadecimal value between 00 and ff."));
+      }
+    }
+
     $value = sprintf('#%02s%02s%02s', $values['r'], $values['g'], $values['b']);
     form_set_value($element, array('rgb' => $value), $form_state);
   }
