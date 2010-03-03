@@ -1,0 +1,3 @@
+$Id$
+
+#730984 by rfay: Email example (D7) needs to check_plain() on user text.

@@ -50,7 +50,12 @@ function email_example_mail($key, &$message, $params) {
       // Note that the message body is an array, not a string.
       $message['body'][] = t('@name sent you the following message:', array('@name' => $user->name), $options);
       // Because this is just user-entered text, we do not need to translate it.
-      $message['body'][] = $params['message'];
+
+      // Since user-entered text may have unintentional HTML entities in it like
+      // '<' or '>', we need to make sure these entities are properly escaped,
+      // as the body will later be transformed from HTML to text, meaning
+      // that a normal use of '<' will result in truncation of the message.
+      $message['body'][] = check_plain($params['message']);
       break;
   }
 }
