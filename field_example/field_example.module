@@ -191,12 +191,8 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
 }
 
 /**
- * Convert form elements r, g, and b into a single HTML RGB value as text. We
- * could also perform widget-level validation here to get per-color
- * error reporting, but field-level validation is good enough for now.
- *
- * The validate function seems to be required to populate the correct
- * schema member.
+ * Validate the individual fields and then convert thm into a single HTML RGB
+ * value as text.
  */
 function _field_example_3text_validate($element, &$form_state) {
   $delta = $element['#delta']; // TODO: Isn't there a better way to find out which element?

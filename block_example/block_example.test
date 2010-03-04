@@ -31,7 +31,7 @@ class BlockExampleTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Login user, create an example node, and test blog functionality through the admin and user interfaces.
+   * Login user, create an example node, and test block functionality through the admin and user interfaces.
    */
   function testBlockExampleBasic() {
     // Login the admin user.
