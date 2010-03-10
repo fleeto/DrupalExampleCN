@@ -33,23 +33,22 @@ function filter_example_menu() {
  * foo_filter is more complex, including its own settings and inline tips.
  */
 function filter_example_filter_info() {
-  $filters['foo_filter'] = array(
+  $filters['filter_foo'] = array(
     'title' => t('Foo filter'),
     'description' => t('Every instance of "foo" in the input text will be replaced with a preconfigured replacement.'),
     'process callback'  => '_filter_example_filter_foo_process',
     'default settings' => array(
-      'foo_default_replacement' => 'bar',
+      'filter_example_foo' => 'bar',
     ),
     'settings callback' => '_filter_example_filter_foo_settings',
     'tips callback' => '_filter_example_filter_foo_tips',
   );
-  $filters['time_filter'] = array(
+  $filters['filter_time'] = array(
     'title' => t('Time tag'),
     'description' => t('Every instance of the special &lt;time /&gt; tag will be replaced with the current date and time in the user\'s specified time zone.'),
     'prepare callback' => '_filter_example_filter_time_prepare',
     'process callback' => '_filter_example_filter_time_process',
     'tips callback' => '_filter_example_filter_time_tips',
-
   );
   return $filters;
 }
@@ -76,7 +75,8 @@ function _filter_example_information() {
     array('!link' => l("admin/config/content/formats", "admin/config/content/formats"))
   );
 }
-/*
+
+/**
  * Settings callback for foo filter
  *
  * Make use of $format to have different replacements for every input format
@@ -89,23 +89,23 @@ function _filter_example_information() {
  * can be read from $filter argument
  */
 function _filter_example_filter_foo_settings($form, $form_state, $filter, $format, $defaults) {
-  $filter_form["filter_example_foo_" . $format->format] = array(
+  $settings['filter_example_foo'] = array(
     '#type' => 'textfield',
     '#title' => t('Substitution string'),
-    '#default_value' => (isset($filter->settings["filter_example_foo_" . $format->format])) ? $filter->settings["filter_example_foo_" . $format->format] : $defaults['foo_default_replacement'],
+    '#default_value' => isset($filter->settings['filter_example_foo']) ? $filter->settings['filter_example_foo'] : $defaults['filter_example_foo'],
     '#description' => t('The string to substitute for "foo" everywhere in the text.')
   );
-  return $filter_form;
+  return $settings;
 }
 
-/*
+/**
  * Foo filter process callback
  *
  * The actual filtering is performed here. The supplied text should be
  * returned, once any necessary substitutions have taken place.
  */
 function _filter_example_filter_foo_process($text, $filter, $format) {
-  $replacement = (isset($filter->settings["filter_example_foo_" . $format->format])) ? $filter->settings["filter_example_foo_" . $format->format] : 'bar';
+  $replacement = isset($filter->settings['filter_example_foo']) ? $filter->settings['filter_example_foo'] : 'bar';
   return str_replace('foo', $replacement, $text);
 }
 
@@ -119,7 +119,7 @@ function _filter_example_filter_foo_process($text, $filter, $format) {
  * but long tips are highly recommended.
  */
 function _filter_example_filter_foo_tips($filter, $format, $long = FALSE) {
-  $replacement = (isset($filter->settings["filter_example_foo_" . $format->format])) ? $filter->settings["filter_example_foo_" . $format->format] : 'bar';
+  $replacement = isset($filter->settings['filter_example_foo']) ? $filter->settings['filter_example_foo'] : 'bar';
   if (!$long) {
     // This string will be shown in the content add/edit form
     return t('<em>foo</em> replaced with %replacement.', array('%replacement' => $replacement));

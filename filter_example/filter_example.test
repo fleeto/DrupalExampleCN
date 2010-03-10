@@ -11,6 +11,8 @@
  */
 class FilterExampleTestCase extends DrupalWebTestCase {
   protected $web_user;
+  protected $filtered_html;
+  protected $full_html;
 
   public static function getInfo() {
     return array(
@@ -25,13 +27,16 @@ class FilterExampleTestCase extends DrupalWebTestCase {
    */
   function setUp() {
     parent::setUp('filter_example');
+
+    // Load the used input formats.
+    $this->filtered_html = db_query_range('SELECT * FROM {filter_format} WHERE name = :name', 0, 1, array(':name' => 'Filtered HTML'))->fetchObject();
+    $this->full_html = db_query_range('SELECT * FROM {filter_format} WHERE name = :name', 0, 1, array(':name' => 'Full HTML'))->fetchObject();
+
     // Create user.
-    $filtered_html_format = db_query_range('SELECT * FROM {filter_format} WHERE name = :name', 0, 1, array(':name' => 'Filtered HTML'))->fetchObject();
-    $full_html_format = db_query_range('SELECT * FROM {filter_format} WHERE name = :name', 0, 1, array(':name' => 'Full HTML'))->fetchObject();
     $this->web_user = $this->drupalCreateUser(array(
       'administer filters',
-      filter_permission_name($filtered_html_format),
-      filter_permission_name($full_html_format),
+      filter_permission_name($this->filtered_html),
+      filter_permission_name($this->full_html),
       'bypass node access',
     ));
   }
@@ -45,10 +50,10 @@ class FilterExampleTestCase extends DrupalWebTestCase {
 
     // Enable both filters in format id 1 (default format)
     $edit = array(
-      'filters[time_filter][status]' => 1,
-      'filters[foo_filter][status]' => 1,
+      'filters[filter_time][status]' => 1,
+      'filters[filter_foo][status]' => 1,
     );
-    $this->drupalPost('admin/config/content/formats/1', $edit, t('Save configuration'));
+    $this->drupalPost('admin/config/content/formats/' . $this->filtered_html->format, $edit, t('Save configuration'));
 
     // Create a content type to test the filters (with default format)
     $content_type = $this->drupalCreateContentType();
@@ -66,23 +71,23 @@ class FilterExampleTestCase extends DrupalWebTestCase {
 
     // Enable foo filter in other format id 2
     $edit = array(
-      'filters[foo_filter][status]' => 1,
+      'filters[filter_foo][status]' => 1,
     );
-    $this->drupalPost('admin/config/content/formats/2', $edit, t('Save configuration'));
+    $this->drupalPost('admin/config/content/formats/' . $this->full_html->format, $edit, t('Save configuration'));
 
     // Change foo filter replacement with a random string in format id 2
     $replacement = $this->randomName();
     $options = array(
-      'filters[foo_filter][settings][filter_example_foo_2]' => $replacement,
+      'filters[filter_foo][settings][filter_example_foo]' => $replacement,
     );
-    $this->drupalPost('admin/config/content/formats/2', $options, t('Save configuration'));
+    $this->drupalPost('admin/config/content/formats/' . $this->full_html->format, $options, t('Save configuration'));
 
     // Create a test node with content format 2
     $langcode = LANGUAGE_NONE;
     $edit = array(
       "title" => $this->randomName(),
       "body[$langcode][0][value]" => 'What foo is it? it is <time />',
-      "body[$langcode][0][value_format]" => 2,
+      "body[$langcode][0][format]" => $this->full_html->format,
     );
     $result = $this->drupalPost('node/add/' . $content_type->type, $edit, t('Save'));
     $this->assertResponse(200);
