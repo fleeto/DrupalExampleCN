@@ -16,16 +16,6 @@ function token_example_menu() {
 }
 
 /**
- * Implements hook_entity_info_alter().
- */
-function token_entity_info_alter(&$info) {
-  // Since some token types to do not match their entity type names, we have t
-  // map them to the proper type.
-  $info['taxonomy_term']['token type'] = 'term';
-  $info['taxonomy_vocabulary']['token type'] = 'vocabulary';
-}
-
-/**
  * Form builder; display lists of supported token entities and text to tokenize.
  */
 function token_example_example_form(&$form, $form_state) {
