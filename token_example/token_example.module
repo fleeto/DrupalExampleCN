@@ -16,6 +16,21 @@ function token_example_menu() {
 }
 
 /**
+ * Implements hook_entity_info_alter().
+ *
+ * @todo Remove this when the testbot can properly pick up dependencies
+ * for contrib modules.
+ */
+function token_entity_info_alter(&$info) {
+  if (isset($info['taxonomy_term'])) {
+    $info['taxonomy_term']['token type'] = 'term';
+  }
+  if (isset($info['taxonomy_vocabulary'])) {
+    $info['taxonomy_vocabulary']['token type'] = 'vocabulary';
+  }
+}
+
+/**
  * Form builder; display lists of supported token entities and text to tokenize.
  */
 function token_example_example_form(&$form, $form_state) {
