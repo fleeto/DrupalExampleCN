@@ -14,6 +14,7 @@ class TokenExampleTestCase extends DrupalWebTestCase {
       'name' => 'Token example functionality',
       'description' => 'Verify the token example interface.',
       'group' => 'Examples',
+      'dependencies' => array('token'),
     );
   }
 

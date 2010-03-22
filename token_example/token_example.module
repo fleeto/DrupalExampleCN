@@ -21,7 +21,7 @@ function token_example_menu() {
  * @todo Remove this when the testbot can properly pick up dependencies
  * for contrib modules.
  */
-function token_entity_info_alter(&$info) {
+function token_example_entity_info_alter(&$info) {
   if (isset($info['taxonomy_term'])) {
     $info['taxonomy_term']['token type'] = 'term';
   }
@@ -36,6 +36,17 @@ function token_entity_info_alter(&$info) {
 function token_example_example_form(&$form, $form_state) {
   $entities = entity_get_info();
   $token_types = array();
+
+  $form['token_field'] = array(
+    '#type' => 'textfield',
+    '#default_value' => '',
+    '#attributes' => array('class' => array('token-autocomplete')),
+    '#attached' => array(
+      'library' => array(
+        array('system', 'ui.autocomplete'),
+      ),
+    ),
+  );
 
   // Scan through the list of entities for supported token entities.
   foreach ($entities as $entity => $info) {
