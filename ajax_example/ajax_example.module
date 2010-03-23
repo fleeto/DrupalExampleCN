@@ -318,12 +318,11 @@ function ajax_example_submit_driven_callback($form, $form_state) {
 function ajax_example_dependent_dropdown($form, &$form_state) {
   // get the list of options to populate the first dropdown
   $options_first = _ajax_example_get_first_dropdown_options();
-  $options_keys = array_keys($options_first);
   // if we have a value for the first dropdown from $form_state['values'] we use
   // this both as the default value for the first dropdown and also as a
   // parameter to pass to the function that retrieves the options for the
   // second dropdown.
-  $selected = (isset($form_state['values']['dropdown_first']) ? $form_state['values']['dropdown_first'] : (isset($options_keys[0]) ? $options_keys[0] : ''));
+  $selected = isset($form_state['values']['dropdown_first']) ? $form_state['values']['dropdown_first'] : key($options_first);
   $form['dropdown_first'] = array(
     '#type' => 'select',
     '#title' => 'First Dropdown',
@@ -334,13 +333,15 @@ function ajax_example_dependent_dropdown($form, &$form_state) {
     // dropdown when rebuilt
     '#ajax' => array(
       'callback' => 'ajax_example_dependent_dropdown_callback',
-      'wrapper' => 'dd',
+      'wrapper' => 'dropdown_second_replace',
     ),
   );
   $form['dropdown_second'] = array(
     '#type' => 'select',
     '#title' => 'Second Dropdown',
-    '#prefix' => '<div id="dd">',
+    // The entire enclosing div created here gets replaced when dropdown_first
+    // is changed.
+    '#prefix' => '<div id="dropdown_second_replace">',
     '#suffix' => '</div>',
     // when the form is rebuilt during ajax processing, the $selected variable
     // will now have the new value and so the options will change
@@ -358,11 +359,15 @@ function ajax_example_dependent_dropdown($form, &$form_state) {
 /**
  * Selects just the second dropdown to be returned for re-rendering
  *
+ * The version here has been re-loaded with a different set of options and
+ * is sent back to the page to be updated.
+ *
  * @return renderable array (the second dropdown)
  */
 function ajax_example_dependent_dropdown_callback($form, $form_state) {
   return $form['dropdown_second'];
 }
+
 
 /**
  * Helper function to populate the first dropdown. This would normally be
@@ -371,12 +376,8 @@ function ajax_example_dependent_dropdown_callback($form, $form_state) {
  * @return array of options
  */
 function _ajax_example_get_first_dropdown_options() {
-  return array(
-    '100' => 'Strings',
-    '101' => 'Woodwind',
-    '102' => 'Brass',
-    '103' => 'Percussion',
-  );
+  // drupal_map_assoc() just makes an array('Strings' => 'Strings'...).
+  return drupal_map_assoc(array(t('Strings'), t('Woodwinds'), t('Brass'), t('Percussion')));
 }
 
 /**
@@ -389,10 +390,10 @@ function _ajax_example_get_first_dropdown_options() {
  */
 function _ajax_example_get_second_dropdown_options($key = '') {
   $options = array(
-    '100' => array('200' => 'Violin', '201' => 'Viola', '202' => 'Cello', '203' => 'Double Bass'),
-    '101' => array('204' => 'Flute', '205' => 'Clarinet', '206' => 'Oboe'),
-    '102' => array('207' => 'Trumpet', '208' => 'trombone', '209' => 'French Horn', '210' => 'Tuba'),
-    '103' => array('211' => 'Bass Drum', '212' => 'Timpani', '213' => 'Snare Drum'),
+    t('Strings') => drupal_map_assoc(array(t('Violin'), t('Viola'), t('Cello'), t('Double Bass'))),
+    t('Woodwinds') => drupal_map_assoc(array(t('Flute'), t('Clarinet'), t('Oboe'), t('Bassoon'))),
+    t('Brass') => drupal_map_assoc(array(t('Trumpet'), t('Trombone'), t('French Horn'), t('Euphonium'))),
+    t('Percussion') => drupal_map_assoc(array(t('Bass Drum'), t('Timpani'), t('Snare Drum'), t('Tambourine'))),
   );
   if (isset($options[$key])) {
     return $options[$key];
