@@ -1,0 +1,19 @@
+/* $Id$ */
+
+/**
+  * @file
+  *   CSS for ajax_example
+  *
+ */
+ 
+/* hide the next button when not degrading to non-javascript browser */
+html.js .next-button { 
+  display: none; 
+}
+
+
+.form-item-dropdown-first {
+  display: inline-block;
+}
+
+
