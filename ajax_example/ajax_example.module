@@ -86,8 +86,30 @@ function ajax_example_menu() {
     'file' => 'ajax_example_misc.inc',
   );
 
+  $items['ajax_example/dependent_dropdown_degrades'] = array(
+    'title' => 'AJAX Example: degrading dependent dropdown',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_dependent_dropdown_degrades'),
+    'access callback' => TRUE,
+    'file' => 'ajax_example_graceful_degradation.inc',
+  );
+  $items['ajax_example/dependent_dropdown_degrades_no_js'] = array(
+    'title' => 'AJAX Example: degrading dependent dropdown w/JS turned off',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_dependent_dropdown_degrades', TRUE),
+    'access callback' => TRUE,
+    'file' => 'ajax_example_graceful_degradation.inc',
+  );
 
   return $items;
+}
+
+/**
+ * Implements hook_init() to add module css.
+ */
+function ajax_example_init() {
+  drupal_add_css(drupal_get_path('module', 'ajax_example') . '/ajax_example.css');
+  drupal_add_js(drupal_get_path('module', 'ajax_example') . '/ajax_example.js');
 }
 
 /**
