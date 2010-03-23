@@ -149,5 +149,5 @@ function ajax_example_dependent_dropdown_degrades_submit($form, &$form_state) {
  * @return renderable array (the second dropdown)
  */
 function ajax_example_dependent_dropdown_degrades_first_callback($form, $form_state) {
-  return $form['dropdown_second'];
+  return $form['dropdown_second_fieldset']['dropdown_second'];
 }
