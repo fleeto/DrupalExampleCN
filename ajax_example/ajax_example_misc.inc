@@ -49,7 +49,7 @@ function ajax_link_response($type = 'ajax') {
     $output = t("This is some content delivered via AJAX");
     $commands = array();
     $commands[] = ajax_command_append('#myDiv', $output);
-    $page = array('#type' => 'ajax_commands', '#ajax_commands' => $commands);
+    $page = array('#type' => 'ajax', '#commands' => $commands);
     ajax_deliver($page);
   }
   else {
