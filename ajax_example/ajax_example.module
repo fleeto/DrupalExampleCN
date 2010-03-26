@@ -177,14 +177,14 @@ function ajax_example_autocheckboxes($form, &$form_state) {
 
   $default = !empty($form_state['values']['howmany']) ? $form_state['values']['howmany'] : 1;
 
-  $form['howmany'] = array(
+  $form['howmany_select'] = array(
     '#title' => t('How many checkboxes do you want?'),
     '#type' => 'select',
     '#options' => array(1 => 1, 2 => 2, 3 => 3, 4 => 4),
     '#default_value' => $default,
     '#ajax' => array(
       'callback' => 'ajax_example_autocheckboxes_callback',
-      'wrapper' => 'checkboxes',
+      'wrapper' => 'checkboxes-div',
       'method' => 'replace',
       'effect' => 'fade',
     ),
@@ -192,17 +192,19 @@ function ajax_example_autocheckboxes($form, &$form_state) {
   );
 
 
-  $form['checkboxes'] = array(
+  $form['checkboxes_fieldset'] = array(
     '#title' => t("Generated Checkboxes"),
-    '#prefix' => '<div id="checkboxes">',
+    // The prefix/suffix provide the div that we're replacing, named by
+    // #ajax['wrapper'] above.
+    '#prefix' => '<div id="checkboxes-div">',
     '#suffix' => '</div>',
     '#type' => 'fieldset',
     '#description' => t('This is where we get automatically generated checkboxes'),
   );
 
-  $num_checkboxes = !empty($form_state['values']['howmany']) ? $form_state['values']['howmany'] : 1;
+  $num_checkboxes = !empty($form_state['values']['howmany_select']) ? $form_state['values']['howmany_select'] : 1;
   for ($i=1; $i<=$num_checkboxes; $i++) {
-    $form['checkboxes']["checkbox$i"] = array(
+    $form['checkboxes_fieldset']["checkbox$i"] = array(
       '#type' => 'checkbox',
       '#title' => "Checkbox $i",
     );
@@ -222,7 +224,7 @@ function ajax_example_autocheckboxes($form, &$form_state) {
  * array of commands), we can just return a piece of the form.
  */
 function ajax_example_autocheckboxes_callback($form, $form_state) {
-  return $form['checkboxes'];
+  return $form['checkboxes_fieldset'];
 }
 
 /**
