@@ -101,6 +101,22 @@ function ajax_example_menu() {
     'file' => 'ajax_example_graceful_degradation.inc',
   );
 
+
+  $items['ajax_example/dynamic_sections'] = array(
+    'title' => 'AJAX Example: Dynamic Sections',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_dynamic_sections'),
+    'access callback' => TRUE,
+    'file' => 'ajax_example_graceful_degradation.inc',
+  );
+  $items['ajax_example/dynamic_sections_no_js'] = array(
+    'title' => 'AJAX Example: Dynamic Sections w/JS turned off',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_dynamic_sections', TRUE),
+    'access callback' => TRUE,
+    'file' => 'ajax_example_graceful_degradation.inc',
+  );
+
   return $items;
 }
 

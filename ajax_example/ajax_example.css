@@ -11,8 +11,8 @@ html.js .next-button {
   display: none; 
 }
 
-
-.form-item-dropdown-first {
+/* Make the next/choose button align to the right of the select control */
+.form-item-dropdown-first, .form-item-question-type-select {
   display: inline-block;
 }
 
