@@ -117,6 +117,22 @@ function ajax_example_menu() {
     'file' => 'ajax_example_graceful_degradation.inc',
   );
 
+
+  $items['ajax_example/wizard'] = array(
+    'title' => 'AJAX Example: Wizard',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_wizard'),
+    'access callback' => TRUE,
+    'file' => 'ajax_example_graceful_degradation.inc',
+  );
+  $items['ajax_example/wizard_no_js'] = array(
+    'title' => 'AJAX Example: Wizard w/JS turned off',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_wizard', TRUE),
+    'access callback' => TRUE,
+    'file' => 'ajax_example_graceful_degradation.inc',
+  );
+
   return $items;
 }
 

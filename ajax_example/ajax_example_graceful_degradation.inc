@@ -13,8 +13,15 @@
  * These examples show AJAX with graceful degradation when Javascript is not
  * available.
  *
+ * In each of these the key idea is that the form is rebuilt different ways
+ * depending on form input. So the formbuilder function is in charge of
+ * almost all logic.
+ *
  * General documentation is available at
  * @link ajax AJAX Framework documentation @endlink.
+ *
+ * @todo: Enable validation functions after http://drupal.org/node/671184 lands.
+ * @todo: Enable #required in wizard after that issue lands.
  *
  * @}
 */
@@ -126,7 +133,7 @@ function ajax_example_dependent_dropdown_degrades_submit($form, &$form_state) {
 
   // Now handle the case of the next, previous, and submit buttons.
   // only submit will result in actual submission, all others rebuild.
-  switch($form_state['clicked_button']['#id']) {
+  switch($form_state['triggering_element']['#id']) {
     case 'edit-submit': // Submit: We're done.
       $form_state['rebuild'] = FALSE;
       drupal_set_message(t('Your values have been submitted. dropdown_first=@first, dropdown_second=@second', array('@first' => $form_state['values']['dropdown_first'], '@second' => $form_state['values']['dropdown_second'])));
@@ -282,7 +289,7 @@ function ajax_example_dynamic_sections_submit($form, &$form_state) {
   // select is changed.
   // Now handle the case of the next, previous, and submit buttons.
   // only submit will result in actual submission, all others rebuild.
-  switch($form_state['clicked_button']['#id']) {
+  switch($form_state['triggering_element']['#id']) {
     case 'edit-submit': // Submit: We're done.
       $form_state['rebuild'] = FALSE;
       $answer = $form_state['values']['question'];
@@ -313,4 +320,177 @@ function ajax_example_dynamic_sections_submit($form, &$form_state) {
  */
 function ajax_example_dynamic_sections_select_callback($form, $form_state) {
   return $form['questions_fieldset'];
+}
+
+
+/**
+ * This example is a classic wizard, where a different and sequential form
+ * is presented on each step of the form.
+ *
+ * In the AJAX version, form is replaced for each wizard section. In the
+ * multistep version, it causes a new page load.
+ *
+ * @param $form
+ * @param $form_state
+ * @param $no_js_use
+ *   Used for this demonstration only. If true means that the form should be
+ *   built using a simulated no-javascript approach (ajax.js will not be
+ *   loaded.)
+ */
+function ajax_example_wizard($form, &$form_state, $no_js_use = FALSE) {
+
+  // Provide a wrapper around the entire form, since we'll replace the whole
+  // thing.
+  $form['#prefix'] = '<div id="wizard-form-wrapper">';
+  $form['#suffix'] = '</div>';
+  $form['#tree'] = TRUE; // We want to deal with hierarchical form values.
+
+  $form['description'] = array(
+    '#markup' => '<div>' . t('This example is a step-by-step wizard. The <a href="!ajax">AJAX version</a> does it without page reloads; the <a href="!multistep">multistep version</a> is the same code but simulates a non-javascript environment, showing it with page reloads.',
+      array('!ajax' => url('ajax_example/wizard'), '!multistep' => url('ajax_example/wizard_no_js')))
+    . '</div>',
+  );
+
+  $step = empty($form_state['storage']['step']) ? 1 : $form_state['storage']['step'];
+  $form_state['storage']['step'] = $step;
+
+  switch ($step) {
+    case 1:
+      $form['step1'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Step 1: Personal details'),
+      );
+      $form['step1']['name'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Your name'),
+        '#default_value' => empty($form_state['values']['step1']['name']) ? '' : $form_state['values']['step1']['name'],
+        // '#required' => TRUE,
+      );
+      break;
+
+    case 2:
+      $form['step2'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Step 2: Street address info'),
+      );
+      $form['step2']['address'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Your street address'),
+        '#default_value' => empty($form_state['values']['step2']['address']) ? '' : $form_state['values']['step2']['address'],
+        // '#required' => TRUE,
+      );
+      break;
+    case 3:
+      $form['step3'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Step 3: City info'),
+      );
+      $form['step3']['city'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Your city'),
+        '#default_value' => empty($form_state['values']['step3']['city']) ? '' : $form_state['values']['step3']['city'],
+        // '#required' => TRUE,
+      );
+      break;
+  }
+  if ($step == 3) {
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t("Submit your information"),
+    );
+  }
+  if ($step < 3) {
+    $form['next'] = array(
+      '#type' => 'submit',
+      '#value' => t('Next step'),
+      '#ajax' => array(
+        'wrapper' => 'wizard-form-wrapper',
+        'callback' => 'ajax_example_wizard_callback',
+      ),
+
+    );
+  }
+  if ($step > 1) {
+    $form['prev'] = array(
+      '#type' => 'submit',
+      '#value' => t("Previous step"),
+
+      // Since all info will be discarded, don't validate on 'prev'.
+      '#limit_validation_errors' => array(),
+      // #submit is required to use #limit_validation_errors
+      '#submit' => array('ajax_example_wizard_submit'),
+      '#ajax' => array(
+        'wrapper' => 'wizard-form-wrapper',
+        'callback' => 'ajax_example_wizard_callback',
+      ),
+    );
+  }
+
+  // This simply allows us to demonstrate no-javascript use without
+  // actually turning off javascript in the browser. Removing the #ajax
+  // element turns off AJAX behaviors on that element and as a result
+  // ajax.js doesn't get loaded.
+  // For demonstration only! You don't need this.
+  if ($no_js_use) {
+    // Remove the #ajax from the above, so ajax.js won't be loaded.
+    // For demonstration only.
+    unset($form['next']['#ajax']);
+    unset($form['prev']['#ajax']);
+  }
+
+  return $form;
+}
+
+function ajax_example_wizard_callback($form, $form_state) {
+  return $form;
+}
+
+/**
+ * Submit function for ajax_example_wizard.
+ *
+ * In AJAX this is only submitted when the final submit button is clicked,
+ * but in the non-javascript situation, it is submitted with every
+ * button click.
+ *
+ */
+function ajax_example_wizard_submit($form, &$form_state) {
+
+  // Save away the current information.
+  $current_step = 'step' . $form_state['storage']['step'];
+  $form_state['storage']['values'][$current_step] = $form_state['values'][$current_step];
+
+  // Increment or decrement the step as needed. Recover values if they exist.
+  if ($form_state['triggering_element']['#id'] == 'edit-next') {
+    $form_state['storage']['step']++;
+    // If values had already been entered for this step, recover them from
+    // $form_state['storage'] to pre-populate them.
+    $step_name = 'step' . $form_state['storage']['step'];
+    if (!empty($form_state['storage']['values'][$step_name])) {
+      $form_state['values'][$step_name] = $form_state['storage']['values'][$step_name];
+    }
+  }
+  if ($form_state['triggering_element']['#id'] == 'edit-prev') {
+    $form_state['storage']['step']--;
+    // Recover our values from $form_state['storage'] to pre-populate them.
+    $step_name = 'step' . $form_state['storage']['step'];
+    $form_state['values'][$step_name] = $form_state['storage']['values'][$step_name];
+  }
+
+  // If they're done, submit.
+  if ($form_state['triggering_element']['#id'] == 'edit-submit') {
+    $value_message = t("Your information has been submitted: ");
+    foreach ($form_state['storage']['values'] as $step => $values) {
+      $value_message .= "$step: ";
+      foreach ($values as $key => $value) {
+       $value_message .= "$key=$value, ";
+      }
+    }
+    drupal_set_message($value_message);
+    $form_state['rebuild'] = FALSE;
+    return;
+  }
+
+  // Otherwise, we still have work to do.
+
+  $form_state['rebuild'] = TRUE;
 }
