@@ -177,13 +177,15 @@ function node_example_uninstall() {
   // http://api.drupal.org/api/function/node_delete_multiple/7
   node_delete_multiple($nids);
 
-  // Loop over each of our fields and delete them individually.
+  // Loop over each of the fields defined by this module and delete
+  // all instances of the field, their data, and the field itself.
   // http://api.drupal.org/api/function/field_delete_field/7
   foreach (array_keys(node_example_installed_fields()) as $field) {
     field_delete_field($field);
   }
 
-  // Loop over each of our fields instances and delete them individually.
+  // Loop over any remaining field instances attached to the node_example
+  // content type (such as the body field) and delete them individually.
   // http://api.drupal.org/api/function/field_delete_field/7
   $instances = field_info_instances('node', 'node_example');
   foreach ($instances as $instance_name => $instance) {
