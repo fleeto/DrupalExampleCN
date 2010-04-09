@@ -62,7 +62,7 @@ function node_example_install() {
   // Create all the instances for our fields.
   // http://api.drupal.org/api/function/field_create_instance/7
   foreach (node_example_installed_instances() as $instance) {
-    $instance['object_type'] = 'node';
+    $instance['entity_type'] = 'node';
     $instance['bundle'] = $node_example['type'];
     field_create_instance($instance);
   }
