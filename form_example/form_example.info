@@ -6,4 +6,5 @@ core = 7.x
 files[] = form_example.module
 files[] = form_example.install
 files[] = form_example_tutorial.inc
+files[] = form_example_states.inc
 files[] = form_example.test
