@@ -481,10 +481,7 @@ function dbtng_example_form_update($form, &$form_state) {
   }
   $default_entry = !empty($form_state['values']['pid']) ? $keyed_entries[$form_state['values']['pid']] : $entries[0];
 
-  $form['entry'] = array(
-    '#type' => 'value',
-    '#value' => $default_entry,
- );
+  $form_state['entries'] = $keyed_entries;
 
  $form['pid'] = array(
     '#type'  => 'select',
@@ -531,7 +528,7 @@ function dbtng_example_form_update($form, &$form_state) {
  * When the pid changes, populates the defaults from the database in the form.
  */
 function dbtng_example_form_update_callback($form, $form_state) {
-  $entry = $form_state['values']['entry'];
+  $entry = $form_state['entries'][$form_state['values']['pid']];
   // Setting the #value of items is the only way I was able to figure out
   // to get replaced defaults on these items. #default_value will not do it
   // and shouldn't.
