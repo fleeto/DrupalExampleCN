@@ -187,7 +187,7 @@ function _token_example_get_taxonomy_term() {
  * Build a list of availalbe files.
  */
 function _token_example_get_file() {
-  $file_query = db_select('file', 'f');
+  $file_query = db_select('file_managed', 'f');
   $file_query->fields('f', array('fid', 'filename'));
   $file_query->range(0, 10);
   $files = $file_query->execute()->fetchAllKeyed();
