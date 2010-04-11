@@ -5,14 +5,12 @@
  * Implementation of hook_install().
  */
 function node_access_example_install() {
-  drupal_install_schema('node_access_example');
 }
 
 /**
  * Implementation of hook_uninstall().
  */
 function node_access_example_uninstall() {
-  drupal_uninstall_schema('node_access_example');
 }
 
 /**
