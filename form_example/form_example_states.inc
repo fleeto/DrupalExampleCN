@@ -5,16 +5,6 @@
  * @file
  * An example of how to use the new #states Form API element, allowing
  * dynamic form behavior with very simple setup.
- * @see http://api.drupal.org/api/drupal/developer--topics--forms_api_reference.html/7#states
- *
- * Outstanding issues:
- *  - Can't hide a fieldset
- *    @see http://drupal.org/node/667944
- *    @see http://drupal.org/node/767212
- *  - Can't use radios instead of select.
- *    @see http://drupal.org/node/767268.
- *  - Setting optional/required doesn't actually make an item optional/required.
- *    Instead it just changes CSS around the item. (no issue yet)
  */
 
 /**
@@ -48,6 +38,30 @@
  *   ),
  * ),
  * @endcode
+ *
+ * If you need an action to take place only when two different conditions are
+ * true, then you add both of those conditions to the action. See the
+ * 'country_writein' element below for an example.
+ *
+ * Note that the easiest way to select a textfield, checkbox, or select is
+ * with the ':input' jquery shortcut, which selects any any of those.
+ * @see http://api.jquery.com/input-selector/
+ *
+ * There are examples below of changing or hiding an element when a checkbox
+ * is checked, when a textarea is filled, when a select has a given value.
+ *
+ *
+ * See also @link http://api.drupal.org/api/drupal/developer--topics--forms_api_reference.html/7#states Form API Reference @endlink
+ *
+ * Outstanding issues:
+ *  - Can't hide a fieldset
+ *    @see http://drupal.org/node/667944.
+ *    @see http://drupal.org/node/767212.
+ *  - Can't use radios instead of select.
+ *    @see http://drupal.org/node/767268.
+ *  - Setting optional/required doesn't actually make an item optional/required.
+ *    Instead it just changes CSS around the item.
+ *    @see http://drupal.org/node/767738.
  */
 function form_example_states_form($form, &$form_state) {
   $form['name'] = array(
@@ -147,10 +161,16 @@ function form_example_states_form($form, &$form_state) {
     '#size' => 20,
     '#title' => t('Please enter the name of the country where your college or university is located.'),
 
-    // Make this form invisible if $form['school_country'] above is set to 'UK'.
+    // Here we use two conditions, which is an AND. We want to show this
+    // element *only* if the school_country select is 'Other' AND the
+    // student_type is 'Undergraduate'. Otherwise, the field might be shown
+    // inappropriately if the user has been experimenting while set to
+    // "Undergraduate" and then the select changes.
     '#states' => array(
-      'invisible' => array(  // Action to take: Make invisible.
-        ':input[name=school_country]' => array('value' => t('UK')),
+      'visible' => array(  // Action to take: Make visible.
+        // Make visible if *both* conditions are true.
+        ':input[name=school_country]' => array('value' => t('Other')),
+        ':input[name=student_type]' => array('value' => t('Undergraduate')),
       ),
     ),
   );
