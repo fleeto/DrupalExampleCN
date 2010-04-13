@@ -306,8 +306,10 @@ function image_example_colorize_effect(&$image, $data) {
 
   // Not all GD installations are created equal. It is a good idea to check for
   // the existence of image manipulation functions before using them.
-  // PHP installations using non-bundled GD do not have imagerotate.
-  if (!function_exists('imagefield')) {
+  // PHP installations using non-bundled GD do not have imagefilter(). More
+  // information about image manipulation functions is available in the PHP
+  // manual. http://www.php.net/manual/en/book.image.php
+  if (!function_exists('imagefilter')) {
     watchdog('image', 'The image %image could not be colorized because the imagefilter() function is not available in this PHP installation.', array('%file' => $image->source));
     return FALSE;
   }
