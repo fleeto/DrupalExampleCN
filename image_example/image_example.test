@@ -101,17 +101,4 @@ class ImageExampleTestCase extends DrupalWebTestCase {
     $image = isset($fid) ? file_load($fid) : NULL;
     $this->assertRaw(file_uri_target($image->uri), t('Image is displayed'));
   }
-
-  /**
-   * Tests for colorize effect.
-   */
-  function testImageExampleEffects() {
-    // This test is a very simple verification that the
-    // image_example_colorize_effect() function works. We simply call the
-    // function and if it returns TRUE we assume all is well.
-    $file = current($this->drupalGetTestFiles('image'));
-    $image = image_load($file->uri);
-    $return = image_example_colorize_effect($image, array('color' => '#FFFFFF'));
-    $this->assertTrue($return, t('image_example_colorize_effect() function returned TRUE.'));
-  }
 }
