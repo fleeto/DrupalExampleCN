@@ -4,8 +4,17 @@
 /**
  * @file
  * Examples demonstrating the Drupal Form API.
+ *
  */
 
+/**
+ * The Form Example module is a part of the @link http://drupal.org/project/examples Examples for Developers Project @endlink
+ * and provides various Drupal Form API Examples. You can download and
+ * experiment with this code at the
+ * @link http://drupal.org/project/examples Examples for Developers project page. @endlink
+ *
+ * @defgroup form_example Examples: Form Examples
+ */
 
 /**
  * Implements hook_menu() to set up the URLs (menu entries) for the

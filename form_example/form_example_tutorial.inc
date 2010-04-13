@@ -13,22 +13,37 @@
  * Links are provided inline for the related handbook pages.
  */
 
+/**
+ * Main Form tutorial page.
+ *
+ * @see form_example_tutorial_1()
+ * @see form_example_tutorial_2()
+ * @see form_example_tutorial_3()
+ * @see form_example_tutorial_4()
+ * @see form_example_tutorial_5()
+ * @see form_example_tutorial_6()
+ * @see form_example_tutorial_7()
+ * @see form_example_tutorial_8()
+ * @see form_example_tutorial_9()
+ * @see form_example_tutorial_10()
+ *
+ */
 function form_example_tutorial() {
   return t('This is a set of ten form tutorials tied to the <a href="http://drupal.org/node/262422">Drupal handbook</a>.');
 }
 
 //////////////// Tutorial Example 1 //////////////////////
 /**
- * This first form function is from the handbook page at
- * // TODO: UPdate all URLs
- * http://drupal.org/node/717722.
+ * This first form function is from the @link http://drupal.org/node/717722 Form Tutorial handbook page @endlink
+ *
  * It just creates a very basic form with a textfield.
  *
- * This function is called the "form builder". It builds the form.
- * It takes a single argument, $form_state, but if drupal_get_form()
+ * This function is called the "form constructor function". It builds the form.
+ * It takes a two arguments, $form and $form_state, but if drupal_get_form()
  * sends additional arguments, they will be provided after $form_state.
+ *
+ * @ingroup form_example
  */
-
 function form_example_tutorial_1($form, &$form_state) {
 
   $form['description'] = array(
@@ -48,7 +63,9 @@ function form_example_tutorial_1($form, &$form_state) {
 
 /**
  * This is Example 2, a basic form with a submit button.
+ *
  * @see http://drupal.org/node/717726
+ * @ingroup form_example
  */
 function form_example_tutorial_2($form, &$form_state) {
   $form['description'] = array(
@@ -81,6 +98,8 @@ function form_example_tutorial_2($form, &$form_state) {
  * Study the code below and you'll notice that we renamed the array of the first
  * and last name fields by placing them under the $form['name']
  * array. This tells Form API these fields belong to the $form['name'] fieldset.
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_3($form, &$form_state) {
   $form['description'] = array(
@@ -115,6 +134,7 @@ function form_example_tutorial_3($form, &$form_state) {
 /**
  * Example 4: Basic form with required fields.
  *
+ * @ingroup form_example
  */
 function form_example_tutorial_4($form, &$form_state) {
   $form['description'] = array(
@@ -160,9 +180,9 @@ function form_example_tutorial_4($form, &$form_state) {
  * For a more extensive example on element types
  * @see http://drupal.org/node/751826
  *
- * See the complete form reference at
- * @see http://api.drupal.org/api/file/developer/topics/forms_api.html
-
+ * See the @link http://api.drupal.org/api/file/developer/topics/forms_api.html complete form reference @endlink
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_5($form, &$form_state) {
   $form['description'] = array(
@@ -205,8 +225,9 @@ function form_example_tutorial_5($form, &$form_state) {
  * Example 6: A basic form with a validate handler.
  *
  * From http://drupal.org/node/717736
+ * @see form_example_tutorial_6_validate()
+ *
  */
-
 function form_example_tutorial_6($form, &$form_state) {
   $form['description'] = array(
     '#type' => 'item',
@@ -262,6 +283,9 @@ function form_example_tutorial_6($form, &$form_state) {
  * followed by '_validate'. This is always the name of the default validation
  * function. An alternate list of validation functions could have been provided
  * in $form['#validate'].
+ *
+ * @see form_example_tutorial_6()
+ *
  */
 function form_example_tutorial_6_validate($form, &$form_state) {
   $year_of_birth = $form_state['values']['year_of_birth'];
@@ -279,8 +303,12 @@ function form_example_tutorial_6_validate($form, &$form_state) {
  *
  * From the handbook page:
  * http://drupal.org/node/717740
+ *
+ * @see form_example_tutorial_7_validate()
+ * @see form_example_tutorial_7_submit()
+ * @ingroup form_example
+ *
  */
-
 function form_example_tutorial_7($form, &$form_state) {
   $form['description'] = array(
     '#type' => 'item',
@@ -320,23 +348,25 @@ function form_example_tutorial_7($form, &$form_state) {
 
 
 /**
- * Validation function.
+ * Validation function for form_example_tutorial_7().
+ *
  */
 function form_example_tutorial_7_validate($form, &$form_state) {
-    $year_of_birth = $form_state['values']['year_of_birth'];
-    if ($year_of_birth && ($year_of_birth < 1900 || $year_of_birth > 2000)) {
-        form_set_error('year_of_birth', 'Enter a year between 1900 and 2000.');
-    }
+  $year_of_birth = $form_state['values']['year_of_birth'];
+  if ($year_of_birth && ($year_of_birth < 1900 || $year_of_birth > 2000)) {
+    form_set_error('year_of_birth', 'Enter a year between 1900 and 2000.');
+  }
 }
 
 /**
+ * Submit function for form_example_tutorial_7().
+ *
  * Adds a submit handler/function to our form to send a successful
  * completion message to the screen.
  */
-
 function form_example_tutorial_7_submit($form, &$form_state) {
-    drupal_set_message(t('The form has been submitted. name="@first @last", year of birth=@year_of_birth',
-      array('@first' => $form_state['values']['first'], '@last' => $form_state['values']['last'], '@year_of_birth' => $form_state['values']['year_of_birth'])));
+  drupal_set_message(t('The form has been submitted. name="@first @last", year of birth=@year_of_birth',
+    array('@first' => $form_state['values']['first'], '@last' => $form_state['values']['last'], '@year_of_birth' => $form_state['values']['year_of_birth'])));
 }
 
 
@@ -346,6 +376,11 @@ function form_example_tutorial_7_submit($form, &$form_state) {
  * Example 8: With a "reset" button.
  *
  * From handbook page http://drupal.org/node/717742.
+ *
+ * @see form_example_tutorial_8_clear()
+ * @see form_example_tutorial_8_validate()
+ * @see form_example_tutorial_8_submit()
+ * @ingroup form_example
  */
 function form_example_tutorial_8($form, &$form_state) {
   $form['description'] = array(
@@ -401,19 +436,17 @@ function form_example_tutorial_8($form, &$form_state) {
 }
 
 /**
- * Validation function for the reset button.
+ * Submit handler for the reset button of form_example_tutorial_8().
  *
- * Setting the $form_state['rebuild'] value to TRUE says that we're going to
- * rebuild the form.  We also clear the existing values, although values
- * aren't used in the form builder in this example.
  */
 function form_example_tutorial_8_clear($form, &$form_state) {
-  $form_state['rebuild'] = FALSE;
-  unset($form_state['storage']);
-  unset($form_state['input']);
+  // Do nothing. Form submits and by default redirects to the same URL,
+  // and an entire new form is born.
 }
 
 /**
+ * Validate handler for form_example_tutorial_8().
+ *
  * Makes the first and last name fields required by using the
  * validation function to make sure values have been entered. This
  * causes the name fields to show up in red if left blank after clearing
@@ -438,6 +471,9 @@ function form_example_tutorial_8_validate($form, &$form_state) {
   }
 }
 
+/**
+ * Submit function for form_example_tutorial_8().
+ */
 function form_example_tutorial_8_submit($form, &$form_state) {
   drupal_set_message(t('The form has been submitted. name="@first @last", year of birth=@year_of_birth',
     array('@first' => $form_state['values']['first'], '@last' => $form_state['values']['last'], '@year_of_birth' => $form_state['values']['year_of_birth'])));
@@ -454,6 +490,13 @@ function form_example_tutorial_8_submit($form, &$form_state) {
  * the form will by default have the previously-entered values.
  *
  * From handbook page http://drupal.org/node/717746.
+ *
+ * @see form_example_tutorial_9_new_name()
+ * @see form_example_tutorial_9_clear()
+ * @see form_example_tutorial_9_submit()
+ * @see form_example_tutorial_9_validate()
+ * @ingroup form_example
+ *
  */
 function form_example_tutorial_9($form, &$form_state) {
   $form['description'] = array(
@@ -474,7 +517,6 @@ function form_example_tutorial_9($form, &$form_state) {
   $form['name']['first'] = array(
     '#type' => 'textfield',
     '#title' => t('First name'),
-    '#default_value' => !empty($form_state['values']['first']) ? $form_state['values']['first'] : '', // changed
     '#description' => "Please enter your first name.",
     '#size' => 20,
     '#maxlength' => 20,
@@ -482,18 +524,16 @@ function form_example_tutorial_9($form, &$form_state) {
   $form['name']['last'] = array(
     '#type' => 'textfield',
     '#title' => t('Last name'),
-    '#default_value' => !empty($form_state['values']['last']) ? $form_state['values']['last'] : '', // added
   );
   $form['year_of_birth'] = array(
     '#type' => 'textfield',
     '#title' => "Year of birth",
     '#description' => 'Format is "YYYY"',
-    '#default_value' => !empty($form_state['values']['year_of_birth']) ? $form_state['values']['year_of_birth'] : '', // added
   );
 
-  // Add new elements to the form if $form_state['storage']['new_name'] is set.
+  // Add new elements to the form if $form_state['new_name'] is set.
   // This happens when the "add new name" button is clicked.
-  if (isset($form_state['storage']['new_name'])) {
+  if (isset($form_state['new_name'])) {
     $form['name2'] = array(
       '#type' => 'fieldset',
       '#title' => t('Name #2'),
@@ -506,18 +546,15 @@ function form_example_tutorial_9($form, &$form_state) {
       '#description' => "Please enter your first name.",
       '#size' => 20,
       '#maxlength' => 20,
-      '#default_value' => !empty($form_state['values']['first2']) ? $form_state['values']['first2'] : '',
     );
     $form['name2']['last2'] = array(
       '#type' => 'textfield',
       '#title' => t('Last name'),
-      '#default_value' => !empty($form_state['values']['last2']) ? $form_state['values']['last2'] : '',
     );
     $form['year_of_birth2'] = array(
       '#type' => 'textfield',
       '#title' => "Year of birth",
       '#description' => 'Format is "YYYY"',
-      '#default_value' => !empty($form_state['values']['year_of_birth2']) ? $form_state['values']['year_of_birth2'] : '',
     );
   }
 
@@ -534,7 +571,7 @@ function form_example_tutorial_9($form, &$form_state) {
   );
 
   // Adds "Add another name" button, if it hasn't already been clicked.
-  if (empty($form_state['storage']['new_name'])) {
+  if (empty($form_state['new_name'])) {
     $form['new_name'] = array(
       '#type' => 'submit',
       '#value' => 'Add another name',
@@ -546,31 +583,44 @@ function form_example_tutorial_9($form, &$form_state) {
 }
 
 /**
- * Creating a new element, 'new_name' in the $form_state['storage'] array
+ * Submit handler for "Add new name" button on form_example_tutorial_9().
+ *
+ * Creating a new key, 'new_name' in the $form_state array
  * sets the value used to determine whether to show the new
  * fields on the form and hide the "Add another name" button.
  *
- * $form_state['storage'] is just a place to store spare information. Any
- * keys can be created in this array.
+ * $form_state['new_name'] is used to tell the form constructor function
+ * that elements for a new name should be created. All elements of
+ * $form_state are persisted, so there's no need to use a particular key,
+ * like the old $form_state['storage'].
  */
 function form_example_tutorial_9_new_name($form, &$form_state) {
-    $form_state['storage']['new_name'] = TRUE;
-    // Setting $form_state['rebuild'] = TRUE causes the default submit
-    // function to be skipped and the form to be rebuilt.
-    $form_state['rebuild'] = TRUE;
+  // Everything in $form_state is persistent, so we'll just use
+  // $form_state['new_name']
+  $form_state['new_name'] = TRUE;
+
+  // Setting $form_state['rebuild'] = TRUE causes the default submit
+  // function to be skipped and the form to be rebuilt.
+  $form_state['rebuild'] = TRUE;
 }
 
 /**
- * In this 'clear' function we'll just submit the form with nothing happening.
+ * "Reset" or "clear" submit handler for form-example_tutorial_9().
+ *
+ * In this 'clear' function we'll just submit the form with nothing happening,
+ * ending up with a brand new form.
+ *
  * The default submit function won't run, just this one.
+ * In a more sophisticated example a "Clear" button might clear just one page,
+ * in which case it would have to do more. But here we're just going to throw
+ * away everything and continue.
  */
 function form_example_tutorial_9_clear($form, &$form_state) {
-  unset ($form_state['storage']);
-  unset($form_state['input']);
-  $form_state['rebuild'] = FALSE;
 }
 
 /**
+ * Validate function for form_example_tutorial_9().
+ *
  * Adds logic to validate the form to check the validity of the new fields,
  * if they exist.
  */
@@ -587,7 +637,7 @@ function form_example_tutorial_9_validate($form, &$form_state) {
   if ($year_of_birth && ($year_of_birth < 1900 || $year_of_birth > 2000)) {
     form_set_error('year_of_birth', 'Enter a year between 1900 and 2000.');
   }
-  if (!empty($form_state['storage']['new_name'])) {
+  if (!empty($form_state['new_name'])) {
     $year_of_birth = $form_state['values']['year_of_birth2'];
     $first_name = $form_state['values']['first2'];
     $last_name = $form_state['values']['last2'];
@@ -602,17 +652,17 @@ function form_example_tutorial_9_validate($form, &$form_state) {
     }
   }
 }
+
 /**
- * Submit function.
+ * Submit function for form_example_tutorial_9().
  */
 function form_example_tutorial_9_submit($form, &$form_state) {
   drupal_set_message(t('The form has been submitted. name="@first @last", year of birth=@year_of_birth',
     array('@first' => $form_state['values']['first'], '@last' => $form_state['values']['last'], '@year_of_birth' => $form_state['values']['year_of_birth'])));
   if (!empty($form_state['values']['first2'])) {
-      drupal_set_message(t('Second name: name="@first @last", year of birth=@year_of_birth',
-    array('@first' => $form_state['values']['first2'], '@last' => $form_state['values']['last2'], '@year_of_birth' => $form_state['values']['year_of_birth2'])));
+    drupal_set_message(t('Second name: name="@first @last", year of birth=@year_of_birth',
+      array('@first' => $form_state['values']['first2'], '@last' => $form_state['values']['last2'], '@year_of_birth' => $form_state['values']['year_of_birth2'])));
   }
-  unset($form_state['storage']);
 }
 
 
@@ -625,18 +675,23 @@ function form_example_tutorial_9_submit($form, &$form_state) {
  * Handbook page: http://drupal.org/node/717750.
  *
  * For more extensive multistep forms,
- * @see http://pingvision.com/blog/ben-jeavons/2009/multi-step-forms-drupal-6-using-variable-functions
+ * See the @link http://pingvision.com/blog/ben-jeavons/2009/multi-step-forms-drupal-6-using-variable-functions Drupal 6 tutorial @endlink
  *
- */
-
-/**
  * Adds logic to our form builder to give it two pages. It checks a
  * value in $form_state['storage'] to determine if it should display page 2.
+ *
+ * @see form_example_tutorial_10_submit()
+ * @see form_example_tutorial_10_validate()
+ * @see form_example_tutorial_10_page_two()
+ * @see form_example_tutorial_10_new_name()
+ * @see form_example_tutorial_10_clear()
+ * @see form_example_tutorial.inc
+ * @ingroup form_example
  */
 function form_example_tutorial_10($form, &$form_state) {
 
-  // Display page 2 if $form_state['storage']['page_two'] is set
-  if (isset($form_state['storage']['page_two'])) {
+  // Display page 2 if $form_state['page_two'] is set
+  if (isset($form_state['page_two'])) {
     return form_example_tutorial_10_page_two();
   }
   $form['description'] = array(
@@ -644,7 +699,7 @@ function form_example_tutorial_10($form, &$form_state) {
     '#title' => t('A basic multistep form (page 1)'),
   );
 
-  // Page 1 is displayed if $form_state['storage']['page_two'] is not set
+  // Page 1 is displayed if $form_state['page_two'] is not set
   $form['name'] = array(
     '#type' => 'fieldset',
     '#title' => t('Name'),
@@ -671,7 +726,7 @@ function form_example_tutorial_10($form, &$form_state) {
     '#default_value' => !empty($form_state['values']['year_of_birth']) ? $form_state['values']['year_of_birth'] : '', // added
   );
   // Add new elements to the form
-  if (!empty($form_state['storage']['new_name'])) {
+  if (!empty($form_state['new_name'])) {
     $form['name2'] = array(
       '#type' => 'fieldset',
       '#title' => t('Name #2'),
@@ -705,7 +760,7 @@ function form_example_tutorial_10($form, &$form_state) {
     // Do not validate anything as we're throwing it away anyway.
     '#limit_validation_errors' => array(),
   );
-  if (empty($form_state['storage']['new_name'])) {
+  if (empty($form_state['new_name'])) {
     $form['new_name'] = array(
       '#type' => 'submit',
       '#value' => 'Add another name',
@@ -719,7 +774,9 @@ function form_example_tutorial_10($form, &$form_state) {
   return $form;
 }
 
-// New function created to help make the code more manageable.
+/**
+ * Returns the form for the second page of form_example_tutorial_10().
+ */
 function form_example_tutorial_10_page_two() {
   $form['description'] = array(
     '#type' => 'item',
@@ -738,29 +795,27 @@ function form_example_tutorial_10_page_two() {
 }
 
 /**
- * Submit function for the "Add new name button"
+ * Submit function for the "Add new name button" of form_example_tutorial_10().
  */
 function form_example_tutorial_10_new_name($form, &$form_state) {
-  $form_state['storage']['new_name'] = TRUE;
+  $form_state['new_name'] = TRUE;
   $form_state['rebuild'] = TRUE; // default submit function will be skipped
 }
 
 /**
- * Submit function for the "Reset" button.
+ * Submit function for the "Reset" button of form_example_tutorial_10()
  */
 function form_example_tutorial_10_clear($form, &$form_state) {
-  unset($form_state['storage']);
-  unset($form_state['input']);  // Clear for the next round.
-
-  $form_state['rebuild'] = FALSE;
 }
 
 /**
+ * Validate handler for form_example_tutorial_10().
+ *
  * The validate function now validates page 2 as well.
  */
 function form_example_tutorial_10_validate($form, &$form_state) {
   // Validate page 2 here
-  if (isset($form_state['storage']['page_two'])) {
+  if (isset($form_state['page_two'])) {
     $color = $form_state['values']['color'];
     if (!$color) {
       form_set_error('color', 'Please enter a color.');
@@ -780,7 +835,7 @@ function form_example_tutorial_10_validate($form, &$form_state) {
   if ($year_of_birth && ($year_of_birth < 1900 || $year_of_birth > 2000)) {
     form_set_error('year_of_birth', 'Enter a year between 1900 and 2000.');
   }
-  if (!empty($form_state['storage']['new_name'])) {
+  if (!empty($form_state['new_name'])) {
     $year_of_birth = $form_state['values']['year_of_birth2'];
     $first_name = $form_state['values']['first2'];
     $last_name = $form_state['values']['last2'];
@@ -797,6 +852,8 @@ function form_example_tutorial_10_validate($form, &$form_state) {
 }
 
 /**
+ * Submit handler for form_example_tutorial_10().
+ *
  * Modifies this function so that it will respond appropriately based on
  * which page was submitted. If the first page is being submitted,
  * values in the 'storage' array are saved and the form gets
@@ -809,21 +866,20 @@ function form_example_tutorial_10_submit($form, &$form_state) {
   // Handle page 1 submissions (the 'Next' button).
   if ($form_state['triggering_element']['#id'] == 'edit-next') {
     // When form rebuilds, it will look at this to figure which page to build.
-    $form_state['storage']['page_two'] = TRUE;
+    $form_state['page_two'] = TRUE;
 
-    // Values below in the $form_state['storage'] array are saved
+    // Values in $form_state['page_one_values'] are saved
     // to carry forward to subsequent pages in the form.
-    $form_state['storage']['page_one_values'] = $form_state['values'];
+    // and we tell FAPI to rebuild the form.
+    $form_state['page_one_values'] = $form_state['values'];
     $form_state['rebuild'] = TRUE;
   }
   // Handle page 2 submissions (the 'Submit' button)
   else {
-    /*
-     Normally, some code would go here to alter the database with the data
-     collected from the form. Sets a message with drupal_set_message()
-     to validate working code.
-     */
-    $page_one_values = $form_state['storage']['page_one_values'];
+    // Normally, some code would go here to alter the database with the data
+    // collected from the form. Sets a message with drupal_set_message()
+    // to validate working code.
+    $page_one_values = $form_state['page_one_values'];
     drupal_set_message(t('The form has been submitted. name="@first @last", year of birth=@year_of_birth',
       array('@first' => $page_one_values['first'], '@last' => $page_one_values['last'], '@year_of_birth' => $page_one_values['year_of_birth'])));
 
@@ -833,10 +889,6 @@ function form_example_tutorial_10_submit($form, &$form_state) {
     }
     drupal_set_message(t('And the favorite color is @color', array('@color' => $form_state['values']['color'])));
 
-    // $form_state['storage'] must be unset for redirection to occur. Otherwise
-    // $form_state['rebuild'] is automatically set and this form will be
-    // rebuilt.
-    unset ($form_state['storage']);
     $form_state['redirect'] = 'node'; // Redirects the user to /node.
   }
 }

@@ -11,6 +11,8 @@
  * This form shows off the #states system by dynamically showing parts of the
  * form based on the state of other parts.
  *
+ * @ingroup form_example
+ *
  * The basic idea is that you add a #states property to the element which is
  * to be changed based on some action elsewhere on the form. The #states
  * property lists a change which is to be made, and under what conditions
@@ -44,24 +46,15 @@
  * 'country_writein' element below for an example.
  *
  * Note that the easiest way to select a textfield, checkbox, or select is
- * with the ':input' jquery shortcut, which selects any any of those.
- * @see http://api.jquery.com/input-selector/
+ * with the @link http://api.jquery.com/input-selector/ ':input' jquery shortcut @endlink,
+ * which selects any any of those.
  *
  * There are examples below of changing or hiding an element when a checkbox
  * is checked, when a textarea is filled, when a select has a given value.
  *
- *
  * See also @link http://api.drupal.org/api/drupal/developer--topics--forms_api_reference.html/7#states Form API Reference @endlink
  *
- * Outstanding issues:
- *  - Can't hide a fieldset
- *    @see http://drupal.org/node/667944.
- *    @see http://drupal.org/node/767212.
- *  - Can't use radios instead of select.
- *    @see http://drupal.org/node/767268.
- *  - Setting optional/required doesn't actually make an item optional/required.
- *    Instead it just changes CSS around the item.
- *    @see http://drupal.org/node/767738.
+ *
  */
 function form_example_states_form($form, &$form_state) {
   $form['name'] = array(
@@ -71,6 +64,9 @@ function form_example_states_form($form, &$form_state) {
 
     // This field is normally not required, but if the 'make required' checkbox
     // is checked, it will be changed to required.
+    // Note that this doesn't fully work yet, as although the visual appearance
+    // of 'required' is set, you can still submit the form without validation
+    // failing. See http://drupal.org/node/767738.
     '#states' => array(
       'required' => array(  // Action to take.
         ':input[name=optional_checkbox]' => array('checked' => TRUE)
