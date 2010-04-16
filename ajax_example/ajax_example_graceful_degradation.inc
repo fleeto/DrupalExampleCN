@@ -128,14 +128,13 @@ function ajax_example_dependent_dropdown_degrades_submit($form, &$form_state) {
 
   // Now handle the case of the next, previous, and submit buttons.
   // only submit will result in actual submission, all others rebuild.
-  switch($form_state['triggering_element']['#id']) {
-    case 'edit-submit': // Submit: We're done.
-      $form_state['rebuild'] = FALSE;
+  switch($form_state['triggering_element']['#value']) {
+    case t('OK'): // Submit: We're done.
       drupal_set_message(t('Your values have been submitted. dropdown_first=@first, dropdown_second=@second', array('@first' => $form_state['values']['dropdown_first'], '@second' => $form_state['values']['dropdown_second'])));
       return;
   }
 
-  // edit-next or anything else will cause rebuild of the form and present
+  // 'Choose' or anything else will cause rebuild of the form and present
   // it again.
   $form_state['rebuild'] = TRUE;
 }
@@ -285,8 +284,8 @@ function ajax_example_dynamic_sections_submit($form, &$form_state) {
   // select is changed.
   // Now handle the case of the next, previous, and submit buttons.
   // only submit will result in actual submission, all others rebuild.
-  switch($form_state['triggering_element']['#id']) {
-    case 'edit-submit': // Submit: We're done.
+  switch($form_state['triggering_element']['#value']) {
+    case t('Submit your answer'): // Submit: We're done.
       $form_state['rebuild'] = FALSE;
       $answer = $form_state['values']['question'];
 
@@ -304,7 +303,7 @@ function ajax_example_dynamic_sections_submit($form, &$form_state) {
       return;
   }
 
-  // edit-next or anything else will cause rebuild of the form and present
+  // Any other form element will cause rebuild of the form and present
   // it again.
   $form_state['rebuild'] = TRUE;
 }
@@ -460,7 +459,7 @@ function ajax_example_wizard_submit($form, &$form_state) {
   $form_state['storage']['values'][$current_step] = $form_state['values'][$current_step];
 
   // Increment or decrement the step as needed. Recover values if they exist.
-  if ($form_state['triggering_element']['#id'] == 'edit-next') {
+  if ($form_state['triggering_element']['#value'] == t('Next step')) {
     $form_state['storage']['step']++;
     // If values had already been entered for this step, recover them from
     // $form_state['storage'] to pre-populate them.
@@ -469,7 +468,7 @@ function ajax_example_wizard_submit($form, &$form_state) {
       $form_state['values'][$step_name] = $form_state['storage']['values'][$step_name];
     }
   }
-  if ($form_state['triggering_element']['#id'] == 'edit-prev') {
+  if ($form_state['triggering_element']['#value'] == t('Previous step')) {
     $form_state['storage']['step']--;
     // Recover our values from $form_state['storage'] to pre-populate them.
     $step_name = 'step' . $form_state['storage']['step'];
@@ -477,7 +476,7 @@ function ajax_example_wizard_submit($form, &$form_state) {
   }
 
   // If they're done, submit.
-  if ($form_state['triggering_element']['#id'] == 'edit-submit') {
+  if ($form_state['triggering_element']['#value'] == t('Submit your information')) {
     $value_message = t("Your information has been submitted: ");
     foreach ($form_state['storage']['values'] as $step => $values) {
       $value_message .= "$step: ";
