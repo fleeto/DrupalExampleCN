@@ -13,8 +13,8 @@
  * These examples show basic AJAX concepts.
  *
  * General documentation is available at
- * @link ajax AJAX Framework documentation @endlink and at
- * @link http://drupal.org/node/752056 @endlink.
+ * @link ajax AJAX Framework documentation @endlink and at the
+ * @link http://drupal.org/node/752056 AJAX Forms handbook page @endlink.
  *
  * The several examples here demonstrate basic AJAX usage.
  * @}
@@ -130,6 +130,21 @@ function ajax_example_menu() {
     'title' => 'AJAX Example: Wizard w/JS turned off',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ajax_example_wizard', TRUE),
+    'access callback' => TRUE,
+    'file' => 'ajax_example_graceful_degradation.inc',
+  );
+
+  $items['ajax_example/add_more'] = array(
+    'title' => 'AJAX Example: Add-more button',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_add_more'),
+    'access callback' => TRUE,
+    'file' => 'ajax_example_graceful_degradation.inc',
+  );
+  $items['ajax_example/add_more_no_js'] = array(
+    'title' => 'AJAX Example: Add-more button w/JS turned off',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_add_more', TRUE),
     'access callback' => TRUE,
     'file' => 'ajax_example_graceful_degradation.inc',
   );

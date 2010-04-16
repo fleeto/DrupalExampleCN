@@ -17,19 +17,11 @@
  * depending on form input. So the formbuilder function is in charge of
  * almost all logic.
  *
- * General documentation is available at
- * @link ajax AJAX Framework documentation @endlink.
- *
- * @todo: Enable validation functions after http://drupal.org/node/671184 lands.
- * @todo: Enable #required in wizard after that issue lands.
+ * @see ajax
  *
  * @}
 */
 
-/**
- * @ingroup ajax_degradation_examples
- * @{
- */
 
 
 /**
@@ -43,6 +35,9 @@
  * form as if Javascript were not enabled. ajax_example_menu() provides two
  * ways to call this form, one normal ($no_js_use = FALSE) and one simulating
  * Javascript disabled ($no_js_use = TRUE).
+ *
+ * @ingroup ajax_examples
+ * @ingroup ajax_degradation_examples
  */
 function ajax_example_dependent_dropdown_degrades($form, &$form_state, $no_js_use = FALSE) {
   // get the list of options to populate the first dropdown
@@ -166,6 +161,9 @@ function ajax_example_dependent_dropdown_degrades_first_callback($form, $form_st
  *
  * The third $no_js_use argument is strictly for demonstrating operation
  * without javascript, without making the user/developer turn off javascript.
+ *
+ * @ingroup ajax_examples
+ * @ingroup ajax_degradation_examples
  */
 
 function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) {
@@ -271,15 +269,13 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
 /**
  * Validation function for ajax_example_dynamic_sections().
  *
- * This causes horrible errors until http://drupal.org/node/671184 lands.
- * @todo: Enable this after http://drupal.org/node/671184 lands.
  */
-//function ajax_example_dynamic_sections_validate($form, &$form_state) {
-//  $answer = $form_state['values']['question'];
-//  if ($answer !== t('George Washington')) {
-//    form_set_error('question', t('Wrong answer. Try again. (Hint: The right answer is "George Washington".)'));
-//  }
-//}
+function ajax_example_dynamic_sections_validate($form, &$form_state) {
+  $answer = $form_state['values']['question'];
+  if ($answer !== t('George Washington')) {
+    form_set_error('question', t('Wrong answer. Try again. (Hint: The right answer is "George Washington".)'));
+  }
+}
 
 /**
  * Submit function for ajax_example_dynamic_sections().
@@ -336,6 +332,10 @@ function ajax_example_dynamic_sections_select_callback($form, $form_state) {
  *   Used for this demonstration only. If true means that the form should be
  *   built using a simulated no-javascript approach (ajax.js will not be
  *   loaded.)
+ *
+ * @ingroup ajax_examples
+ * @ingroup ajax_degradation_examples
+ *
  */
 function ajax_example_wizard($form, &$form_state, $no_js_use = FALSE) {
 
@@ -364,7 +364,7 @@ function ajax_example_wizard($form, &$form_state, $no_js_use = FALSE) {
         '#type' => 'textfield',
         '#title' => t('Your name'),
         '#default_value' => empty($form_state['values']['step1']['name']) ? '' : $form_state['values']['step1']['name'],
-        // '#required' => TRUE,
+        '#required' => TRUE,
       );
       break;
 
@@ -377,7 +377,7 @@ function ajax_example_wizard($form, &$form_state, $no_js_use = FALSE) {
         '#type' => 'textfield',
         '#title' => t('Your street address'),
         '#default_value' => empty($form_state['values']['step2']['address']) ? '' : $form_state['values']['step2']['address'],
-        // '#required' => TRUE,
+        '#required' => TRUE,
       );
       break;
     case 3:
@@ -389,7 +389,7 @@ function ajax_example_wizard($form, &$form_state, $no_js_use = FALSE) {
         '#type' => 'textfield',
         '#title' => t('Your city'),
         '#default_value' => empty($form_state['values']['step3']['city']) ? '' : $form_state['values']['step3']['city'],
-        // '#required' => TRUE,
+        '#required' => TRUE,
       );
       break;
   }
@@ -493,4 +493,144 @@ function ajax_example_wizard_submit($form, &$form_state) {
   // Otherwise, we still have work to do.
 
   $form_state['rebuild'] = TRUE;
+}
+
+
+//// AJAX add-more example, with graceful degradation.
+
+/**
+ * This example shows a button to "add more" - add another textfield, and
+ * the corresponding "remove" button.
+ *
+ * It works equivalently with javascript or not, and does the same basic steps
+ * either way.
+ *
+ * The basic idea is that we build the form based on the setting of
+ * $form_state['num_names']. The custom submit functions for the "add-one"
+ * and "remove-one" buttons increment and decrement $form_state['num_names']
+ * and then force a rebuild of the form.
+ *
+ * The $no_js_use argument is simply for demonstration: When set, it prevents
+ * '#ajax' from being set, thus making the example behave as if javascript
+ * were disabled in the browser.
+ *
+ * @ingroup ajax_examples
+ * @ingroup ajax_degradation_examples
+ */
+
+function ajax_example_add_more($form, &$form_state, $no_js_use = FALSE) {
+
+  $form['description'] = array(
+    '#markup' => '<div>' . t('This example shows an add-more and a remove-last button. The <a href="!ajax">AJAX version</a> does it without page reloads; the <a href="!multistep">non-js version</a> is the same code but simulates a non-javascript environment, showing it with page reloads.',
+      array('!ajax' => url('ajax_example/add_more'), '!multistep' => url('ajax_example/add_more_no_js')))
+    . '</div>',
+  );
+
+  // Because we have many fields with the same values, we have to set
+  // #tree to be able to access them.
+  $form['#tree'] = TRUE;
+
+  $form['names_fieldset'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('People coming to the picnic'),
+    // Set up the wrapper so that AJAX will be able to replace the fieldset.
+    '#prefix' => '<div id="names-fieldset-wrapper">',
+    '#suffix' => '</div>',
+  );
+
+  // Build the fieldset with the proper number of names. We'll use
+  // $form_state['num_names'] to determine the number of textfields to build.
+  if (empty($form_state['num_names'])) {
+    $form_state['num_names'] = 1;
+  }
+  for ($i = 0; $i < $form_state['num_names']; $i++) {
+    $form['names_fieldset']['name'][$i] = array(
+      '#type' => 'textfield',
+      '#title' => t('Name'),
+    );
+  }
+  $form['names_fieldset']['add_name'] = array(
+    '#type' => 'submit',
+    '#value' => t('Add one more'),
+    '#submit' => array('ajax_example_add_more_add_one'),
+    '#ajax' => array(
+      'callback' => 'ajax_example_add_more_callback',
+      'wrapper' => 'names-fieldset-wrapper',
+    ),
+  );
+  if ($form_state['num_names'] > 1) {
+    $form['names_fieldset']['remove_name'] = array(
+      '#type' => 'submit',
+      '#value' => t('Remove one'),
+      '#submit' => array('ajax_example_add_more_remove_one'),
+      '#ajax' => array(
+        'callback' => 'ajax_example_add_more_callback',
+        'wrapper' => 'names-fieldset-wrapper',
+      ),
+    );
+  }
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
+
+
+  // This simply allows us to demonstrate no-javascript use without
+  // actually turning off javascript in the browser. Removing the #ajax
+  // element turns off AJAX behaviors on that element and as a result
+  // ajax.js doesn't get loaded.
+  // For demonstration only! You don't need this. It's just so you don't
+  // have to turn off javascript in your browser to test.
+  if ($no_js_use) {
+    // Remove the #ajax from the above, so ajax.js won't be loaded.
+    // For demonstration only.
+    if (!empty($form['names_fieldset']['remove_name']['#ajax'])) {
+      unset($form['names_fieldset']['remove_name']['#ajax']);
+    }
+    unset($form['names_fieldset']['add_name']['#ajax']);
+  }
+
+  return $form;
+}
+
+/**
+ * Callback for both ajax-enabled buttons.
+ *
+ * This simply selects and returns the fieldset with the names in it.
+ */
+function ajax_example_add_more_callback($form, $form_state) {
+  return $form['names_fieldset'];
+}
+
+/**
+ * Submit handler for the "add-one-more" button.
+ *
+ * It just increments the max counter and then causes a rebuild.
+ */
+function ajax_example_add_more_add_one($form, &$form_state) {
+  $form_state['num_names']++;
+  $form_state['rebuild'] = TRUE;
+}
+
+/**
+ * Submit handler for the "remove one" button.
+ *
+ * Decrements the max counter and causes a form rebuild.
+ */
+function ajax_example_add_more_remove_one($form, &$form_state) {
+  if ($form_state['num_names'] > 1) {
+    $form_state['num_names']--;
+  }
+  $form_state['rebuild'] = TRUE;
+}
+
+/**
+ * Final submit handler.
+ *
+ * Reports to us what values were finally set.
+ */
+function ajax_example_add_more_submit($form, &$form_state) {
+  $output = t('These people are coming to the picnic: @names',
+    array('@names' => implode(', ', $form_state['values']['names_fieldset']['name'])) );
+  drupal_set_message($output);
 }
