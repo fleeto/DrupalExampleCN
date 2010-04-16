@@ -369,25 +369,191 @@ function form_example_tutorial_7_submit($form, &$form_state) {
 }
 
 
-
 //////////////// Tutorial Example 8 //////////////////////
 
 /**
- * Example 8: A form with a dynamically added new fields.
+ * Example 8: A simple multistep form with a Next and a Back button.
+ *
+ * Handbook page: http://drupal.org/node/717750.
+ *
+ * For more extensive multistep forms,
+ * See the @link http://pingvision.com/blog/ben-jeavons/2009/multi-step-forms-drupal-6-using-variable-functions Drupal 6 tutorial @endlink
+ *
+ * Adds logic to our form builder to give it two pages.
+ *
+ * @see form_example_tutorial_8_submit()
+ * @see form_example_tutorial_8_validate()
+ * @see form_example_tutorial_8_page_two()
+ * @see form_example_tutorial_8_page_two_submit()
+ * @see form_example_tutorial_8_next_submit()
+ * @see form_example_tutorial.inc
+ * @ingroup form_example
+ */
+function form_example_tutorial_8($form, &$form_state) {
+
+  // Display page 2 if $form_state['page_num'] == 1
+  if (!empty($form_state['page_num']) && $form_state['page_num'] == 2) {
+    return form_example_tutorial_8_page_two($form, $form_state);
+  }
+
+  // Otherwise we build page 1.
+  $form_state['page_num'] = 1;
+
+  $form['description'] = array(
+    '#type' => 'item',
+    '#title' => t('A basic multistep form (page 1)'),
+  );
+
+  $form['first'] = array(
+    '#type' => 'textfield',
+    '#title' => t('First name'),
+    '#description' => "Please enter your first name.",
+    '#size' => 20,
+    '#maxlength' => 20,
+    '#required' => TRUE,
+    '#default_value' => !empty($form_state['values']['first']) ? $form_state['values']['first'] : '',
+  );
+  $form['last'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Last name'),
+    '#default_value' => !empty($form_state['values']['last']) ? $form_state['values']['last'] : '',
+  );
+  $form['year_of_birth'] = array(
+    '#type' => 'textfield',
+    '#title' => "Year of birth",
+    '#description' => 'Format is "YYYY"',
+    '#default_value' => !empty($form_state['values']['year_of_birth']) ? $form_state['values']['year_of_birth'] : '',
+  );
+  $form['next'] = array(
+    '#type' => 'submit',
+    '#value' => 'Next >>',
+    '#submit' => array('form_example_tutorial_8_next_submit'),
+    '#validate' => array('form_example_tutorial_8_next_validate'),
+  );
+  return $form;
+}
+
+/**
+ * Returns the form for the second page of form_example_tutorial_8().
+ */
+function form_example_tutorial_8_page_two($form, &$form_state) {
+  $form['description'] = array(
+    '#type' => 'item',
+    '#title' => t('A basic multistep form (page 2)'),
+  );
+
+  $form['color'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Favorite color'),
+    '#required' => TRUE,
+    '#default_value' => !empty($form_state['values']['color']) ? $form_state['values']['color'] : '',
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+    '#submit' => array('form_example_tutorial_8_page_two_submit'),
+  );
+  $form['back'] = array(
+    '#type' => 'submit',
+    '#value' => t('<< Back'),
+    '#submit' => array('form_example_tutorial_8_page_two_back'),
+    // We won't bother validating the required 'color' field, since they
+    // have to come back to this page to submit anyway.
+    '#limit_validation_errors' => array(),
+  );
+  return $form;
+}
+
+
+/**
+ * Validate handler for the next button on first page.
+ *
+ */
+function form_example_tutorial_8_next_validate($form, &$form_state) {
+  $year_of_birth = $form_state['values']['year_of_birth'];
+  if ($year_of_birth && ($year_of_birth < 1900 || $year_of_birth > 2000)) {
+    form_set_error('year_of_birth', 'Enter a year between 1900 and 2000.');
+  }
+}
+
+/**
+ * Submit handler for form_example_tutorial_8() next button.
+ *
+ * Capture the values from page one and store them away so they can be used
+ * at final submit time.
+ *
+ */
+function form_example_tutorial_8_next_submit($form, &$form_state) {
+
+  // Values are saved for each page.
+  // to carry forward to subsequent pages in the form.
+  // and we tell FAPI to rebuild the form.
+  $form_state['page_values'][1] = $form_state['values'];
+
+  if (!empty($form_state['page_values'][2])) {
+    $form_state['values'] = $form_state['page_values'][2];
+  }
+
+  // When form rebuilds, it will look at this to figure which page to build.
+  $form_state['page_num'] = 2;
+  $form_state['rebuild'] = TRUE;
+}
+
+/**
+ * Back button handler submit handler.
+ *
+ * We save away the values we have for this page and restore to
+ * $form_state['values'] the values from page 1.
+ *
+ */
+function form_example_tutorial_8_page_two_back($form, &$form_state) {
+  $form_state['page_values'][2] = $form_state['values'];
+  $form_state['values'] = $form_state['page_values'][1];
+  $form_state['page_num'] = 1;
+  $form_state['rebuild'] = TRUE;
+}
+/**
+ * The page 2 submit handler.
+ *
+ * This is the final submit handler. Gather all the data together and output
+ * it in a drupal_set_message().
+ */
+function form_example_tutorial_8_page_two_submit($form, &$form_state) {
+  // Normally, some code would go here to alter the database with the data
+  // collected from the form. Instead sets a message with drupal_set_message()
+  // to validate that the code worked.
+  $page_one_values = $form_state['page_values'][1];
+  drupal_set_message(t('The form has been submitted. name="@first @last", year of birth=@year_of_birth',
+  array('@first' => $page_one_values['first'], '@last' => $page_one_values['last'], '@year_of_birth' => $page_one_values['year_of_birth'])));
+
+  if (!empty($page_one_values['first2'])) {
+    drupal_set_message(t('Second name: name="@first @last", year of birth=@year_of_birth',
+    array('@first' => $page_one_values['first2'], '@last' => $page_one_values['last2'], '@year_of_birth' => $page_one_values['year_of_birth2'])));
+  }
+  drupal_set_message(t('And the favorite color is @color', array('@color' => $form_state['values']['color'])));
+
+  // If we wanted to redirect on submission, set $form_state['redirect']
+  // $form_state['redirect'] = 'node'; // Redirects the user to /node.
+}
+
+//////////////// Tutorial Example 9 //////////////////////
+
+/**
+ * Example 9: A form with a dynamically added new fields.
  *
  * This example adds default values so that when the form is rebuilt,
  * the form will by default have the previously-entered values.
  *
  * From handbook page http://drupal.org/node/717746.
  *
- * @see form_example_tutorial_8_add_name()
- * @see form_example_tutorial_8_remove_name()
- * @see form_example_tutorial_8_submit()
- * @see form_example_tutorial_8_validate()
+ * @see form_example_tutorial_9_add_name()
+ * @see form_example_tutorial_9_remove_name()
+ * @see form_example_tutorial_9_submit()
+ * @see form_example_tutorial_9_validate()
  * @ingroup form_example
  *
  */
-function form_example_tutorial_8($form, &$form_state) {
+function form_example_tutorial_9($form, &$form_state) {
 
   // We will have many fields with the same name, so we need to be able to
   // access the form hierarchically.
@@ -442,7 +608,7 @@ function form_example_tutorial_8($form, &$form_state) {
   $form['add_name'] = array(
     '#type' => 'submit',
     '#value' => t('Add another name'),
-    '#submit' => array('form_example_tutorial_8_add_name'),
+    '#submit' => array('form_example_tutorial_9_add_name'),
   );
 
   // If we have more than one name, this button allows removal of the
@@ -451,7 +617,7 @@ function form_example_tutorial_8($form, &$form_state) {
     $form['remove_name'] = array(
       '#type' => 'submit',
       '#value' => t('Remove latest name'),
-      '#submit' => array('form_example_tutorial_8_remove_name'),
+      '#submit' => array('form_example_tutorial_9_remove_name'),
       // Since we are removing a name, don't validate until later.
       '#limit_validation_errors' => array(),
     );
@@ -461,7 +627,7 @@ function form_example_tutorial_8($form, &$form_state) {
 }
 
 /**
- * Submit handler for "Add another name" button on form_example_tutorial_8().
+ * Submit handler for "Add another name" button on form_example_tutorial_9().
  *
  * $form_state['num_names'] tells the form builder function how many name
  * fieldsets to build, so here we increment it.
@@ -470,34 +636,32 @@ function form_example_tutorial_8($form, &$form_state) {
  * particular key, like the old $form_state['storage']. We can just use
  * $form_state['num_names'].
  */
-function form_example_tutorial_8_add_name($form, &$form_state) {
+function form_example_tutorial_9_add_name($form, &$form_state) {
   // Everything in $form_state is persistent, so we'll just use
   // $form_state['add_name']
   $form_state['num_names']++;
 
-  // Setting $form_state['rebuild'] = TRUE causes the default submit
-  // function to be skipped and the form to be rebuilt.
+  // Setting $form_state['rebuild'] = TRUE causes the form to be rebuilt again.
   $form_state['rebuild'] = TRUE;
 }
 
 
-function form_example_tutorial_8_remove_name($form, &$form_state) {
+function form_example_tutorial_9_remove_name($form, &$form_state) {
   if ($form_state['num_names'] > 1) {
     $form_state['num_names']--;
   }
 
-  // Setting $form_state['rebuild'] = TRUE causes the default submit
-  // function to be skipped and the form to be rebuilt.
+  // Setting $form_state['rebuild'] = TRUE causes the form to be rebuilt again.
   $form_state['rebuild'] = TRUE;
 }
 
 /**
- * Validate function for form_example_tutorial_8().
+ * Validate function for form_example_tutorial_9().
  *
  * Adds logic to validate the form to check the validity of the new fields,
  * if they exist.
  */
-function form_example_tutorial_8_validate($form, &$form_state) {
+function form_example_tutorial_9_validate($form, &$form_state) {
 
   for ($i = 1; $i <= $form_state['num_names']; $i++) {
     $year_of_birth = $form_state['values']['name'][$i]['year_of_birth'];
@@ -509,181 +673,13 @@ function form_example_tutorial_8_validate($form, &$form_state) {
 }
 
 /**
- * Submit function for form_example_tutorial_8().
+ * Submit function for form_example_tutorial_9().
  */
-function form_example_tutorial_8_submit($form, &$form_state) {
-  $output = t("Form 8 has been submitted. ");
+function form_example_tutorial_9_submit($form, &$form_state) {
+  $output = t("Form 9 has been submitted. ");
   for ($i = 1; $i <= $form_state['num_names']; $i++) {
     $output .= t("@num: @first @last (@date)... ", array('@num' => $i, '@first' => $form_state['values']['name'][$i]['first'],
       '@last' =>  $form_state['values']['name'][$i]['last'], '@date' =>  $form_state['values']['name'][$i]['year_of_birth']));
   }
   drupal_set_message($output);
-}
-
-
-
-//////////////// Tutorial Example 9 //////////////////////
-
-/**
- * Example 9: A simple multistep form with a Next and a Back button.
- *
- * Handbook page: http://drupal.org/node/717750.
- *
- * For more extensive multistep forms,
- * See the @link http://pingvision.com/blog/ben-jeavons/2009/multi-step-forms-drupal-6-using-variable-functions Drupal 6 tutorial @endlink
- *
- * Adds logic to our form builder to give it two pages.
- *
- * @see form_example_tutorial_9_submit()
- * @see form_example_tutorial_9_validate()
- * @see form_example_tutorial_9_page_two()
- * @see form_example_tutorial_9_page_two_submit()
- * @see form_example_tutorial_9_next_submit()
- * @see form_example_tutorial.inc
- * @ingroup form_example
- */
-function form_example_tutorial_9($form, &$form_state) {
-
-  // Display page 2 if $form_state['page_num'] == 1
-  if (!empty($form_state['page_num']) && $form_state['page_num'] == 2) {
-    return form_example_tutorial_9_page_two($form, $form_state);
-  }
-
-  // Otherwise we build page 1.
-  $form_state['page_num'] = 1;
-
-  $form['description'] = array(
-    '#type' => 'item',
-    '#title' => t('A basic multistep form (page 1)'),
-  );
-
-  $form['first'] = array(
-    '#type' => 'textfield',
-    '#title' => t('First name'),
-    '#description' => "Please enter your first name.",
-    '#size' => 20,
-    '#maxlength' => 20,
-    '#required' => TRUE,
-    '#default_value' => !empty($form_state['values']['first']) ? $form_state['values']['first'] : '',
-  );
-  $form['last'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Last name'),
-    '#default_value' => !empty($form_state['values']['last']) ? $form_state['values']['last'] : '',
-  );
-  $form['year_of_birth'] = array(
-    '#type' => 'textfield',
-    '#title' => "Year of birth",
-    '#description' => 'Format is "YYYY"',
-    '#default_value' => !empty($form_state['values']['year_of_birth']) ? $form_state['values']['year_of_birth'] : '',
-  );
-  $form['next'] = array(
-    '#type' => 'submit',
-    '#value' => 'Next >>',
-    '#submit' => array('form_example_tutorial_9_next_submit'),
-    '#validate' => array('form_example_tutorial_9_next_validate'),
-  );
-  return $form;
-}
-
-/**
- * Returns the form for the second page of form_example_tutorial_9().
- */
-function form_example_tutorial_9_page_two($form, &$form_state) {
-  $form['description'] = array(
-    '#type' => 'item',
-    '#title' => t('A basic multistep form (page 2)'),
-  );
-
-  $form['color'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Favorite color'),
-    '#required' => TRUE,
-    '#default_value' => !empty($form_state['values']['color']) ? $form_state['values']['color'] : '',
-  );
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Submit'),
-    '#submit' => array('form_example_tutorial_9_page_two_submit'),
-  );
-  $form['back'] = array(
-    '#type' => 'submit',
-    '#value' => t('<< Back'),
-    '#submit' => array('form_example_tutorial_9_page_two_back'),
-    // We won't bother validating the required 'color' field, since they
-    // have to come back to this page to submit anyway.
-    '#limit_validation_errors' => array(),
-  );
-  return $form;
-}
-
-
-/**
- * Validate handler for the next button on first page.
- *
- */
-function form_example_tutorial_9_next_validate($form, &$form_state) {
-  $year_of_birth = $form_state['values']['year_of_birth'];
-  if ($year_of_birth && ($year_of_birth < 1900 || $year_of_birth > 2000)) {
-    form_set_error('year_of_birth', 'Enter a year between 1900 and 2000.');
-  }
-}
-
-/**
- * Submit handler for form_example_tutorial_9() next button.
- *
- * Capture the values from page one and store them away so they can be used
- * at final submit time.
- *
- */
-function form_example_tutorial_9_next_submit($form, &$form_state) {
-
-  // Values are saved for each page.
-  // to carry forward to subsequent pages in the form.
-  // and we tell FAPI to rebuild the form.
-  $form_state['page_values'][1] = $form_state['values'];
-
-  if (!empty($form_state['page_values'][2])) {
-    $form_state['values'] = $form_state['page_values'][2];
-  }
-
-  // When form rebuilds, it will look at this to figure which page to build.
-  $form_state['page_num'] = 2;
-  $form_state['rebuild'] = TRUE;
-}
-
-/**
- * Back button handler submit handler.
- *
- * We save away the values we have for this page and restore to
- * $form_state['values'] the values from page 1.
- *
- */
-function form_example_tutorial_9_page_two_back($form, &$form_state) {
-  $form_state['page_values'][2] = $form_state['values'];
-  $form_state['values'] = $form_state['page_values'][1];
-  $form_state['page_num'] = 1;
-  $form_state['rebuild'] = TRUE;
-}
-/**
- * The page 2 submit handler.
- *
- * This is the final submit handler. Gather all the data together and output
- * it in a drupal_set_message().
- */
-function form_example_tutorial_9_page_two_submit($form, &$form_state) {
-  // Normally, some code would go here to alter the database with the data
-  // collected from the form. Instead sets a message with drupal_set_message()
-  // to validate that the code worked.
-  $page_one_values = $form_state['page_values'][1];
-  drupal_set_message(t('The form has been submitted. name="@first @last", year of birth=@year_of_birth',
-  array('@first' => $page_one_values['first'], '@last' => $page_one_values['last'], '@year_of_birth' => $page_one_values['year_of_birth'])));
-
-  if (!empty($page_one_values['first2'])) {
-    drupal_set_message(t('Second name: name="@first @last", year of birth=@year_of_birth',
-    array('@first' => $page_one_values['first2'], '@last' => $page_one_values['last2'], '@year_of_birth' => $page_one_values['year_of_birth2'])));
-  }
-  drupal_set_message(t('And the favorite color is @color', array('@color' => $form_state['values']['color'])));
-
-  $form_state['redirect'] = 'node'; // Redirects the user to /node.
 }

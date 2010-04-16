@@ -99,7 +99,7 @@ function form_example_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('form_example_tutorial_8'),
     'access callback' => TRUE,
-    'description' => 'Tutorial 8: Form with dynamically added new fields',
+    'description' => 'Tutorial 8: Basic multistep form',
     'type' => MENU_LOCAL_TASK,
     'file' => 'form_example_tutorial.inc',
   );
@@ -108,13 +108,11 @@ function form_example_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('form_example_tutorial_9'),
     'access callback' => TRUE,
-    'description' => 'Tutorial 9: Basic multistep form',
+    'description' => 'Tutorial 9: Form with dynamically added new fields',
     'type' => MENU_LOCAL_TASK,
     'file' => 'form_example_tutorial.inc',
     'weight' => 9,
   );
-
-
   $items['form_example/states'] = array(
     'title' => 'Form Example: #states',
     'page callback' => 'drupal_get_form',

@@ -72,8 +72,19 @@ class FormExampleTestCase extends DrupalWebTestCase {
 
     $this->assertText(t('Enter a year between 1900 and 2000'));
 
-    // #8
-    $url = 'form_example/tutorial/8';
+      // #8
+    $this->drupalPost('form_example/tutorial/8',
+      array('first' => t('firstname'), 'last' => t('lastname'), 'year_of_birth' => 1955),
+      t('Next >>'));
+
+    $this->drupalPost(NULL, array('color' => t('green')), t('<< Back'));
+    $this->drupalPost(NULL, array(), t('Next >>'));
+    $this->drupalPost(NULL, array(), t('Submit'));
+    $this->assertText(t('The form has been submitted. name="firstname lastname", year of birth=1955'));
+    $this->assertText(t('And the favorite color is green'));
+
+    // #9
+    $url = 'form_example/tutorial/9';
     for ($i = 1; $i <= 4; $i++) {
       if ($i > 1) {
         $url = NULL;  // later steps of multistep form take NULL.
@@ -90,22 +101,10 @@ class FormExampleTestCase extends DrupalWebTestCase {
 
     $this->drupalPost(NULL, array(), t('Submit'));
 
-    $this->assertText('Form 8 has been submitted');
+    $this->assertText('Form 9 has been submitted');
     for ($i = 1; $i <= 4; $i++) {
       $this->assertText(t('@num: firstname @num lastname @num (@year)', array('@num' => $i, '@year' => 1950 + $i)));
     }
-
-    // #9
-    $this->drupalPost('form_example/tutorial/9',
-      array('first' => t('firstname'), 'last' => t('lastname'), 'year_of_birth' => 1955),
-      t('Next >>'));
-
-    $this->drupalPost(NULL, array('color' => t('green')), t('<< Back'));
-    $this->drupalPost(NULL, array(), t('Next >>'));
-    $this->drupalPost(NULL, array(), t('Submit'));
-    $this->assertText(t('The form has been submitted. name="firstname lastname", year of birth=1955'));
-    $this->assertText(t('And the favorite color is green'));
   }
-
 }
 

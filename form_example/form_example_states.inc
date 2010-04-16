@@ -106,10 +106,11 @@ function form_example_states_form($form, &$form_state) {
     '#size' => 4,
 
     // This #states rule limits visibility to when the $form['tests_taken']
-    // 'SAT' checkbox is checked.
+    // 'SAT' checkbox is checked and the student type is "High School"
     '#states' => array(
       'visible' => array(  // action to take.
         ':input[name=tests_taken[SAT]]' => array('checked' => TRUE),
+        ':input[name=student_type]' => array('value' => t('High School')),
       ),
     ),
   );
@@ -119,10 +120,11 @@ function form_example_states_form($form, &$form_state) {
     '#size' => 4,
 
     // Set this element visible if the ACT checkbox above is
-    // checked.
+    // checked and the student type is "High School"
     '#states' => array(
       'visible' => array(  // action to take.
         ':input[name=tests_taken[ACT]]' => array('checked' => TRUE),
+        ':input[name=student_type]' => array('value' => t('High School')),
       ),
     ),
   );
