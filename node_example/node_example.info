@@ -7,3 +7,5 @@ core = 7.x
 files[] = node_example.module
 files[] = node_example.install
 files[] = node_example.test
+
+dependencies[] = image
