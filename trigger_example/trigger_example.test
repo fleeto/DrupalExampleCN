@@ -85,7 +85,7 @@ class TriggerExampleTestCase extends DrupalWebTestCase {
 //    $this->assertText($action_label, "Found the random message on the page after login.");
   }
 
-  function drupalPost($path, $edit, $submit, array $options = array(), array $headers = array()) {
+  function drupalPost($path, $edit, $submit, array $options = array(), array $headers = array(), $form_html_id = NULL) {
     $submit_matches = FALSE;
     $ajax = is_array($submit);
     if (isset($path)) {
@@ -94,7 +94,11 @@ class TriggerExampleTestCase extends DrupalWebTestCase {
     if ($this->parse()) {
       $edit_save = $edit;
       // Let's iterate over all the forms.
-      $forms = $this->xpath('//form');
+      $xpath = "//form";
+      if (!empty($form_html_id)) {
+        $xpath .= "[@id='" . $form_html_id . "']";
+      }
+      $forms = $this->xpath($xpath);
       foreach ($forms as $form) {
         // We try to set the fields of this form as specified in $edit.
         $edit = $edit_save;
@@ -164,4 +168,3 @@ class TriggerExampleTestCase extends DrupalWebTestCase {
   }
 
 }
-
