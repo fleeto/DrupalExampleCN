@@ -134,14 +134,17 @@ function block_example_contents($which_block) {
  */
 
 /**
- * Implement hook_block_info_alter().
+ * Implements hook_block_list_alter().
  *
  * This hook allows you to add, remove or modify blocks in the block list. The
  * block list contains the block definitions. This example requires
  * search module and the search block enabled
  * to see how this hook implementation works.
+ *
+ * You may also be interested in hook_block_info_alter(), which allows changes
+ * to the behavior of blocks.
  */
-function block_example_block_info_alter(&$blocks) {
+function block_example_block_list_alter(&$blocks) {
   // We are going to make the search block sticky on bottom of regions. For
   // this example, we will modify the block list and append the search block at
   // the end of the list, so even if the administrator configures the block to

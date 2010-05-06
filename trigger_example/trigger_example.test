@@ -32,7 +32,7 @@ class TriggerExampleTestCase extends DrupalWebTestCase {
     $this->drupalLogin($test_user);
 
     // Create a configurable action for display a message to the user
-    $hash = md5('system_message_action');
+    $hash = drupal_hash_base64('system_message_action');
     $action_label = $this->randomName();
     $edit = array(
       'actions_label' => $action_label,
@@ -42,7 +42,7 @@ class TriggerExampleTestCase extends DrupalWebTestCase {
     $aid = db_query('SELECT aid FROM {actions} WHERE callback = :callback', array(':callback' => 'system_message_action'))->fetchField();
     // $aid is likely 3 but if we add more uses for the sequences table in
     // core it might break, so it is easier to get the value from the database.
-    $edit = array('aid' => md5($aid));
+    $edit = array('aid' => drupal_hash_base64($aid));
 
     // Note that this only works because there's just one item on the page.
     $this->drupalPost('admin/structure/trigger/trigger_example', $edit, t('Assign'));
@@ -59,7 +59,7 @@ class TriggerExampleTestCase extends DrupalWebTestCase {
     $this->drupalLogin($admin_user);
 
     // Create a configurable action for display a message to the user
-    $hash = md5('system_message_action');
+    $hash = drupal_hash_base64('system_message_action');
     $action_label = $this->randomName();
     $edit = array(
       'actions_label' => $action_label,
@@ -67,7 +67,7 @@ class TriggerExampleTestCase extends DrupalWebTestCase {
     );
     $this->drupalPost('admin/config/system/actions/configure/' . $hash, $edit, t('Save'));
     $aid = db_query('SELECT aid FROM {actions} WHERE callback = :callback', array(':callback' => 'system_message_action'))->fetchField();
-    $edit = array('aid' => md5($aid));
+    $edit = array('aid' => drupal_hash_base64($aid));
 
     // Unfortunately there is no current way in simpletest to choose the correct
     // form to submit to, since all the forms on this page have the same name
