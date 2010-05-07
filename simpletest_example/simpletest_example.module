@@ -69,22 +69,7 @@ function simpletest_example_node_access($node, $op, $account) {
  * Form for the node type.
  */
 function simpletest_example_form($node, $form_state) {
-  $type = node_type_get_type($node);
-
-  $form = array();
-
-  if ($type->has_title) {
-    $form['title'] = array(
-      '#type' => 'textfield',
-      '#title' => check_plain($type->title_label),
-      '#required' => TRUE,
-      '#default_value' => $node->title,
-      '#maxlength' => 255,
-      '#weight' => -5,
-    );
-  }
-
-  return $form;
+  return node_content_form($node, $form_state);
 }
 
 

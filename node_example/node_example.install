@@ -2,52 +2,44 @@
 // $Id$
 /**
  * @file
- * install file for Node Example module.
+ * Install file for Node Example module.
  *
- * Most of the definition of the node type is in this module.
+ * The definition of the fields for the module is here, although
+ * node_example_node_info() provides the actual content type definition.
+ *
+ * See @link http://drupal.org/node/707832 Field API Tutorial @endlink
+ *
+ * See @link http://drupal.org/node/443536 Field API Handbook Page @endlink
+ *
+ * See @link field Field API documentation @endlink
+ *
  */
 
 /**
  * Implements hook_install().
  *
- * @see node_type_set_defaults()
+ * - Add the body field.
+ * - Configure the body field.
+ * - Create color, quantity, and image fields.
+ * - Create color, quantity, and image instances.
+ *
  * @see field_info_instance()
  * @see field_update_instance()
  * @see field_create_field()
  * @see field_create_instance()
  */
 function node_example_install() {
-  // get the name of our localization function for translation during install
-  // http://api.drupal.org/api/function/get_t/7
-  $t = get_t();
+  node_types_rebuild();
+  $types = node_type_get_types();
+  node_add_body_field($types['node_example']);
 
-  // Define the node type.  This is similar to hook_node_info() in Drupal 6
-  $node_example = array(
-    'type' => 'node_example',
-    'name' => $t('Example Node'),
-    'base' => 'node_content',
-    'description' => $t('This is an example node type with a few fields.'),
-    'body_label' => $t('Example Description')
-  );
-
-  // Complete the node type definition by setting any defaults not explicitly
-  // declared above.
-  // http://api.drupal.org/api/function/node_type_set_defaults/7
-  $content_type = node_type_set_defaults($node_example);
-
-  // Save the content type
-  node_type_save($content_type);
-
-  // Load the instance definition for our content types body
+  // Load the instance definition for our content type's body
   // http://api.drupal.org/api/function/field_info_instance/7
   $body_instance = field_info_instance('node', 'body', 'node_example');
 
   // Add our example_node_list view mode to the body instance display by
   // instructing the body to display as a summary
-  $body_instance['display']['example_node_list'] = array(
-    'label' => 'hidden',
-    'type' => 'text_summary_or_trimmed',
-  );
+  $body_instance['type'] = 'text_summary_or_trimmed';
 
   // Save our changes to the body field instance.
   // http://api.drupal.org/api/function/field_update_instance/7
@@ -55,27 +47,26 @@ function node_example_install() {
 
   // Create all the fields we are adding to our content type.
   // http://api.drupal.org/api/function/field_create_field/7
-  foreach (node_example_installed_fields() as $field) {
+  foreach (_node_example_installed_fields() as $field) {
     field_create_field($field);
   }
 
   // Create all the instances for our fields.
   // http://api.drupal.org/api/function/field_create_instance/7
-  foreach (node_example_installed_instances() as $instance) {
+  foreach (_node_example_installed_instances() as $instance) {
     $instance['entity_type'] = 'node';
-    $instance['bundle'] = $node_example['type'];
+    $instance['bundle'] = 'node_example';
     field_create_instance($instance);
   }
 }
 
 /**
- * All fields created by this content type.  The field is the default definition
- * that lets Drupal know that a field exists.
+ * Return a structured array defining the fields created by this content type.
  *
- * This is inside its own function so that it can be used in both hook_install()
+ * This is packaged in a function so it can be used in both hook_install()
  * and hook_uninstall().
  */
-function node_example_installed_fields() {
+function _node_example_installed_fields() {
   $t = get_t();
   return array(
     'color' => array(
@@ -100,16 +91,18 @@ function node_example_installed_fields() {
 }
 
 /**
- * All instances created by this content type.  The instance lets Drupal know
- * which widget to use to allow the user to enter data and how to react in
- * different view modes.  We are going to display a page that uses a custom
- * "node_example_list" view mode.  We will set a cardinality of three allowing
- * our content type to give the user three color fields to enter data into.
+ * Return a structured array defining the instances for this content type.
  *
- * This is inside its own function so that it can be used in both hook_install()
+ * The instance lets Drupal know which widget to use to allow the user to enter
+ * data and how to react in different view modes.  We are going to display a
+ * page that uses a custom "node_example_list" view mode.  We will set a
+ * cardinality of three allowing our content type to give the user three color
+ * fields.
+ *
+ * This is provided as a function so that it can be used in both hook_install()
  * and hook_uninstall().
  */
-function node_example_installed_instances() {
+function _node_example_installed_instances() {
   $t = get_t();
   return array(
     'color' => array(
@@ -180,7 +173,7 @@ function node_example_uninstall() {
   // Loop over each of the fields defined by this module and delete
   // all instances of the field, their data, and the field itself.
   // http://api.drupal.org/api/function/field_delete_field/7
-  foreach (array_keys(node_example_installed_fields()) as $field) {
+  foreach (array_keys(_node_example_installed_fields()) as $field) {
     field_delete_field($field);
   }
 
