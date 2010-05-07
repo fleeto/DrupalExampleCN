@@ -152,7 +152,7 @@ function _node_example_installed_instances() {
 
 
 /**
- * Implementation of hook_uninstall().
+ * Implements hook_uninstall().
  *
  */
 function node_example_uninstall() {

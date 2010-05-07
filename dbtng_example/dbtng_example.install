@@ -7,7 +7,7 @@
  */
 
 /**
- * Implementation of hook_install().
+ * Implements hook_install().
  *
  * In Drupal 7, there is no need to install schema using this hook, the schema
  * is already installed before this hook is called.
@@ -45,7 +45,7 @@ function dbtng_example_install() {
 }
 
 /**
- * Implementation of hook_uninstall().
+ * Implements hook_uninstall().
  *
  * As in hook_install, there is no need to uninstall schema, Drupal will do it
  * for us.

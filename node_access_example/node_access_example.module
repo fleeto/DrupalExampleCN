@@ -18,7 +18,7 @@
  */
 
 /**
- * Implementation of hook_perm().
+ * Implements hook_perm().
  *
  * In this example, we will use a simple permission to determine whether a user
  * has access to "private" content. This permission is defined here.
@@ -37,7 +37,7 @@ function node_access_example_perm() {
 }
 
 /**
- * Implementation of hook_node_grants().
+ * Implements hook_node_grants().
  *
  * Tell the node access system what GIDs the user belongs to for each realm.
  * In this example, we are providing two realms: the example realm, which
@@ -63,7 +63,7 @@ function node_access_example_node_grants($account, $op) {
 }
 
 /**
- * Implementation of hook_node_access_records().
+ * Implements hook_node_access_records().
  *
  * All node access modules must implement this hook. If the module is
  * interested in the privacy of the node passed in, return a list
@@ -100,7 +100,7 @@ function node_access_example_node_access_records($node) {
 }
 
 /**
- * Implementation of hook_form_alter()
+ * Implements hook_form_alter().
  *
  * This module adds a simple checkbox to the node form labeled private. If the
  * checkbox is labelled, only the node author and users with 'access private content'
@@ -118,7 +118,7 @@ function node_access_example_form_alter(&$form, $form_state) {
 }
 
 /**
- * Implementation of hook_nodeapi().
+ * Implements hook_nodeapi().
  */
 
 function node_access_example_nodeapi_load(&$node) {
@@ -126,7 +126,7 @@ function node_access_example_nodeapi_load(&$node) {
 }
 
 /**
- * Implementation of hook_nodeapi_delete().
+ * Implements hook_nodeapi_delete().
  *
  * The module must track the access status of the node.
  */
@@ -136,7 +136,7 @@ function node_access_example_nodeapi_delete(&$node) {
 }
 
 /**
- * Implementation of hook_nodeapi_insert().
+ * Implements hook_nodeapi_insert().
  *
  * The module must track the access status of the node.
  */
@@ -147,7 +147,7 @@ function node_access_example_nodeapi_insert(&$node) {
 }
 
 /**
- * Implementation of hook_nodeapi_update().
+ * Implements hook_nodeapi_update().
  *
  * The module must track the access status of the node.
  */

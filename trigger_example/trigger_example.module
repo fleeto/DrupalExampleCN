@@ -214,7 +214,7 @@ function _trigger_example_first_time_login($hook, &$edit, $account, $category = 
  */
 
 /**
- * Implementation of hook_help().
+ * Implements hook_help().
  */
 function trigger_example_help($path, $arg) {
   switch ($path) {
@@ -242,7 +242,7 @@ function trigger_example_help($path, $arg) {
 }
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  *
  * Provide a form that can be used to fire the module's triggers.
  */

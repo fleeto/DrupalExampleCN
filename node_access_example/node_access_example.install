@@ -2,19 +2,19 @@
 // $Id$
 
 /**
- * Implementation of hook_install().
+ * Implements hook_install().
  */
 function node_access_example_install() {
 }
 
 /**
- * Implementation of hook_uninstall().
+ * Implements hook_uninstall().
  */
 function node_access_example_uninstall() {
 }
 
 /**
- * Implementation of hook_schema().
+ * Implements hook_schema().
  */
 function node_access_example_schema() {
   $schema['node_access_example'] = array(
