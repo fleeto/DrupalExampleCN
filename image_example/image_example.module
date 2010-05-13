@@ -359,7 +359,7 @@ function image_example_theme() {
 }
 
 /**
- * Theme callback for colorize effect summary output.
+ * Formats a summary of an image colorize effect.
  *
  * @param $variables
  *   An associative array containing:
