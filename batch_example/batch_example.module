@@ -6,7 +6,7 @@
  * This is an example outlining how a module can define batches.
  *
  * Batches allow heavy processing to be spread out over several page
-m * requests, ensuring that the processing does not get interrupted
+ * requests, ensuring that the processing does not get interrupted
  * because of a PHP timeout, while allowing the user to receive feedback
  * on the progress of the ongoing operations. It also can prevent out of memory
  * situations.
