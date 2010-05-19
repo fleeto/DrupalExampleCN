@@ -152,13 +152,6 @@ function ajax_example_menu() {
   return $items;
 }
 
-/**
- * Implements hook_init() to add module css.
- */
-function ajax_example_init() {
-  drupal_add_css(drupal_get_path('module', 'ajax_example') . '/ajax_example.css');
-  drupal_add_js(drupal_get_path('module', 'ajax_example') . '/ajax_example.js');
-}
 
 /**
  * @ingroup ajax_examples

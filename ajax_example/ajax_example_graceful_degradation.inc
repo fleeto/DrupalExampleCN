@@ -31,6 +31,12 @@
  * On changing the first dropdown, the options in the second
  * are updated. Gracefully degrades if no javascript.
  *
+ * A bit of CSS and javascript is required. The CSS hides the "add more" button
+ * if javascript is not enabled. The Javascript snippet is really only used
+ * to enable us to present the form in degraded mode without forcing the user
+ * to turn off Javascript.  Both of these are loaded by using the
+ * #attached FAPI property, so it's a good example of how to use that.
+ *
  * The extra argument $no_js_use is here only to allow presentation of this
  * form as if Javascript were not enabled. ajax_example_menu() provides two
  * ways to call this form, one normal ($no_js_use = FALSE) and one simulating
@@ -49,6 +55,15 @@ function ajax_example_dependent_dropdown_degrades($form, &$form_state, $no_js_us
   // second dropdown.
   $selected = isset($form_state['values']['dropdown_first']) ? $form_state['values']['dropdown_first'] : key($options_first);
 
+  // Attach the CSS and JS we need to show this with and without javascript.
+  // Without javascript we need an extra "Choose" button, and this is
+  // hidden when we have javascript enabled.
+  $form['#attached']['css'] = array(
+    drupal_get_path('module', 'ajax_example') . '/ajax_example.css',
+  );
+  $form['#attached']['js'] = array(
+    drupal_get_path('module', 'ajax_example') . '/ajax_example.js',
+  );
 
   $form['dropdown_first_fieldset'] = array(
     '#type' => 'fieldset',
@@ -167,6 +182,16 @@ function ajax_example_dependent_dropdown_degrades_first_callback($form, $form_st
 
 function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) {
 
+  // Attach the CSS and JS we need to show this with and without javascript.
+  // Without javascript we need an extra "Choose" button, and this is
+  // hidden when we have javascript enabled.
+
+  $form['#attached']['css'] = array(
+    drupal_get_path('module', 'ajax_example') . '/ajax_example.css',
+  );
+  $form['#attached']['js'] = array(
+    drupal_get_path('module', 'ajax_example') . '/ajax_example.js',
+  );
   $form['description'] = array(
     '#type' => 'markup',
     '#markup' => '<div>' . t('This example demonstrates a form which dynamically creates various sections based on the configuration in the form.
@@ -185,7 +210,6 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
     '#type' => 'select',
     '#title' => t('Question style'),
     '#options' => drupal_map_assoc(array(t('Choose question style'), t('Multiple Choice'), t('True/False'), t('Fill-in-the-blanks'))),
-    // '#description' => t('Choose whether you want multiple-choice, true/false, or fill-in-the-blanks questions.'),
     '#default_value' => empty($form_state['values']['question_type_select']) ? '' : $form_state['values']['question_type_select'],
     '#ajax' => array(
       'wrapper' => 'questions-fieldset-wrapper',
@@ -197,6 +221,8 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
     '#type' => 'submit',
     '#value' => t('Choose'),
     '#attributes' => array('class' => array('next-button')),
+    '#limit_validation_errors' => array(),  // No need to validate when submitting this.
+    '#validate' => array(),
   );
 
   // This simply allows us to demonstrate no-javascript use without
