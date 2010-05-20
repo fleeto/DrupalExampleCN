@@ -27,6 +27,7 @@
  * nodeapi_example_form_node_type_form_alter
  */
 function nodeapi_example_form_alter(&$form, $form_state, $form_id) {
+  // First, check for the node type configuration form.
   if ($form_id == 'node_type_form') {
     // Alter the node type's configuration form to add our setting. We don't
     // need to worry about saving this value back to the variable, the form
@@ -43,8 +44,8 @@ function nodeapi_example_form_alter(&$form, $form_state, $form_id) {
     $form['rating']['nodeapi_example'] = array(
       '#type' => 'radios',
       '#title' => t('NodeAPI Example Rating'),
-      '#default_value' => variable_get('nodeapi_example_' . $form['#node_type']->type, 1),
-      '#options' => array(0 => t('Disabled'), 1 => t('Enabled')),
+      '#default_value' => variable_get('nodeapi_example_' . $form['#node_type']->type, FALSE),
+      '#options' => array(FALSE => t('Disabled'), TRUE => t('Enabled')),
       '#description' => t('Should this node have a rating attached to it?'),
     );
   }
@@ -53,7 +54,7 @@ function nodeapi_example_form_alter(&$form, $form_state, $form_id) {
     // If the rating is enabled for this node type, we insert our control
     // into the form.
     $node = $form['#node'];
-    if (variable_get('nodeapi_example_' . $form['type']['#value'], 0)) {
+    if (variable_get('nodeapi_example_' . $form['type']['#value'], FALSE)) {
       $form['nodeapi_example_rating'] = array(
         '#type' => 'select',
         '#title' => t('Rating'),
@@ -108,7 +109,7 @@ function nodeapi_example_form_alter(&$form, $form_state, $form_id) {
  * required
  */
 function nodeapi_example_node_validate($node, $form) {
-  if (variable_get('nodeapi_example_' . $node->type, TRUE)) {
+  if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
     if (isset($node->nodeapi_example_rating) && !$node->nodeapi_example_rating) {
       form_set_error('nodeapi_example_rating', t('You must rate this content.'));
     }
@@ -123,7 +124,7 @@ function nodeapi_example_node_validate($node, $form) {
  */
 function nodeapi_example_node_load($nodes, $form) {
   foreach ($nodes as $node) {
-    if (variable_get('nodeapi_example_' . $node->type, TRUE)) {
+    if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
       $nids[] = $node->nid;
     }
   }
@@ -152,7 +153,7 @@ function nodeapi_example_node_load($nodes, $form) {
  * database inserts.
  */
 function nodeapi_example_node_insert($node) {
-  if (variable_get('nodeapi_example_' . $node->type, TRUE)) {
+  if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
     // Notice that we are ignoring any revision information using $node->nid
     db_insert('nodeapi_example')
     ->fields(array(
@@ -171,8 +172,8 @@ function nodeapi_example_node_insert($node) {
 function nodeapi_example_node_delete($node) {
   // Notice that we're deleting even if the content type has no rating enabled.
   db_delete('nodeapi_example')
-  ->condition('nid', $node->nid)
-  ->execute();
+    ->condition('nid', $node->nid)
+    ->execute();
 }
 
 /**
@@ -187,7 +188,7 @@ function nodeapi_example_node_delete($node) {
  * saved so there would be nothing to update.
  */
 function nodeapi_example_node_update($node) {
-  if (variable_get('nodeapi_example_' . $node->type, TRUE)) {
+  if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
     nodeapi_example_node_delete($node);
     nodeapi_example_node_insert($node);
   }
@@ -210,7 +211,7 @@ function nodeapi_example_node_update($node) {
  * additional information.
  */
 function nodeapi_example_node_view($node, $build_mode = 'full') {
-  if (variable_get('nodeapi_example_' . $node->type, TRUE)) {
+  if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
     // Make sure to set a rating, also for nodes saved previously and not yet rated.
     $rating = isset($node->nodeapi_example_rating) ? $node->nodeapi_example_rating : 0;
     $node->content['nodeapi_example'] = array(
@@ -228,7 +229,7 @@ function nodeapi_example_node_view($node, $build_mode = 'full') {
 function nodeapi_example_theme() {
   return array(
     'nodeapi_example_rating' => array(
-      'arguments' => array('rating' => NULL),
+      'variables' => array('rating' => NULL),
   ),
   );
 }
@@ -243,12 +244,13 @@ function nodeapi_example_theme() {
  */
 function theme_nodeapi_example_rating($variables) {
   $options = array(
-  0 => t('Unrated'),
-  1 => t('Poor'),
-  2 => t('Needs improvement'),
-  3 => t('Acceptable'),
-  4 => t('Good'),
-  5 => t('Excellent'));
+    0 => t('Unrated'),
+    1 => t('Poor'),
+    2 => t('Needs improvement'),
+    3 => t('Acceptable'),
+    4 => t('Good'),
+    5 => t('Excellent'),
+  );
   $output = '<div class="nodeapi_example_rating">';
   $output .= t('Rating: %rating', array('%rating' => $options[(int) $variables['rating']]));
   $output .= '</div>';
