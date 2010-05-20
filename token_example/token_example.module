@@ -153,7 +153,7 @@ function _token_example_get_comment() {
 }
 
 /**
- * Build a list of availalbe user accounts.
+ * Build a list of available user accounts.
  */
 function _token_example_get_user() {
   if (!user_access('access user profiles') && !user_access('administer users')) {
@@ -171,7 +171,7 @@ function _token_example_get_user() {
 }
 
 /**
- * Build a list of availalbe taxonomy terms.
+ * Build a list of available taxonomy terms.
  */
 function _token_example_get_taxonomy_term() {
   $term_query = db_select('taxonomy_term_data', 'ttd');
@@ -184,7 +184,7 @@ function _token_example_get_taxonomy_term() {
 }
 
 /**
- * Build a list of availalbe files.
+ * Build a list of available files.
  */
 function _token_example_get_file() {
   $file_query = db_select('file_managed', 'f');
