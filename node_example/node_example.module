@@ -106,6 +106,7 @@ function node_example_page() {
 function node_example_entity_info_alter(&$entity_info) {
   $entity_info['node']['view modes']['example_node_list'] = array(
     'label' => t('Example Node List'),
+    'custom settings' => FALSE,
   );
 }
 
