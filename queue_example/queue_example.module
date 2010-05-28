@@ -75,7 +75,7 @@ function queue_example_add_remove_form($form, &$form_state) {
   $form['insert_fieldset']['string_to_add'] = array(
     '#type' => 'textfield',
     '#size' => 10,
-    '#value' => t('item @counter', array('@counter' => $form_state['storage']['insert_counter'])),
+    '#default_value' => t('item @counter', array('@counter' => $form_state['storage']['insert_counter'])),
   );
   $form['insert_fieldset']['add_item'] = array(
     '#type' => 'submit',
@@ -204,11 +204,11 @@ function queue_example_add_remove_form_run_cron($form, &$form_state) {
 /**
  * Submit handler for clearing/deleting the queue.
  */
- function queue_example_add_remove_form_clear_queue($form, &$form_state) {
-   $queue = DrupalQueue::get($form_state['values']['queue_name']);
-   $queue->deleteQueue();
-   drupal_set_message(t('Deleted the @queue_name queue and all items in it', array('@queue_name' => $form_state['values']['queue_name'])));
- }
+function queue_example_add_remove_form_clear_queue($form, &$form_state) {
+  $queue = DrupalQueue::get($form_state['values']['queue_name']);
+  $queue->deleteQueue();
+  drupal_set_message(t('Deleted the @queue_name queue and all items in it', array('@queue_name' => $form_state['values']['queue_name'])));
+}
 
 /**
  * Retrieve the queue from the database for display purposes only.

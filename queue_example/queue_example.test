@@ -29,7 +29,7 @@ class QueueExampleTestCase extends DrupalWebTestCase {
 
     // Load the queue with 5 items.
     for ($i = 1; $i <= 5; $i++) {
-      $edit = array('string_to_add' => $i);
+      $edit = array('string_to_add' => "boogie$i");
       $this->drupalPost('queue_example/insert_remove', $edit, t('Insert into queue'));
       $this->assertText(t('There are now @number items in the queue', array('@number' => $i)));
     }
@@ -37,7 +37,7 @@ class QueueExampleTestCase extends DrupalWebTestCase {
     for ($i = 1; $i <= 5; $i++) {
       $edit = array('claim_time' => 0);
       $this->drupalPost(NULL, $edit, t('Claim the next item from the queue'));
-      $this->assertPattern(t('Claimed item id=.*string=@string for 0 seconds.%', array('@string' => $i)));
+      $this->assertPattern(t('%Claimed item id=.*string=@string for 0 seconds.%', array('@string' => "boogie$i")));
     }
     $edit = array('claim_time' => 0);
     $this->drupalPost(NULL, $edit, t('Claim the next item from the queue'));
@@ -49,7 +49,7 @@ class QueueExampleTestCase extends DrupalWebTestCase {
     for ($i = 1; $i <= 5; $i++) {
       $edit = array('claim_time' => 0);
       $this->drupalPost(NULL, $edit, t('Claim the next item and delete it'));
-      $this->assertPattern(t('Claimed and deleted item id=.*string=@string for 0 seconds.%', array('@string' => $i)));
+      $this->assertPattern(t('%Claimed and deleted item id=.*string=@string for 0 seconds.%', array('@string' => "boogie$i")));
     }
     // Verify that nothing is left to claim.
     $edit = array('claim_time' => 0);
