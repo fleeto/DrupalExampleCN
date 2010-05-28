@@ -49,7 +49,7 @@ class QueueExampleTestCase extends DrupalWebTestCase {
     for ($i = 1; $i <= 5; $i++) {
       $edit = array('claim_time' => 0);
       $this->drupalPost(NULL, $edit, t('Claim the next item and delete it'));
-      $this->assertPattern(t('%Claimed and deleted item id=.*string=@string for 0 seconds.%', array('@string' => $i)));
+      $this->assertPattern(t('Claimed and deleted item id=.*string=@string for 0 seconds.%', array('@string' => $i)));
     }
     // Verify that nothing is left to claim.
     $edit = array('claim_time' => 0);
