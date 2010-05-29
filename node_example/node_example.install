@@ -69,8 +69,8 @@ function node_example_install() {
 function _node_example_installed_fields() {
   $t = get_t();
   return array(
-    'color' => array(
-      'field_name' => 'color',
+    'node_example_color' => array(
+      'field_name' => 'node_example_color',
       'label'       => $t('The colors available for this object.'),
       'cardinality' => 3,
       'type'        => 'text',
@@ -78,12 +78,12 @@ function _node_example_installed_fields() {
         'max_length' => 60,
       ),
     ),
-    'quantity' => array(
-      'field_name'  => 'quantity',
+    'node_example_quantity' => array(
+      'field_name'  => 'node_example_quantity',
       'type'        => 'text',
     ),
-    'image' => array(
-      'field_name' => 'image',
+    'node_example_image' => array(
+      'field_name' => 'node_example_image',
       'type'       => 'image',
       'cardinality' => 1,
     ),
@@ -105,8 +105,8 @@ function _node_example_installed_fields() {
 function _node_example_installed_instances() {
   $t = get_t();
   return array(
-    'color' => array(
-      'field_name' => 'color',
+    'node_example_color' => array(
+      'field_name' => 'node_example_color',
       'label'       => $t('The colors available for this object.'),
       'cardinality' => 3,
       'widget'      => array(
@@ -119,8 +119,8 @@ function _node_example_installed_instances() {
         ),
       ),
     ),
-    'quantity' => array(
-      'field_name'  => 'quantity',
+    'node_example_quantity' => array(
+      'field_name'  => 'node_example_quantity',
       'type'        => 'text',
       'widget'      => array(
         'type'    => 'text_textfield',
@@ -132,8 +132,8 @@ function _node_example_installed_instances() {
         ),
       ),
     ),
-    'image' => array(
-      'field_name'  => 'image',
+    'node_example_image' => array(
+      'field_name'  => 'node_example_image',
       'label'       => $t('Upload an image:'),
       'required'    => FALSE,
       'widget' => array(

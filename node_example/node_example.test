@@ -37,10 +37,10 @@ class NodeExampleTestCase extends DrupalWebTestCase {
     // Create a new node. The image makes it more complicated, so skip it.
     $edit = array(
       'title' => $this->randomName(),
-      'color[und][0][value]' => 'red',
-      'color[und][1][value]' => 'green',
-      'color[und][2][value]' => 'blue',
-      'quantity[und][0][value]' => 100,
+      'node_example_color[und][0][value]' => 'red',
+      'node_example_color[und][1][value]' => 'green',
+      'node_example_color[und][2][value]' => 'blue',
+      'node_example_quantity[und][0][value]' => 100,
     );
     $this->drupalPost('node/add/node-example', $edit, t('Save'));
     $this->assertText("Example Node " . $edit['title'] . " has been created", "Found node creation message");
