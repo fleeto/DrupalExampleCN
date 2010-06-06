@@ -133,7 +133,8 @@ function dbtng_example_entry_insert($entry) {
  */
 function dbtng_example_entry_update($entry) {
   try {
-    $result = db_update('dbtng_example')
+    // db_update()...->execute() returns the number of rows updated.
+    $count = db_update('dbtng_example')
               ->fields($entry)
               ->condition('pid', $entry['pid'])
               ->execute();
@@ -142,6 +143,7 @@ function dbtng_example_entry_update($entry) {
     drupal_set_message(t('db_update failed. Message = %message, query= %query',
       array('%message' => $e->getMessage(), '%query' => $e->query_string)), 'error');
   }
+  return $count;
 }
 
 /**
@@ -560,6 +562,6 @@ function dbtng_example_form_update_submit($form, $form_state){
     'age' => $form_state['values']['age'],
     'uid' => $user->uid,
   );
-  dbtng_example_entry_update($entry);
-  drupal_set_message(t("Updated entry @entry", array('@entry' => print_r($entry, TRUE))));
+  $count = dbtng_example_entry_update($entry);
+  drupal_set_message(t("Updated entry @entry (@count row updated)", array('@count' => $count, '@entry' => print_r($entry, TRUE))));
 }
