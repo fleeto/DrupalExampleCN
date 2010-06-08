@@ -86,7 +86,6 @@ function field_example_field_validate($obj_type, $object, $field, $instance, $la
   }
 }
 
-
 /**
  * Implements hook_field_is_empty().
  */
@@ -154,7 +153,7 @@ function field_example_field_widget_info() {
  * This widget displays three text fields, one each for red, green,
  * and blue. However, the field type defines a single text column,
  * rgb, which needs an HTML color spec. Define an element validate
- * handler that converts our r, g, and b fields into a simulaed single
+ * handler that converts our r, g, and b fields into a simulated single
  * 'rgb' form element.
  */
 function field_example_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
@@ -192,7 +191,7 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
 }
 
 /**
- * Validate the individual fields and then convert thm into a single HTML RGB
+ * Validate the individual fields and then convert them into a single HTML RGB
  * value as text.
  */
 function _field_example_3text_validate($element, &$form_state) {
