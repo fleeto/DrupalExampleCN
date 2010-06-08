@@ -33,7 +33,9 @@
  ***************************************************************/
 
 /**
- * Implements hook_field_info() to provide the description of the field.
+ * Implements hook_field_info().
+ *
+ * Provides the description of the field.
  */
 function field_example_field_info() {
   return array(
@@ -42,7 +44,7 @@ function field_example_field_info() {
       'description' => t('Demonstrates a field composed of an RGB color.'),
       'default_widget' => 'field_example_3text',
       'default_formatter' => 'field_example_helloworld',
-  ),
+    ),
   );
 }
 
@@ -66,7 +68,7 @@ function field_example_field_schema($field) {
 }
 
 /**
- * Implement hook_field_validate().
+ * Implements hook_field_validate().
  *
  * Verifies that the RGB field as combined is valid
  * (6 hex digits with a # at the beginning).
@@ -87,7 +89,6 @@ function field_example_field_validate($obj_type, $object, $field, $instance, $la
 
 /**
  * Implements hook_field_is_empty().
- *
  */
 function field_example_field_is_empty($item, $field) {
   return empty($item['rgb']);
@@ -108,7 +109,7 @@ function field_example_field_formatter_info() {
     'field_example_helloworld' => array(
       'label' => t('Example formatter for a color'),
       'field types' => array('field_example_rgb'),
-  ),
+    ),
   );
 }
 
@@ -136,14 +137,14 @@ function field_example_field_formatter_view($object_type, $object, $field, $inst
  **************************************************************************/
 
 /**
- * Implement hook_field_widget_info().
+ * Implements hook_field_widget_info().
  */
 function field_example_field_widget_info() {
   return array(
     'field_example_3text' => array(
        'label' => t('RGB text field'),
        'field types' => array('field_example_rgb'),
-  ),
+    ),
   );
 }
 
@@ -230,8 +231,9 @@ function field_example_field_widget_error($element, $error) {
 
 
 /**
- * Implements hook_menu() just to provide a simple user interface that
- * tells the developer where to go.
+ * Implements hook_menu().
+ *
+ * Provides a simple user interface that tells the developer where to go.
  */
 function field_example_menu() {
   $items['example/field_example'] = array(
@@ -246,6 +248,5 @@ function field_example_menu() {
  * A simple page to explain to the developer what to do.
  */
 function _field_example_page() {
-  return t("The Field Example provides a field composed of an HTML RGB value, like #ff00ff.
-           To use it, add the field to a content type.");
+  return t("The Field Example provides a field composed of an HTML RGB value, like #ff00ff. To use it, add the field to a content type.");
 }
