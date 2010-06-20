@@ -72,7 +72,6 @@ function ajax_example_dependent_dropdown_degrades($form, &$form_state, $no_js_us
     '#type' => 'select',
     '#title' => 'First Dropdown',
     '#options' => $options_first,
-    '#default_value' => $selected,
     '#attributes' => array('class' => array('enabled-for-ajax')),
 
     // bind an ajax callback to the change event (which is the default for the
@@ -113,7 +112,6 @@ function ajax_example_dependent_dropdown_degrades($form, &$form_state, $no_js_us
     // the $selected variable will now have the new value and so the options
     // will change.
     '#options' => _ajax_example_get_second_dropdown_options($selected),
-    '#default_value' => isset($form_state['values']['dropdown_second']) ? $form_state['values']['dropdown_second'] : '',
   );
 
   $form['dropdown_second_fieldset']['submit'] = array(
@@ -210,7 +208,6 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
     '#type' => 'select',
     '#title' => t('Question style'),
     '#options' => drupal_map_assoc(array(t('Choose question style'), t('Multiple Choice'), t('True/False'), t('Fill-in-the-blanks'))),
-    '#default_value' => empty($form_state['values']['question_type_select']) ? '' : $form_state['values']['question_type_select'],
     '#ajax' => array(
       'wrapper' => 'questions-fieldset-wrapper',
       'callback' => 'ajax_example_dynamic_sections_select_callback',
@@ -256,7 +253,6 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
         $form['questions_fieldset']['question'] = array(
           '#type' => 'radios',
           '#title' => t('Who was the first president of the United States'),
-          '#default_value' => empty($form_state['values']['questions_fieldset']['question']) ? '' : $form_state['values']['questions_fieldset']['question'],
           '#options' => drupal_map_assoc(array(t('George Bush'), t('Adam McGuire'), t('Abraham Lincoln'), t('George Washington'))),
         );
         break;
@@ -267,7 +263,6 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
           '#title' => t('Was George Washington the first president of the United States?'),
           '#options' => array(t('George Washington') => t("True"), 0 => t("False")),
           '#description' => t('Click "True" if you think George Washington was the first president of the United States.'),
-          '#default_value' => empty($form_state['values']['questions_fieldset']['question']) ? '' : $form_state['values']['questions_fieldset']['question'],
         );
         break;
 
@@ -276,7 +271,6 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
           '#type' => 'textfield',
           '#title' => t('Who was the first president of the United States'),
           '#description' => t('Please type the correct answer to the question.'),
-          '#default_value' => empty($form_state['values']['questions_fieldset']['question']) ? '' : $form_state['values']['questions_fieldset']['question'],
         );
         break;
 

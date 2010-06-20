@@ -28,33 +28,33 @@ class FormExampleTestCase extends DrupalWebTestCase {
    */
   function testTutorials() {
     // Tutorial #1
-    $this->drupalGet('form_example/tutorial');
+    $this->drupalGet('examples/form_example/tutorial');
     $this->assertText(t('#9'));
 
     // #2
-    $this->drupalPost('form_example/tutorial/2', array('name' => t('name')), t('Submit'));
+    $this->drupalPost('examples/form_example/tutorial/2', array('name' => t('name')), t('Submit'));
 
     // #4
-    $this->drupalPost('form_example/tutorial/4',
+    $this->drupalPost('examples/form_example/tutorial/4',
       array('first' => t('firstname'), 'last' => t('lastname')), t('Submit'));
-    $this->drupalPost('form_example/tutorial/4', array(), t('Submit'));
+    $this->drupalPost('examples/form_example/tutorial/4', array(), t('Submit'));
     $this->assertText(t('First name field is required'));
     $this->assertText(t('Last name field is required'));
 
     // #5
-    $this->drupalPost('form_example/tutorial/5',
+    $this->drupalPost('examples/form_example/tutorial/5',
       array('first' => t('firstname'), 'last' => t('lastname')), t('Submit'));
     $this->assertText(t('Please enter your first name'));
-    $this->drupalPost('form_example/tutorial/4', array(), t('Submit'));
+    $this->drupalPost('examples/form_example/tutorial/4', array(), t('Submit'));
     $this->assertText(t('First name field is required'));
     $this->assertText(t('Last name field is required'));
 
     // #6
-    $this->drupalPost('form_example/tutorial/6',
+    $this->drupalPost('examples/form_example/tutorial/6',
       array('first' => t('firstname'), 'last' => t('lastname'), 'year_of_birth' => 1955),
       t('Submit'));
     $this->assertNoText(t('Enter a year between 1900 and 2000'));
-    $this->drupalPost('form_example/tutorial/6',
+    $this->drupalPost('examples/form_example/tutorial/6',
       array('first' => t('firstname'), 'last' => t('lastname'), 'year_of_birth' => 1855),
       t('Submit'));
 
@@ -62,18 +62,18 @@ class FormExampleTestCase extends DrupalWebTestCase {
 
 
     // #7
-    $this->drupalPost('form_example/tutorial/7',
+    $this->drupalPost('examples/form_example/tutorial/7',
       array('first' => t('firstname'), 'last' => t('lastname'), 'year_of_birth' => 1955),
       t('Submit'));
     $this->assertText(t('The form has been submitted. name="firstname lastname", year of birth=1955'));
-    $this->drupalPost('form_example/tutorial/7',
+    $this->drupalPost('examples/form_example/tutorial/7',
       array('first' => t('firstname'), 'last' => t('lastname'), 'year_of_birth' => 1855),
       t('Submit'));
 
     $this->assertText(t('Enter a year between 1900 and 2000'));
 
       // #8
-    $this->drupalPost('form_example/tutorial/8',
+    $this->drupalPost('examples/form_example/tutorial/8',
       array('first' => t('firstname'), 'last' => t('lastname'), 'year_of_birth' => 1955),
       t('Next >>'));
 
@@ -84,7 +84,7 @@ class FormExampleTestCase extends DrupalWebTestCase {
     $this->assertText(t('And the favorite color is green'));
 
     // #9
-    $url = 'form_example/tutorial/9';
+    $url = 'examples/form_example/tutorial/9';
     for ($i = 1; $i <= 4; $i++) {
       if ($i > 1) {
         $url = NULL;  // later steps of multistep form take NULL.

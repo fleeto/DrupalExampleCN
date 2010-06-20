@@ -28,55 +28,136 @@
 function ajax_example_menu() {
   $items = array();
 
-  $items['ajax_example/simplest'] = array(
-    'title' => 'AJAX Example: simplest',
+  $items['examples/ajax_example'] = array(
+    'title' => 'AJAX Example',
+    'page callback' => 'ajax_example_intro',
+    'access callback' => TRUE,
+    'expanded' => TRUE,
+  );
+  $items['examples/ajax_example/simplest'] = array(
+    'title' => 'Simplest AJAX Example',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ajax_example_simplest'),
     'access callback' => TRUE,
+    'weight' => 0,
   );
   // Automatically generate checkboxes
-  $items['ajax_example/autocheckboxes'] = array(
-    'title' => 'AJAX Example: generate checkboxes',
+  $items['examples/ajax_example/autocheckboxes'] = array(
+    'title' => 'Generate checkboxes',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ajax_example_autocheckboxes'),
     'access callback' => TRUE,
+    'weight' => 1,
   );
 
     // Automatically generate textfields
-  $items['ajax_example/autotextfields'] = array(
-    'title' => 'AJAX Example: generate textfields',
+  $items['examples/ajax_example/autotextfields'] = array(
+    'title' => 'Generate textfields',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ajax_example_autotextfields'),
     'access callback' => TRUE,
+    'weight' => 2,
   );
 
-  $items['ajax_example/submit_driven_ajax'] = array(
-    'title' => 'AJAX Example: submit-driven AJAX',
+  $items['examples/ajax_example/submit_driven_ajax'] = array(
+    'title' => 'Submit-driven AJAX',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ajax_example_submit_driven_ajax'),
     'access callback' => TRUE,
+    'weight' => 3,
   );
 
-  $items['ajax_example/dependent_dropdown'] = array(
-    'title' => 'AJAX Example: dependent dropdown',
+  $items['examples/ajax_example/dependent_dropdown'] = array(
+    'title' => 'Dependent dropdown',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ajax_example_dependent_dropdown'),
     'access callback' => TRUE,
+    'weight' => 4,
+  );
+  $items['examples/ajax_example/dependent_dropdown_degrades'] = array(
+    'title' => 'Dependent dropdown (with graceful degradation)',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_dependent_dropdown_degrades'),
+    'access callback' => TRUE,
+    'weight' => 5,
+    'file' => 'ajax_example_graceful_degradation.inc',
+  );
+  $items['examples/ajax_example/dependent_dropdown_degrades_no_js'] = array(
+    'title' => 'Dependent dropdown with javascript off',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_dependent_dropdown_degrades', TRUE),
+    'access callback' => TRUE,
+    'file' => 'ajax_example_graceful_degradation.inc',
+    'weight' => 5,
   );
 
-  $items['ajax_example/advanced_commands'] = array(
-    'title' => 'Ajax Example: AJAX framework commands',
+  $items['examples/ajax_example/dynamic_sections'] = array(
+    'title' => 'Dynamic Sections (with graceful degradation)',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_dynamic_sections'),
+    'access callback' => TRUE,
+    'weight' => 6,
+    'file' => 'ajax_example_graceful_degradation.inc',
+  );
+  $items['ajax_example/dynamic_sections_no_js'] = array(
+    'title' => 'Dynamic Sections w/JS turned off',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_dynamic_sections', TRUE),
+    'access callback' => TRUE,
+    'weight' => 6,
+    'file' => 'ajax_example_graceful_degradation.inc',
+  );
+
+
+  $items['examples/ajax_example/wizard'] = array(
+    'title' => 'Wizard (with graceful degradation)',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_wizard'),
+    'access callback' => TRUE,
+    'file' => 'ajax_example_graceful_degradation.inc',
+    'weight' => 7,
+  );
+  $items['examples/ajax_example/wizard_no_js'] = array(
+    'title' => 'Wizard w/JS turned off',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_wizard', TRUE),
+    'access callback' => TRUE,
+    'file' => 'ajax_example_graceful_degradation.inc',
+    'weight' => 7,
+  );
+
+  $items['examples/ajax_example/add_more'] = array(
+    'title' => 'Add-more button (with graceful degradation)',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_add_more'),
+    'access callback' => TRUE,
+    'file' => 'ajax_example_graceful_degradation.inc',
+    'weight' => 8,
+  );
+  $items['examples/ajax_example/add_more_no_js'] = array(
+    'title' => 'Add-more button w/JS turned off',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_add_more', TRUE),
+    'access callback' => TRUE,
+    'file' => 'ajax_example_graceful_degradation.inc',
+    'weight' => 8,
+  );
+
+  $items['examples/ajax_example/advanced_commands'] = array(
+    'title' => 'AJAX framework commands',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ajax_example_advanced_commands'),
     'access callback' => TRUE,
     'file' => 'ajax_example_advanced.inc',
+    'weight' => 10,
   );
 
-  $items['ajax_example/ajax_link'] = array(
-    'title' => 'Ajax Example: Ajax Link',
+  $items['examples/ajax_example/ajax_link'] = array(
+    'title' => 'Ajax Link',
     'page callback' => 'ajax_example_render_link',
     'access callback' => TRUE,
     'file' => 'ajax_example_misc.inc',
+    'weight' => 9,
   );
 
   $items['ajax_link_callback'] = array(
@@ -87,71 +168,13 @@ function ajax_example_menu() {
     'file' => 'ajax_example_misc.inc',
   );
 
-  $items['ajax_example/dependent_dropdown_degrades'] = array(
-    'title' => 'AJAX Example: degrading dependent dropdown',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('ajax_example_dependent_dropdown_degrades'),
-    'access callback' => TRUE,
-    'file' => 'ajax_example_graceful_degradation.inc',
-  );
-  $items['ajax_example/dependent_dropdown_degrades_no_js'] = array(
-    'title' => 'AJAX Example: degrading dependent dropdown w/JS turned off',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('ajax_example_dependent_dropdown_degrades', TRUE),
-    'access callback' => TRUE,
-    'file' => 'ajax_example_graceful_degradation.inc',
-  );
-
-
-  $items['ajax_example/dynamic_sections'] = array(
-    'title' => 'AJAX Example: Dynamic Sections',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('ajax_example_dynamic_sections'),
-    'access callback' => TRUE,
-    'file' => 'ajax_example_graceful_degradation.inc',
-  );
-  $items['ajax_example/dynamic_sections_no_js'] = array(
-    'title' => 'AJAX Example: Dynamic Sections w/JS turned off',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('ajax_example_dynamic_sections', TRUE),
-    'access callback' => TRUE,
-    'file' => 'ajax_example_graceful_degradation.inc',
-  );
-
-
-  $items['ajax_example/wizard'] = array(
-    'title' => 'AJAX Example: Wizard',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('ajax_example_wizard'),
-    'access callback' => TRUE,
-    'file' => 'ajax_example_graceful_degradation.inc',
-  );
-  $items['ajax_example/wizard_no_js'] = array(
-    'title' => 'AJAX Example: Wizard w/JS turned off',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('ajax_example_wizard', TRUE),
-    'access callback' => TRUE,
-    'file' => 'ajax_example_graceful_degradation.inc',
-  );
-
-  $items['ajax_example/add_more'] = array(
-    'title' => 'AJAX Example: Add-more button',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('ajax_example_add_more'),
-    'access callback' => TRUE,
-    'file' => 'ajax_example_graceful_degradation.inc',
-  );
-  $items['ajax_example/add_more_no_js'] = array(
-    'title' => 'AJAX Example: Add-more button w/JS turned off',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('ajax_example_add_more', TRUE),
-    'access callback' => TRUE,
-    'file' => 'ajax_example_graceful_degradation.inc',
-  );
-
   return $items;
 }
 
+function ajax_example_intro() {
+  $markup = t('The AJAX example module provides many examples of AJAX including forms, links, and AJAX commands.');
+  return $markup;
+}
 
 /**
  * @ingroup ajax_examples

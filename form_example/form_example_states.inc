@@ -52,40 +52,32 @@
  * There are examples below of changing or hiding an element when a checkbox
  * is checked, when a textarea is filled, when a select has a given value.
  *
+ * See @link drupal_process_states full documentation @endlink
+ *
  * See also @link http://api.drupal.org/api/drupal/developer--topics--forms_api_reference.html/7#states Form API Reference @endlink
  *
  *
  */
 function form_example_states_form($form, &$form_state) {
-  $form['name'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Your name'),
-    '#required' => FALSE,
-
-    // This field is normally not required, but if the 'make required' checkbox
-    // is checked, it will be changed to required.
-    // Note that this doesn't fully work yet, as although the visual appearance
-    // of 'required' is set, you can still submit the form without validation
-    // failing. See http://drupal.org/node/767738.
-    '#states' => array(
-      'required' => array(  // Action to take.
-        ':input[name=optional_checkbox]' => array('checked' => TRUE)
-      ),
-    ),
-  );
-  $form['optional_checkbox'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Make name (above) required'),
-  );
-
   $form['student_type'] = array(
-    '#type' => 'select',
+    '#type' => 'radios',
     '#options' => drupal_map_assoc(array(t('High School'), t('Undergraduate'), t('Graduate'))),
     '#title' => t('What type of student are you?')
   );
+  $form['high_school'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('High School Information'),
+    // This #states rule says that the "high school" fieldset should only
+    // be shown if the "student_type" form element is set to "High School".
+    '#states' => array(
+      'visible' => array(
+        ':input[name=student_type]' => array('value' => t('High School')),
+      ),
+    ),
+  );
 
   // High school information.
-  $form['tests_taken'] = array(
+  $form['high_school']['tests_taken'] = array(
     '#type' => 'checkboxes',
     '#options' => drupal_map_assoc(array(t('SAT'), t('ACT'))),
     '#title' => t('What standardized tests did you take?'),
@@ -100,92 +92,87 @@ function form_example_states_form($form, &$form_state) {
       ),
     ),
   );
-  $form['sat_score'] = array(
+
+  $form['high_school']['sat_score'] = array(
     '#type' => 'textfield',
     '#title' => t('Your SAT score:'),
     '#size' => 4,
 
     // This #states rule limits visibility to when the $form['tests_taken']
-    // 'SAT' checkbox is checked and the student type is "High School"
+    // 'SAT' checkbox is checked."
     '#states' => array(
       'visible' => array(  // action to take.
         ':input[name=tests_taken[SAT]]' => array('checked' => TRUE),
-        ':input[name=student_type]' => array('value' => t('High School')),
       ),
     ),
   );
-  $form['act_score'] = array(
+  $form['high_school']['act_score'] = array(
     '#type' => 'textfield',
     '#title' => t('Your ACT score:'),
     '#size' => 4,
 
-    // Set this element visible if the ACT checkbox above is
-    // checked and the student type is "High School"
+    // Set this element visible if the ACT checkbox above is checked.
     '#states' => array(
       'visible' => array(  // action to take.
         ':input[name=tests_taken[ACT]]' => array('checked' => TRUE),
-        ':input[name=student_type]' => array('value' => t('High School')),
       ),
     ),
   );
 
   // Undergrad information.
-  $form['school_name'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Your college or university:'),
-
-    // Set this element visible if the student_type is Undergraduate, above.
+  $form['undergraduate'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Undergraduate Information'),
+    // This #states rule says that the "undergraduate" fieldset should only
+    // be shown if the "student_type" form element is set to "Undergraduate".
     '#states' => array(
-      'visible' => array(  // action to take.
+      'visible' => array(
         ':input[name=student_type]' => array('value' => t('Undergraduate')),
       ),
     ),
   );
-  $form['school_country'] = array(
+
+  $form['undergraduate']['school_name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Your college or university:'),
+  );
+  $form['undergraduate']['school_country'] = array(
     '#type' => 'select',
     '#options' => drupal_map_assoc(array(t('UK'), t('Other'))),
     '#title' => t('In what country is your college or university located?'),
-
-    // Only set visible if the student type is set to Undergraduate above.
-    '#states' => array(
-      'visible' => array(   // action to take.
-        ':input[name=student_type]' => array('value' => t('Undergraduate')),
-      ),
-    ),
-
   );
-  $form['country_writein'] = array(
+  $form['undergraduate']['country_writein'] = array(
     '#type' => 'textfield',
     '#size' => 20,
     '#title' => t('Please enter the name of the country where your college or university is located.'),
 
-    // Here we use two conditions, which is an AND. We want to show this
-    // element *only* if the school_country select is 'Other' AND the
-    // student_type is 'Undergraduate'. Otherwise, the field might be shown
-    // inappropriately if the user has been experimenting while set to
-    // "Undergraduate" and then the select changes.
+    // Only show this field if school_country is set to 'Other'.
     '#states' => array(
       'visible' => array(  // Action to take: Make visible.
         // Make visible if *both* conditions are true.
         ':input[name=school_country]' => array('value' => t('Other')),
-        ':input[name=student_type]' => array('value' => t('Undergraduate')),
       ),
     ),
   );
 
   // Graduate student information.
-  $form['more_info'] = array(
-    '#type' => 'textarea',
-    '#title' => t('Please describe your graduate studies'),
-    // Make this form visible only if the student_type select is 'Graduate'.
+  $form['graduate'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Graduate School Information'),
+    // This #states rule says that the "graduate" fieldset should only
+    // be shown if the "student_type" form element is set to "Graduate".
     '#states' => array(
-      'visible' => array(   // Action to take.
+      'visible' => array(
         ':input[name=student_type]' => array('value' => t('Graduate')),
       ),
     ),
   );
+  $form['graduate']['more_info'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Please describe your graduate studies'),
+  );
 
-  $form['info_provide'] = array(
+  $form['graduate']['info_provide'] = array(
     '#type' => 'checkbox',
     '#title' => t('Check here if you have provided information above'),
     '#disabled' => TRUE,
@@ -194,10 +181,6 @@ function form_example_states_form($form, &$form_state) {
       // in it, if it's 'filled'.
       'checked' => array(      // Action to take: check the checkbox.
         ':input[name=more_info]' => array('filled' => TRUE),
-      ),
-      // Only show this if we're working on Graduate.
-      'visible' => array(      // Action to take.
-        ':input[name=student_type]' => array('value' => t('Graduate')),
       ),
     ),
   );

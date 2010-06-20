@@ -22,8 +22,14 @@
  */
 function form_example_menu() {
   $items = array();
-  $items['form_example/tutorial'] = array(
-    'title' => 'Form Example: Tutorial',
+  $items['examples/form_example'] = array(
+    'title' => 'Form Example',
+    'page callback' => 'form_example_intro',
+    'access callback' => TRUE,
+    'expanded' => TRUE,
+  );
+  $items['examples/form_example/tutorial'] = array(
+    'title' => 'Form Tutorial',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('form_example_tutorial_1'),
     'access callback' => TRUE,
@@ -31,7 +37,7 @@ function form_example_menu() {
     'file' => 'form_example_tutorial.inc',
     'type' => MENU_NORMAL_ITEM,
   );
-  $items['form_example/tutorial/1'] = array(
+  $items['examples/form_example/tutorial/1'] = array(
     'title' => '#1',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('form_example_tutorial_1'),
@@ -40,7 +46,7 @@ function form_example_menu() {
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'file' => 'form_example_tutorial.inc',
   );
-  $items['form_example/tutorial/2'] = array(
+  $items['examples/form_example/tutorial/2'] = array(
     'title' => '#2',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('form_example_tutorial_2'),
@@ -49,7 +55,7 @@ function form_example_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'form_example_tutorial.inc',
   );
-  $items['form_example/tutorial/3'] = array(
+  $items['examples/form_example/tutorial/3'] = array(
     'title' => '#3',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('form_example_tutorial_3'),
@@ -58,7 +64,7 @@ function form_example_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'form_example_tutorial.inc',
   );
-  $items['form_example/tutorial/4'] = array(
+  $items['examples/form_example/tutorial/4'] = array(
     'title' => '#4',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('form_example_tutorial_4'),
@@ -67,7 +73,7 @@ function form_example_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'form_example_tutorial.inc',
   );
-  $items['form_example/tutorial/5'] = array(
+  $items['examples/form_example/tutorial/5'] = array(
     'title' => '#5',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('form_example_tutorial_5'),
@@ -76,7 +82,7 @@ function form_example_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'form_example_tutorial.inc',
   );
-  $items['form_example/tutorial/6'] = array(
+  $items['examples/form_example/tutorial/6'] = array(
     'title' => '#6',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('form_example_tutorial_6'),
@@ -85,7 +91,7 @@ function form_example_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'form_example_tutorial.inc',
   );
-  $items['form_example/tutorial/7'] = array(
+  $items['examples/form_example/tutorial/7'] = array(
     'title' => '#7',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('form_example_tutorial_7'),
@@ -94,7 +100,7 @@ function form_example_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'form_example_tutorial.inc',
   );
-  $items['form_example/tutorial/8'] = array(
+  $items['examples/form_example/tutorial/8'] = array(
     'title' => '#8',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('form_example_tutorial_8'),
@@ -103,7 +109,7 @@ function form_example_menu() {
     'type' => MENU_LOCAL_TASK,
     'file' => 'form_example_tutorial.inc',
   );
-  $items['form_example/tutorial/9'] = array(
+  $items['examples/form_example/tutorial/9'] = array(
     'title' => '#9',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('form_example_tutorial_9'),
@@ -113,8 +119,8 @@ function form_example_menu() {
     'file' => 'form_example_tutorial.inc',
     'weight' => 9,
   );
-  $items['form_example/states'] = array(
-    'title' => 'Form Example: #states',
+  $items['examples/form_example/states'] = array(
+    'title' => '#states example',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('form_example_states_form'),
     'access callback' => TRUE,
@@ -124,13 +130,17 @@ function form_example_menu() {
   return $items;
 }
 
+function form_example_intro() {
+  $markup = t('The form example module provides a tutorial and a #states example');
+  return $markup;
+}
 
 /**
  * Implements hook_help() to provide a bit of help.
  */
 function form_example_help($path, $arg) {
   switch($path) {
-    case 'form_example/tutorial':
+    case 'examples/form_example/tutorial':
       // TODO: Update the URL.
       $help = t('This form example tutorial for Drupal 7 is the code from the <a href="http://drupal.org/node/262422">Handbook 10-step tutorial</a>');
   }

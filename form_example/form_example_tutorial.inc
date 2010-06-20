@@ -380,6 +380,8 @@ function form_example_tutorial_7_submit($form, &$form_state) {
  * See the @link http://pingvision.com/blog/ben-jeavons/2009/multi-step-forms-drupal-6-using-variable-functions Drupal 6 tutorial @endlink
  *
  * Adds logic to our form builder to give it two pages.
+ * The @link ajax_example_wizard AJAX Example's Wizard Example @endlink
+ * gives an AJAX version of this same idea.
  *
  * @see form_example_tutorial_8_submit()
  * @see form_example_tutorial_8_validate()
@@ -577,13 +579,10 @@ function form_example_tutorial_9($form, &$form_state) {
       '#collapsed' => FALSE,
     );
 
-    // Change/add the #default_value for the first name, last name, and
-    // birth year to show their old values so when the "Add another name"
-    //button is clicked, they will retain their values.
     $form['name'][$i]['first'] = array(
       '#type' => 'textfield',
       '#title' => t('First name'),
-      '#description' => "Enter first name.",
+      '#description' => t("Enter first name."),
       '#size' => 20,
       '#maxlength' => 20,
       '#required' => TRUE,
@@ -595,8 +594,8 @@ function form_example_tutorial_9($form, &$form_state) {
     );
     $form['name'][$i]['year_of_birth'] = array(
       '#type' => 'textfield',
-      '#title' => "Year of birth",
-      '#description' => 'Format is "YYYY"',
+      '#title' => t("Year of birth"),
+      '#description' => t('Format is "YYYY"'),
     );
   }
   $form['submit'] = array(

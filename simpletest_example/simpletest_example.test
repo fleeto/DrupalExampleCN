@@ -54,9 +54,13 @@ class SimpletestExampleTestCase extends DrupalWebTestCase {
     // We'll run this test normally, but not on the testbot, as it would
     // indicate that the examples module was failing tests.
     if (!$this->runningOnTestbot()) {
+      // The debug() statement will output information into the test results.
+      // It can also be used in Drupal 7 anywhere in code and will come out
+      // as a drupal_set_message().
+      debug('We are not running on the PIFR testing server, so will go ahead and catch the failure.');
       $this->drupalGet("node/{$node->nid}/edit");
       // Make sure we don't get a 401 unauthorized response:
-      $this->assertResponse(200, t('User is allowed to edit the content.'));      
+      $this->assertResponse(200, t('User is allowed to edit the content.'));
 
       // Looking for title text in the page to determine whether we were
       // successful opening edit form.
