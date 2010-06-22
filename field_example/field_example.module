@@ -43,7 +43,7 @@ function field_example_field_info() {
       'label' => t('Example Color RGB'),
       'description' => t('Demonstrates a field composed of an RGB color.'),
       'default_widget' => 'field_example_3text',
-      'default_formatter' => 'field_example_helloworld',
+      'default_formatter' => 'field_example_simple_text',
     ),
   );
 }
@@ -64,7 +64,13 @@ function field_example_field_schema($field) {
   $columns = array(
     'rgb' => array('type' => 'varchar', 'length' => 7, 'not null' => FALSE),
   );
-  return array('columns' => $columns);
+  $indexes = array(
+    'rgb' => array('rgb'),
+  );
+  return array(
+    'columns' => $columns,
+    'indexes' => $indexes,
+  );
 }
 
 /**
@@ -75,7 +81,7 @@ function field_example_field_schema($field) {
  */
 function field_example_field_validate($obj_type, $object, $field, $instance, $langcode, &$items, &$errors) {
   foreach($items as $delta => $item) {
-    if(isset($item['rgb'])) {
+    if(!empty($item['rgb'])) {
       if(! preg_match('@^#[0-9a-f]{6}$@', $item['rgb'])) {
         $errors[$field['field_name']][$langcode][$delta][] = array(
           'error' => 'field_example_invalid',
@@ -85,6 +91,7 @@ function field_example_field_validate($obj_type, $object, $field, $instance, $la
     }
   }
 }
+
 
 /**
  * Implements hook_field_is_empty().
@@ -105,8 +112,14 @@ function field_example_field_is_empty($item, $field) {
  */
 function field_example_field_formatter_info() {
   return array(
-    'field_example_helloworld' => array(
-      'label' => t('Example formatter for a color'),
+    // This formatter just displays the hex value in the color indicated.
+    'field_example_simple_text' => array(
+      'label' => t('Simple text-based formatter'),
+      'field types' => array('field_example_rgb'),
+    ),
+    // This formatter changes the background color of the content region.
+    'field_example_color_background' => array(
+      'label' => t('Change the background of the output text'),
       'field types' => array('field_example_rgb'),
     ),
   );
@@ -114,16 +127,36 @@ function field_example_field_formatter_info() {
 
 /**
  * Implements hook_field_formatter_view().
+ *
+ * Two formatters are implemented.
+ * - field_example_simple_text just outputs markup indicating the color that
+ *   was entered and uses an inline style to set the text color to that value.
+ * - field_example_color_background does the same but also changes the
+ *   background color of div.region-content.
  */
 function field_example_field_formatter_view($object_type, $object, $field, $instance, $langcode, $items, $display) {
   $element = array();
 
-  if($display['type']=='field_example_helloworld') {
-    foreach ($items as $delta => $item) {
-      $element[$delta]['#markup'] = '<p style="color: ' . $item['rgb']. '">'
-        . t('The color code in this field is @code', array('@code' => $item['rgb'])) . '</p>';
-    }
+  switch ($display['type']) {
+    // This formatter simply outputs the field as text and with a color.
+    case 'field_example_simple_text':
+      foreach ($items as $delta => $item) {
+        $element[$delta]['#markup'] = '<p style="color: ' . $item['rgb']. '">'
+          . t('The color code in this field is @code', array('@code' => $item['rgb'])) . '</p>';
+      }
+      break;
+
+    // This formatter adds css to the page changing the '.region-content' area's
+    // background color. If there are many fields, the last one will win.
+    case 'field_example_color_background':
+      foreach ($items as $delta => $item) {
+        drupal_add_css('div.region-content { background-color:' . $item['rgb'] .';}', array('type' => 'inline') );
+        $element[$delta]['#markup'] = '<p>'
+          . t('The content area color has been changed to @code', array('@code' => $item['rgb'])) . '</p>';
+      }
+      break;
   }
+
   return $element;
 }
 
@@ -137,12 +170,26 @@ function field_example_field_formatter_view($object_type, $object, $field, $inst
 
 /**
  * Implements hook_field_widget_info().
+ *
+ * Three widgets are provided.
+ * - A simple text-only widget where the user enters the '#ffffff'.
+ * - A 3-textfield widget that gathers the red, green, and blue values
+ *   separately.
+ * - A farbtastic colorpicker widget that chooses the value graphically.
  */
 function field_example_field_widget_info() {
   return array(
+    'field_example_text' => array(
+      'label' => t('RGB value as #ffffff'),
+      'field types' => array('field_example_rgb'),
+    ),
     'field_example_3text' => array(
        'label' => t('RGB text field'),
        'field types' => array('field_example_rgb'),
+    ),
+    'field_example_colorpicker' => array(
+      'label' => t('Color Picker'),
+      'field types' => array('field_example_rgb'),
     ),
   );
 }
@@ -150,55 +197,105 @@ function field_example_field_widget_info() {
 /**
  * Implements hook_field_widget_form().
  *
- * This widget displays three text fields, one each for red, green,
+ * Three different forms are provided, for the three widget types.
+ *
+ * The 'field_example_colorpicker' and 'field_example_text' are essentially
+ * the same, but field_example_colorpicker adds a javascript colorpicker
+ * helper.
+ *
+ * field_example_3text displays three text fields, one each for red, green,
  * and blue. However, the field type defines a single text column,
  * rgb, which needs an HTML color spec. Define an element validate
  * handler that converts our r, g, and b fields into a simulated single
  * 'rgb' form element.
  */
 function field_example_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
-  // Convert rgb value into r, g, and b for #default_value.
-  if (isset($items[$delta]['rgb'])) {
-    preg_match_all('@..@', substr($items[$delta]['rgb'],1), $match);
-  }
-  else {
-    $match = array(array());
-  }
-
-  // A fieldset to hold the three text fields.
+  $value = isset($items[$delta]['rgb']) ? $items[$delta]['rgb'] : '';
   $element += array(
-    '#type' => 'fieldset',
-    '#element_validate' => array('_field_example_3text_validate'),
-
-    // The following two items are set so that the validation function will
-    // be able to access external value information which otherwise would be
-    // unavailable.
-    '#langcode' => $langcode,  // Passed so that validation function can use it.
-    '#delta' => $delta, // Pass the delta to validation function so it can access values.
+    '#delta' => $delta,
   );
+  $element['rgb'] = array();
 
-  // Create a textfield for saturation values for Red, Green, and Blue.
-  foreach (array('r' => t('Red'), 'g' => t('Green'), 'b' => t('Blue')) as $key => $title) {
-    $element[$key] = array(
-      '#type' => 'textfield',
-      '#title' => $title,
-      '#size' => 2,
-      '#default_value' => array_shift($match[0]),
-      '#description' => t('The 2-digit hexadecimal representation of the @color saturation, like "a1" or "ff"', array('@color' => $title)),
-    );
+  switch ($instance['widget']['type']) {
+
+    case 'field_example_colorpicker':
+      $element['rgb'] += array(
+        '#suffix' => '<div class="field-example-colorpicker"></div>',
+        '#attributes' => array('class' => array('edit-field-example-colorpicker')),
+        '#attached' => array(
+          // Add Farbtastic color picker.
+          'library' => array(
+            array('system', 'farbtastic'),
+          ),
+          // Add javascript to trigger the colorpicker.
+          'js' => array(drupal_get_path('module', 'field_example') . '/field_example.js'),
+        ),
+      );
+
+    // DELIBERATE fall-through: From here on the field_example_text and
+    // field_example_colorpicker are exactly the same.
+    case 'field_example_text':
+      $element['rgb'] += array(
+        '#type' => 'textfield',
+        '#default_value' => $value,
+        // Allow a slightly larger size that the field length to allow for some
+        // configurations where all characters won't fit in input field.
+        '#size' => 7,
+        '#maxlength' => 7,
+      );
+      break;
+
+    case 'field_example_3text':
+      // Convert rgb value into r, g, and b for #default_value.
+      if (isset($items[$delta]['rgb'])) {
+        preg_match_all('@..@', substr($items[$delta]['rgb'], 1), $match);
+      }
+      else {
+        $match = array(array());
+      }
+
+      // A fieldset to hold the three text fields.
+      $element += array(
+        '#type' => 'fieldset',
+        '#element_validate' => array('field_example_3text_validate'),
+
+        // The following is set so that the validation function will be able
+        // to access external value information which otherwise would be
+        // unavailable.
+        '#delta' => $delta,
+        '#attached' => array(
+          'css' => array(drupal_get_path('module', 'field_example') . '/field_example.css'),
+        ),
+      );
+
+      // Create a textfield for saturation values for Red, Green, and Blue.
+      foreach (array('r' => t('Red'), 'g' => t('Green'), 'b' => t('Blue')) as $key => $title) {
+        $element[$key] = array(
+          '#type' => 'textfield',
+          '#title' => $title,
+          '#size' => 2,
+          '#default_value' => array_shift($match[0]),
+          '#attributes' => array('class' => array('rgb-entry')),
+          // '#description' => t('The 2-digit hexadecimal representation of the @color saturation, like "a1" or "ff"', array('@color' => $title)),
+        );
+      }
+      break;
+
   }
   return $element;
 }
+
 
 /**
  * Validate the individual fields and then convert them into a single HTML RGB
  * value as text.
  */
-function _field_example_3text_validate($element, &$form_state) {
+function field_example_3text_validate($element, &$form_state) {
   $delta = $element['#delta']; // TODO: Isn't there a better way to find out which element?
-  $field_name = substr($element['r']['#name'],0,strpos($element['r']['#name'],'['));
-  if (isset($form_state['values'][$field_name][$element['#langcode']][$delta])) {
-    $values = $form_state['values'][$field_name][$element['#langcode']][$delta];
+  $field = $form_state['field'][$element['#field_name']][$element['#language']]['field'];
+  $field_name = $field['field_name'];
+  if (isset($form_state['values'][$field_name][$element['#language']][$delta])) {
+    $values = $form_state['values'][$field_name][$element['#language']][$delta];
     foreach (array('r', 'g', 'b') as $colorfield) {
       $val = hexdec($values[$colorfield]);
       // If they left any empty, we'll set the value empty and quit.
@@ -235,7 +332,7 @@ function field_example_field_widget_error($element, $error) {
  * Provides a simple user interface that tells the developer where to go.
  */
 function field_example_menu() {
-  $items['example/field_example'] = array(
+  $items['examples/field_example'] = array(
     'title' => 'Field Example',
     'page callback' => '_field_example_page',
     'access callback' => TRUE,
