@@ -163,7 +163,7 @@ function node_access_example_permission() {
 /**
  * Implements hook_node_access().
  *
- *  Allows view and edit access to private nodes where theacccount requesting
+ *  Allows view and edit access to private nodes where the account requesting
  *  access has the username 'foobar'.
  */
 function node_access_example_node_access($node, $op, $account) {
@@ -172,7 +172,7 @@ function node_access_example_node_access($node, $op, $account) {
   if (is_string($node)) {
     return NODE_ACCESS_IGNORE;
   }
-  if (($op == 'view' || $op == 'update') && $account->name == 'foobar' && !empty($node->private)) {
+  if (($op == 'view' || $op == 'update') && (!empty($account->name) && $account->name == 'foobar') && !empty($node->private)) {
     drupal_set_message(t('Access to node @nid allowed because requester name (@name) is specifically allowed', array('@name' => $node->name, '@uid' => $account->uid)));
     return NODE_ACCESS_ALLOW;
   }
