@@ -75,7 +75,7 @@ class BlockExampleTestCase extends DrupalWebTestCase {
     // Verify that new content is shown and the title is uppercase
     $this->drupalGet('/');
     $this->assertRaw( $string, t('Content of configurable text block successfully verified.'));
-    $this->assertRaw( drupal_strtoupper(t('Title of first block (example_configurable_text)')), t('hook_block_view_alter implementation successfully verified.'));
+    $this->assertText(t('Title of first block (example_configurable_text)'), t('hook_block_view_alter implementation successfully verified.'));
 
     // Verify that search block is at the bottom of the region..
 

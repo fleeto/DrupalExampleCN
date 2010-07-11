@@ -118,8 +118,9 @@ function block_example_contents($which_block) {
       // Modules would typically perform some database queries to fetch the
       // content for their blocks. Here, we'll just use the variable set in the
       // block configuration or, if none has set, a default value.
-      return variable_get('block_example_string',  t('A default value.'));
-
+      // Block content can be returned in two formats: renderable arrays
+      // (as here) are preferred though a simple string will work as well.
+      return array('#markup' => variable_get('block_example_string',  t('A default value.')));
     case 'example_empty':
       // It is possible that a block not have any content, since it is
       // probably dynamically constructed. In this case, Drupal will not display
