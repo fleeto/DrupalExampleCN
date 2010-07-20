@@ -2,7 +2,6 @@
 name = Batch example
 description = An example outlining how a module can define batch operations.
 package = Example modules
-version = VERSION
 core = 7.x
 files[] = batch_example.module
 files[] = batch_example.install

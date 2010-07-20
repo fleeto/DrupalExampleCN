@@ -2,7 +2,6 @@
 name = Page example
 description = An example module showing how to define a page to be displayed to the user at a given URL.
 package = Example modules
-version = VERSION
 core = 7.x
 files[] = page_example.module
 files[] = page_example.test
