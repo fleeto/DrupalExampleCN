@@ -14,7 +14,7 @@
  * - @link filter_example.module Defining an input filter @endlink
  * - @link form_example.module Form API examples, including multistep forms @endlink
  * - @link js_example.module Javascript examples @endlink
- * - @link menu_example.module Menu API examples
+ * - @link menu_example.module Menu API examples @endlink
  * - @link nodeapi_example.module Node API demonstrations showing how a separate module can change the behavior of a node @endlink
  * - @link node_example.module Creating custom node types, with fields @endlink
  * - @link page_example.module Creating a custom page @endlink
