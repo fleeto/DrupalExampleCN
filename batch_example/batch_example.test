@@ -15,7 +15,7 @@ class BatchExampleTestCase extends DrupalWebTestCase {
   public static function getInfo() {
     return array(
       'name' => 'Batch example functionality',
-      'description' => 'Verify the defined batches and its consistency in the database.',
+      'description' => 'Verify the defined batches.',
       'group' => 'Examples',
     );
   }
@@ -42,13 +42,13 @@ class BatchExampleTestCase extends DrupalWebTestCase {
     }
 
     // Launch Batch 1
-    $result = $this->drupalPost('batch_example', array('batch' => 'batch_1'), t('Go'));
+    $result = $this->drupalPost('examples/batch_example', array('batch' => 'batch_1'), t('Go'));
     // Check that 1000 operations were performed.
-    $this->assertRaw('1000 processed.', t('Queue batch 1 processed successfully.'));
+    $this->assertText('1000 results processed');
 
     // Launch Batch 2
-    $result = $this->drupalPost('batch_example', array('batch' => 'batch_2'), t('Go'));
+    $result = $this->drupalPost('examples/batch_example', array('batch' => 'batch_2'), t('Go'));
     // Check that 600 operations were performed.
-    $this->assertRaw('600 processed.', t('Queue batch 2 processed successfully.'));
+    $this->assertText('600 results processed');
   }
 }
