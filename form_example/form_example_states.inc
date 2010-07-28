@@ -22,7 +22,7 @@
  * @code
  * '#states' => array(
  *   'visible' => array(
- *     ':input[name=student_type]' => array('value' => t('High School')),
+ *     ':input[name="student_type"]' => array('value' => t('High School')),
  *   ),
  * ),
  * @endcode
@@ -55,8 +55,6 @@
  * See @link drupal_process_states full documentation @endlink
  *
  * See also @link http://api.drupal.org/api/drupal/developer--topics--forms_api_reference.html/7#states Form API Reference @endlink
- *
- *
  */
 function form_example_states_form($form, &$form_state) {
   $form['student_type'] = array(
@@ -71,7 +69,7 @@ function form_example_states_form($form, &$form_state) {
     // be shown if the "student_type" form element is set to "High School".
     '#states' => array(
       'visible' => array(
-        ':input[name=student_type]' => array('value' => t('High School')),
+        ':input[name="student_type"]' => array('value' => t('High School')),
       ),
     ),
   );
@@ -88,7 +86,7 @@ function form_example_states_form($form, &$form_state) {
     // value as the one that triggers visibility.
     '#states' => array(
       'visible' => array(   // action to take.
-        ':input[name=student_type]' => array('value' => t('High School')),
+        ':input[name="student_type"]' => array('value' => t('High School')),
       ),
     ),
   );
@@ -102,7 +100,7 @@ function form_example_states_form($form, &$form_state) {
     // 'SAT' checkbox is checked."
     '#states' => array(
       'visible' => array(  // action to take.
-        ':input[name=tests_taken[SAT]]' => array('checked' => TRUE),
+        ':input[name="tests_taken[SAT]"]' => array('checked' => TRUE),
       ),
     ),
   );
@@ -114,7 +112,7 @@ function form_example_states_form($form, &$form_state) {
     // Set this element visible if the ACT checkbox above is checked.
     '#states' => array(
       'visible' => array(  // action to take.
-        ':input[name=tests_taken[ACT]]' => array('checked' => TRUE),
+        ':input[name="tests_taken[ACT]"]' => array('checked' => TRUE),
       ),
     ),
   );
@@ -127,11 +125,37 @@ function form_example_states_form($form, &$form_state) {
     // be shown if the "student_type" form element is set to "Undergraduate".
     '#states' => array(
       'visible' => array(
-        ':input[name=student_type]' => array('value' => t('Undergraduate')),
+        ':input[name="student_type"]' => array('value' => t('Undergraduate')),
       ),
     ),
   );
 
+  $form['undergraduate']['how_many_years'] = array(
+    '#type' => 'select',
+    '#title' => t('How many years have you completed?'),
+    // The options here are integers, but since all the action here happens
+    // using the DOM on the client, we will have to use strings to work with
+    // them.
+    '#options' => array(
+      1 => t('One'),
+      2 => t('Two'),
+      3 => t('Three'),
+      4 => t('Four'),
+      5 => t('Lots'),
+    ),
+  );
+
+  $form['undergraduate']['comment'] = array(
+    '#type' => 'item',
+    '#description' => t("Wow, that's a long time."),
+    '#states' => array(
+      'visible' => array(
+        // Note that '5' must be used here instead of the integer 5.
+        // The information is coming from the DOM as a string.
+        ':input[name="how_many_years"]' => array('value' => '5'),
+      ),
+    ),
+  );
   $form['undergraduate']['school_name'] = array(
     '#type' => 'textfield',
     '#title' => t('Your college or university:'),
@@ -149,8 +173,19 @@ function form_example_states_form($form, &$form_state) {
     // Only show this field if school_country is set to 'Other'.
     '#states' => array(
       'visible' => array(  // Action to take: Make visible.
-        // Make visible if *both* conditions are true.
-        ':input[name=school_country]' => array('value' => t('Other')),
+        ':input[name="school_country"]' => array('value' => t('Other')),
+      ),
+    ),
+  );
+
+  $form['undergraduate']['thanks'] = array(
+    '#type' => 'item',
+    '#description' => t('Thanks for providing both your school and your country.'),
+    '#states' => array(
+      // Here visibility requires that two separate conditions be true.
+      'visible' => array(
+        'input[name="school_country"]' => array('value' => t('Other')),
+        'input[name="country_writein"]' => array('filled' => TRUE),
       ),
     ),
   );
@@ -163,7 +198,7 @@ function form_example_states_form($form, &$form_state) {
     // be shown if the "student_type" form element is set to "Graduate".
     '#states' => array(
       'visible' => array(
-        ':input[name=student_type]' => array('value' => t('Graduate')),
+        ':input[name="student_type"]' => array('value' => t('Graduate')),
       ),
     ),
   );
@@ -180,9 +215,31 @@ function form_example_states_form($form, &$form_state) {
       // Mark this checkbox checked if the "more_info" textarea has something
       // in it, if it's 'filled'.
       'checked' => array(      // Action to take: check the checkbox.
-        ':input[name=more_info]' => array('filled' => TRUE),
+        ':input[name="more_info"]' => array('filled' => TRUE),
       ),
     ),
+  );
+
+  $form['expand_more_info'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Check here if you want to add more information.'),
+  );
+  $form['more_info'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Additional Information'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+
+    // Expand the expand_more_info fieldset if the box is checked.
+    '#states' => array(
+      'expanded' => array(
+        ':input[name="expand_more_info"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+  $form['more_info']['feedback'] = array(
+    '#type' => 'textarea',
+    '#title' => t('What do you have to say?'),
   );
 
   $form['submit'] = array(

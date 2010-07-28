@@ -67,7 +67,7 @@ class FilterExampleTestCase extends DrupalWebTestCase {
     $result = $this->drupalPost('node/add/' . $content_type->type, $edit, t('Save'));
     $this->assertResponse(200);
     $time = format_date(time());
-    $this->assertRaw('What bar is it? it is <em>' . $time . '</em>', t('Both filters successfully verified.'));
+    $this->assertRaw('What bar is it? it is <em>' . $time . '</em>');
 
     // Enable foo filter in other format id 2
     $edit = array(
