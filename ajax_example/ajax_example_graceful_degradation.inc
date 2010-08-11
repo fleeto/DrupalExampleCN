@@ -541,7 +541,7 @@ function ajax_example_add_more($form, &$form_state, $no_js_use = FALSE) {
 
   $form['description'] = array(
     '#markup' => '<div>' . t('This example shows an add-more and a remove-last button. The <a href="!ajax">AJAX version</a> does it without page reloads; the <a href="!multistep">non-js version</a> is the same code but simulates a non-javascript environment, showing it with page reloads.',
-      array('!ajax' => url('ajax_example/add_more'), '!multistep' => url('ajax_example/add_more_no_js')))
+      array('!ajax' => url('examples/ajax_example/add_more'), '!multistep' => url('examples/ajax_example/add_more_no_js')))
     . '</div>',
   );
 
