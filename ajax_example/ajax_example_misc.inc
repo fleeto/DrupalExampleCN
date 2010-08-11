@@ -1,5 +1,6 @@
 <?php
 // $Id$
+
 /**
  * @file
  * AJAX Miscellaneous Topics.

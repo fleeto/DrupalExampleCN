@@ -1,3 +1,6 @@
+<?php
+// $Id$
+?>
 <div class="demo">
 <h2><?php print $title; ?></h2>
 <div id="accordion">

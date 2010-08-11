@@ -1,4 +1,5 @@
 ; $Id$
+
 name = Node example
 description = Demonstrates a custom content type and uses the field api.
 package = Example modules

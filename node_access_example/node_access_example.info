@@ -1,4 +1,5 @@
 ; $Id$
+
 name = Node access example
 description = Demonstrates how a module can use Drupal's node access system
 package = Example modules

@@ -1,3 +1,5 @@
+// $Id$
+
 (function($){
 $(document).ready(function(){
   var weight = Drupal.settings.js_weights.blue;

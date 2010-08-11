@@ -1,4 +1,5 @@
 ; $Id$
+
 name = Field Example
 description = A trivial implementation of a field to show the Field API
 package = Example modules
