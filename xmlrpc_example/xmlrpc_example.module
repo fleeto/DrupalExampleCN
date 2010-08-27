@@ -28,21 +28,21 @@
  * @see hook_xmlrpc()
  */
 function xmlrpc_example_xmlrpc() {
-   $methods[] =  array(
-      'xmlrpc_example.add',
-      '_xmlrpc_example_add',
-      array(
-        'int', // the type of the return value
-        'int', // the type of the first argument
-        'int',  // the type of the second argument
-      ),
-      t('Returns the sum of the two arguments.')
+  $methods[] =  array(
+    'xmlrpc_example.add',
+    '_xmlrpc_example_add',
+    array(
+      'int', // the type of the return value
+      'int', // the type of the first argument
+      'int',  // the type of the second argument
+    ),
+    t('Returns the sum of the two arguments.')
   );
   $methods[] =  array(
-      'xmlrpc_example.subtract',
-      '_xmlrpc_example_subtract',
-      array('int', 'int', 'int'),
-      t('Return difference of the two arguments.')
+    'xmlrpc_example.subtract',
+    '_xmlrpc_example_subtract',
+    array('int', 'int', 'int'),
+    t('Return difference of the two arguments.')
   );
 
   return $methods;
@@ -148,7 +148,10 @@ function xmlrpc_example_demo_form() {
  */
 function xmlrpc_example_add_submit($form, &$form_state) {
   $server = url($GLOBALS['base_url'] . "/xmlrpc.php");
-  $result = xmlrpc($server, 'xmlrpc_example.add', (int)$form_state['values']['num1'], (int)$form_state['values']['num2']);
+  $result = xmlrpc($server, array('xmlrpc_example.add' => array(
+    (int) $form_state['values']['num1'],
+    (int) $form_state['values']['num2'],
+  )));
 
   if ($result === FALSE) {
     drupal_set_message(t("Error return from xmlrpc(): Error: @errno, Message: @message", array('@errno' => xmlrpc_errno(), '@message' => xmlrpc_error_msg())));
@@ -169,7 +172,10 @@ function xmlrpc_example_add_submit($form, &$form_state) {
  */
 function xmlrpc_example_subtract_submit($form, &$form_state) {
   $server = url($GLOBALS['base_url'] . "/xmlrpc.php");
-  $result = xmlrpc($server, 'xmlrpc_example.subtract', (int)$form_state['values']['num1'], (int)$form_state['values']['num2']);
+  $result = xmlrpc($server, array('xmlrpc_example.subtract' => array(
+    (int) $form_state['values']['num1'],
+    (int) $form_state['values']['num2'],
+  )));
 
   if ($result === FALSE) {
     drupal_set_message(t("Error return from xmlrpc(): Error: @errno, Message: @message", array('@errno' => xmlrpc_errno(), '@message' => xmlrpc_error_msg())));

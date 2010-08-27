@@ -35,11 +35,11 @@ class XmlrpcExampleTestCase extends DrupalWebTestCase {
    * Perform several calls the xmlrpc inteface to test the services.
    */
   function testXmlrpcExampleBasic() {
-
     // Unit test functionality.
-    $result = xmlrpc($this->xmlrpc_url, 'xmlrpc_example.add', 3, 4);
+    $result = xmlrpc($this->xmlrpc_url, array('xmlrpc_example.add' => array(3, 4)));
     $this->assertEqual($result, 7, t('Successfully added 3+4 = 7'));
-    $result = xmlrpc($this->xmlrpc_url, 'xmlrpc_example.subtract', 4, 3);
+
+    $result = xmlrpc($this->xmlrpc_url, array('xmlrpc_example.subtract' => array(4, 3)));
     $this->assertEqual($result, 1, t('Successfully subtracted 4-3 = 1'));
 
     // Now test the UI.
@@ -50,7 +50,5 @@ class XmlrpcExampleTestCase extends DrupalWebTestCase {
     $edit = array('num1' => 8, 'num2' => 3);
     $this->drupalPost('examples/xmlrpc_example', $edit, t('Subtract the integers'));
     $this->assertText(t("The XMLRPC server returned this response: @num", array('@num' => 5)));
-
   }
-
 }
