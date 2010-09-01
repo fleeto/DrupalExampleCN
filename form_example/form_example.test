@@ -81,10 +81,10 @@ class FormExampleTestCase extends DrupalWebTestCase {
     debug($this->content, 'Content after pressing back');
     $this->drupalPost(NULL, array(), t('Next >>'));
     debug($this->content, 'Content after pressing next');
-    $this->drupalPost(NULL, array(), t('Submit'));
+    $this->drupalPost(NULL, array('color' => t('red')), t('Submit'));
     debug($this->content, 'Content after pressing submit');
     $this->assertText(t('The form has been submitted. name="firstname lastname", year of birth=1955'));
-    $this->assertText(t('And the favorite color is green'));
+    $this->assertText(t('And the favorite color is red'));
 
     // #9
     $url = 'examples/form_example/tutorial/9';
