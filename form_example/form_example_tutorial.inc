@@ -461,7 +461,7 @@ function form_example_tutorial_8_page_two($form, &$form_state) {
     '#submit' => array('form_example_tutorial_8_page_two_back'),
     // We won't bother validating the required 'color' field, since they
     // have to come back to this page to submit anyway.
-    '#limit_validation_errors' => array(),
+    '#limit_validation_errors' => array('submit'),
   );
   return $form;
 }
