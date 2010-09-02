@@ -39,12 +39,12 @@ class BlockExampleTestCase extends DrupalWebTestCase {
 
     // Find the blocks in the settings page
     $this->drupalGet('admin/structure/block');
-    $this->assertRaw(t('Example: configurable text string'), t('Block cofigurable-string found.'));
+    $this->assertRaw(t('Example: configurable text string'), t('Block configurable-string found.'));
     $this->assertRaw(t('Example: empty block'), t('Block empty-block found.'));
 
     // Verify the default settings for block are processed.
-    $this->assertFieldByName('block_example_example_empty[region]', 'sidebar_first', t('Empty block is enabled in first sidebar successfully verified.') );
-    $this->assertFieldByName('block_example_example_configurable_text[region]', -1, t('Configurable text block is disabled in first sidebar successfully verified.') );
+    $this->assertFieldByName('blocks[block_example_example_empty][region]', 'sidebar_first', t('Empty block is enabled in first sidebar successfully verified.') );
+    $this->assertFieldByName('blocks[block_example_example_configurable_text][region]', -1, t('Configurable text block is disabled in first sidebar successfully verified.') );
 
     // Verify that blocks are not shown
     $this->drupalGet('/');
@@ -52,8 +52,8 @@ class BlockExampleTestCase extends DrupalWebTestCase {
     $this->assertNoRaw( t('Title of second block (example_empty)'), t('Block empty not found.'));
 
     // Enable the Configurable text block and verify
-    $this->drupalPost('admin/structure/block', array('block_example_example_configurable_text[region]' => 'sidebar_first'), t('Save blocks'));
-    $this->assertFieldByName('block_example_example_configurable_text[region]', 'sidebar_first', t('Configurable text block is enabled in first sidebar successfully verified.') );
+    $this->drupalPost('admin/structure/block', array('blocks[block_example_example_configurable_text][region]' => 'sidebar_first'), t('Save blocks'));
+    $this->assertFieldByName('blocks[block_example_example_configurable_text][region]', 'sidebar_first', t('Configurable text block is enabled in first sidebar successfully verified.') );
 
     // Verify that blocks are there. Empty block will not be shown, because it is empty
     $this->drupalGet('/');
@@ -81,8 +81,8 @@ class BlockExampleTestCase extends DrupalWebTestCase {
 
     // Enable the search block on top of sidebar_first
     $block_options = array(
-      'search_form[region]' => 'sidebar_first',
-      'search_form[weight]' => -9,
+      'blocks[search_form][region]' => 'sidebar_first',
+      'blocks[search_form][weight]' => -9,
     );
     $this->drupalPost('admin/structure/block', $block_options, t('Save blocks'));
 
