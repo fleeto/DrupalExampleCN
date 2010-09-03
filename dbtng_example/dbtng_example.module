@@ -297,6 +297,8 @@ function dbtng_example_advanced_list() {
   $select->condition('e.name', 'John');
   // Filter only persons older than 18 years.
   $select->condition('e.age', 18, '>');
+  // Make sure we only get items 0-49, for scalability reasons.
+  $select->range(0, 50);
 
   // Now, loop all these entries and show them in a table. Note that there is no
   // db_fetch_* object or array function being called here. Also note that the
