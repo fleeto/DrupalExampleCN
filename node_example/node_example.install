@@ -72,7 +72,6 @@ function _node_example_installed_fields() {
   return array(
     'node_example_color' => array(
       'field_name' => 'node_example_color',
-      'label'       => $t('The colors available for this object.'),
       'cardinality' => 3,
       'type'        => 'text',
       'settings'    => array(
@@ -81,6 +80,7 @@ function _node_example_installed_fields() {
     ),
     'node_example_quantity' => array(
       'field_name'  => 'node_example_quantity',
+      'cardinality' => 1,
       'type'        => 'text',
     ),
     'node_example_image' => array(
@@ -109,7 +109,6 @@ function _node_example_installed_instances() {
     'node_example_color' => array(
       'field_name' => 'node_example_color',
       'label'       => $t('The colors available for this object.'),
-      'cardinality' => 3,
       'widget'      => array(
         'type'    => 'text_textfield',
       ),
@@ -122,6 +121,7 @@ function _node_example_installed_instances() {
     ),
     'node_example_quantity' => array(
       'field_name'  => 'node_example_quantity',
+      'label' => $t('Quantity required'),
       'type'        => 'text',
       'widget'      => array(
         'type'    => 'text_textfield',
