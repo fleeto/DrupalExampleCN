@@ -57,10 +57,10 @@ class FieldExampleTest extends DrupalWebTestCase {
 
     // Now add a singleton field.
     $edit = array (
-      '_add_new_field[label]' => $single_field_name_friendly,
-      '_add_new_field[field_name]' => $single_field_name_machine,
-      '_add_new_field[type]' => 'field_example_rgb',
-      '_add_new_field[widget_type]' => 'field_example_3text',
+      'fields[_add_new_field][label]' => $single_field_name_friendly,
+      'fields[_add_new_field][field_name]' => $single_field_name_machine,
+      'fields[_add_new_field][type]' => 'field_example_rgb',
+      'fields[_add_new_field][widget_type]' => 'field_example_3text',
 
     );
     $this->drupalPost(NULL, $edit, t('Save'));
@@ -77,10 +77,10 @@ class FieldExampleTest extends DrupalWebTestCase {
     $multivalue_field_name_friendly = $this->randomName(20);
     $multivalue_field_name_machine = strtolower($this->randomName(10));
     $edit = array (
-      '_add_new_field[label]' => $multivalue_field_name_friendly,
-      '_add_new_field[field_name]' => $multivalue_field_name_machine,
-      '_add_new_field[type]' => 'field_example_rgb',
-      '_add_new_field[widget_type]' => 'field_example_3text',
+      'fields[_add_new_field][label]' => $multivalue_field_name_friendly,
+      'fields[_add_new_field][field_name]' => $multivalue_field_name_machine,
+      'fields[_add_new_field][type]' => 'field_example_rgb',
+      'fields[_add_new_field][widget_type]' => 'field_example_3text',
     );
     $this->drupalPost(NULL, $edit, t('Save'));
 
