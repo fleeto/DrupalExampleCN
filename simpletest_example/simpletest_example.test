@@ -4,7 +4,7 @@
 /**
  * @file
  * An example of simpletest tests to accompany the tutorial at
- * http://drupal.org/node/395012.
+ * http://drupal.org/node/890654.
  */
 
 class SimpletestExampleTestCase extends DrupalWebTestCase {
