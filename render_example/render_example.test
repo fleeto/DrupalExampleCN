@@ -11,6 +11,7 @@ class RenderExampleTestCase extends DrupalWebTestCase {
       'name' => 'Render example functionality',
       'description' => t('Test Render Example'),
       'group' => 'Examples',
+      'dependencies' => array('devel'),
     );
   }
 
