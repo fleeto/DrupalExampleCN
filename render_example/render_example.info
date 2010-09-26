@@ -1,0 +1,10 @@
+; $Id$
+name = Render example
+description = Demonstrates drupal_render's capabilities and altering render arrays
+core = 7.x
+
+stylesheets[all][] = render_example.css
+
+files[] = render_example.module
+files[] = render_example.test
+dependencies[] = devel
