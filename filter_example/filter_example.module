@@ -13,7 +13,7 @@
  */
 
 /**
- * Implements hook_menu just for a little example menu.
+ * Implements hook_menu().
  */
 function filter_example_menu() {
   $items['examples/filter_example'] = array(
@@ -27,7 +27,7 @@ function filter_example_menu() {
 /**
  * Implements hook_filter_info().
  *
- * Here we define the diferent filters provided by the module. For the example,
+ * Here we define the diferent filters provided by the module. For this example,
  * time_filter is a very static and simple replacement, but it requires some
  * preparation of the string because of the special html tags < and >. The
  * foo_filter is more complex, including its own settings and inline tips.
@@ -79,14 +79,13 @@ function _filter_example_information() {
 /**
  * Settings callback for foo filter
  *
- * Make use of $format to have different replacements for every input format
- * Since we allow the administrator to define the string that gets
- * substituted when "foo" is encountered, we need to provide an
- * interface for this customization. The object format is also an argument of
- * the callback
+ * Make use of $format to have different replacements for every input format.
+ * Since we allow the administrator to define the string that gets substituted
+ * when "foo" is encountered, we need to provide an interface for this kind of
+ * customization. The object format is also an argument of the callback.
  *
- * Settings of this form is stored in database by the filter module, and the
- * can be read from $filter argument
+ * The settings defined in this form are stored in database by the filter module,
+ * and they will be available in the $filter argument
  */
 function _filter_example_filter_foo_settings($form, $form_state, $filter, $format, $defaults) {
   $settings['filter_example_foo'] = array(
@@ -101,8 +100,9 @@ function _filter_example_filter_foo_settings($form, $form_state, $filter, $forma
 /**
  * Foo filter process callback
  *
- * The actual filtering is performed here. The supplied text should be
- * returned, once any necessary substitutions have taken place.
+ * The actual filtering is performed here. The supplied text should be returned,
+ * once any necessary substitutions have taken place. The example just replaces
+ * foo with our custom defined string in the settings page.
  */
 function _filter_example_filter_foo_process($text, $filter, $format) {
   $replacement = isset($filter->settings['filter_example_foo']) ? $filter->settings['filter_example_foo'] : 'bar';
@@ -157,7 +157,7 @@ function _filter_example_filter_time_prepare($text, $filter) {
  * Time filter process callback
  *
  * Now, in the "process" step, we'll search for our escaped time tags and
- * to the real filtering.
+ * to the real filtering: replace the xml tag with the date.
  */
 function _filter_example_filter_time_process($text, $filter) {
   return str_replace('[filter-example-time]', '<em>' . format_date(time()) . '</em>', $text);
