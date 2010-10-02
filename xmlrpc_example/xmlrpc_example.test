@@ -3,11 +3,7 @@
 
 /**
  * @file
- * Test case for the xmlrpc example module.
- *
- * This file contains the test cases to check if module is performing as
- * expected.
- *
+ * Test case for the XML-RPC example module.
  */
 class XmlrpcExampleTestCase extends DrupalWebTestCase {
   protected $xmlrpc_url;
@@ -32,7 +28,7 @@ class XmlrpcExampleTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Perform several calls the xmlrpc inteface to test the services.
+   * Perform several calls to the XML-RPC interface to test the services.
    */
   function testXmlrpcExampleBasic() {
     // Unit test functionality.
@@ -42,13 +38,72 @@ class XmlrpcExampleTestCase extends DrupalWebTestCase {
     $result = xmlrpc($this->xmlrpc_url, array('xmlrpc_example.subtract' => array(4, 3)));
     $this->assertEqual($result, 1, t('Successfully subtracted 4-3 = 1'));
 
+    // Verify default limits
+    $result = xmlrpc($this->xmlrpc_url, array('xmlrpc_example.subtract' => array(3, 4)));
+    $this->assertEqual(xmlrpc_errno(), 10002, t('Results below minimum return custom error: 10002'));
+
+    $result = xmlrpc($this->xmlrpc_url, array('xmlrpc_example.add' => array(7, 4)));
+    $this->assertEqual(xmlrpc_errno(), 10001, t('Results beyond maximum return custom error: 10001'));
+  }
+
+
+  /**
+   * Perform several calls using XML-RPC web client.
+   */
+  function testXmlrpcExampleClient() {
     // Now test the UI.
     $edit = array('num1' => 3, 'num2' => 5);
-    $this->drupalPost('examples/xmlrpc_example', $edit, t('Add the integers'));
-    $this->assertText(t("The XMLRPC server returned this response: @num", array('@num' => 8)));
+    $this->drupalPost('examples/xmlrpc/client', $edit, t('Add the integers'));
+    $this->assertText(t("The XML-RPC server returned this response: @num", array('@num' => 8)));
 
     $edit = array('num1' => 8, 'num2' => 3);
-    $this->drupalPost('examples/xmlrpc_example', $edit, t('Subtract the integers'));
-    $this->assertText(t("The XMLRPC server returned this response: @num", array('@num' => 5)));
+    $this->drupalPost('examples/xmlrpc/client', $edit, t('Subtract the integers'));
+    $this->assertText(t("The XML-RPC server returned this response: @num", array('@num' => 5)));
   }
+
+  /**
+   * Perform several XML-RPC requests with different server settings.
+   */
+  function testXmlrpcExampleServer() {
+    // Set different minimum and maxmimum valuesI.
+    $options = array('xmlrpc_example_server_min' => 3, 'xmlrpc_example_server_max' => 7);
+    $this->drupalPost('examples/xmlrpc/server', $options, t('Save configuration'));
+    $this->assertText(t("The configuration options have been saved"), t("Results limited to >= 3 and <= 7"));
+
+    $edit = array('num1' => 8, 'num2' => 3);
+    $this->drupalPost('examples/xmlrpc/client', $edit, t('Subtract the integers'));
+    $this->assertText(t("The XML-RPC server returned this response: @num", array('@num' => 5)));
+
+    $result = xmlrpc($this->xmlrpc_url, array('xmlrpc_example.add' => array(3, 4)));
+    $this->assertEqual($result, 7, t('Successfully added 3+4 = 7'));
+
+    $result = xmlrpc($this->xmlrpc_url, array('xmlrpc_example.subtract' => array(4, 3)));
+    $this->assertEqual(xmlrpc_errno(), 10002, t('subtracting 4-3 = 1 returns custom error: 10002'));
+
+    $result = xmlrpc($this->xmlrpc_url, array('xmlrpc_example.add' => array(7, 4)));
+    $this->assertEqual(xmlrpc_errno(), 10001, t('Adding 7 + 4 = 11 returns custom error: 10001'));
+  }
+
+  /**
+   * Perform several XML-RPC requests altering the server behaviour with
+   * hook_xmlrpc_alter API
+   */
+  function testXmlrpcExampleAlter() {
+    // Enable XML-RPC service altering functionality.
+    $options = array('xmlrpc_example_alter_enabled' => 1);
+    $this->drupalPost('examples/xmlrpc/alter', $options, t('Save configuration'));
+    $this->assertText(t("The configuration options have been saved"), t("Results are not limited due to methods alteration"));
+
+    // After altering the functionality, the add and subtract methods have no
+    // limits and should not return any error.
+    $edit = array('num1' => 80, 'num2' => 3);
+    $this->drupalPost('examples/xmlrpc/client', $edit, t('Subtract the integers'));
+    $this->assertText(t("The XML-RPC server returned this response: @num", array('@num' => 77)));
+
+    $result = xmlrpc($this->xmlrpc_url, array('xmlrpc_example.add' => array(30, 4)));
+    $this->assertEqual($result, 34, t('Successfully added 30+4 = 34'));
+
+    $result = xmlrpc($this->xmlrpc_url, array('xmlrpc_example.subtract' => array(4, 30)));
+    $this->assertEqual($result, -26, t('Successfully substracted 4-30 = -26'));
+   }
 }
