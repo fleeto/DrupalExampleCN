@@ -100,7 +100,7 @@ function xmlrpc_example_info() {
 // any other number. Client applications must know the meaning of the error
 // numbers returned by the server.
 
-// The following code is the XML-RPC implmentation of the server part. The fisrt
+// The following code is the XML-RPC implementation of the server part. The first
 // step is to define the methods. This methods should be associated to callbacks
 // that will be defined later.
 
@@ -464,7 +464,7 @@ function _xmlrpc_example_alter_subtract($num1, $num2) {
 }
 
 
-// Our implmementation of hook_xmlrpc_alter will work only if a system variable
+// Our implementation of hook_xmlrpc_alter will work only if a system variable
 // is set to true, and we need a configuration form to enable/disable this
 // 'feature'. This is the user interface to enable or disable the hook_xmlrpc_alter
 // operations.
