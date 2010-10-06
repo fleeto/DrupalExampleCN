@@ -144,7 +144,7 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
     // able to search for private nodes, and will not have available nodes
     // shown on examples/node_access, because node_access() is not called
     // for node listings, only for actual access to a node.
-    $edit_user = $this->drupalCreateUser(array('access comments', 'access content', 'post comments', 'post comments without approval', 'search content'));
+    $edit_user = $this->drupalCreateUser(array('access comments', 'access content', 'post comments', 'skip comment approval', 'search content'));
     // Update the name of the user to 'foobar'.
     $num_updated = db_update('users')
       ->fields(array(
