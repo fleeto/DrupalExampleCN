@@ -206,6 +206,7 @@ function dbtng_example_entry_delete($entry) {
  * @code
  *   // SELECT * FROM {dbtng_example} WHERE uid = 0 AND name = 'John'
  *   db_select('dbtng_example')
+ *     ->fields('dbtng_example')
  *     ->condition('uid', 0)
  *     ->condition('name', 'John')
  *     ->execute();
@@ -216,6 +217,7 @@ function dbtng_example_entry_delete($entry) {
  *   // SELECT * FROM {dbtng_example} WHERE uid = 0 AND name = 'John'
  *   $arguments = array(':name' => 'John', ':uid' => 0);
  *   db_select('dbtng_example')
+ *     ->fields('dbtng_example')
  *     ->where('uid = :uid AND name = :name', $arguments)
  *     ->execute();
  * @endcode
@@ -229,6 +231,7 @@ function dbtng_example_entry_delete($entry) {
  * @code
  *   // SELECT * FROM {dbtng_example} WHERE age > 18
  *   db_select('dbtng_example')
+ *     ->fields('dbtng_example')
  *     ->condition('age', 18, '>')
  *     ->execute();
  * @endcode
