@@ -85,7 +85,7 @@ class TriggerExampleTestCase extends DrupalWebTestCase {
 //    $this->assertText($action_label, "Found the random message on the page after login.");
   }
 
-  function drupalPost($path, $edit, $submit, array $options = array(), array $headers = array(), $form_html_id = NULL) {
+  protected function drupalPost($path, $edit, $submit, array $options = array(), array $headers = array(), $form_html_id = NULL, $extra_post = NULL) {
     $submit_matches = FALSE;
     $ajax = is_array($submit);
     if (isset($path)) {
@@ -167,4 +167,17 @@ class TriggerExampleTestCase extends DrupalWebTestCase {
     }
   }
 
+  /**
+   * Test assigning a configurable action to the triggersomething event.
+   */
+  function testTriggerhookinfoalter() {
+    // Create an administrative user.
+    $test_user = $this->drupalCreateUser(array('administer actions'));
+    $this->drupalLogin($test_user);
+
+    $this->drupalGet('admin/structure/trigger/system');
+    // Verify the new 'On cron execution' label of the cron trigger is shown,
+    $this->assertText( t('On cron execution') , t('The hook_trigger_info_alter() event changed a trigger name.'));
+    $this->assertNoText( t('When cron runs') , t('The hook_trigger_info_alter() event changed a trigger name.'));
+  }
 }

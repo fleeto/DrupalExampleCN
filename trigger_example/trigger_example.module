@@ -64,6 +64,7 @@
  * @link http://drupal.org/node/199254 Triggers and Actions in Drupal 6 @endlink
  *
  * @see hook_trigger_info()
+ * @see hook_trigger_info_alter()
  */
 
 /**
@@ -278,4 +279,34 @@ function trigger_example_form_submit($form, $form_state) {
   if ($form_state['values']['op'] == t('Run triggersomething event')) {
     trigger_example_triggersomething();
   }
+}
+
+
+/**
+ * Optional usage of hook_trigger_info_aler()
+ *
+ * This function is not required to write your own triggers, but it may be
+ * useful when you want to alter existing triggers.
+ *
+ */
+
+/**
+ * Implements hook_trigger_info_alter().
+ *
+ * We call hook_trigger_info_alter when we want to change an existing trigger.
+ * As mentioned earlier, this hook is not required to create your own triggers,
+ * and should only be used when you need to alter current existing triggers. In
+ * this example implementation a little change is done to the existing trigger
+ * provided by core: 'cron'
+ *
+ * @param array $triggers
+ *  Array of trigger information returned by hook_trigger_info()
+ *  implementations.
+ *
+ * @see hook_trigger_info()
+ */
+function trigger_example_trigger_info_alter(&$triggers) {
+  // Make a simple change to an existing core trigger, altering the label
+  // "When cron runs" to our custom label "On cron execution"
+  $triggers['system']['cron']['label'] = t('On cron execution');
 }
