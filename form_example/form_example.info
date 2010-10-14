@@ -8,4 +8,5 @@ files[] = form_example.module
 files[] = form_example.install
 files[] = form_example_tutorial.inc
 files[] = form_example_states.inc
+files[] = form_example_wizard.inc
 files[] = form_example.test

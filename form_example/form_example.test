@@ -3,7 +3,7 @@
 
 /**
  * @file
- * test file for form_example module.
+ * Test file for form_example module.
  */
 
 /**
@@ -14,7 +14,7 @@ class FormExampleTestCase extends DrupalWebTestCase {
   public static function getInfo() {
     return array(
       'name' => 'Form Example tests',
-      'description' => 'Various tests on the dbtng example module.' ,
+      'description' => 'Various tests on the form example module.' ,
       'group' => 'Examples',
     );
   }
@@ -106,5 +106,60 @@ class FormExampleTestCase extends DrupalWebTestCase {
       $this->assertText(t('@num: firstname @num lastname @num (@year)', array('@num' => $i, '@year' => 1950 + $i)));
     }
   }
+
+  /**
+   * Test Wizard tutorial
+   * @TODO improve this using drupal_form_submit
+   */
+  function testWizard() {
+    // Is the wizard there
+    $this->drupalGet('examples/form_example/wizard');
+    $this->assertText(t('Extensible wizard example'));
+
+    $first_name = $this->randomName(8);
+    $last_name  = $this->randomName(8);
+    $city = $this->randomName(8);
+    $aunts_name = $this->randomName(8);
+
+    // Submit the first step of the wizard
+    $options = array(
+      'first_name' => $first_name,
+      'last_name'  => $last_name,
+    );
+    $this->drupalPost('examples/form_example/wizard', $options, t('Next'));
+
+    // A label city is created, and two buttons appear, Preivous and Next
+    $this->assertText(t('Hint: Do not enter "San Francisco", and do not leave this out.'));
+
+    // Go back to the beginning and verify that the value is there.
+    $this->drupalPost(NULL, array(), t('Previous'));
+    $this->assertFieldByName('first_name', $first_name);
+    $this->assertFieldByName('last_name', $last_name);
+
+    // Go next. We should keep our values.
+    $this->drupalPost(NULL, array(), t('Next'));
+    $this->assertText(t('Hint: Do not enter "San Francisco", and do not leave this out.'));
+
+    // Try "San Francisco".
+    $this->drupalPost(NULL, array('city' => 'San Francisco'), t('Next'));
+    $this->assertText(t('You were warned not to enter "San Francisco"'));
+
+    // Try the real city.
+    $this->drupalPost(NULL, array('city' => $city), t('Next'));
+
+    // Enter the Aunt's name, but then the previous button.
+    $this->drupalPost(NULL, array('aunts_name'=> $aunts_name), t('Previous'));
+    $this->assertFieldByName('city', $city);
+
+    // Now go forward and then press finish; check for correct values.
+    $this->drupalPost(NULL, array(), t('Next'));
+    $this->drupalPost(NULL, array('aunts_name' => $aunts_name), t('Finish'));
+
+    $this->assertRaw(t('[first_name] =&gt; @first_name', array('@first_name' => $first_name)));
+    $this->assertRaw(t('[last_name] =&gt; @last_name', array('@last_name' => $last_name)));
+    $this->assertRaw(t('[city] =&gt; @city', array('@city' => $city)));
+    $this->assertRaw(t('[aunts_name] =&gt; @aunts_name', array('@aunts_name' => $aunts_name)));
+  }
+
 }
 

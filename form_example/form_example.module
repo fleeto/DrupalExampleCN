@@ -127,24 +127,18 @@ function form_example_menu() {
     'description' => 'How to use the #states attribute in FAPI',
     'file' => 'form_example_states.inc',
   );
+  $items['examples/form_example/wizard'] = array(
+    'title' => 'Extensible wizard example',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_example_wizard'),
+    'access callback' => TRUE,
+    'description' => 'A general approach to a wizard multistep form.',
+    'file' => 'form_example_wizard.inc',
+  );
   return $items;
 }
 
 function form_example_intro() {
-  $markup = t('The form example module provides a tutorial and a #states example');
-  return $markup;
-}
-
-/**
- * Implements hook_help() to provide a bit of help.
- */
-function form_example_help($path, $arg) {
-  switch($path) {
-    case 'examples/form_example/tutorial':
-      // TODO: Update the URL.
-      $help = t('This form example tutorial for Drupal 7 is the code from the <a href="http://drupal.org/node/262422">Handbook 10-step tutorial</a>');
-  }
-  if (!empty($help)) {
-    return '<p>' . $help . '</p>';
-  }
+  $markup = t('The form example module provides a tutorial, extensible multistep example, and a #states example');
+  return array('#markup' => $markup);
 }
