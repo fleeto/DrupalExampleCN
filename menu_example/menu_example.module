@@ -374,7 +374,9 @@ function menu_example_id_load($id) {
  *   menu_router table.
  */
 function menu_example_menu_alter(&$items) {
-  // Change the path 'user/logout' to a Spanish 'user/salir''.
+  // Change the path 'user/logout' to a Spanish 'user/salir'. This change will
+  // prevent the menu "Log out" link from showing up. You should go to user/salir
+  // manually to log out of the site.
   if (!empty($items['user/logout'])) {
     $items['user/salir'] = $items['user/logout'];
     unset($items['user/logout']);
@@ -382,8 +384,8 @@ function menu_example_menu_alter(&$items) {
 
   // Here we will change the title callback to our own function, changing the
   // 'user' link from the traditional to always being "username's account".
-  if (!empty($items['user/%user_uid_only_optional'])) {
-    $items['user/%user_uid_only_optional']['title callback'] = 'menu_example_user_page_title';
+  if (!empty($items['user/%user'])) {
+    $items['user/%user']['title callback'] = 'menu_example_user_page_title';
   }
 }
 
@@ -404,13 +406,7 @@ function _menu_example_simple_title_callback($base_string) {
  * @param $account
  *   User account related to the visited page.
  */
-function menu_example_user_page_title($uid) {
-  if ($GLOBALS['user']->uid == $uid) {
-    $account = $GLOBALS['user'];
-  }
-  else {
-    $account = user_load($uid);
-  }
+function menu_example_user_page_title($account) {
   return is_object($account) ? t("@name's account", array('@name' => format_username($account))) : '';
 }
 
