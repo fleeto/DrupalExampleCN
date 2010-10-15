@@ -5,8 +5,7 @@
  * @file
  * Install file for Node Example module.
  *
- * The definition of the fields for the module is here, although
- * node_example_node_info() provides the actual content type definition.
+ * The definition of the fields for the module is here,
  *
  * See @link http://drupal.org/node/707832 Field API Tutorial @endlink
  *
