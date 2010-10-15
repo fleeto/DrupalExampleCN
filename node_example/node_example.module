@@ -3,8 +3,8 @@
 
 /**
  * @file
- * This example shows how a module can define a new
- * node type.  In Drupal 7 we move much of what was once needed in this file
+ * This is an example outlining how a module can be used to define a new
+ * node type.  In Drupal 7 we move most of what was once needed in this file
  * to the node_example.install file so that it can be managed efficiently.
  *
  * Our example node type will allow users to specify multiple "colors",
@@ -16,8 +16,8 @@
  * return it's data.  This module declares a custom view mode called
  * "example_node_list".
  *
- * We no longer need an extra per-module database table to store this content
- * type's information.
+ * We no longer need an extra database table to store this content type's
+ * information.
  *
  * Most node types that provide fields do not require any custom code for
  * the fields, as the fields system provides storage and access.
@@ -29,28 +29,11 @@
  * See @link field Field API documentation @endlink
  *
  * See @link field_example.install field_example.install @endlink
+ *
+ * Remember that most node types do not require any custom code, as one
+ * simply creates them using the fields UI.
  */
 
-/**
- * Implements hook_node_info() to provide our node_example type.
- */
-function node_example_node_info() {
-  return array(
-    'node_example' => array(
-      'name' => t('Example Node'),
-      'base' => 'node_example',
-      'description' => t('This is an example node type with a few fields.'),
-      'has_title' => TRUE,
-    ),
-  );
-}
-
-/**
- * Implement hook_form() with the standard default form.
- */
-function node_example_form($node, $form_state) {
-  return node_content_form($node, $form_state);
-}
 
 /**
  * Implements hook_menu().

@@ -24,15 +24,35 @@
  * - Create color, quantity, and image fields.
  * - Create color, quantity, and image instances.
  *
+ * @see node_type_set_defaults()
  * @see field_info_instance()
  * @see field_update_instance()
  * @see field_create_field()
  * @see field_create_instance()
  */
 function node_example_install() {
-  node_types_rebuild();
-  $types = node_type_get_types();
-  node_add_body_field($types['node_example']);
+  // use get_t() to get the name of our localization function for translation
+  // during install, when t() is not available.
+  $t = get_t();
+
+  // Define the node type.
+  $node_example = array(
+    'type' => 'node_example',
+    'name' => $t('Example Node'),
+    'base' => 'node_content',
+    'description' => $t('This is an example node type with a few fields.'),
+    'body_label' => $t('Example Description')
+  );
+
+  // Complete the node type definition by setting any defaults not explicitly
+  // declared above.
+  // http://api.drupal.org/api/function/node_type_set_defaults/7
+  $content_type = node_type_set_defaults($node_example);
+  node_add_body_field($content_type);
+
+  // Save the content type
+  node_type_save($content_type);
+
 
   // Load the instance definition for our content type's body
   // http://api.drupal.org/api/function/field_info_instance/7
@@ -40,7 +60,10 @@ function node_example_install() {
 
   // Add our example_node_list view mode to the body instance display by
   // instructing the body to display as a summary
-  $body_instance['type'] = 'text_summary_or_trimmed';
+  $body_instance['display']['example_node_list'] = array(
+    'label' => 'hidden',
+    'type' => 'text_summary_or_trimmed',
+  );
 
   // Save our changes to the body field instance.
   // http://api.drupal.org/api/function/field_update_instance/7
@@ -56,7 +79,7 @@ function node_example_install() {
   // http://api.drupal.org/api/function/field_create_instance/7
   foreach (_node_example_installed_instances() as $instance) {
     $instance['entity_type'] = 'node';
-    $instance['bundle'] = 'node_example';
+    $instance['bundle'] = $node_example['type'];
     field_create_instance($instance);
   }
 }
@@ -64,8 +87,8 @@ function node_example_install() {
 /**
  * Return a structured array defining the fields created by this content type.
  *
- * This is packaged in a function so it can be used in both hook_install()
- * and hook_uninstall().
+ * This is packaged in a function so it can be used in both
+ * node_example_install() and node_example_uninstall().
  */
 function _node_example_installed_fields() {
   $t = get_t();
