@@ -7,7 +7,8 @@
  * content types.
  *
  * We will add the ability for each node to have a "rating," which will be a
- * number from one to five.
+ * number from one to five. The rating will be tracked using the revision
+ * system also, so every node revision may have different rating values.
  */
 
 /**
@@ -124,21 +125,25 @@ function nodeapi_example_node_validate($node, $form) {
  */
 function nodeapi_example_node_load($nodes, $form) {
   foreach ($nodes as $node) {
+    // We are using the revision id instead of node id
     if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
-      $nids[] = $node->nid;
+      $vids[] = $node->vid;
     }
   }
   // Check if we should load rating for any of the nodes
-  if (!isset($nids) || !count($nids)) {
+  if (!isset($vids) || !count($vids)) {
     return;
   }
 
+  // When we read, we don't care about the node->nid, but we look for the right
+  // revision ID (node->vid)
   $result = db_select('nodeapi_example', 'e')
   ->fields('e', array(
         'nid',
+        'vid',
         'rating',
   ))
-  ->where('e.nid IN (:nids)', array(':nids' => $nids))
+  ->where('e.vid IN (:vids)', array(':vids' => $vids))
   ->execute();
 
   foreach ($result as $record) {
@@ -158,6 +163,7 @@ function nodeapi_example_node_insert($node) {
     db_insert('nodeapi_example')
     ->fields(array(
         'nid' => $node->nid,
+        'vid' => $node->vid,
         'rating' => $node->nodeapi_example_rating,
     ))
     ->execute();
@@ -167,7 +173,8 @@ function nodeapi_example_node_insert($node) {
 /**
  * Implements hook_node_delete().
  *
- * When a node is deleted, we need to remove all related records from our table.
+ * When a node is deleted, we need to remove all related records from our table,
+ * including all revisions. For the delete operations we use node->nid.
  */
 function nodeapi_example_node_delete($node) {
   // Notice that we're deleting even if the content type has no rating enabled.
@@ -189,8 +196,26 @@ function nodeapi_example_node_delete($node) {
  */
 function nodeapi_example_node_update($node) {
   if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
-    nodeapi_example_node_delete($node);
-    nodeapi_example_node_insert($node);
+    // If may happen that this node does not have a previous saved rating
+    // value, so we can't just update it, we need to check first if this
+    $rating = db_select('nodeapi_example', 'e')
+      ->fields('e', array(
+        'rating',
+      ))
+      ->where('e.vid = (:vid)', array(':vid' => $node->vid))
+      ->execute()->fetchField();
+
+    if($rating) {
+      // node has been rated before.
+      db_update('nodeapi_example')
+         ->fields(array('rating' => $node->nodeapi_example_rating))
+         ->condition('vid', $node->vid)
+         ->execute();
+    }
+    else {
+      // Node was not previously rated, so insert a new rating in database.
+      nodeapi_example_node_insert($node);
+    }
   }
 }
 
