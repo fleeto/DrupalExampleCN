@@ -240,6 +240,10 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
     $path_components = preg_split('/\//', $path);
     $fail = FALSE;
     $var = &$_SESSION['file_example'];
+    // Handle case of just session://.
+    if (strlen($path) == 0) {
+      return $var;
+    }
     foreach ($path_components as $component) {
       if ($create || isset($var[$component])) {
         $var = &$var[$component];
@@ -420,10 +424,10 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
     foreach ($path_components as $component) {
       $unset .= '[\'' . $component . '\']';
     }
-    // TODO: I really don't like this eval.
-    debug($unset, 'array element to be unset');
+    // TODO: Is there a better way to delete from an array?
+    // drupal_array_get_nested_value() doesn't work because it only returns
+    // a reference; unsetting a reference only unsets the reference.
     eval("unset($unset);");
-
     return TRUE;
   }
 
