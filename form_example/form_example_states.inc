@@ -52,7 +52,7 @@
  * There are examples below of changing or hiding an element when a checkbox
  * is checked, when a textarea is filled, when a select has a given value.
  *
- * See @link drupal_process_states full documentation @endlink
+ * See drupal_process_states() for full documentation.
  *
  * See also @link http://api.drupal.org/api/drupal/developer--topics--forms_api_reference.html/7#states Form API Reference @endlink
  */
