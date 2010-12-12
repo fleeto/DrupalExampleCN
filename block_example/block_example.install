@@ -10,6 +10,5 @@
  * Implements hook_uninstall().
  */
 function block_example_uninstall() {
-
   variable_del('block_example_string');
 }
