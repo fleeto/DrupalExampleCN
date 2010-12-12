@@ -189,6 +189,17 @@ function form_example_states_form($form, &$form_state) {
       ),
     ),
   );
+  $form['undergraduate']['go_away'] = array(
+    '#type' => 'submit',
+    '#value' => t('Done with form'),
+    '#states' => array(
+      // Here visibility requires that two separate conditions be true.
+      'visible' => array(
+        'input[name="school_country"]' => array('value' => t('Other')),
+        'input[name="country_writein"]' => array('filled' => TRUE),
+      ),
+    ),
+  );
 
   // Graduate student information.
   $form['graduate'] = array(
