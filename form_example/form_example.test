@@ -60,7 +60,6 @@ class FormExampleTestCase extends DrupalWebTestCase {
 
     $this->assertText(t('Enter a year between 1900 and 2000'));
 
-
     // #7
     $this->drupalPost('examples/form_example/tutorial/7',
       array('first' => t('firstname'), 'last' => t('lastname'), 'year_of_birth' => 1955),
@@ -104,6 +103,19 @@ class FormExampleTestCase extends DrupalWebTestCase {
     $this->assertText('Form 9 has been submitted');
     for ($i = 1; $i <= 4; $i++) {
       $this->assertText(t('@num: firstname @num lastname @num (@year)', array('@num' => $i, '@year' => 1950 + $i)));
+    }
+
+    // #10
+    $url = 'examples/form_example/tutorial/10';
+
+    $this->drupalPost($url, array(), t('Submit'));
+    $this->assertText(t('No file was uploaded.'));
+
+    // Get sample images.
+    $images = $this->drupalGetTestFiles('image');
+    foreach ($images as $image) {
+      $this->drupalPost($url, array('files[file]' => drupal_realpath($image->uri)), t('Submit'));
+      $this->assertText(t('The form has been submitted and the image has been saved, filename: @filename.', array('@filename' => $image->filename)));
     }
   }
 

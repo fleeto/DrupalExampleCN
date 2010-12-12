@@ -119,6 +119,16 @@ function form_example_menu() {
     'file' => 'form_example_tutorial.inc',
     'weight' => 9,
   );
+  $items['examples/form_example/tutorial/10'] = array(
+    'title' => '#10',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_example_tutorial_10'),
+    'access callback' => TRUE,
+    'description' => t('Tutorial 11: Form with file upload'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'form_example_tutorial.inc',
+    'weight' => 10,
+  );
   $items['examples/form_example/states'] = array(
     'title' => '#states example',
     'page callback' => 'drupal_get_form',
