@@ -24,6 +24,8 @@
  * Set up calls to drupal_get_form() for all our example cases.
  *
  * Implements hook_menu().
+ * See @link menu_example.module Menu Example @endlink for more details on
+ * hook_menu().
  */
 function ajax_example_menu() {
   $items = array();
@@ -34,6 +36,8 @@ function ajax_example_menu() {
     'access callback' => TRUE,
     'expanded' => TRUE,
   );
+
+  // Change the description of a form element.
   $items['examples/ajax_example/simplest'] = array(
     'title' => 'Simplest AJAX Example',
     'page callback' => 'drupal_get_form',
@@ -41,7 +45,7 @@ function ajax_example_menu() {
     'access callback' => TRUE,
     'weight' => 0,
   );
-  // Automatically generate checkboxes
+  // Generate a changing number of checkboxes.
   $items['examples/ajax_example/autocheckboxes'] = array(
     'title' => 'Generate checkboxes',
     'page callback' => 'drupal_get_form',
@@ -49,8 +53,7 @@ function ajax_example_menu() {
     'access callback' => TRUE,
     'weight' => 1,
   );
-
-    // Automatically generate textfields
+  // Generate different textfields based on form state.
   $items['examples/ajax_example/autotextfields'] = array(
     'title' => 'Generate textfields',
     'page callback' => 'drupal_get_form',
@@ -59,6 +62,7 @@ function ajax_example_menu() {
     'weight' => 2,
   );
 
+  // Submit a form without a page reload.
   $items['examples/ajax_example/submit_driven_ajax'] = array(
     'title' => 'Submit-driven AJAX',
     'page callback' => 'drupal_get_form',
@@ -67,6 +71,7 @@ function ajax_example_menu() {
     'weight' => 3,
   );
 
+  // Repopulate a dropdown based on form state.
   $items['examples/ajax_example/dependent_dropdown'] = array(
     'title' => 'Dependent dropdown',
     'page callback' => 'drupal_get_form',
@@ -74,6 +79,8 @@ function ajax_example_menu() {
     'access callback' => TRUE,
     'weight' => 4,
   );
+  // Repopulate a dropdown, but this time with graceful degredation.
+  // See ajax_example_graceful_degradation.inc.
   $items['examples/ajax_example/dependent_dropdown_degrades'] = array(
     'title' => 'Dependent dropdown (with graceful degradation)',
     'page callback' => 'drupal_get_form',
@@ -82,6 +89,7 @@ function ajax_example_menu() {
     'weight' => 5,
     'file' => 'ajax_example_graceful_degradation.inc',
   );
+  // The above example as it appears to users with no javascript.
   $items['examples/ajax_example/dependent_dropdown_degrades_no_js'] = array(
     'title' => 'Dependent dropdown with javascript off',
     'page callback' => 'drupal_get_form',
@@ -91,6 +99,7 @@ function ajax_example_menu() {
     'weight' => 5,
   );
 
+  // Populate a form section based on input in another element.
   $items['examples/ajax_example/dynamic_sections'] = array(
     'title' => 'Dynamic Sections (with graceful degradation)',
     'page callback' => 'drupal_get_form',
@@ -99,6 +108,7 @@ function ajax_example_menu() {
     'weight' => 6,
     'file' => 'ajax_example_graceful_degradation.inc',
   );
+  // The  above example as it appears to users with no javascript.
   $items['ajax_example/dynamic_sections_no_js'] = array(
     'title' => 'Dynamic Sections w/JS turned off',
     'page callback' => 'drupal_get_form',
@@ -108,7 +118,8 @@ function ajax_example_menu() {
     'file' => 'ajax_example_graceful_degradation.inc',
   );
 
-
+  // A classic multi-step wizard, but with no page reloads.
+  // See ajax_example_graceful_degradation.inc.
   $items['examples/ajax_example/wizard'] = array(
     'title' => 'Wizard (with graceful degradation)',
     'page callback' => 'drupal_get_form',
@@ -117,6 +128,7 @@ function ajax_example_menu() {
     'file' => 'ajax_example_graceful_degradation.inc',
     'weight' => 7,
   );
+  // The above example as it appears to users with no javascript.
   $items['examples/ajax_example/wizard_no_js'] = array(
     'title' => 'Wizard w/JS turned off',
     'page callback' => 'drupal_get_form',
@@ -126,6 +138,8 @@ function ajax_example_menu() {
     'weight' => 7,
   );
 
+  // Add-more button that creates additional form elements.
+  // See ajax_example_graceful_degradation.inc.
   $items['examples/ajax_example/add_more'] = array(
     'title' => 'Add-more button (with graceful degradation)',
     'page callback' => 'drupal_get_form',
@@ -134,6 +148,7 @@ function ajax_example_menu() {
     'file' => 'ajax_example_graceful_degradation.inc',
     'weight' => 8,
   );
+  // The above example as it appears to users with no javascript.
   $items['examples/ajax_example/add_more_no_js'] = array(
     'title' => 'Add-more button w/JS turned off',
     'page callback' => 'drupal_get_form',
@@ -143,15 +158,8 @@ function ajax_example_menu() {
     'weight' => 8,
   );
 
-  $items['examples/ajax_example/advanced_commands'] = array(
-    'title' => 'AJAX framework commands',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('ajax_example_advanced_commands'),
-    'access callback' => TRUE,
-    'file' => 'ajax_example_advanced.inc',
-    'weight' => 10,
-  );
-
+  // Use the AJAX framework outside the context of a form.
+  // See ajax_example_misc.inc.
   $items['examples/ajax_example/ajax_link'] = array(
     'title' => 'Ajax Link',
     'page callback' => 'ajax_example_render_link',
@@ -159,13 +167,24 @@ function ajax_example_menu() {
     'file' => 'ajax_example_misc.inc',
     'weight' => 9,
   );
-
+  // A menu callback is required when using ajax outside of the Form API.
   $items['ajax_link_callback'] = array(
     'page callback' => 'ajax_link_response',
     'access callback' => 'user_access',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
     'file' => 'ajax_example_misc.inc',
+  );
+
+  // Use AJAX framework commands outside of the #ajax form property.
+  // See ajax_example_advanced.inc.
+  $items['examples/ajax_example/advanced_commands'] = array(
+    'title' => 'AJAX framework commands',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_advanced_commands'),
+    'access callback' => TRUE,
+    'file' => 'ajax_example_advanced.inc',
+    'weight' => 10,
   );
 
   return $items;
@@ -184,6 +203,7 @@ function ajax_example_intro() {
 /**
  * Simple form whose ajax-enabled 'changethis' member causes a text change
  * in the description of the 'replace_textfield' member.
+ * See @link http://drupal.org/node/262422 Form API Tutorial @endlink
  */
 function ajax_example_simplest($form, &$form_state) {
   $form = array();
@@ -196,35 +216,43 @@ function ajax_example_simplest($form, &$form_state) {
       'three' => 'three',
     ),
     '#ajax' => array(
+      // #ajax has two required keys: callback and wrapper.
+      // 'callback' is a function that will be called when this element changes.
       'callback' => 'ajax_example_simplest_callback',
+      // 'wrapper' is the HTML id of the page element that will be replaced.
       'wrapper' => 'replace_textfield_div',
+      // There are also several optional keys - see ajax_example_autocheckboxes
+      // below for details on 'method', 'effect' and 'speed' and
+      // ajax_example_dependent_dropdown for 'event'.
      ),
   );
 
-  // This entire form element will be replaced with an updated value.
-  // However, it has to have the prefix/suffix to work right, as the entire
-  // div is replaced.
-  // In this example, the description is dynamically updated during form
-  // rebuild.
-
+  // This entire form element will be replaced whenever 'changethis' is updated.
   $form['replace_textfield'] = array(
     '#type' => 'textfield',
     '#title' => t("Why"),
+    // The prefix/suffix provide the div that we're replacing, named by
+    // #ajax['wrapper'] above.
     '#prefix' => '<div id="replace_textfield_div">',
     '#suffix' => '</div>',
   );
 
+  // An AJAX request calls the form builder function for every change.
+  // We can change how we build the form based on $form_state.
   if (!empty($form_state['values']['changethis'])) {
     $form['replace_textfield']['#description'] = t("Say why you chose") .  " '{$form_state['values']['changethis']}'";
   }
   return $form;
 }
+
 /**
  * Callback for ajax_example_simplest.
  *
- * The form item 'replace_textfield' has already been processed and changed
- * when the form was submitted and rebuilt during the AJAX call, so now
- * we just return the piece of the form that changed.
+ * On an ajax submit, the form builder function is called again, then the $form
+ * and $form_state are passed to this callback function so it can select which
+ * portion of the form to send on to the client.
+ *
+ * @return renderable array (the textfield element)
  */
 function ajax_example_simplest_callback($form, $form_state) {
   // The form has already been submitted and updated. We can return the replaced
@@ -232,14 +260,14 @@ function ajax_example_simplest_callback($form, $form_state) {
   return $form['replace_textfield'];
 }
 
-
 /**
  * AJAX-enabled select element causes replacement of a set of checkboxes
  * based on the selection.
  */
 function ajax_example_autocheckboxes($form, &$form_state) {
-
-  $default = !empty($form_state['values']['howmany']) ? $form_state['values']['howmany'] : 1;
+  // Since the form builder is called after every AJAX request, we rebuild
+  // the form based on $form_state.
+  $default = !empty($form_state['values']['howmany_select']) ? $form_state['values']['howmany_select'] : 1;
 
   $form['howmany_select'] = array(
     '#title' => t('How many checkboxes do you want?'),
@@ -249,10 +277,16 @@ function ajax_example_autocheckboxes($form, &$form_state) {
     '#ajax' => array(
       'callback' => 'ajax_example_autocheckboxes_callback',
       'wrapper' => 'checkboxes-div',
-      'method' => 'replace',
-      'effect' => 'fade',
+      //'method' defaults to replaceWith, but valid values also include
+      // append, prepend, before and after.
+      'method' => 'replaceWith',
+      // 'effect' defaults to none. Other valid values are 'fade' and 'slide'.
+      // See ajax_example_autotextfields for an example of 'fade'.
+      'effect' => 'slide',
+      // 'speed' defaults to 'slow'. You can also use 'fast'
+      // or a number of milliseconds for the animation to last.
+      'speed' => 'slow',
     ),
-
   );
 
 
@@ -286,10 +320,15 @@ function ajax_example_autocheckboxes($form, &$form_state) {
  * Callback element needs only select the portion of the form to be updated.
  * Since #ajax['callback'] return can be HTML or a renderable array (or an
  * array of commands), we can just return a piece of the form.
+ * See @link ajax_example_advanced.inc AJAX Advanced Commands for more details
+ * on AJAX framework commands.
+ *
+ * @return renderable array (the checkboxes fieldset)
  */
 function ajax_example_autocheckboxes_callback($form, $form_state) {
   return $form['checkboxes_fieldset'];
 }
+
 
 /**
  * Show/hide textfields based on AJAX-enabled checkbox clicks.
@@ -312,7 +351,6 @@ function ajax_example_autotextfields($form, &$form_state) {
       'callback' => 'ajax_example_autotextfields_callback',
       'wrapper' => 'textfields',
       'effect' => 'fade',
-
     ),
   );
 
@@ -324,7 +362,9 @@ function ajax_example_autotextfields($form, &$form_state) {
     '#description' => t('This is where we put automatically generated textfields'),
   );
 
-   if (!empty($form_state['values']['ask_first_name']) && $form_state['values']['ask_first_name']) {
+  // Since checkboxes return TRUE or FALSE, we have to check that
+  // $form_state has been filled as well as what it contains.
+  if (!empty($form_state['values']['ask_first_name']) && $form_state['values']['ask_first_name']) {
     $form['textfields']['first_name'] = array(
       '#type' => 'textfield',
       '#title' => t('First Name'),
@@ -337,16 +377,13 @@ function ajax_example_autotextfields($form, &$form_state) {
     );
   }
 
-
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Click Me'),
   );
 
-
   return $form;
 }
-
 
 /**
  * Selects the piece of the form we want to use as replacement text and returns
@@ -388,8 +425,13 @@ function ajax_example_submit_driven_ajax($form, &$form_state) {
 /**
  * Select the 'box' element, change the markup in it, and return it as a
  * renderable array.
+ *
+ * @return renderable array (the box element)
  */
 function ajax_example_submit_driven_callback($form, $form_state) {
+  // In most cases, it is recomended that you put this logic in form generation
+  // rather than the callback. Submit driven forms are an exception, because
+  // you may not want to return the form at all.
   $element = $form['box'];
   $element['#markup'] = "Clicked submit ({$form_state['values']['op']}): " . date('c');
   return $element;
@@ -404,9 +446,9 @@ function ajax_example_submit_driven_callback($form, $form_state) {
  * are updated.
  */
 function ajax_example_dependent_dropdown($form, &$form_state) {
-  // get the list of options to populate the first dropdown
+  // Get the list of options to populate the first dropdown.
   $options_first = _ajax_example_get_first_dropdown_options();
-  // if we have a value for the first dropdown from $form_state['values'] we use
+  // If we have a value for the first dropdown from $form_state['values'] we use
   // this both as the default value for the first dropdown and also as a
   // parameter to pass to the function that retrieves the options for the
   // second dropdown.
@@ -416,10 +458,15 @@ function ajax_example_dependent_dropdown($form, &$form_state) {
     '#title' => 'First Dropdown',
     '#options' => $options_first,
     '#default_value' => $selected,
-    // bind an ajax callback to the change event (which is the default for the
+    // Bind an ajax callback to the change event (which is the default for the
     // select form type) of the first dropdown. It will replace the second
     // dropdown when rebuilt
     '#ajax' => array(
+      // When 'event' occurs, Drupal will perform an ajax request in the
+      // background. Usually the default value is sufficient (eg. change for
+      // select elements), but valid values include any jQuery event,
+      // most notably 'mousedown', 'blur', and 'submit'.
+      'event' => 'change',
       'callback' => 'ajax_example_dependent_dropdown_callback',
       'wrapper' => 'dropdown_second_replace',
     ),
@@ -440,22 +487,20 @@ function ajax_example_dependent_dropdown($form, &$form_state) {
     '#type' => 'submit',
     '#value' => t('Submit'),
   );
-
   return $form;
 }
 
 /**
  * Selects just the second dropdown to be returned for re-rendering
  *
- * The version here has been re-loaded with a different set of options and
- * is sent back to the page to be updated.
+ * Since the controlling logic for populating the form is in the form builder
+ * function, all we do here is select the element and return it to be updated.
  *
  * @return renderable array (the second dropdown)
  */
 function ajax_example_dependent_dropdown_callback($form, $form_state) {
   return $form['dropdown_second'];
 }
-
 
 /**
  * Helper function to populate the first dropdown. This would normally be

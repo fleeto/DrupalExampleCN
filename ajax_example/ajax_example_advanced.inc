@@ -87,7 +87,7 @@ function ajax_example_advanced_commands($form, &$form_state) {
   // Shows the 'changed' command.
   $form['changed_command_example_fieldset'] = array(
     '#type' => 'fieldset',
-    '#title' => t("Demonstrates the AJAX 'changed' command. If region is 'changed', it's marked with CSS. This example also puts an asterisk by changed content."),
+    '#title' => t("Demonstrates the AJAX 'changed' command. If region is 'changed', it is marked with CSS. This example also puts an asterisk by changed content."),
   );
 
   $form['changed_command_example_fieldset']['changed_command_example'] = array(
@@ -118,7 +118,6 @@ function ajax_example_advanced_commands($form, &$form_state) {
     '#suffix' => "<div id='css_div' style='height: 50px; width: 50px; border: 1px solid black'> box</div>
                   <div id='css_status'>Status: Unknown</div>"
   );
-
 
   // Shows the AJAX 'data' command. But there is no use of this information,
   // as this would require a javascript client to use the data.

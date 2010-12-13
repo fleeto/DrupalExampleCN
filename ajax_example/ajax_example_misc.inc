@@ -12,13 +12,17 @@
  * Demonstrates a clickable AJAX-enabled link.
  *
  * Because of the 'use-ajax' class applied here, the link submission is done
- * via AJAX.
+ * without a page refresh.
  *
- * This will not work if ajax.js is not loaded on the page.
+ * When using the AJAX framework outside the context of a form, you have to
+ * include ajax.js explicitly.
  * @return unknown_type
  */
 function ajax_example_render_link() {
-  drupal_add_js('misc/ajax.js');
+  // drupal_add_library is invoked automatically when a form element has the
+  // '#ajax' property, but since we are not rendering a form here, we have to
+  // do it ourselves.
+  drupal_add_library('system', 'drupal.ajax');
   $explanation = "
 The link below has the <i>use-ajax</i> class applied to it, so if
 javascript is enabled, ajax.js will try to submit it via an AJAX call instead
@@ -26,6 +30,9 @@ of a normal page load. The URL also contains the '/nojs/' magic string, which
 is stripped if javascript is enabled, allowing the server code to tell by the
 URL whether JS was enabled or not, letting it do different things based on that.";
   $output = "<div>" . t($explanation);
+  // The use-ajax class is special, so that the link will call without causing
+  // a page reload. Note the /nojs portion of the path - if javascript is
+  // enabled, this part will be stripped from the path before it is called.
   $link = l(t('Click here'), 'ajax_link_callback/nojs/', array('attributes' => array('class' => array('use-ajax'))));
   $output .= "<div>$link</div><div id='myDiv'></div>";
   return $output;
@@ -49,6 +56,8 @@ function ajax_link_response($type = 'ajax') {
   if ($type == 'ajax') {
     $output = t("This is some content delivered via AJAX");
     $commands = array();
+    // See ajax_example_advanced.inc for more details on the available commands
+    // and how to use them.
     $commands[] = ajax_command_append('#myDiv', $output);
     $page = array('#type' => 'ajax', '#commands' => $commands);
     ajax_deliver($page);

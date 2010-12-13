@@ -1,9 +1,11 @@
 /* $Id$ */
 
-/**
-  * @file
-  *   CSS for ajax_example
-  *
+/*
+ * @file ajax_example.css
+ *   CSS for ajax_example.
+ *
+ * See @link ajax_example_dependent_dropdown_degrades @endlink for
+ * details on what this file does. It is not used in any other example.
  */
  
 /* hide the next button when not degrading to non-javascript browser */

@@ -14,13 +14,13 @@
  * available.
  *
  * In each of these the key idea is that the form is rebuilt different ways
- * depending on form input. So the formbuilder function is in charge of
- * almost all logic.
+ * depending on form input. In order to accomplish that, the formbuilder function
+ * is in charge of almost all logic.
  *
  * @see ajax
  *
  * @}
-*/
+ */
 
 
 
@@ -35,7 +35,7 @@
  * if javascript is not enabled. The Javascript snippet is really only used
  * to enable us to present the form in degraded mode without forcing the user
  * to turn off Javascript.  Both of these are loaded by using the
- * #attached FAPI property, so it's a good example of how to use that.
+ * #attached FAPI property, so it is a good example of how to use that.
  *
  * The extra argument $no_js_use is here only to allow presentation of this
  * form as if Javascript were not enabled. ajax_example_menu() provides two
@@ -46,10 +46,10 @@
  * @ingroup ajax_degradation_examples
  */
 function ajax_example_dependent_dropdown_degrades($form, &$form_state, $no_js_use = FALSE) {
-  // get the list of options to populate the first dropdown
+  // Get the list of options to populate the first dropdown.
   $options_first = _ajax_example_get_first_dropdown_options();
 
-  // if we have a value for the first dropdown from $form_state['values'] we use
+  // If we have a value for the first dropdown from $form_state['values'] we use
   // this both as the default value for the first dropdown and also as a
   // parameter to pass to the function that retrieves the options for the
   // second dropdown.
@@ -74,9 +74,9 @@ function ajax_example_dependent_dropdown_degrades($form, &$form_state, $no_js_us
     '#options' => $options_first,
     '#attributes' => array('class' => array('enabled-for-ajax')),
 
-    // bind an ajax callback to the change event (which is the default for the
-    // select form type) of the first dropdown. It will replace the second
-    // dropdown when rebuilt.
+    // The '#ajax' property allows us to bind a callback to the server whenever this
+    // form element changes. See ajax_example_autocheckboxes and
+    // ajax_example_dependent_dropdown in ajax_example.module for more details.
     '#ajax' => array(
       'callback' => 'ajax_example_dependent_dropdown_degrades_first_callback',
       'wrapper' => 'dropdown-second-replace',
@@ -91,7 +91,8 @@ function ajax_example_dependent_dropdown_degrades($form, &$form_state, $no_js_us
     unset($form['dropdown_first_fieldset']['dropdown_first']['#ajax']);
   }
 
-  // The CSS for this module hides this next button if JS is enabled.
+  // Since we don't know if the user has js or not, we always need to output
+  // this element, then hide it with with css if javascript is enabled.
   $form['dropdown_first_fieldset']['continue_to_second'] = array(
     '#type' => 'submit',
     '#value' => t('Choose'),
@@ -107,17 +108,14 @@ function ajax_example_dependent_dropdown_degrades($form, &$form_state, $no_js_us
     '#prefix' => '<div id="dropdown-second-replace">',
     '#suffix' => '</div>',
     '#attributes' => array('class' => array('enabled-for-ajax')),
-
-    // when the form is rebuilt during processing (either AJAX or multistep),
+    // When the form is rebuilt during processing (either AJAX or multistep),
     // the $selected variable will now have the new value and so the options
     // will change.
     '#options' => _ajax_example_get_second_dropdown_options($selected),
   );
-
   $form['dropdown_second_fieldset']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('OK'),
-
     // This class allows attached js file to override the disabled attribute,
     // since it's not necessary in ajax-enabled form.
     '#attributes' => array('class' => array('enabled-for-ajax')),
@@ -129,7 +127,6 @@ function ajax_example_dependent_dropdown_degrades($form, &$form_state, $no_js_us
     $form['dropdown_second_fieldset']['dropdown_second']['#description'] = t('You must make your choice on the first dropdown before changing this second one.');
     $form['dropdown_second_fieldset']['submit']['#disabled'] = TRUE;
   }
-
 
   return $form;
 }
@@ -146,7 +143,6 @@ function ajax_example_dependent_dropdown_degrades_submit($form, &$form_state) {
       drupal_set_message(t('Your values have been submitted. dropdown_first=@first, dropdown_second=@second', array('@first' => $form_state['values']['dropdown_first'], '@second' => $form_state['values']['dropdown_second'])));
       return;
   }
-
   // 'Choose' or anything else will cause rebuild of the form and present
   // it again.
   $form_state['rebuild'] = TRUE;
@@ -160,7 +156,6 @@ function ajax_example_dependent_dropdown_degrades_submit($form, &$form_state) {
 function ajax_example_dependent_dropdown_degrades_first_callback($form, $form_state) {
   return $form['dropdown_second_fieldset']['dropdown_second'];
 }
-
 
 
 /**
@@ -183,7 +178,6 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
   // Attach the CSS and JS we need to show this with and without javascript.
   // Without javascript we need an extra "Choose" button, and this is
   // hidden when we have javascript enabled.
-
   $form['#attached']['css'] = array(
     drupal_get_path('module', 'ajax_example') . '/ajax_example.css',
   );
@@ -203,7 +197,6 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
       Try the <a href="!ajax_link">AJAX version</a> and the <a href="!non_ajax_link">simulated-non-AJAX version</a>.
     ', array('!ajax_link' => url('ajax_example/dynamic_sections'), '!non_ajax_link' => url('ajax_example/dynamic_sections_no_js') )) . '</div>',
   );
-
   $form['question_type_select'] = array(
     '#type' => 'select',
     '#title' => t('Question style'),
@@ -226,7 +219,6 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
   // actually turning off javascript in the browser. Removing the #ajax
   // element turns off AJAX behaviors on that element and as a result
   // ajax.js doesn't get loaded.
-
   if ($no_js_use) {
     // Remove the #ajax from the above, so ajax.js won't be loaded.
     unset($form['question_type_select']['#ajax']);
@@ -236,7 +228,6 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
   // that gets rebuilt.
   $form['questions_fieldset'] = array(
     '#type' => 'fieldset',
-
     // These provide the wrapper referred to in #ajax['wrapper'] above.
     '#prefix' => '<div id="questions-fieldset-wrapper">',
     '#suffix' => '</div>',
@@ -273,7 +264,6 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
           '#description' => t('Please type the correct answer to the question.'),
         );
         break;
-
     }
 
     $form['questions_fieldset']['submit'] = array(
@@ -281,13 +271,11 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
       '#value' => t('Submit your answer'),
     );
   }
-
   return $form;
 }
 
 /**
  * Validation function for ajax_example_dynamic_sections().
- *
  */
 function ajax_example_dynamic_sections_validate($form, &$form_state) {
   $answer = $form_state['values']['question'];
@@ -303,7 +291,7 @@ function ajax_example_dynamic_sections_submit($form, &$form_state) {
   // This is only executed when a button is pressed, not when the AJAXified
   // select is changed.
   // Now handle the case of the next, previous, and submit buttons.
-  // only submit will result in actual submission, all others rebuild.
+  // Only submit will result in actual submission, all others rebuild.
   switch($form_state['triggering_element']['#value']) {
     case t('Submit your answer'): // Submit: We're done.
       $form_state['rebuild'] = FALSE;
@@ -342,7 +330,7 @@ function ajax_example_dynamic_sections_select_callback($form, $form_state) {
  * This example is a classic wizard, where a different and sequential form
  * is presented on each step of the form.
  *
- * In the AJAX version, form is replaced for each wizard section. In the
+ * In the AJAX version, the form is replaced for each wizard section. In the
  * multistep version, it causes a new page load.
  *
  * @param $form
@@ -359,7 +347,7 @@ function ajax_example_dynamic_sections_select_callback($form, $form_state) {
 function ajax_example_wizard($form, &$form_state, $no_js_use = FALSE) {
 
   // Provide a wrapper around the entire form, since we'll replace the whole
-  // thing.
+  // thing with each submit.
   $form['#prefix'] = '<div id="wizard-form-wrapper">';
   $form['#suffix'] = '</div>';
   $form['#tree'] = TRUE; // We want to deal with hierarchical form values.
@@ -370,6 +358,8 @@ function ajax_example_wizard($form, &$form_state, $no_js_use = FALSE) {
     . '</div>',
   );
 
+  // $form_state['storage'] has no specific drupal meaning, but it is
+  // traditional to keep variables for multistep forms there.
   $step = empty($form_state['storage']['step']) ? 1 : $form_state['storage']['step'];
   $form_state['storage']['step'] = $step;
 
@@ -399,6 +389,7 @@ function ajax_example_wizard($form, &$form_state, $no_js_use = FALSE) {
         '#required' => TRUE,
       );
       break;
+
     case 3:
       $form['step3'] = array(
         '#type' => 'fieldset',
@@ -426,7 +417,6 @@ function ajax_example_wizard($form, &$form_state, $no_js_use = FALSE) {
         'wrapper' => 'wizard-form-wrapper',
         'callback' => 'ajax_example_wizard_callback',
       ),
-
     );
   }
   if ($step > 1) {
@@ -476,12 +466,14 @@ function ajax_example_wizard_submit($form, &$form_state) {
 
   // Save away the current information.
   $current_step = 'step' . $form_state['storage']['step'];
-  $form_state['storage']['values'][$current_step] = $form_state['values'][$current_step];
+  if (!empty($form_state['values'][$current_step])) {
+    $form_state['storage']['values'][$current_step] = $form_state['values'][$current_step];
+  }
 
   // Increment or decrement the step as needed. Recover values if they exist.
   if ($form_state['triggering_element']['#value'] == t('Next step')) {
     $form_state['storage']['step']++;
-    // If values had already been entered for this step, recover them from
+    // If values have already been entered for this step, recover them from
     // $form_state['storage'] to pre-populate them.
     $step_name = 'step' . $form_state['storage']['step'];
     if (!empty($form_state['storage']['values'][$step_name])) {
@@ -510,12 +502,9 @@ function ajax_example_wizard_submit($form, &$form_state) {
   }
 
   // Otherwise, we still have work to do.
-
   $form_state['rebuild'] = TRUE;
 }
 
-
-//// AJAX add-more example, with graceful degradation.
 
 /**
  * This example shows a button to "add more" - add another textfield, and
@@ -538,7 +527,6 @@ function ajax_example_wizard_submit($form, &$form_state) {
  */
 
 function ajax_example_add_more($form, &$form_state, $no_js_use = FALSE) {
-
   $form['description'] = array(
     '#markup' => '<div>' . t('This example shows an add-more and a remove-last button. The <a href="!ajax">AJAX version</a> does it without page reloads; the <a href="!multistep">non-js version</a> is the same code but simulates a non-javascript environment, showing it with page reloads.',
       array('!ajax' => url('examples/ajax_example/add_more'), '!multistep' => url('examples/ajax_example/add_more_no_js')))
@@ -548,7 +536,6 @@ function ajax_example_add_more($form, &$form_state, $no_js_use = FALSE) {
   // Because we have many fields with the same values, we have to set
   // #tree to be able to access them.
   $form['#tree'] = TRUE;
-
   $form['names_fieldset'] = array(
     '#type' => 'fieldset',
     '#title' => t('People coming to the picnic'),
@@ -572,6 +559,8 @@ function ajax_example_add_more($form, &$form_state, $no_js_use = FALSE) {
     '#type' => 'submit',
     '#value' => t('Add one more'),
     '#submit' => array('ajax_example_add_more_add_one'),
+    // See the examples in ajax_example.module for more details on the
+    // properties of #ajax.
     '#ajax' => array(
       'callback' => 'ajax_example_add_more_callback',
       'wrapper' => 'names-fieldset-wrapper',
@@ -593,16 +582,13 @@ function ajax_example_add_more($form, &$form_state, $no_js_use = FALSE) {
     '#value' => t('Submit'),
   );
 
-
   // This simply allows us to demonstrate no-javascript use without
   // actually turning off javascript in the browser. Removing the #ajax
   // element turns off AJAX behaviors on that element and as a result
   // ajax.js doesn't get loaded.
-  // For demonstration only! You don't need this. It's just so you don't
-  // have to turn off javascript in your browser to test.
+  // For demonstration only! You don't need this.
   if ($no_js_use) {
     // Remove the #ajax from the above, so ajax.js won't be loaded.
-    // For demonstration only.
     if (!empty($form['names_fieldset']['remove_name']['#ajax'])) {
       unset($form['names_fieldset']['remove_name']['#ajax']);
     }
@@ -624,7 +610,7 @@ function ajax_example_add_more_callback($form, $form_state) {
 /**
  * Submit handler for the "add-one-more" button.
  *
- * It just increments the max counter and then causes a rebuild.
+ * It just increments the max counter and causes a rebuild.
  */
 function ajax_example_add_more_add_one($form, &$form_state) {
   $form_state['num_names']++;
@@ -646,7 +632,7 @@ function ajax_example_add_more_remove_one($form, &$form_state) {
 /**
  * Final submit handler.
  *
- * Reports to us what values were finally set.
+ * Reports what values were finally set.
  */
 function ajax_example_add_more_submit($form, &$form_state) {
   $output = t('These people are coming to the picnic: @names',
