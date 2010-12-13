@@ -5,6 +5,7 @@
  * @file
  * Example modules
  *
+ * - @link action_example.module Creating actions @endlink
  * - @link ajax_example.module Using AJAX forms @endlink
  * - @link batch_example.module Using the batch API @endlink
  * - @link block_example.module Defining blocks @endlink
