@@ -65,6 +65,7 @@
  *
  * @see hook_trigger_info()
  * @see hook_trigger_info_alter()
+ * Also see the @link action_example.module Action Example @endlink.
  */
 
 /**
@@ -149,7 +150,7 @@ function trigger_example_triggersomething($options = array()) {
  */
 function trigger_example_user_login(&$edit, $account, $category = NULL) {
   // Verify user has never accessed the site: last access was creation date.
-  if ($account->created == $account->access) {
+  if ($account->access == 0) {
     // Call the aproppriate trigger function
     _trigger_example_first_time_login('user_first_time_login', $edit, $account, $category);
   }

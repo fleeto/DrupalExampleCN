@@ -69,115 +69,11 @@ class TriggerExampleTestCase extends DrupalWebTestCase {
     $aid = db_query('SELECT aid FROM {actions} WHERE callback = :callback', array(':callback' => 'system_message_action'))->fetchField();
     $edit = array('aid' => drupal_hash_base64($aid));
 
-    // Unfortunately there is no current way in simpletest to choose the correct
-    // form to submit to, since all the forms on this page have the same name
-    // for their submit button. See http://drupal.org/node/709852
     // Find the correct trigger
-//    $this->drupalGet('admin/structure/trigger/user');
-//    $form = $this->xpath("//*[@id='edit-user-first-time-login']");
-//    $button_id = (string)$form[0]->div->input->attributes()->id;
-//
-//    $this->drupalPost('admin/structure/trigger/user', $edit, t('Assign'));
-//
-//
-//    $test_user = $this->drupalCreateUser();
-//    $this->drupalLogin($test_user);
-//    $this->assertText($action_label, "Found the random message on the page after login.");
-  }
+    $this->drupalPost('admin/structure/trigger/user', $edit, t('Assign'), array(), array(), 'trigger-user-first-time-login-assign-form');
 
-  protected function drupalPost($path, $edit, $submit, array $options = array(), array $headers = array(), $form_html_id = NULL, $extra_post = NULL) {
-    $submit_matches = FALSE;
-    $ajax = is_array($submit);
-    if (isset($path)) {
-      $this->drupalGet($path, $options);
-    }
-    if ($this->parse()) {
-      $edit_save = $edit;
-      // Let's iterate over all the forms.
-      $xpath = "//form";
-      if (!empty($form_html_id)) {
-        $xpath .= "[@id='" . $form_html_id . "']";
-      }
-      $forms = $this->xpath($xpath);
-      foreach ($forms as $form) {
-        // We try to set the fields of this form as specified in $edit.
-        $edit = $edit_save;
-        $post = array();
-        $upload = array();
-        $submit_matches = $this->handleForm($post, $edit, $upload, $ajax ? NULL : $submit, $form);
-        $action = isset($form['action']) ? $this->getAbsoluteUrl($form['action']) : $this->getUrl();
-        if ($ajax) {
-          $action = $this->getAbsoluteUrl(!empty($submit['path']) ? $submit['path'] : 'system/ajax');
-          // AJAX callbacks verify the triggering element if necessary, so while
-          // we may eventually want extra code that verifies it in the
-          // handleForm() function, it's not currently a requirement.
-          $submit_matches = TRUE;
-        }
-
-        // We post only if we managed to handle every field in edit and the
-        // submit button matches.
-        if (!$edit && $submit_matches) {
-          $post_array = $post;
-          if ($upload) {
-            // TODO: cURL handles file uploads for us, but the implementation
-            // is broken. This is a less than elegant workaround. Alternatives
-            // are being explored at #253506.
-            foreach ($upload as $key => $file) {
-              $file = drupal_realpath($file);
-              if ($file && is_file($file)) {
-                $post[$key] = '@' . $file;
-              }
-            }
-          }
-          else {
-            foreach ($post as $key => $value) {
-              // Encode according to application/x-www-form-urlencoded
-              // Both names and values needs to be urlencoded, according to
-              // http://www.w3.org/TR/html4/interact/forms.html#h-17.13.4.1
-              $post[$key] = urlencode($key) . '=' . urlencode($value);
-            }
-            if ($ajax && isset($submit['triggering_element'])) {
-              $post['ajax_triggering_element'] = 'ajax_triggering_element=' . urlencode($submit['triggering_element']);
-            }
-            $post = implode('&', $post);
-          }
-          $out = $this->curlExec(array(CURLOPT_URL => $action, CURLOPT_POST => TRUE, CURLOPT_POSTFIELDS => $post, CURLOPT_HTTPHEADER => $headers));
-          // Ensure that any changes to variables in the other thread are picked up.
-          $this->refreshVariables();
-
-          // Replace original page output with new output from redirected page(s).
-          if ($new = $this->checkForMetaRefresh()) {
-            $out = $new;
-          }
-          $this->verbose('POST request to: ' . $path .
-                         '<hr />Ending URL: ' . $this->getUrl() .
-                         '<hr />Fields: ' . highlight_string('<?php ' . var_export($post_array, TRUE), TRUE) .
-                         '<hr />' . $out);
-          return $out;
-        }
-      }
-      // We have not found a form which contained all fields of $edit.
-      foreach ($edit as $name => $value) {
-        $this->fail(t('Failed to set field @name to @value', array('@name' => $name, '@value' => $value)));
-      }
-      if (!$ajax) {
-        $this->assertTrue($submit_matches, t('Found the @submit button', array('@submit' => $submit)));
-      }
-      $this->fail(t('Found the requested form fields at @path', array('@path' => $path)));
-    }
-  }
-
-  /**
-   * Test assigning a configurable action to the triggersomething event.
-   */
-  function testTriggerhookinfoalter() {
-    // Create an administrative user.
-    $test_user = $this->drupalCreateUser(array('administer actions'));
+    $test_user = $this->drupalCreateUser();
     $this->drupalLogin($test_user);
-
-    $this->drupalGet('admin/structure/trigger/system');
-    // Verify the new 'On cron execution' label of the cron trigger is shown,
-    $this->assertText( t('On cron execution') , t('The hook_trigger_info_alter() event changed a trigger name.'));
-    $this->assertNoText( t('When cron runs') , t('The hook_trigger_info_alter() event changed a trigger name.'));
+    $this->assertText($action_label);
   }
 }
