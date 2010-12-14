@@ -87,6 +87,10 @@ function image_example_style_form_submit($form, &$form_state) {
     $file->status = FILE_STATUS_PERMANENT;
     file_save($file);
 
+    // When a module is managing a file, it must manage the usage count.
+    // Here we increment the usage count with file_usage_add().
+    file_usage_add($file, 'image_example', 'sample_image', 1);
+
     // Save the fid of the file so that the module can reference it later.
     variable_set('image_example_image_fid', $file->fid);
     drupal_set_message(t('The image @image_name was uploaded and saved with an ID of @fid and will be displayed using the style @style.', array('@image_name' => $file->filename, '@fid' => $file->fid, '@style' => $form_state['values']['image_example_style_name'])));
@@ -98,6 +102,10 @@ function image_example_style_form_submit($form, &$form_state) {
     $fid = variable_get('image_example_image_fid', FALSE);
     $file = $fid ? file_load($fid) : FALSE;
     if ($file) {
+      // When a module is managing a file, it must manage the usage count.
+      // Here we decrement the usage count with file_usage_delete().
+      file_usage_delete($file, 'image_example', 'sample_image', 1);
+
       // The file_delete() function takes a file object and checks to see if
       // the file is being used by any other modules. If it is the delete
       // operation is cancelled, otherwise the file is deleted.
