@@ -30,6 +30,10 @@
  * the public:// and private:// schemes, and contrib modules can add any
  * scheme they want to. This example adds the session:// scheme, which allows
  * reading and writing the $_SESSION['file_example'] key as if it were a file.
+ *
+ * Note that because this implementation uses simple PHP arrays ($_SESSION)
+ * it is limited to string values, so binary files will not work correctly.
+ * Only text files can be used.
  */
 class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
@@ -388,7 +392,9 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
    * @see http://php.net/manual/en/streamwrapper.stream-stat.php
    */
   public function stream_stat() {
-    return array();
+    return array(
+      'size' => drupal_strlen($this->session_content),
+    );
   }
 
   /**
@@ -558,6 +564,10 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
    */
   public function url_stat($uri, $flags) {
 
+    // PHP does not necessarily construct the object before all operations,
+    // so here we make sure that the startup work is done.
+    $this->__construct();
+
     $key = $this->uri_to_session_key($uri, FALSE);
     $return = FALSE; // Default to fail.
     $mode = 0;
@@ -571,6 +581,11 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
     }
 
     if ($mode) {
+      $size = 0;
+      if ($mode == 0100000) {
+        $size = drupal_strlen($key);
+      }
+
       $mode |= 0777;  // There are no protections on this, so all writable.
       $return = array(
         'dev' => 0,
@@ -580,7 +595,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
         'uid' => 0,
         'gid' => 0,
         'rdev' => 0,
-        'size' => 0,
+        'size' => $size,
         'atime' => 0,
         'mtime' => 0,
         'ctime' => 0,

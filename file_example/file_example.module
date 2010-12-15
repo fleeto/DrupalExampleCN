@@ -495,7 +495,7 @@ function file_example_get_managed_file($uri) {
 function file_example_stream_wrappers() {
   $wrappers = array(
     'session' => array(
-      'name' => t('Session variable storage'),
+      'name' => t('Example: $_SESSION variable storage'),
       'class' => 'FileExampleSessionStreamWrapper',
       'description' => t('Store files in the $_SESSION variable as an example.'),
     ),
