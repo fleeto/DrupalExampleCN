@@ -75,7 +75,7 @@ function xmlrpc_example_menu() {
  */
 function xmlrpc_example_info() {
   return array(
-    '#markup' => t('This XML-RPC example presents code that shows <ul><li><a href="!server">XML-RPC server code</a></li><li><a href="!client">XML-RPC client code</a></li><li>and <a href="!alter">an example hook_xmlrpc_alter() call</a></li></ul>', array('!server' => url('examples/xmlrpc/server'), 'client' => url('examples/xmlrpc/client'), 'alter' => url('examples/xmlrpc/alter'))),
+    '#markup' => t('This XML-RPC example presents code that shows <ul><li><a href="!server">XML-RPC server code</a></li><li><a href="!client">XML-RPC client code</a></li><li>and <a href="!alter">an example hook_xmlrpc_alter() call</a></li></ul>', array('!server' => url('examples/xmlrpc/server'), '!client' => url('examples/xmlrpc/client'), '!alter' => url('examples/xmlrpc/alter'))),
   );
 }
 
