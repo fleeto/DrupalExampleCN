@@ -74,8 +74,21 @@ function xmlrpc_example_menu() {
  * A simple landing-page information function.
  */
 function xmlrpc_example_info() {
+  $server = $GLOBALS['base_url'] . "/xmlrpc.php";
+
+  $options = array(
+    'system.listMethods' => array(),
+  );
+  // Make the xmlrpc request and process the results.
+  $supported_methods = xmlrpc($server, $options);
+  if ($supported_methods === FALSE) {
+    drupal_set_message(t("Error return from xmlrpc(): Error: @errno, Message: @message", array('@errno' => xmlrpc_errno(), '@message' => xmlrpc_error_msg())));
+  }
+
+
   return array(
-    '#markup' => t('This XML-RPC example presents code that shows <ul><li><a href="!server">XML-RPC server code</a></li><li><a href="!client">XML-RPC client code</a></li><li>and <a href="!alter">an example hook_xmlrpc_alter() call</a></li></ul>', array('!server' => url('examples/xmlrpc/server'), '!client' => url('examples/xmlrpc/client'), '!alter' => url('examples/xmlrpc/alter'))),
+    'basic' => array('#markup' => t('This XML-RPC example presents code that shows <ul><li><a href="!server">XML-RPC server code</a></li><li><a href="!client">XML-RPC client code</a></li><li>and <a href="!alter">an example hook_xmlrpc_alter() call</a></li></ul>', array('!server' => url('examples/xmlrpc/server'), '!client' => url('examples/xmlrpc/client'), '!alter' => url('examples/xmlrpc/alter')))),
+    'method_array' => array('#markup' => theme('item_list', array('title' => t('These methods are supported by !server', array('!server' => $server)), 'items' => $supported_methods))),
   );
 }
 
