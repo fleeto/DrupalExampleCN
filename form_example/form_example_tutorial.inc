@@ -377,8 +377,9 @@ function form_example_tutorial_7_submit($form, &$form_state) {
  *
  * Handbook page: http://drupal.org/node/717750.
  *
- * For more extensive multistep forms,
- * See the @link http://pingvision.com/blog/ben-jeavons/2009/multi-step-forms-drupal-6-using-variable-functions Drupal 6 tutorial @endlink
+ * For more extensive multistep forms, see
+ * @link form_example_wizard.inc form_example_wizard.inc @endlink
+ *
  *
  * Adds logic to our form builder to give it two pages.
  * The @link ajax_example_wizard AJAX Example's Wizard Example @endlink
@@ -505,16 +506,15 @@ function form_example_tutorial_8_next_submit($form, &$form_state) {
 /**
  * Back button handler submit handler.
  *
- * We save away the values we have for this page and restore to
- * $form_state['values'] the values from page 1.
- *
+ * Since #limit_validation_errors = array() is set, values from page 2
+ * will be discarded. We load the page 1 values instead.
  */
 function form_example_tutorial_8_page_two_back($form, &$form_state) {
-  $form_state['page_values'][2] = $form_state['values'];
   $form_state['values'] = $form_state['page_values'][1];
   $form_state['page_num'] = 1;
   $form_state['rebuild'] = TRUE;
 }
+
 /**
  * The page 2 submit handler.
  *
