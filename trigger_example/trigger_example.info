@@ -5,5 +5,4 @@ description = An example showing how a module can provide triggers that can have
 package = Example modules
 core = 7.x
 dependencies[] = trigger
-files[] = trigger_example.module
 files[] = trigger_example.test

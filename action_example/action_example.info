@@ -4,5 +4,4 @@ description = Demonstrates providing actions that can be associated to triggers.
 package = Example modules
 core = 7.x
 dependencies[] = trigger
-files[] = action_example.module
 files[] = action_example.test

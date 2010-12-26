@@ -6,7 +6,4 @@ package = Example modules
 core = 7.x
 core = 7.x
 dependencies[] = image
-files[] = image_example.module
-files[] = image_example.pages.inc
-files[] = image_example.install
 files[] = image_example.test
