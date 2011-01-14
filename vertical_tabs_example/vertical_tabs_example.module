@@ -77,6 +77,7 @@ function vertical_tabs_example_form_alter(&$form, $form_state, $form_id) {
       '#type' => 'textfield',
       '#title' => t('Use this custom setting'),
       '#default_value' => '',
+      '#description' => t('This field is a demonstration about how to use Vertical Tabs in your forms. This setting will not be saved.'),
     );
   }
 }
