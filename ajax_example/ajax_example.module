@@ -158,11 +158,20 @@ function ajax_example_menu() {
     'weight' => 8,
   );
 
-  // Use the AJAX framework outside the context of a form.
-  // See ajax_example_misc.inc.
+  // Use the AJAX framework outside the context of a form using the use-ajax
+  // class. See ajax_example_misc.inc.
   $items['examples/ajax_example/ajax_link'] = array(
-    'title' => 'Ajax Link',
+    'title' => 'Ajax Link ("use-ajax" class)',
     'page callback' => 'ajax_example_render_link',
+    'access callback' => TRUE,
+    'file' => 'ajax_example_misc.inc',
+    'weight' => 9,
+  );
+  // Use the AJAX framework outside the context of a form using a renderable
+  // array of type link with the #ajax property. See ajax_example_misc.inc.
+  $items['examples/ajax_example/ajax_link_renderable'] = array(
+    'title' => 'Ajax Link (Renderable Array)',
+    'page callback' => 'ajax_example_render_link_ra',
     'access callback' => TRUE,
     'file' => 'ajax_example_misc.inc',
     'weight' => 9,
