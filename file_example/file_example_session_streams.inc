@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 /**
  * @file file_example_session_streams.inc

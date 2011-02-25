@@ -1,4 +1,3 @@
-; $Id$
 
 name = Block Example
 description = An example outlining how a module can define blocks.

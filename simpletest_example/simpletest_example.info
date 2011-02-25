@@ -1,4 +1,3 @@
-; $Id$
 
 name = Simpletest Example
 description = Provides simpletest_example page node type.

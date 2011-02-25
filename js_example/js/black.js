@@ -1,4 +1,3 @@
-// $Id$
 
 (function($){
 $(document).ready(function(){

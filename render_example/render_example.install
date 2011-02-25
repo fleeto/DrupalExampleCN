@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /**
  * @file render_example.install
  * Install/uninstall routines for render example.

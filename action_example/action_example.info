@@ -1,4 +1,3 @@
-; $Id$
 name = Action example
 description = Demonstrates providing actions that can be associated to triggers.
 package = Example modules

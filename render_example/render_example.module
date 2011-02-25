@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /**
  * @file render_example.module
  * Demonstrate how render arrays are arranged and how they can be altered.

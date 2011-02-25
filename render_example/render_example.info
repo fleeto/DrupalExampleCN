@@ -1,4 +1,3 @@
-; $Id$
 name = Render example
 description = Demonstrates drupal_render's capabilities and altering render arrays
 package = Example modules

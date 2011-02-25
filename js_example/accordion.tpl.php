@@ -1,5 +1,4 @@
 <?php
-// $Id$
 ?>
 <div class="demo">
 <h2><?php print $title; ?></h2>

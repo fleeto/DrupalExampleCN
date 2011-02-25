@@ -1,4 +1,3 @@
-// $Id$
 
 /*
  * @file ajax_example.js

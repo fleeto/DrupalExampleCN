@@ -1,4 +1,3 @@
-; $Id$
 
 name = Image Example
 description = Example implementation of image.module hooks.
