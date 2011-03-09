@@ -275,25 +275,27 @@ function ajax_example_simplest_callback($form, $form_state) {
 function ajax_example_autocheckboxes($form, &$form_state) {
   // Since the form builder is called after every AJAX request, we rebuild
   // the form based on $form_state.
-  $default = !empty($form_state['values']['howmany_select']) ? $form_state['values']['howmany_select'] : 1;
+  $num_checkboxes = !empty($form_state['values']['howmany_select']) ? $form_state['values']['howmany_select'] : 1;
 
   $form['howmany_select'] = array(
     '#title' => t('How many checkboxes do you want?'),
     '#type' => 'select',
     '#options' => array(1 => 1, 2 => 2, 3 => 3, 4 => 4),
-    '#default_value' => $default,
+    '#default_value' => $num_checkboxes,
     '#ajax' => array(
       'callback' => 'ajax_example_autocheckboxes_callback',
       'wrapper' => 'checkboxes-div',
       //'method' defaults to replaceWith, but valid values also include
       // append, prepend, before and after.
-      'method' => 'replaceWith',
+      // 'method' => 'replaceWith',
       // 'effect' defaults to none. Other valid values are 'fade' and 'slide'.
       // See ajax_example_autotextfields for an example of 'fade'.
       'effect' => 'slide',
       // 'speed' defaults to 'slow'. You can also use 'fast'
       // or a number of milliseconds for the animation to last.
-      'speed' => 'slow',
+      // 'speed' => 'slow',
+      // Don't show any throbber...
+      'progress' => array('type' => 'none'),
     ),
   );
 
@@ -308,8 +310,7 @@ function ajax_example_autocheckboxes($form, &$form_state) {
     '#description' => t('This is where we get automatically generated checkboxes'),
   );
 
-  $num_checkboxes = !empty($form_state['values']['howmany_select']) ? $form_state['values']['howmany_select'] : 1;
-  for ($i=1; $i<=$num_checkboxes; $i++) {
+  for ($i = 1; $i <= $num_checkboxes; $i++) {
     $form['checkboxes_fieldset']["checkbox$i"] = array(
       '#type' => 'checkbox',
       '#title' => "Checkbox $i",
@@ -543,3 +544,4 @@ function _ajax_example_get_second_dropdown_options($key = '') {
     return array();
   }
 }
+
