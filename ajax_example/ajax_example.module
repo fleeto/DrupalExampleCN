@@ -462,9 +462,10 @@ function ajax_example_dependent_dropdown($form, &$form_state) {
   // parameter to pass to the function that retrieves the options for the
   // second dropdown.
   $selected = isset($form_state['values']['dropdown_first']) ? $form_state['values']['dropdown_first'] : key($options_first);
+
   $form['dropdown_first'] = array(
     '#type' => 'select',
-    '#title' => 'First Dropdown',
+    '#title' => 'Instrument Type',
     '#options' => $options_first,
     '#default_value' => $selected,
     // Bind an ajax callback to the change event (which is the default for the
@@ -475,17 +476,18 @@ function ajax_example_dependent_dropdown($form, &$form_state) {
       // background. Usually the default value is sufficient (eg. change for
       // select elements), but valid values include any jQuery event,
       // most notably 'mousedown', 'blur', and 'submit'.
-      'event' => 'change',
+      // 'event' => 'change',
       'callback' => 'ajax_example_dependent_dropdown_callback',
-      'wrapper' => 'dropdown_second_replace',
+      'wrapper' => 'dropdown-second-replace',
     ),
   );
+
   $form['dropdown_second'] = array(
     '#type' => 'select',
-    '#title' => 'Second Dropdown',
+    '#title' => $options_first[$selected] . ' ' . t('Instruments'),
     // The entire enclosing div created here gets replaced when dropdown_first
     // is changed.
-    '#prefix' => '<div id="dropdown_second_replace">',
+    '#prefix' => '<div id="dropdown-second-replace">',
     '#suffix' => '</div>',
     // when the form is rebuilt during ajax processing, the $selected variable
     // will now have the new value and so the options will change
@@ -518,8 +520,8 @@ function ajax_example_dependent_dropdown_callback($form, $form_state) {
  * @return array of options
  */
 function _ajax_example_get_first_dropdown_options() {
-  // drupal_map_assoc() just makes an array('Strings' => 'Strings'...).
-  return drupal_map_assoc(array(t('Strings'), t('Woodwinds'), t('Brass'), t('Percussion')));
+  // drupal_map_assoc() just makes an array('String' => 'String'...).
+  return drupal_map_assoc(array(t('String'), t('Woodwind'), t('Brass'), t('Percussion')));
 }
 
 /**
@@ -532,8 +534,8 @@ function _ajax_example_get_first_dropdown_options() {
  */
 function _ajax_example_get_second_dropdown_options($key = '') {
   $options = array(
-    t('Strings') => drupal_map_assoc(array(t('Violin'), t('Viola'), t('Cello'), t('Double Bass'))),
-    t('Woodwinds') => drupal_map_assoc(array(t('Flute'), t('Clarinet'), t('Oboe'), t('Bassoon'))),
+    t('String') => drupal_map_assoc(array(t('Violin'), t('Viola'), t('Cello'), t('Double Bass'))),
+    t('Woodwind') => drupal_map_assoc(array(t('Flute'), t('Clarinet'), t('Oboe'), t('Bassoon'))),
     t('Brass') => drupal_map_assoc(array(t('Trumpet'), t('Trombone'), t('French Horn'), t('Euphonium'))),
     t('Percussion') => drupal_map_assoc(array(t('Bass Drum'), t('Timpani'), t('Snare Drum'), t('Tambourine'))),
   );

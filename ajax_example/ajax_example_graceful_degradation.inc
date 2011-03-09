@@ -69,7 +69,7 @@ function ajax_example_dependent_dropdown_degrades($form, &$form_state, $no_js_us
   );
   $form['dropdown_first_fieldset']['dropdown_first'] = array(
     '#type' => 'select',
-    '#title' => 'First Dropdown',
+    '#title' => 'Instrument Type',
     '#options' => $options_first,
     '#attributes' => array('class' => array('enabled-for-ajax')),
 
@@ -103,7 +103,7 @@ function ajax_example_dependent_dropdown_degrades($form, &$form_state, $no_js_us
   );
   $form['dropdown_second_fieldset']['dropdown_second'] = array(
     '#type' => 'select',
-    '#title' => 'Second Dropdown',
+    '#title' => $options_first[$selected] . ' ' . t('Instruments'),
     '#prefix' => '<div id="dropdown-second-replace">',
     '#suffix' => '</div>',
     '#attributes' => array('class' => array('enabled-for-ajax')),
