@@ -9,8 +9,8 @@ class FieldExampleTest extends DrupalWebTestCase {
 
   public static function getInfo() {
     return array(
-      'name' => t('Field Example'),
-      'description' => t('Create a content type with example_field_rgb fields, create a node, check for correct values.'),
+      'name' => 'Field Example',
+      'description' => 'Create a content type with example_field_rgb fields, create a node, check for correct values.',
       'group' => 'Examples',
     );
   }

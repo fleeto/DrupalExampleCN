@@ -11,8 +11,8 @@ class FileExampleTest extends DrupalWebTestCase {
 
   public static function getInfo() {
     return array(
-      'name' => t('File Example Functionality'),
-      'description' => t('Test File Example features and sample streamwrapper.'),
+      'name' => 'File Example Functionality',
+      'description' => 'Test File Example features and sample streamwrapper.',
       'group' => 'Examples',
     );
   }
