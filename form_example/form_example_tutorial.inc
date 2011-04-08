@@ -289,7 +289,7 @@ function form_example_tutorial_6($form, &$form_state) {
 function form_example_tutorial_6_validate($form, &$form_state) {
   $year_of_birth = $form_state['values']['year_of_birth'];
   if ($year_of_birth && ($year_of_birth < 1900 || $year_of_birth > 2000)) {
-    form_set_error('year_of_birth', 'Enter a year between 1900 and 2000.');
+    form_set_error('year_of_birth', t('Enter a year between 1900 and 2000.'));
   }
 }
 
@@ -353,7 +353,7 @@ function form_example_tutorial_7($form, &$form_state) {
 function form_example_tutorial_7_validate($form, &$form_state) {
   $year_of_birth = $form_state['values']['year_of_birth'];
   if ($year_of_birth && ($year_of_birth < 1900 || $year_of_birth > 2000)) {
-    form_set_error('year_of_birth', 'Enter a year between 1900 and 2000.');
+    form_set_error('year_of_birth', t('Enter a year between 1900 and 2000.'));
   }
 }
 
@@ -475,7 +475,7 @@ function form_example_tutorial_8_page_two($form, &$form_state) {
 function form_example_tutorial_8_next_validate($form, &$form_state) {
   $year_of_birth = $form_state['values']['year_of_birth'];
   if ($year_of_birth && ($year_of_birth < 1900 || $year_of_birth > 2000)) {
-    form_set_error('year_of_birth', 'Enter a year between 1900 and 2000.');
+    form_set_error('year_of_birth', t('Enter a year between 1900 and 2000.'));
   }
 }
 
@@ -666,7 +666,7 @@ function form_example_tutorial_9_validate($form, &$form_state) {
     $year_of_birth = $form_state['values']['name'][$i]['year_of_birth'];
 
     if ($year_of_birth && ($year_of_birth < 1900 || $year_of_birth > 2000)) {
-      form_set_error("name][$i][year_of_birth", 'Enter a year between 1900 and 2000.');
+      form_set_error("name][$i][year_of_birth", t('Enter a year between 1900 and 2000.'));
     }
   }
 }
