@@ -12,7 +12,7 @@
     attach: function(context) {
       $(".edit-field-example-colorpicker").live("focus", function(event) {
         var edit_field = this;
-        var picker = $(this).closest('tr').find(".field-example-colorpicker");
+        var picker = $(this).closest('div').parent().find(".field-example-colorpicker");
         
         // Hide all color pickers except this one.
         $(".field-example-colorpicker").hide();
