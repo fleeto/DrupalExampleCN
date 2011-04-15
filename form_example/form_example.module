@@ -144,10 +144,60 @@ function form_example_menu() {
     'description' => 'A general approach to a wizard multistep form.',
     'file' => 'form_example_wizard.inc',
   );
+  $items['examples/form_example/element_example'] = array(
+    'title' => 'Element example',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_example_element_demo_form'),
+    'access callback' => TRUE,
+    'file' => 'form_example_elements.inc',
+    'weight' => 100,
+  );
+
   return $items;
 }
 
 function form_example_intro() {
-  $markup = t('The form example module provides a tutorial, extensible multistep example, and a #states example');
+  $markup = t('The form example module provides a tutorial, extensible multistep example, an element example, and a #states example');
   return array('#markup' => $markup);
+}
+
+/**
+ * Implements hook_help() to provide a bit of help.
+ */
+function form_example_help($path, $arg) {
+  switch ($path) {
+    case 'examples/form_example/tutorial':
+      // TODO: Update the URL.
+      $help = t('This form example tutorial for Drupal 7 is the code from the <a href="http://drupal.org/node/262422">Handbook 10-step tutorial</a>');
+      break;
+    case 'examples/form_example/element_example':
+      $help = t('The Element Example shows how modules can provide their own Form API element types. Four different element types are demonstrated.');
+      break;
+  }
+  if (!empty($help)) {
+    return '<p>' . $help . '</p>';
+  }
+}
+
+/**
+* Implements hook_element_info().
+*
+* To keep the various pieces of the example together, this just returns
+* _form_example_elements().
+*/
+function form_example_element_info() {
+  require_once('form_example_elements.inc');
+  return _form_example_element_info();
+}
+
+/**
+* Implements hook_theme().
+*
+* The only theme implementation is by the element example. To keep the various
+* parts of the example together, this actually returns
+* _form_example_element_theme().
+*/
+function form_example_theme($existing, $type, $theme, $path) {
+  require_once('form_example_elements.inc');
+  return _form_example_element_theme($existing, $type, $theme, $path);
 }

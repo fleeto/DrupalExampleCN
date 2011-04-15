@@ -675,7 +675,7 @@ function form_example_tutorial_9_validate($form, &$form_state) {
  * Submit function for form_example_tutorial_9().
  */
 function form_example_tutorial_9_submit($form, &$form_state) {
-  $output = t("Form 9 has been submitted. ");
+  $output = t("Form 9 has been submitted.");
   for ($i = 1; $i <= $form_state['num_names']; $i++) {
     $output .= t("@num: @first @last (@date)... ", array('@num' => $i, '@first' => $form_state['values']['name'][$i]['first'],
       '@last' =>  $form_state['values']['name'][$i]['last'], '@date' =>  $form_state['values']['name'][$i]['year_of_birth']));
