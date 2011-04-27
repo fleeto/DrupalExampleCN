@@ -1,7 +1,5 @@
 <?php
 
-// $Id$
-
 /**
  * @file
  * This is an example demonstrating how a module can define custom form and

@@ -1,4 +1,3 @@
-
 name = XMLRPC example
 description = This is an example of how to implement client and server communications using XML-RPC.
 package = Example modules

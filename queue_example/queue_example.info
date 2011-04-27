@@ -1,4 +1,3 @@
-
 name = Queue example
 description = Examples of using the Drupal Queue API.
 package = Example modules

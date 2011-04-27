@@ -1,4 +1,3 @@
-
 name = NodeAPI example
 description = Demonstrates using the hook_node_* APIs (formerly hook_nodeapi) to alter a node from a different module.
 package = Example modules

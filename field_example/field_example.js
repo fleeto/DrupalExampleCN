@@ -1,4 +1,3 @@
-
 /**
  * @file
  * Javascript for Field Example.

@@ -1,4 +1,3 @@
-
 /*
  * @file ajax_example.js
  *   JavaScript for ajax_example.
