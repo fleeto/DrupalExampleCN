@@ -32,9 +32,9 @@ function page_example_help($path, $arg) {
  */
 function page_example_permission() {
   return array(
-  	'access simple page' => array(
-  	  'title' => t('Access simple page'),
-  	  'description' => t('Allow users to access simple page'),
+    'access simple page' => array(
+      'title' => t('Access simple page'),
+      'description' => t('Allow users to access simple page'),
     ),
     'access arguments page' => array(
       'title' => t('Access page with arguments'),

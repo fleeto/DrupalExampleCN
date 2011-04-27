@@ -704,8 +704,8 @@ function form_example_tutorial_10($form_state) {
 
   $form['file'] = array(
     '#type' => 'file',
-  	'#title' => t('Image'),
-  	'#description' => t('Upload a file, allowed extensions: jpg, jpeg, png, gif'),
+    '#title' => t('Image'),
+    '#description' => t('Upload a file, allowed extensions: jpg, jpeg, png, gif'),
   );
 
   $form['submit'] = array(
@@ -720,7 +720,7 @@ function form_example_tutorial_10($form_state) {
  * Validate handler for form_example_tutorial_10().
  */
 function form_example_tutorial_10_validate($form, &$form_state) {
-	$file = file_save_upload('file', array(
+  $file = file_save_upload('file', array(
     'file_validate_is_image' => array(), // Validates file is really an image.
     'file_validate_extensions' => array('png gif jpg jpeg'), // Validate extensions.
   ));

@@ -49,12 +49,12 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
     $nodes_by_user = array();
     $titles = array(); // Titles keyed by nid
     $private_nodes = array(); // Array of nids marked private.
-    for($i = 0; $i < $num_simple_users; $i++) {
+    for ($i = 0; $i < $num_simple_users; $i++) {
       $simple_users[$i] = $this->drupalCreateUser(array('access content', 'create article content', 'search content'));
     }
     foreach ($simple_users as $web_user) {
       $this->drupalLogin($web_user);
-      foreach(array(0 => 'Public', 1 => 'Private') as $is_private => $type) {
+      foreach (array(0 => 'Public', 1 => 'Private') as $is_private => $type) {
         $edit = array(
           'title' => t('@private_public Article created by @user', array('@private_public' => $type, '@user' => $web_user->name)),
         );
@@ -86,11 +86,11 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
       // Check to see that we find the number of search results expected.
       $this->checkSearchResults('Private node', 1);
       // Check own nodes to see that all are readable.
-      foreach(array_keys($nodes_by_user) as $uid) {
+      foreach (array_keys($nodes_by_user) as $uid) {
         // All of this user's nodes should be readable to same.
         if ($uid == $web_user->uid) {
-          foreach($nodes_by_user[$uid] as $nid => $is_private) {
-            $this->drupalGet('node/'.$nid);
+          foreach ($nodes_by_user[$uid] as $nid => $is_private) {
+            $this->drupalGet('node/' . $nid);
             $this->assertResponse(200);
             $this->assertTitle($titles[$nid] . ' | Drupal', t('Correct title for node found'));
           }
@@ -98,8 +98,8 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
         else {
           // Otherwise, for other users, private nodes should get a 403,
           // but we should be able to read non-private nodes.
-          foreach($nodes_by_user[$uid] as $nid => $is_private) {
-            $this->drupalGet('node/'.$nid);
+          foreach ($nodes_by_user[$uid] as $nid => $is_private) {
+            $this->drupalGet('node/' . $nid);
             $this->assertResponse($is_private ? 403 : 200, t('Node @nid by user @uid should get a @response for this user (@web_user_uid)', array('@nid' => $nid, '@uid' => $uid, '@response' => $is_private ? 403 : 200, '@web_user_uid' => $web_user->uid)));
             if (!$is_private) {
               $this->assertTitle($titles[$nid] . ' | Drupal', t('Correct title for node was found'));
@@ -124,7 +124,7 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
     // Check to see that we find the number of search results expected.
     $this->checkSearchResults('Private node', 3);
 
-    foreach($nodes_by_user as $uid => $private_status) {
+    foreach ($nodes_by_user as $uid => $private_status) {
       foreach ($private_status as $nid => $is_private) {
         $this->drupalGet('node/' . $nid);
         $this->assertResponse(200);
@@ -156,7 +156,7 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
     $this->drupalLogin($edit_user);
 
     // Try to edit each of the private nodes.
-    foreach($private_nodes as $nid) {
+    foreach ($private_nodes as $nid) {
       $body = $this->randomName();
       $edit = array('body[und][0][value]' => $body);
       $this->drupalPost('node/' . $nid . '/edit', $edit, t('Save'));
@@ -167,7 +167,7 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
     // This test should go last, as the nodes get deleted.
     $edit_user = $this->drupalCreateUser(array('access content', 'access any private content', 'edit any private content'));
     $this->drupalLogin($edit_user);
-    foreach($private_nodes as $nid) {
+    foreach ($private_nodes as $nid) {
       $body = $this->randomName();
       $edit = array('body[und][0][value]' => $body);
       $this->drupalPost('node/' . $nid . '/edit', $edit, t('Save'));

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @file file_example_session_streams.inc
- * Implement DrupalStreamWrapperInterface to provide a demonstration session://
+ * @file
+ * Implements DrupalStreamWrapperInterface to provide a demonstration session://
  * streamwrapper. This example is nearly fully functional, but has no known
  * practical use. It's an example and demonstration only.
  */
@@ -477,8 +477,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
     if (strpos($target, '/')) {
       $dirname = preg_replace('@/[^/]*$@', '', $target);
     }
-    else
-    {
+    else {
       $dirname = '';
     }
     return $scheme . '://' . $dirname;
@@ -575,7 +574,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
     if (is_array($key) && array_key_exists('.isadir.txt', $key)) {
       $mode = 0040000; // S_IFDIR means it's a directory.
     }
-    else if ($key !== FALSE) {
+    elseif ($key !== FALSE) {
       $mode = 0100000; // S_IFREG, means it's a file.
     }
 

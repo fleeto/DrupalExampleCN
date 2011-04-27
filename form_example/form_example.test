@@ -159,7 +159,7 @@ class FormExampleTestCase extends DrupalWebTestCase {
     $this->drupalPost(NULL, array('city' => $city), t('Next'));
 
     // Enter the Aunt's name, but then the previous button.
-    $this->drupalPost(NULL, array('aunts_name'=> $aunts_name), t('Previous'));
+    $this->drupalPost(NULL, array('aunts_name' => $aunts_name), t('Previous'));
     $this->assertFieldByName('city', $city);
 
     // Now go forward and then press finish; check for correct values.
@@ -181,12 +181,12 @@ class FormExampleTestCase extends DrupalWebTestCase {
     $edit = array(
       'a_form_example_textfield' => $this->randomName(),
       'a_form_example_checkbox' => TRUE,
-      'a_form_example_element_discrete[areacode]' => sprintf('%03d', rand(0,999)),
-      'a_form_example_element_discrete[prefix]' => sprintf('%03d', rand(0,999)),
-      'a_form_example_element_discrete[extension]' => sprintf('%04d', rand(0,9999)),
-      'a_form_example_element_combined[areacode]' => sprintf('%03d', rand(0,999)),
-      'a_form_example_element_combined[prefix]' => sprintf('%03d', rand(0,999)),
-      'a_form_example_element_combined[extension]' => sprintf('%04d', rand(0,9999)),
+      'a_form_example_element_discrete[areacode]' => sprintf('%03d', rand(0, 999)),
+      'a_form_example_element_discrete[prefix]' => sprintf('%03d', rand(0, 999)),
+      'a_form_example_element_discrete[extension]' => sprintf('%04d', rand(0, 9999)),
+      'a_form_example_element_combined[areacode]' => sprintf('%03d', rand(0, 999)),
+      'a_form_example_element_combined[prefix]' => sprintf('%03d', rand(0, 999)),
+      'a_form_example_element_combined[extension]' => sprintf('%04d', rand(0, 9999)),
     );
     $this->drupalPost('examples/form_example/element_example', $edit, t('Submit'));
     $this->assertText(t('a_form_example_textfield has value @value', array('@value' => $edit['a_form_example_textfield'])));

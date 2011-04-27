@@ -3,7 +3,6 @@
 /**
  * @file
  * Demonstrations of AJAX with graceful degradation.
- *
  */
 
 /**
@@ -137,7 +136,7 @@ function ajax_example_dependent_dropdown_degrades_submit($form, &$form_state) {
 
   // Now handle the case of the next, previous, and submit buttons.
   // only submit will result in actual submission, all others rebuild.
-  switch($form_state['triggering_element']['#value']) {
+  switch ($form_state['triggering_element']['#value']) {
     case t('OK'): // Submit: We're done.
       drupal_set_message(t('Your values have been submitted. dropdown_first=@first, dropdown_second=@second', array('@first' => $form_state['values']['dropdown_first'], '@second' => $form_state['values']['dropdown_second'])));
       return;
@@ -291,7 +290,7 @@ function ajax_example_dynamic_sections_submit($form, &$form_state) {
   // select is changed.
   // Now handle the case of the next, previous, and submit buttons.
   // Only submit will result in actual submission, all others rebuild.
-  switch($form_state['triggering_element']['#value']) {
+  switch ($form_state['triggering_element']['#value']) {
     case t('Submit your answer'): // Submit: We're done.
       $form_state['rebuild'] = FALSE;
       $answer = $form_state['values']['question'];
@@ -488,7 +487,7 @@ function ajax_example_wizard_submit($form, &$form_state) {
 
   // If they're done, submit.
   if ($form_state['triggering_element']['#value'] == t('Submit your information')) {
-    $value_message = t("Your information has been submitted: ");
+    $value_message = t('Your information has been submitted:') . ' ';
     foreach ($form_state['storage']['values'] as $step => $values) {
       $value_message .= "$step: ";
       foreach ($values as $key => $value) {

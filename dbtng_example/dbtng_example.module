@@ -10,7 +10,6 @@
  * General documentation is available at
  * @link database Database abstraction layer documentation @endlink and
  * at @link http://drupal.org/node/310069 @endlink.
- *
  */
 
 /**
@@ -138,7 +137,7 @@ function dbtng_example_entry_update($entry) {
               ->condition('pid', $entry['pid'])
               ->execute();
   }
-  catch(Exception $e) {
+  catch (Exception $e) {
     drupal_set_message(t('db_update failed. Message = %message, query= %query',
       array('%message' => $e->getMessage(), '%query' => $e->query_string)), 'error');
   }
@@ -281,7 +280,7 @@ function dbtng_example_entry_load($entry = array()) {
  *  e.name = 'John' AND e.age > 18
  *
  * @see db_select()
- * @seeW http://drupal.org/node/310075
+ * @see http://drupal.org/node/310075
  */
 function dbtng_example_advanced_list() {
   $output = '';
@@ -338,7 +337,7 @@ function dbtng_example_help($path) {
       $output = t('Generate a list of all entries in the database. There is no filter in the query.');
       break;
     case 'examples/dbtng/advanced':
-      $output  = t('A more complex list of entries in the database. ');
+      $output  = t('A more complex list of entries in the database.') . ' ';
       $output .= t('Only the entries with name = "John" and age older than 18 years are shown, the username of the person who created the entry is also shown.');
       break;
     case 'examples/dbtng/update':
@@ -455,7 +454,7 @@ function dbtng_example_form_add($form, &$form_state) {
 /**
  * Submit handler for 'add entry' form.
  */
-function dbtng_example_form_add_submit($form, $form_state){
+function dbtng_example_form_add_submit($form, $form_state) {
   global $user;
 
   // Save the submitted entry.
@@ -555,7 +554,7 @@ function dbtng_example_form_update_callback($form, $form_state) {
 /**
  * Submit handler for 'update entry' form.
  */
-function dbtng_example_form_update_submit($form, $form_state){
+function dbtng_example_form_update_submit($form, $form_state) {
   global $user;
 
   // Save the submitted entry.

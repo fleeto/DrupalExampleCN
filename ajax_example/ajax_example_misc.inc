@@ -3,9 +3,7 @@
 /**
  * @file
  * AJAX Miscellaneous Topics.
- *
- *
-*/
+ */
 
 /**
  * Demonstrates a clickable AJAX-enabled link using the 'use-ajax' class.
@@ -28,7 +26,7 @@ javascript is enabled, ajax.js will try to submit it via an AJAX call instead
 of a normal page load. The URL also contains the '/nojs/' magic string, which
 is stripped if javascript is enabled, allowing the server code to tell by the
 URL whether JS was enabled or not, letting it do different things based on that.";
-  $output = "<div>" . t($explanation) ."</div>";
+  $output = "<div>" . t($explanation) . "</div>";
   // The use-ajax class is special, so that the link will call without causing
   // a page reload. Note the /nojs portion of the path - if javascript is
   // enabled, this part will be stripped from the path before it is called.
@@ -59,7 +57,7 @@ of a normal page load. The URL also contains the '/nojs/' magic string, which
 is stripped if javascript is enabled, allowing the server code to tell by the
 URL whether JS was enabled or not, letting it do different things based on that.";
   $build['my_div'] = array(
-    '#markup' => $explanation .'<div id="myDiv"></div>',
+    '#markup' => $explanation . '<div id="myDiv"></div>',
   );
   $build['ajax_link'] = array(
     '#type' => 'link',

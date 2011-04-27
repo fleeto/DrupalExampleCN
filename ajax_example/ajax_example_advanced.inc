@@ -196,7 +196,7 @@ function ajax_example_advanced_commands($form, &$form_state) {
   $form['restripe_command_example_fieldset']['restripe_num_rows'] = array(
     '#type' => 'select',
     '#default_value' => !empty($form_state['values']['restripe_num_rows']) ? $form_state['values']['restripe_num_rows'] : 1,
-    '#options' => drupal_map_assoc(array(1,2,3,4,5,6,7,8,9,10)),
+    '#options' => drupal_map_assoc(array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
     '#ajax' => array(
       'callback' => 'ajax_example_advanced_commands_restripe_num_rows',
       'method' => 'replace',
@@ -285,7 +285,8 @@ function ajax_example_advanced_commands_changed_callback($form, $form_state) {
   $commands = array();
   if ($checkbox_value) {
     $commands[] = ajax_command_changed( '#changed_div', '#changed_div_mark_this');
-  } else {
+  }
+  else {
     $commands[] = ajax_command_replace('#changed_div', "<div id='changed_div'> <div id='changed_div_mark_this'>This div can be marked as changed or not.</div></div>");
   }
   $commands[] = ajax_command_replace("#changed_status", "<div id='changed_status'>Updated changed_command_example to $checkbox_value_string: " . date('r') . "</div>");
@@ -355,7 +356,8 @@ function ajax_example_advanced_commands_remove_callback($form, $form_state) {
   $should_remove_string = $should_remove ? 'TRUE' : 'FALSE';
   if ($should_remove) {
     $commands[] = ajax_command_remove('#remove_text');
-  } else {
+  }
+  else {
     $commands[] = ajax_command_html('#remove_div', "<div id='remove_text'>text to be removed</div>");
   }
   $commands[] = ajax_command_replace("#remove_status", "<div id='remove_status'>Updated remove_command_example (value={$should_remove_string} " . date('r') . "</div>");

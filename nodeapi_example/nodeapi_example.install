@@ -2,24 +2,8 @@
 
 /**
  * @file
- * Install, update and uninstall functions for the nodeapi example module.
- *
- * This file contains the functions required to perform install, update and
- * uninstall operations.
- *
+ * Install, update and uninstall functions for the nodeapi_example module.
  */
-
-/**
- * Implements hook_install().
- */
-function nodeapi_example_install() {
-}
-
-/**
- * Implements hook_uninstall().
- */
-function nodeapi_example_uninstall() {
-}
 
 /**
  * Implements hook_schema().

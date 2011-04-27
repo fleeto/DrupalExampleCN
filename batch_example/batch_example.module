@@ -30,7 +30,7 @@ function batch_example_menu() {
   $items = array();
   $items['examples/batch_example'] = array(
     'title' => 'Batch example',
-    'description' => t("Example of Drupal batch processing"),
+    'description' => 'Example of Drupal batch processing',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('batch_example_simple_form'),
     'access callback' => TRUE,

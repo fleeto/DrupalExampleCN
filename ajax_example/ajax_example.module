@@ -3,7 +3,6 @@
 /**
  * @file
  * AJAX Examples module file with basic examples.
- *
  */
 
 /**
@@ -20,9 +19,10 @@
 */
 
 /**
- * Set up calls to drupal_get_form() for all our example cases.
- *
  * Implements hook_menu().
+ *
+ * Sets up calls to drupal_get_form() for all our example cases.
+ *
  * See @link menu_example.module Menu Example @endlink for more details on
  * hook_menu().
  */
@@ -248,7 +248,7 @@ function ajax_example_simplest($form, &$form_state) {
   // An AJAX request calls the form builder function for every change.
   // We can change how we build the form based on $form_state.
   if (!empty($form_state['values']['changethis'])) {
-    $form['replace_textfield']['#description'] = t("Say why you chose") .  " '{$form_state['values']['changethis']}'";
+    $form['replace_textfield']['#description'] = t("Say why you chose '@value'", array('@value' => $form_state['values']['changethis']));
   }
   return $form;
 }

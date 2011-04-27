@@ -1,7 +1,12 @@
 <?php
 
 /**
- * Implementation hook_theme().
+ * @file
+ * An example module showing how to use some of the new JavaScript features in Drupal 7.
+ */
+
+/**
+ * Implements hook_theme().
  */
 function js_example_theme() {
   return array(
@@ -33,7 +38,7 @@ function js_example_menu() {
 
 function js_example_js_weights() {
   // add some css to show which line is output by which script
-  drupal_add_css(drupal_get_path('module', 'js_example') .'/css/jsweights.css');
+  drupal_add_css(drupal_get_path('module', 'js_example') . '/css/jsweights.css');
   // 
   $weights = array(
     'red' => 100,
@@ -44,12 +49,12 @@ function js_example_js_weights() {
     'purple' => 60
   );
   drupal_add_js(array('js_weights' => $weights), array('type' => 'setting'));
-  drupal_add_js(drupal_get_path('module', 'js_example') .'/js/red.js', array('weight' => $weights['red']));
-  drupal_add_js(drupal_get_path('module', 'js_example') .'/js/blue.js', array('weight' => $weights['blue']));
-  drupal_add_js(drupal_get_path('module', 'js_example') .'/js/green.js', array('weight' => $weights['green']));
-  drupal_add_js(drupal_get_path('module', 'js_example') .'/js/brown.js', array('weight' => $weights['brown']));
-  drupal_add_js(drupal_get_path('module', 'js_example') .'/js/black.js', array('weight' => $weights['black']));
-  drupal_add_js(drupal_get_path('module', 'js_example') .'/js/purple.js', array('weight' => $weights['purple']));
+  drupal_add_js(drupal_get_path('module', 'js_example') . '/js/red.js', array('weight' => $weights['red']));
+  drupal_add_js(drupal_get_path('module', 'js_example') . '/js/blue.js', array('weight' => $weights['blue']));
+  drupal_add_js(drupal_get_path('module', 'js_example') . '/js/green.js', array('weight' => $weights['green']));
+  drupal_add_js(drupal_get_path('module', 'js_example') . '/js/brown.js', array('weight' => $weights['brown']));
+  drupal_add_js(drupal_get_path('module', 'js_example') . '/js/black.js', array('weight' => $weights['black']));
+  drupal_add_js(drupal_get_path('module', 'js_example') . '/js/purple.js', array('weight' => $weights['purple']));
   $output = '<div id="js-weights"></div>';
   return $output;
 }

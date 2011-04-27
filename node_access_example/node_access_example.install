@@ -1,16 +1,9 @@
 <?php
 
 /**
- * Implements hook_install().
+ * @file
+ * Install, update, and uninstall functions for the node_access_example module.
  */
-function node_access_example_install() {
-}
-
-/**
- * Implements hook_uninstall().
- */
-function node_access_example_uninstall() {
-}
 
 /**
  * Implements hook_schema().

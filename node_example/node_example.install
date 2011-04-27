@@ -6,12 +6,9 @@
  *
  * The definition of the fields for the module is here,
  *
- * See @link http://drupal.org/node/707832 Field API Tutorial @endlink
- *
- * See @link http://drupal.org/node/443536 Field API Handbook Page @endlink
- *
- * See @link field Field API documentation @endlink
- *
+ * @see @link http://drupal.org/node/707832 Field API Tutorial @endlink
+ * @see @link http://drupal.org/node/443536 Field API Handbook Page @endlink
+ * @see @link field Field API documentation @endlink
  */
 
 /**
@@ -83,7 +80,7 @@ function node_example_install() {
 }
 
 /**
- * Return a structured array defining the fields created by this content type.
+ * Returns a structured array defining the fields created by this content type.
  *
  * This is packaged in a function so it can be used in both
  * node_example_install() and node_example_uninstall().
@@ -113,7 +110,7 @@ function _node_example_installed_fields() {
 }
 
 /**
- * Return a structured array defining the instances for this content type.
+ * Returns a structured array defining the instances for this content type.
  *
  * The instance lets Drupal know which widget to use to allow the user to enter
  * data and how to react in different view modes.  We are going to display a
@@ -175,7 +172,6 @@ function _node_example_installed_instances() {
 
 /**
  * Implements hook_uninstall().
- *
  */
 function node_example_uninstall() {
   // Gather all the example content that might have been created while this

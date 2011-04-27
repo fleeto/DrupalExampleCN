@@ -268,7 +268,7 @@ function form_example_wizard_submit($form, &$form_state) {
   // In this case we've completed the final page of the wizard, so process the
   // submitted information.
   drupal_set_message(t('This information was collected by this wizard:'));
-  foreach($form_state['step_information'] as $index => $value) {
+  foreach ($form_state['step_information'] as $index => $value) {
     // Remove FAPI fields included in the values (form_token, form_id and form_build_id
     // This is not required, you may access the values using $value['stored_values']
     // but I'm removing them to make a more clear representation of the collected

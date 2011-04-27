@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * An example module showing how to define and use tokens.
+ */
+
+/**
  * Implements hook_menu().
  */
 function token_example_menu() {

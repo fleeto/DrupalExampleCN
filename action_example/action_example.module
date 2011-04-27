@@ -244,8 +244,8 @@ function action_example_basic_action(&$entity, $context = array()) {
  */
 function action_example_unblock_user_action(&$entity, $context = array()) {
 
-	// First we check that entity is a user object. If this is the case, then this
-	// is a user-type trigger.
+  // First we check that entity is a user object. If this is the case, then this
+  // is a user-type trigger.
   if (isset($entity->uid)) {
     $uid = $entity->uid;
   }
@@ -281,38 +281,39 @@ function action_example_unblock_user_action(&$entity, $context = array()) {
  * Generates settings form for action_example_node_sticky_action().
  *
  * @param array $context
- *  An array of options of this action (in case it is being edited)
+ *   An array of options of this action (in case it is being edited)
+ *
  * @return array $form
  *
  */
 function action_example_node_sticky_action_form($context) {
-	/*
-	 * We return a configuration form to set the requirements that will
-	 * match this action before being executed. This is a regular Drupal form and
-	 * may include any type of information you want, but all the fields of the
-	 * form will be saved into the $context variable.
-	 *
-	 * In this case we are promoting all content types submited by this user, but
-	 * it is possible to extend these conditions providing more options in the
-	 * settings form.
-	 */
+  /*
+  * We return a configuration form to set the requirements that will
+  * match this action before being executed. This is a regular Drupal form and
+  * may include any type of information you want, but all the fields of the
+  * form will be saved into the $context variable.
+  *
+  * In this case we are promoting all content types submited by this user, but
+  * it is possible to extend these conditions providing more options in the
+  * settings form.
+  */
   $form['author'] = array(
     '#title' => t('Author name'),
     '#type' => 'textfield',
     '#description' => t('Any content created, presaved or updated by this user will be promoted to front page and set as sticky.'),
     '#default_value' => isset($context['author']) ? $context['author'] : '',
   );
-	// Verify user permissions and provide an easier way to fill this field.
-	if (user_access('access user profiles')) {
+  // Verify user permissions and provide an easier way to fill this field.
+  if (user_access('access user profiles')) {
     $form['author']['#autocomplete_path'] = 'user/autocomplete';
-	}
-	// No more options, return the form.
+  }
+  // No more options, return the form.
   return $form;
 }
 
 /**
- * Validate settings form for action_example_node_sticky_action().
- * Verify that user exists before continuing.
+ * Validates settings form for action_example_node_sticky_action().
+ * Verifies that user exists before continuing.
  */
 function action_example_node_sticky_action_validate($form, $form_state) {
   if (! $account = user_load_by_name($form_state['values']['author']) ) {

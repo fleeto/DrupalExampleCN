@@ -148,11 +148,11 @@ function menu_example_menu() {
   // callback and other conditions are handled by the parent callback.
   $items['menu_example/tabs/default'] = array(
     'type' => MENU_DEFAULT_LOCAL_TASK,
-    'title' => t('Default primary tab'),
+    'title' => 'Default primary tab',
     'weight' => 1,
   );
   // Now add the rest of the tab entries.
-  foreach(array(t('second') => 2, t('third') => 3, t('fourth') => 4) as $tabname => $weight) {
+  foreach (array(t('second') => 2, t('third') => 3, t('fourth') => 4) as $tabname => $weight) {
     $items["menu_example/tabs/$tabname"] = array(
       'type' => MENU_LOCAL_TASK,
       'title' => $tabname,
@@ -171,11 +171,11 @@ function menu_example_menu() {
   // The default local task needs very little information.
   $items['menu_example/tabs/default/first'] = array(
     'type' => MENU_DEFAULT_LOCAL_TASK,
-    'title' => t('Default secondary tab'),
+    'title' => 'Default secondary tab',
     // The additional page callback and related items are handled by the
     // parent menu item.
   );
-  foreach(array(t('second'), t('third')) as $tabname) {
+  foreach (array(t('second'), t('third')) as $tabname) {
     $items["menu_example/tabs/default/$tabname"] = array(
       'type' => MENU_LOCAL_TASK,
       'title' => $tabname,

@@ -253,7 +253,7 @@ function form_example_phonenumber_discrete_process($element, &$form_state, $comp
  * Using regular expressions, we check that:
  *  - the area code is a three digit number
  *  - the prefix is numeric 3-digit number
- *	- the extension is a numeric 4-digit number
+ *  - the extension is a numeric 4-digit number
  *
  * Any problems are shown on the form element using form_error().
  */

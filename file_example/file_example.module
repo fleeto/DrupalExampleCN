@@ -3,7 +3,6 @@
 /**
  * @file
  * Examples demonstrating the Drupal File API (and Stream Wrappers).
- *
  */
 
 /**
@@ -274,10 +273,10 @@ function file_example_unmanaged_php_submit($form, &$form_state) {
   // fwrite($fp, $data).
   $length = strlen($data);
   $write_size = 5;
-  for ($i=0; $i < $length; $i += $write_size) {
+  for ($i = 0; $i < $length; $i += $write_size) {
     $result = fwrite($fp, substr($data, $i, $write_size));
     if ($result === FALSE) {
-      drupal_set_message(t('Failed writing to the file; '), 'error');
+      drupal_set_message(t('Failed writing to the file %file', array('%file' => $destination)), 'error');
       fclose($fp);
       return;
     }
@@ -517,6 +516,6 @@ function file_example_session_contents() {
   $path_components = func_get_args();
   $session_path = join('/', $path_components);
   $content = file_get_contents('session://' . $session_path);
-  return t('Contents of ') . check_plain($session_path) . ': ' . print_r($content, TRUE);
+  return t('Contents of @path:', array('@path' => check_plain($session_path))) . ' ' . print_r($content, TRUE);
 }
 

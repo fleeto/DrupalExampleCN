@@ -1,7 +1,8 @@
 <?php
+
 /**
- * @file render_example.module
- * Demonstrate how render arrays are arranged and how they can be altered.
+ * @file
+ * Demonstrates how render arrays are arranged and how they can be altered.
  * This alters blocks and the page to show the actual render array
  * that is being used to create each item.
  *
@@ -138,7 +139,7 @@ function render_example_arrays() {
   // The rest of this function just places the above arrays in a context where
   // they can be rendered (hopefully attractively and usefully) on the page.
   $page_array = array();
-  foreach($demos as $key => $item) {
+  foreach ($demos as $key => $item) {
     $page_array[$key]['#theme_wrappers'] = array('render_array');
     $page_array[$key]['#description'] = $key;
 
@@ -259,7 +260,7 @@ function render_example_demo_form($form, &$form_state) {
     '#default_value' => variable_get('render_example_reverse_sidebar', FALSE),
   );
   $form['page_fiddling']['render_example_prefix'] = array(
-    '#title' => t('Use #prefix and #suffix to wrap a div around every block '),
+    '#title' => t('Use #prefix and #suffix to wrap a div around every block'),
     '#description' => t('Uses hook_page_alter to wrap all blocks with a div using #prefix and #suffix'),
     '#type' => 'checkbox',
     '#default_value' => variable_get('render_example_prefix'),
@@ -281,7 +282,7 @@ function render_example_page_alter(&$page) {
   // Re-sort the sidebar in reverse order.
   if (variable_get('render_example_reverse_sidebar', FALSE) && !empty($page['sidebar_first'])) {
     $page['sidebar_first'] = array_reverse($page['sidebar_first']);
-    foreach(element_children($page['sidebar_first']) as $element) {
+    foreach (element_children($page['sidebar_first']) as $element) {
       // Reverse the weights if they exist.
       if (!empty($page['sidebar_first'][$element]['#weight'])) {
         $page['sidebar_first'][$element]['#weight'] *= -1;
@@ -383,7 +384,7 @@ function render_example_page_alter(&$page) {
   // Add #prefix and #suffix to a block to wrap a div around it.
   if (variable_get('render_example_prefix', FALSE)) {
     foreach (element_children($page) as $region_name) {
-      foreach(element_children($page[$region_name]) as $block_name) {
+      foreach (element_children($page[$region_name]) as $block_name) {
         $block = &$page[$region_name][$block_name];
         $block['#prefix'] = '<div class="block-prefix"><p>Prefixed</p>';
         $block['#suffix'] = '<span class="block-suffix">Block suffix</span></div>';

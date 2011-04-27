@@ -47,7 +47,7 @@ class FieldExampleTest extends DrupalWebTestCase {
     $single_field_name_friendly = $this->randomName(20);
     $single_field_name_machine = strtolower($this->randomName(10));
 
-    $edit = array (
+    $edit = array(
       'name' => $content_type_friendly,
       'type' => $content_type_machine,
     );
@@ -55,7 +55,7 @@ class FieldExampleTest extends DrupalWebTestCase {
     $this->assertText(t('The content type @name has been added.', array('@name' => $content_type_friendly)));
 
     // Now add a singleton field.
-    $edit = array (
+    $edit = array(
       'fields[_add_new_field][label]' => $single_field_name_friendly,
       'fields[_add_new_field][field_name]' => $single_field_name_machine,
       'fields[_add_new_field][type]' => 'field_example_rgb',
@@ -75,7 +75,7 @@ class FieldExampleTest extends DrupalWebTestCase {
     // Now add a multivalued field.
     $multivalue_field_name_friendly = $this->randomName(20);
     $multivalue_field_name_machine = strtolower($this->randomName(10));
-    $edit = array (
+    $edit = array(
       'fields[_add_new_field][label]' => $multivalue_field_name_friendly,
       'fields[_add_new_field][field_name]' => $multivalue_field_name_machine,
       'fields[_add_new_field][type]' => 'field_example_rgb',

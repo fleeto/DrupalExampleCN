@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install/Update/Uninstall functions for batch_example module
+ * Install, update, and uninstall functions for the batch_example module.
  */
 
 /**
@@ -74,6 +74,6 @@ function batch_example_update_7100(&$sandbox) {
     // hook_update_N() may optionally return a string which will be displayed
     // to the user.
     $final_message = '<ul><li>' . implode('</li><li>', $sandbox['messages']) . "</li></ul>";
-    return t('The batch_example demonstration update did what it was supposed to do: ') . $final_message;
+    return t('The batch_example demonstration update did what it was supposed to do: @message', array('@message' => $final_message));
   }
 }

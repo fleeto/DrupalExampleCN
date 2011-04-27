@@ -204,7 +204,7 @@ function nodeapi_example_node_update($node) {
       ->where('e.vid = (:vid)', array(':vid' => $node->vid))
       ->execute()->fetchField();
 
-    if($rating) {
+    if ($rating) {
       // node has been rated before.
       db_update('nodeapi_example')
          ->fields(array('rating' => $node->nodeapi_example_rating))

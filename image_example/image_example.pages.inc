@@ -3,7 +3,6 @@
 /**
  * @file
  * Page/form showing image styles in use.
- *
  */
 
 /**
@@ -15,7 +14,7 @@
  * module and as a way to demonstrate that the styles and effects defined by
  * this module are available via Drupal's image handling system.
  *
- * @see theme_image_style().
+ * @see theme_image_style()
  */
 function image_example_style_form($form, &$form_state) {
   // If there is already an uploaded image display the image here.
@@ -96,7 +95,7 @@ function image_example_style_form_submit($form, &$form_state) {
   }
   // If the file was removed we need to remove the module's reference to the
   // removed file's fid, and remove the file.
-  else if ($form_state['values']['image_example_image_fid'] == 0) {
+  elseif ($form_state['values']['image_example_image_fid'] == 0) {
     // Retrieve the old file's id.
     $fid = variable_get('image_example_image_fid', FALSE);
     $file = $fid ? file_load($fid) : FALSE;

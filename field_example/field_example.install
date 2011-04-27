@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install/Update/Uninstall functions for field_example module
+ * Install, update, and uninstall functions for the field_example module.
  */
 
 /**
