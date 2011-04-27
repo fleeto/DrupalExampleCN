@@ -31,7 +31,7 @@ class RenderExampleTestCase extends DrupalWebTestCase {
   function assertRenderResults($xpath_array) {
     foreach ($xpath_array as $xpath) {
       $result = $this->xpath($xpath);
-      $this->assertTrue(!empty($result), t('Found xpath %xpath', array('%xpath' => $xpath));
+      $this->assertTrue(!empty($result), t('Found xpath %xpath', array('%xpath' => $xpath)));
     }
   }
 
