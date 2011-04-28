@@ -60,7 +60,7 @@ function block_example_block_info() {
     'info' => t('Example: empty block'),
     'status' => TRUE,
     'region' => 'sidebar_first',  // Not usually provided.
-    'visibility' => 1,  // Not usually provided.
+    'visibility' => BLOCK_VISIBILITY_LISTED,  // Not usually provided.
     'pages' => 'node/*', // Not usually provided here.
   );
 
