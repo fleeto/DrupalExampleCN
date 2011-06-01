@@ -454,7 +454,7 @@ function dbtng_example_form_add($form, &$form_state) {
 /**
  * Submit handler for 'add entry' form.
  */
-function dbtng_example_form_add_submit($form, $form_state) {
+function dbtng_example_form_add_submit($form, &$form_state) {
   global $user;
 
   // Save the submitted entry.
@@ -554,7 +554,7 @@ function dbtng_example_form_update_callback($form, $form_state) {
 /**
  * Submit handler for 'update entry' form.
  */
-function dbtng_example_form_update_submit($form, $form_state) {
+function dbtng_example_form_update_submit($form, &$form_state) {
   global $user;
 
   // Save the submitted entry.
