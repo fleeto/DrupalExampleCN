@@ -273,7 +273,7 @@ function action_example_unblock_user_action(&$entity, $context = array()) {
  * The 'action_example_node_sticky_action' allows creating rules to promote and
  * set sticky content created by selected users on certain events. A form is
  * used to configure which user is affected by this action, and this form
- * includes the stanard _validate and _submit hooks.
+ * includes the standard _validate and _submit hooks.
  */
 
 
@@ -293,7 +293,7 @@ function action_example_node_sticky_action_form($context) {
   * may include any type of information you want, but all the fields of the
   * form will be saved into the $context variable.
   *
-  * In this case we are promoting all content types submited by this user, but
+  * In this case we are promoting all content types submitted by this user, but
   * it is possible to extend these conditions providing more options in the
   * settings form.
   */
