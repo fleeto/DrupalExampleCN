@@ -122,10 +122,25 @@ function nodeapi_example_node_validate($node, $form) {
  * Load the rating information if available for any of the nodes in the argument
  * list.
  */
-function nodeapi_example_node_load($nodes, $form) {
+function nodeapi_example_node_load($nodes, $types) {
+  // We can use $types to figure out if we need to process any of these nodes.
+  $our_types = array();
+  foreach ($types as $type) {
+    if (variable_get('nodeapi_example_' . $type, FALSE)) {
+      $our_types[] = $type;
+    }
+  }
+
+  // Now $our_types contains all the types from $types that we want
+  // to deal with. If it's empty, we can safely return.
+  if (!count($our_types)) {
+    return;
+  }
+
+  // Now we need to make a list of revisions based on $our_types
   foreach ($nodes as $node) {
     // We are using the revision id instead of node id
-    if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
+    if (in_array($node->type, $our_types)) {
       $vids[] = $node->vid;
     }
   }
@@ -134,14 +149,10 @@ function nodeapi_example_node_load($nodes, $form) {
     return;
   }
 
-  // When we read, we don't care about the node->nid, but we look for the right
-  // revision ID (node->vid)
+  // When we read, we don't care about the $node->nid, but we look for the right
+  // revision ID ($node->vid)
   $result = db_select('nodeapi_example', 'e')
-  ->fields('e', array(
-        'nid',
-        'vid',
-        'rating',
-  ))
+  ->fields('e', array('nid', 'vid', 'rating'))
   ->where('e.vid IN (:vids)', array(':vids' => $vids))
   ->execute();
 
@@ -207,9 +218,9 @@ function nodeapi_example_node_update($node) {
     if ($rating) {
       // node has been rated before.
       db_update('nodeapi_example')
-         ->fields(array('rating' => $node->nodeapi_example_rating))
-         ->condition('vid', $node->vid)
-         ->execute();
+        ->fields(array('rating' => $node->nodeapi_example_rating))
+        ->condition('vid', $node->vid)
+        ->execute();
     }
     else {
       // Node was not previously rated, so insert a new rating in database.
