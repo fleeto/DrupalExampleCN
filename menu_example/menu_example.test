@@ -84,65 +84,9 @@ class MenuExampleTestCase extends DrupalWebTestCase {
     $this->assertResponse(200);
     $this->assertText('This menu entry will not show');
 
-    // Verify that the 'logout' link has been changed to 'salir', using an 
-    // overridden drupalLogout function.
-    $this->drupalLogout();
-  }
+    $this->drupalGet('menu_example/menu_altered_path');
+    $this->assertText('This menu item was created strictly to allow the hook_menu_alter()');
 
-  /**
-   * Log in a user with the internal browser.
-   *
-   * This function overrides default drupalLogin function because the changes
-   * made by this module to the menu entries will make default drupalLogin fail.
-   *
-   * @param $user
-   *   User object representing the user to log in.
-   *
-   * @see drupalCreateUser()
-   */
-  protected function drupalLogin(stdClass $user) {
-    if ($this->loggedInUser) {
-      $this->drupalLogout();
-    }
-
-    $edit = array(
-      'name' => $user->name,
-      'pass' => $user->pass_raw
-    );
-    $this->drupalPost('user', $edit, t('Log in'));
-
-    // menu_example prevents "log out" link from appearing on the page, so the
-    // login function must check other link to verify user has logged in
-    // successfully.
-    $pass = $this->assertLink(t('My account'), 0, t('User %name successfully logged in.', array('%name' => $user->name)), t('User login'));
-
-    if ($pass) {
-      $this->loggedInUser = $user;
-    }
-  }
-
-  /*
-   * Logs a user out of the internal browser, then check the login page to
-   * confirm logout.
-   *
-   * This function overrides default drupalLogout function because the changes
-   * made by this module to the menu entries will make default drupalLogout fail.
-   *
-   * When menu_example module is enabled, logout menu entry is user/salir
-   *
-   */
-  protected function drupalLogout() {
-    // Make a request to the logout page, and redirect to the user page, the
-    // idea being if you were properly logged out you should be seeing a login
-    // screen.
-    $this->drupalGet('user/salir');
-    $this->drupalGet('user');
-    $pass = $this->assertField('name', t('Username field found.'), t('Logout'));
-    $pass = $pass && $this->assertField('pass', t('Password field found.'), t('Logout'));
-
-    if ($pass) {
-      $this->loggedInUser = FALSE;
-    }
   }
 
 }
