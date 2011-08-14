@@ -193,7 +193,7 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
       whether we are in a javascript/AJAX environment or not.
       <br/><br/>
       Try the <a href="!ajax_link">AJAX version</a> and the <a href="!non_ajax_link">simulated-non-AJAX version</a>.
-    ', array('!ajax_link' => url('ajax_example/dynamic_sections'), '!non_ajax_link' => url('ajax_example/dynamic_sections_no_js') )) . '</div>',
+    ', array('!ajax_link' => url('examples/ajax_example/dynamic_sections'), '!non_ajax_link' => url('examples/ajax_example/dynamic_sections_no_js') )) . '</div>',
   );
   $form['question_type_select'] = array(
     '#type' => 'select',
@@ -352,7 +352,7 @@ function ajax_example_wizard($form, &$form_state, $no_js_use = FALSE) {
 
   $form['description'] = array(
     '#markup' => '<div>' . t('This example is a step-by-step wizard. The <a href="!ajax">AJAX version</a> does it without page reloads; the <a href="!multistep">multistep version</a> is the same code but simulates a non-javascript environment, showing it with page reloads.',
-      array('!ajax' => url('ajax_example/wizard'), '!multistep' => url('ajax_example/wizard_no_js')))
+      array('!ajax' => url('examples/ajax_example/wizard'), '!multistep' => url('examples/ajax_example/wizard_no_js')))
     . '</div>',
   );
 

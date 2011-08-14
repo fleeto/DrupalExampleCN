@@ -108,7 +108,7 @@ function ajax_example_menu() {
     'file' => 'ajax_example_graceful_degradation.inc',
   );
   // The  above example as it appears to users with no javascript.
-  $items['ajax_example/dynamic_sections_no_js'] = array(
+  $items['examples/ajax_example/dynamic_sections_no_js'] = array(
     'title' => 'Dynamic Sections w/JS turned off',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ajax_example_dynamic_sections', TRUE),
