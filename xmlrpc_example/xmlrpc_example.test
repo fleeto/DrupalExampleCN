@@ -109,7 +109,7 @@ class XmlrpcExampleTestCase extends DrupalWebTestCase {
    */
   function testXmlrpcExampleAlter() {
     // Enable XML-RPC service altering functionality.
-    $options = array('xmlrpc_example_alter_enabled' => 1);
+    $options = array('xmlrpc_example_alter_enabled' => TRUE);
     $this->drupalPost('examples/xmlrpc/alter', $options, t('Save configuration'));
     $this->assertText(t('The configuration options have been saved'), t('Results are not limited due to methods alteration'));
 

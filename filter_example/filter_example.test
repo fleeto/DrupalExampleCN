@@ -49,8 +49,8 @@ class FilterExampleTestCase extends DrupalWebTestCase {
 
     // Enable both filters in format id 1 (default format)
     $edit = array(
-      'filters[filter_time][status]' => 1,
-      'filters[filter_foo][status]' => 1,
+      'filters[filter_time][status]' => TRUE,
+      'filters[filter_foo][status]' => TRUE,
     );
     $this->drupalPost('admin/config/content/formats/' . $this->filtered_html->format, $edit, t('Save configuration'));
 
@@ -70,7 +70,7 @@ class FilterExampleTestCase extends DrupalWebTestCase {
 
     // Enable foo filter in other format id 2
     $edit = array(
-      'filters[filter_foo][status]' => 1,
+      'filters[filter_foo][status]' => TRUE,
     );
     $this->drupalPost('admin/config/content/formats/' . $this->full_html->format, $edit, t('Save configuration'));
 
