@@ -26,7 +26,7 @@ function filter_example_menu() {
 /**
  * Implements hook_filter_info().
  *
- * Here we define the diferent filters provided by the module. For this example,
+ * Here we define the different filters provided by the module. For this example,
  * time_filter is a very static and simple replacement, but it requires some
  * preparation of the string because of the special html tags < and >. The
  * foo_filter is more complex, including its own settings and inline tips.
@@ -52,16 +52,6 @@ function filter_example_filter_info() {
   return $filters;
 }
 
-/*
- * Foo filter
- *
- * Drupal has several content formats (they are not filters), and in our example
- * the foo replacement can be configured for each one of them, allowing an html
- * or php replacement, so the module includes a settings callback, with options
- * to configure that replacements. Also, a Tips callback will help showing the
- * current replacement for the content type being edited.
- */
-
 /**
  * Simply returns a little bit of information about the example.
  */
@@ -69,11 +59,21 @@ function _filter_example_information() {
   return t(
     "There are two filters in this example. The first (foo filter) just replaces
     'foo' with a configurable replacement. The second replaces the string
-    '<time />' with the current time. To use these filters, go to !link and
+    '&lt;time /&gt;' with the current time. To use these filters, go to !link and
     configure one of the input formats.",
     array('!link' => l("admin/config/content/formats", "admin/config/content/formats"))
   );
 }
+
+/*
+ * Foo filter
+ *
+ * Drupal has several text formats (they are not filters), and in our example
+ * the foo replacement can be configured for each one of them, so the module
+ * includes a settings callback, with options to configure those replacements.
+ * Also, a Tips callback will help showing the current replacement
+ * for the content type being edited.
+ */
 
 /**
  * Settings callback for foo filter
@@ -156,7 +156,7 @@ function _filter_example_filter_time_prepare($text, $filter) {
  * Time filter process callback
  *
  * Now, in the "process" step, we'll search for our escaped time tags and
- * to the real filtering: replace the xml tag with the date.
+ * do the real filtering: replace the xml tag with the date.
  */
 function _filter_example_filter_time_process($text, $filter) {
   return str_replace('[filter-example-time]', '<em>' . format_date(time()) . '</em>', $text);
