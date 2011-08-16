@@ -115,7 +115,17 @@ function field_example_field_formatter_view($entity_type, $entity, $field, $inst
     // This formatter simply outputs the field as text and with a color.
     case 'field_example_simple_text':
       foreach ($items as $delta => $item) {
-        $element[$delta]['#markup'] = '<p style="color: ' . $item['rgb'] . '">' . t('The color code in this field is @code', array('@code' => $item['rgb'])) . '</p>';
+        $element[$delta] = array(
+          // We create a render array to produce the desired markup,
+          // "<p style="color: #hexcolor">The color code ... #hexcolor</p>".
+          // See theme_html_tag().
+          '#type' => 'html_tag',
+          '#tag' => 'p',
+          '#attributes' => array(
+            'style' => 'color: ' . $item['rgb'],
+          ),
+          '#value' => t('The color code in this field is @code', array('@code' => $item['rgb'])),
+        );
       }
       break;
 
@@ -123,8 +133,19 @@ function field_example_field_formatter_view($entity_type, $entity, $field, $inst
     // background color. If there are many fields, the last one will win.
     case 'field_example_color_background':
       foreach ($items as $delta => $item) {
-        drupal_add_css('div.region-content { background-color:' . $item['rgb'] . ';}', array('type' => 'inline') );
-        $element[$delta]['#markup'] = '<p>' . t('The content area color has been changed to @code', array('@code' => $item['rgb'])) . '</p>';
+        $element[$delta] = array(
+          '#type' => 'html_tag',
+          '#tag' => 'p',
+          '#value' => t('The content area color has been changed to @code', array('@code' => $item['rgb'])),
+          '#attached' => array(
+            'css' => array(
+              array(
+                'data' => 'div.region-content { background-color:' . $item['rgb'] . ';}',
+                'type' => 'inline',
+              ),
+            ),
+          ),
+        );
       }
       break;
   }
