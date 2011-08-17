@@ -2,69 +2,97 @@
 
 /**
  * @file
- * This is an example illustrating how to restrict access to nodes based on
- * the node access system. It implements an additional "private" marker for
- * each node. The idea is that only the user (or specially permissioned users)
- * can access a "private" node.
+ * Module file illustrating API-based node access.
+ */
+
+/**
+ * @defgroup node_access_example Example: Node Access
+ * @ingroup examples
+ * @{
+ * Demonstrates node access.
  *
- * The node access system has three layers.
- * - Overall override permissions. User 1 and any user with 'bypass node access'
- *   permission are automatically granted access.
- * - hook_node_access() gives each module the opportunity to approve or deny
- *   access. Any module that returns NODE_ACCESS_DENY from hook_node_access()
- *   will result in denial of access. If no module denies access and one or
- *   more modules allow access, then access is granted.
- * - If no resolution has yet been reached, then the node_access table is used
- *   along with hook_node_grants().
+ * This is an example demonstrating how to grant or deny access to nodes
+ * using the Drupal core API node access system.
  *
- * In order to demonstrate hook_node_access() (see
- * node_example_module_node_access()) to deny delete access to users with an
- * even-numbered uid.
+ * This module will add a 'private' flag for each node, which the node's
+ * author can manage. Nodes marked private can only be viewed, edited,
+ * or deleted by the author. However, not everything is as private as it
+ * seems on the internet, and so we need to implement some ways to allow
+ * other users to manage this 'private' content.
  *
- * In addition, the traditional node rights system is employed to specify
- * which users are allowed to view, edit, or delete "private" content.
+ * We will use the node grant system to specify which users
+ * are allowed to view, edit, or delete 'private' content. We will also
+ * allow a user named 'foobar' to have edit privileges on private content
+ * as well.
  *
- * This puts a single marker on a node: 'private'. The marker is implemented
- * by a custom table which has one row per node simply indicating that the node
- * is private. If the "private" marker is set, other users are denied access.
+ * In addition, we will provide a page which will show some minimal
+ * instructions, and statistics on private nodes on the site.
  *
- * Additional standard permissions are defined which allow users with
+ * We use NodeAPI hooks to put a single marker on a node, called
+ * 'private'. The marker is implemented by a database table which has one
+ * row per node simply indicating that the node is private. If the "private"
+ * marker is set, users other than the owner and privileged users are denied
+ * access.
+ *
+ * Standard permissions are defined which allow users with
  * 'access any private content' or 'edit any private content' to override
- * the node access restrictions.
+ * the 'private' node access restrictions.
  *
- * Additionally, the node author can always view, edit, and delete the node.
- * A separate access realm grants privileges to each node's author.
- *
- * There are two basic building blocks in the node access system.
- * - hook_node_access_records() provides a list of "grants" for each node.
- * - hook_node_grants() provides determines which of those grants
- *   is available for a given user account.
- *
- * Note that current best practice is probably to interoperate with the
- * @link http://drupal.org/project/acl ACL module @endlink rather than directly
- * implementing node access.
- *
- * It's also critical to understand when working with node access rights that
- * normally one would only use one module granting node access. That's the
- * reason that ACL module has come to the fore, as it becomes the central
- * clearing house for granting access. The problem with node acces is that
- * it is a granting system, not a restricting system. As a result, the first
- * module that grants access wins, even though some other node access module
- * might have wanted not to grant access. So there's enormous (potential)
- * ambiguity if one tries to use more than one node access module.
+ * A separate access realm grants privileges to each node's author, so that
+ * they can always view, edit, and delete their own private nodes.
  *
  * The only page provided by this module gives a rundown of how many nodes
  * are marked private, and how many of those are accessible to the current
  * user. This demonstrates the use of the 'node_access' tag in node queries,
- * preventing disclosure of information which should not be shown to a user.
+ * preventing disclosure of information which should not be shown to users
+ * who don't have the proper permissions.
  *
- * See: @link node_access Node Access Rights @endlink and
- * @link http://drupal.org/node/270000 Handbook page on Node Access module @endlink
+ * Most relevant functions:
+ * - node_access_example_permission()
+ * - node_access_example_node_access()
+ * - node_access_example_node_access_records()
+ * - node_access_example_node_grants()
+ *
+ * Drupal's node access system has three layers.
+ * - Overall override permissions. User 1 and any user with 'bypass node
+ *   access' permission are automatically granted access.
+ * - hook_node_access() gives each module the opportunity to approve or deny
+ *   access. Any module that returns NODE_ACCESS_DENY from hook_node_access()
+ *   will result in denial of access. If no module denies access and one or
+ *   more modules allow access, then access is granted. hook_node_access() was
+ *   introduced in Drupal 7.
+ * - If no resolution has yet been reached, then the node_access table is used
+ *   along with hook_node_grants(). (Drupal updates the node_access table when
+ *   nodes are saved, by calling hook_node_access_records().)
+ *
+ * Note that the hook_node_grants()/hook_node_access_records() layer is a
+ * first-grant-wins system, which means a module using it can't deny access to
+ * a node. Contributed modules have been developed to overcome this
+ * shortcoming, with their own APIs, such as
+ * @link http://drupal.org/project/acl ACL. @endlink ACL, in fact, has emerged
+ * as the more-or-less standard solution for fine-grained access control, and
+ * you really should be reading up on it. Many modules use it, and if your
+ * module implements another node access system, there could be chaos.
+ *
+ * A list of the many node access modules (and differing APIs) is here:
+ * @link http://drupal.org/node/270000 Overview of Node Access Modules. @endlink
+ * Note that this is Drupal 6 documentation, linked here so the reader can
+ * understand the historical reasons for using contributed node access modules
+ * such as ACL.
+ *
+ * @see node_access()
+ * @see hook_node_access()
+ * @see hook_node_grants()
+ * @see hook_node_access_records()
  */
 
-
 /**
- * Implements hook_menu() to provide a description.
+ * Implements hook_menu().
+ *
+ * This path provides a page, with some instructions for the user, and some
+ * statistics about node access changes implemented by this module.
+ *
+ * @see hook_menu()
  */
 function node_access_example_menu() {
   $items['examples/node_access'] = array(
@@ -76,12 +104,18 @@ function node_access_example_menu() {
 }
 
 /**
+ * Our hook_menu() page callback function.
+ *
  * Information for the user about what nodes are marked private on the system
  * and which of those the user has access to.
  *
  * The queries showing what is accessible to the current user demonstrate the
  * use of the 'node_access' tag to make sure that we don't show inappropriate
  * information to unprivileged users.
+ *
+ * @return Page content.
+ *
+ * @see page_example
  */
 function node_access_example_private_node_listing() {
   $content = '<div>' . t('This example shows how a module can use the Drupal node access system to allow access to specific nodes. You will need to look at the code and then experiment with it by creating nodes, marking them private, and accessing them as various users.') . '</div>';
@@ -131,20 +165,25 @@ function node_access_example_private_node_listing() {
   }
   $content .= '<div>' . t('Accessible rows:') . theme('table', array('header' => array('nid', 'title', 'uid', 'username'), 'rows' => $rows)) . '</div>';
 
-  return $content;
+  return array('#markup' => $content);
 }
-
 
 /**
  * Implements hook_permission().
  *
- * Users with 'access any private content' have global access to content marked
- * private by other users. 'edit any private content' allows global edit
- * privileges, basically overriding the node access system.
+ * We create two permissions, which we can use as a base for our grant/deny
+ * decision:
+ *
+ * - 'access any private content' allows global access to content marked
+ *   private by other users.
+ * - 'edit any private content' allows global edit
+ *   privileges, basically overriding the node access system.
  *
  * Note that the 'edit any * content' and 'delete any * content' permissions
  * will allow edit or delete permissions to the holder, regardless of what
  * this module does.
+ *
+ * @see hook_permissions()
  */
 function node_access_example_permission() {
   return array(
@@ -162,8 +201,13 @@ function node_access_example_permission() {
 /**
  * Implements hook_node_access().
  *
- *  Allows view and edit access to private nodes where the account requesting
- *  access has the username 'foobar'.
+ * Allows view and edit access to private nodes, when the account requesting
+ * access has the username 'foobar'.
+ *
+ * hook_node_access() was introduced in Drupal 7. We use it here to demonstrate
+ * allowing certain privileges to an arbitrary user.
+ *
+ * @see hook_node_access()
  */
 function node_access_example_node_access($node, $op, $account) {
   // If $node is a string, the node has not yet been created. We don't care
@@ -179,18 +223,46 @@ function node_access_example_node_access($node, $op, $account) {
 }
 
 /**
+ * Here we define a constant for our node access grant ID, for the
+ * node_access_example_view and node_access_example_edit realms. This ID could
+ * be any integer, but here we choose 23, because it is this author's favorite
+ * number.
+ */
+define('NODE_ACCESS_EXAMPLE_GRANT_ALL', 23);
+
+/**
  * Implements hook_node_grants().
  *
- * Tell the node access system what grant IDs the account belongs to for each
- * realm.
+ * Tell the node access system what grant IDs the user belongs to for each
+ * realm, based on the operation being performed.
  *
- * Here we are providing two realms:
- * - The node_access_example_author realm grants access to a user for their
- *   own content (nodes that they created). The user's grant ID is their UID.
- * - The node_access_example realm grants override access to users with specific
- *   traditional permissions so that they can edit others content. This has just
- *   one grant id, 1: the user is either a member or not based on the
- *   permissions 'access any private content' and 'edit any private content'.
+ * When the user tries to perform an operation on the node, Drupal calls
+ * hook_node_grants() to determine grant ID and realm for the user. Drupal
+ * looks up the grant ID and realm for the node, and compares them to the
+ * grant ID and realm provided here. If grant ID and realm match for both
+ * user and node, then the operation is allowed.
+ *
+ * Grant ID and realm are both determined per node, by your module in
+ * hook_node_access_records().
+ *
+ * In our example, we've created three access realms: One for authorship, and
+ * two that track with the permission system.
+ *
+ * We always add node_access_example_author to the list of grants, with a grant
+ * ID equal to their user ID. We do this because in our model, authorship
+ * always gives you permission to edit or delete your nodes, even if they're
+ * marked private.
+ *
+ * Then we compare the user's permissions to the operation to determine whether
+ * the user falls into the other two realms: node_access_example_view, and/or
+ * node_access_example_edit. If the user has the 'access any private content'
+ * permission we defined in hook_permission(), they're declared as belonging to
+ * the node_access_example_realm. Similarly, if they have the 'edit any private
+ * content' permission, we add the node_access_example_edit realm to the list
+ * of grants they have.
+ *
+ * @see node_access_example_permission()
+ * @see node_access_example_node_access_records()
  */
 function node_access_example_node_grants($account, $op) {
   // First grant a grant to the author for own content.
@@ -199,11 +271,11 @@ function node_access_example_node_grants($account, $op) {
   // Then, if "access any private content" is allowed to the account,
   // grant view, update, or delete as necessary.
   if ($op == 'view' && user_access('access any private content', $account)) {
-    $grants['node_access_example_view'] = array(1);
+    $grants['node_access_example_view'] = array(NODE_ACCESS_EXAMPLE_GRANT_ALL);
   }
 
   if (($op == 'update' || $op == 'delete') && user_access('edit any private content', $account)) {
-    $grants['node_access_example_edit'] = array(1);
+    $grants['node_access_example_edit'] = array(NODE_ACCESS_EXAMPLE_GRANT_ALL);
   }
 
   return $grants;
@@ -214,9 +286,37 @@ function node_access_example_node_grants($account, $op) {
  *
  * All node access modules must implement this hook. If the module is
  * interested in the privacy of the node passed in, return a list
- * of node access values for each grant ID we offer. Since this
- * example module only offers 1 grant ID, we will only ever be
- * returning one record.
+ * of node access values for each grant ID we offer.
+ *
+ * In this example, for each node which is marked 'private,' we define
+ * three realms:
+ *
+ * The first and second are realms are 'node_access_example_view' and
+ * 'node_access_example_edit,' which have a single grant ID, 1. The
+ * user is either a member of these realms or not, depending upon the
+ * operation and the access permission set.
+ *
+ * The third is node_access_example_author. It gives the node
+ * author special privileges. node_access_example_author has one grant ID for
+ * every UID, and each user is automatically a member of the group where
+ * GID == UID. This has the effect of giving each user their own grant ID
+ * for nodes they authored, within this realm.
+ *
+ * Drupal calls this hook when a node is saved, or when access permissions
+ * change in order to rebuild the node access database table(s).
+ *
+ * The array you return will define the realm and the grant ID for the
+ * given node. This is stored in the {node_access} table for subsequent
+ * comparison against the user's realm and grant IDs, which you'll
+ * supply in hook_node_grants().
+ *
+ * Realm names and grant IDs are arbitrary. Official drupal naming
+ * conventions do not cover access realms, but since all realms are
+ * stored in the same database table, it's probably a good idea to
+ * use descriptive names which follow the module name, such as
+ * 'mymodule_realmname'.
+ *
+ * @see node_access_example_node_grants()
  */
 function node_access_example_node_access_records($node) {
   // We only care about the node if it's been marked private. If not, it is
@@ -225,7 +325,7 @@ function node_access_example_node_access_records($node) {
     $grants = array();
     $grants[] = array(
       'realm' => 'node_access_example_view',
-      'gid' => 1,
+      'gid' => NODE_ACCESS_EXAMPLE_GRANT_ALL,
       'grant_view' => 1,
       'grant_update' => 0,
       'grant_delete' => 0,
@@ -233,15 +333,15 @@ function node_access_example_node_access_records($node) {
     );
     $grants[] = array(
       'realm' => 'node_access_example_edit',
-      'gid' => 1,
+      'gid' => NODE_ACCESS_EXAMPLE_GRANT_ALL,
       'grant_view' => 1,
       'grant_update' => 1,
       'grant_delete' => 1,
       'priority' => 0,
     );
 
-    // For the example_author realm, the GID is equivalent to a UID, which
-    // means there are many many groups of just 1 user.
+    // For the node_access_example_author realm, the grant ID (gid) is
+    // equivalent to the node author's user ID (UID).
     $grants[] = array(
       'realm' => 'node_access_example_author',
       'gid' => $node->uid,
@@ -252,13 +352,14 @@ function node_access_example_node_access_records($node) {
     );
     return $grants;
   }
+  // Return nothing if the node has not been marked private.
 }
 
 /**
  * Implements hook_form_alter().
  *
  * This module adds a simple checkbox to the node form labeled private. If the
- * checkbox is labelled, only the node author and users with
+ * checkbox is checked, only the node author and users with
  * 'access any private content' privileges may see it.
  */
 function node_access_example_form_alter(&$form, $form_state) {
@@ -282,8 +383,10 @@ function node_access_example_form_alter(&$form, $form_state) {
 
 /**
  * Implements hook_node_load().
+ *
+ * Gather and add the private setting for the nodes Drupal is loading.
+ * @see nodeapi_example.module
  */
-
 function node_access_example_node_load($nodes, $types) {
   $result = db_query('SELECT nid, private FROM {node_access_example} WHERE nid IN(:nids)', array(':nids' => array_keys($nodes)));
   foreach ($result as $record) {
@@ -295,8 +398,8 @@ function node_access_example_node_load($nodes, $types) {
  * Implements hook_node_delete().
  *
  * Delete the node_access_example record when the node is deleted.
+ * @see nodeapi_example.module
  */
-
 function node_access_example_node_delete($node) {
   db_delete('node_access_example')->condition('nid', $node->nid)->execute();
 }
@@ -305,6 +408,7 @@ function node_access_example_node_delete($node) {
  * Implements hook_node_insert().
  *
  * Insert a new access record when a node is created.
+ * @see nodeapi_example.module
  */
 function node_access_example_node_insert($node) {
   if (isset($node->private)) {
@@ -314,10 +418,11 @@ function node_access_example_node_insert($node) {
 }
 
 /**
- * Implements hook_nodeapi_update().
+ * Implements hook_node_update().
  *
  * If the record in the node_access_example table already exists, we must
  * update it. If it doesn't exist, we create it.
+ * @see nodeapi_example.module
  */
 function node_access_example_node_update($node) {
   // Find out if there is already a node_access_example record.
@@ -340,3 +445,7 @@ function node_access_example_node_update($node) {
     drupal_set_message(t('Inserted new node_access nid=@nid, private=@private', array('@nid' => $node->nid, '@private' => $node->private)));
   }
 }
+
+/**
+ * @} End of "defgroup node_access_example".
+ */
