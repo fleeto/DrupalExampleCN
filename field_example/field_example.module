@@ -204,15 +204,14 @@ function field_example_field_widget_info() {
  */
 function field_example_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
   $value = isset($items[$delta]['rgb']) ? $items[$delta]['rgb'] : '';
-  $element += array(
-    '#delta' => $delta,
-  );
-  $element['rgb'] = array();
+
+  $widget = $element;
+  $widget['#delta'] = $delta;
 
   switch ($instance['widget']['type']) {
 
     case 'field_example_colorpicker':
-      $element['rgb'] += array(
+      $widget += array(
         '#suffix' => '<div class="field-example-colorpicker"></div>',
         '#attributes' => array('class' => array('edit-field-example-colorpicker')),
         '#attached' => array(
@@ -228,7 +227,7 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
     // DELIBERATE fall-through: From here on the field_example_text and
     // field_example_colorpicker are exactly the same.
     case 'field_example_text':
-      $element['rgb'] += array(
+      $widget += array(
         '#type' => 'textfield',
         '#default_value' => $value,
         // Allow a slightly larger size that the field length to allow for some
@@ -240,22 +239,23 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
 
     case 'field_example_3text':
       // Convert rgb value into r, g, and b for #default_value.
-      if (isset($items[$delta]['rgb'])) {
-        preg_match_all('@..@', substr($items[$delta]['rgb'], 1), $match);
+      if (!empty($value)) {
+        preg_match_all('@..@', substr($value, 1), $match);
       }
       else {
         $match = array(array());
       }
 
-      // A fieldset to hold the three text fields.
-      $element += array(
+      // Make this a fieldset with the three text fields.
+      $widget += array(
         '#type' => 'fieldset',
         '#element_validate' => array('field_example_3text_validate'),
 
-        // The following is set so that the validation function will be able
+        // #delta is set so that the validation function will be able
         // to access external value information which otherwise would be
         // unavailable.
         '#delta' => $delta,
+
         '#attached' => array(
           'css' => array(drupal_get_path('module', 'field_example') . '/field_example.css'),
         ),
@@ -263,7 +263,7 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
 
       // Create a textfield for saturation values for Red, Green, and Blue.
       foreach (array('r' => t('Red'), 'g' => t('Green'), 'b' => t('Blue')) as $key => $title) {
-        $element[$key] = array(
+        $widget[$key] = array(
           '#type' => 'textfield',
           '#title' => $title,
           '#size' => 2,
@@ -275,6 +275,8 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
       break;
 
   }
+
+  $element['rgb'] = $widget;
   return $element;
 }
 
@@ -287,23 +289,23 @@ function field_example_3text_validate($element, &$form_state) {
   $delta = $element['#delta']; // TODO: Isn't there a better way to find out which element?
   $field = $form_state['field'][$element['#field_name']][$element['#language']]['field'];
   $field_name = $field['field_name'];
-  if (isset($form_state['values'][$field_name][$element['#language']][$delta])) {
-    $values = $form_state['values'][$field_name][$element['#language']][$delta];
+  if (isset($form_state['values'][$field_name][$element['#language']][$delta]['rgb'])) {
+    $values = $form_state['values'][$field_name][$element['#language']][$delta]['rgb'];
     foreach (array('r', 'g', 'b') as $colorfield) {
-      $val = hexdec($values[$colorfield]);
+      $colorfield_value = hexdec($values[$colorfield]);
       // If they left any empty, we'll set the value empty and quit.
       if (strlen($values[$colorfield]) == 0) {
-        form_set_value($element, array('rgb' => NULL), $form_state);
+        form_set_value($element, '', $form_state);
         return;
       }
       // If they gave us anything that's not hex, reject it.
-      if ( (strlen($values[$colorfield]) != 2) || $val < 0 || $val > 255) {
+      if ( (strlen($values[$colorfield]) != 2) || $colorfield_value < 0 || $colorfield_value > 255) {
         form_error($element[$colorfield], t("Saturation value must be a 2-digit hexadecimal value between 00 and ff."));
       }
     }
 
     $value = sprintf('#%02s%02s%02s', $values['r'], $values['g'], $values['b']);
-    form_set_value($element, array('rgb' => $value), $form_state);
+    form_set_value($element, $value, $form_state);
   }
 }
 
