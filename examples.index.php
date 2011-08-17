@@ -21,6 +21,7 @@
  * - @link node_access_example.module Define custom node access fules using node access hooks @endlink
  * - @link node_example.module Creating custom node types, with fields @endlink
  * - @link page_example.module Creating a custom page @endlink
+ * - @link pager_example.module Using a table with a pager @endlink
  * - @link queue_example.module Using the Queue API @endlink
  * - @link render_example.module Demonstrates the render API @endlink
  * - @link simpletest_example.module Writing tests for Drupal @endlink
