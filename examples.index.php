@@ -8,6 +8,7 @@
  * - @link ajax_example.module Using AJAX forms @endlink
  * - @link batch_example.module Using the batch API @endlink
  * - @link block_example.module Defining blocks @endlink
+ * - @link contextual_links_example.module Defining contextual links @endlink
  * - @link dbtng_example.module Database examples (DBTNG) @endlink
  * - @link email_example.module Sending e-mail @endlink
  * - @link field_example.module Defining fields in the field API @endlink
