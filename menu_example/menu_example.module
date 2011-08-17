@@ -7,18 +7,23 @@
  */
 
 /**
- * Implementatation of hook_menu().
+ * Implements hook_menu().
  */
 function menu_example_menu() {
 
-  // The simplest kind of menu: A simple call to a function with a menu entry.
-  // The key of the menu item (menu_example/simplest) is the path that defines
-  // the menu router entry.
+  // A simple example which defines a page callback and a menu entry.
+
+  // Menu items are defined by placing them in an $items array. The array key
+  // (in this case 'menu_example') is the path that defines the menu router
+  // entry, so the page will be accessible from the URL
+  // example.com/menu_example.
   $items['menu_example'] = array(
-    // The menu type is not required, as we're using the default.
+    // We are using the default menu type, so this can be omitted.
     // 'type' => MENU_NORMAL_ITEM,
 
-    // The title - do NOT use t() as t() is called automatically.
+    // The menu title. Do NOT use t() which is called by default. You can
+    // override the use of t() by defining a 'title callback'. This is explained
+    // in the 'menu_example/title_callbacks' example below.
     'title' => 'Menu Example',
 
     // Description (hover flyover for menu link). Does NOT use t(), which is
@@ -32,8 +37,10 @@ function menu_example_menu() {
     // content for our page.
     'page arguments' => array(t('This page is displayed by the simplest (and base) menu example. Note that the title of the page is the same as the link title. You can also <a href="!link">visit a similar page with no menu link</a>. Also, note that there is a hook_menu_alter() example that has changed the path of one of the menu items.', array('!link' => url('menu_example/path_only')))),
 
-    // This is to be accessible to all users, so 'access callback' can be set
-    // to TRUE, meaning that we should bypass all access checks.
+    // If the page is meant to be accessible to all users, you can set 'access
+    // callback' to TRUE. This bypasses all access checks. For an explanation on
+    // how to use the permissions system to restrict access for certain users,
+    // see the example 'menu_example/permissioned/controlled' below.
     'access callback' => TRUE,
 
     // If the page callback is located in another file, specify it here and
