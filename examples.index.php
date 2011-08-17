@@ -25,6 +25,7 @@
  * - @link queue_example.module Using the Queue API @endlink
  * - @link render_example.module Demonstrates the render API @endlink
  * - @link simpletest_example.module Writing tests for Drupal @endlink
+ * - @link tablesort__example.module Use a render array to present a table with automatic sorting @endlink
  * - @link token_example.module Using tokens @endlink
  * - @link trigger_example.module Implementing triggers and actions @endlink
  * - @link vertical_tabs_example.module Using vertical tabs @endlink
