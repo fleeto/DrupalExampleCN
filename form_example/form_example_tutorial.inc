@@ -26,12 +26,14 @@
  * @see form_example_tutorial_9()
  * @see form_example_tutorial_10()
  *
+ * @ingroup form_example
  */
 function form_example_tutorial() {
   return t('This is a set of nine form tutorials tied to the <a href="http://drupal.org/node/262422">Drupal handbook</a>.');
 }
 
 //////////////// Tutorial Example 1 //////////////////////
+
 /**
  * This first form function is from the @link http://drupal.org/node/717722 Form Tutorial handbook page @endlink
  *
@@ -77,7 +79,8 @@ function form_example_tutorial_2($form, &$form_state) {
     '#title' => t('Name'),
   );
 
-  // Adds a simple submit button that refreshes the form and clears its contents -- this is the default behavior for forms.
+  // Adds a simple submit button that refreshes the form and clears its
+  // contents. This is the default behavior for forms.
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => 'Submit',
@@ -225,7 +228,6 @@ function form_example_tutorial_5($form, &$form_state) {
  *
  * From http://drupal.org/node/717736
  * @see form_example_tutorial_6_validate()
- *
  */
 function form_example_tutorial_6($form, &$form_state) {
   $form['description'] = array(
@@ -284,7 +286,6 @@ function form_example_tutorial_6($form, &$form_state) {
  * in $form['#validate'].
  *
  * @see form_example_tutorial_6()
- *
  */
 function form_example_tutorial_6_validate($form, &$form_state) {
   $year_of_birth = $form_state['values']['year_of_birth'];
@@ -292,7 +293,6 @@ function form_example_tutorial_6_validate($form, &$form_state) {
     form_set_error('year_of_birth', t('Enter a year between 1900 and 2000.'));
   }
 }
-
 
 
 //////////////// Tutorial Example 7 //////////////////////
@@ -306,7 +306,6 @@ function form_example_tutorial_6_validate($form, &$form_state) {
  * @see form_example_tutorial_7_validate()
  * @see form_example_tutorial_7_submit()
  * @ingroup form_example
- *
  */
 function form_example_tutorial_7($form, &$form_state) {
   $form['description'] = array(
@@ -348,7 +347,6 @@ function form_example_tutorial_7($form, &$form_state) {
 
 /**
  * Validation function for form_example_tutorial_7().
- *
  */
 function form_example_tutorial_7_validate($form, &$form_state) {
   $year_of_birth = $form_state['values']['year_of_birth'];
@@ -470,7 +468,6 @@ function form_example_tutorial_8_page_two($form, &$form_state) {
 
 /**
  * Validate handler for the next button on first page.
- *
  */
 function form_example_tutorial_8_next_validate($form, &$form_state) {
   $year_of_birth = $form_state['values']['year_of_birth'];
@@ -484,7 +481,6 @@ function form_example_tutorial_8_next_validate($form, &$form_state) {
  *
  * Capture the values from page one and store them away so they can be used
  * at final submit time.
- *
  */
 function form_example_tutorial_8_next_submit($form, &$form_state) {
 
@@ -553,7 +549,6 @@ function form_example_tutorial_8_page_two_submit($form, &$form_state) {
  * @see form_example_tutorial_9_submit()
  * @see form_example_tutorial_9_validate()
  * @ingroup form_example
- *
  */
 function form_example_tutorial_9($form, &$form_state) {
 
@@ -694,7 +689,6 @@ function form_example_tutorial_9_submit($form, &$form_state) {
  * @see form_example_tutorial_10_submit()
  * @see form_example_tutorial_10_validate()
  * @ingroup form_example
- *
  */
 function form_example_tutorial_10($form_state) {
   // enctype="multipart/form-data" required by browsers to handle files.

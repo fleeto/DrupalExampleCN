@@ -6,7 +6,8 @@
  */
 
 /**
- * @defgroup ajax_degradation_examples AJAX Degradation Examples
+ * @defgroup ajax_degradation_example Example: AJAX Graceful Degradation
+ * @ingroup examples
  * @{
  * These examples show AJAX with graceful degradation when Javascript is not
  * available.
@@ -14,13 +15,7 @@
  * In each of these the key idea is that the form is rebuilt different ways
  * depending on form input. In order to accomplish that, the formbuilder function
  * is in charge of almost all logic.
- *
- * @see ajax
- *
- * @}
  */
-
-
 
 /**
  * A form with a dropdown whose options are dependent on a
@@ -39,9 +34,6 @@
  * form as if Javascript were not enabled. ajax_example_menu() provides two
  * ways to call this form, one normal ($no_js_use = FALSE) and one simulating
  * Javascript disabled ($no_js_use = TRUE).
- *
- * @ingroup ajax_examples
- * @ingroup ajax_degradation_examples
  */
 function ajax_example_dependent_dropdown_degrades($form, &$form_state, $no_js_use = FALSE) {
   // Get the list of options to populate the first dropdown.
@@ -147,9 +139,10 @@ function ajax_example_dependent_dropdown_degrades_submit($form, &$form_state) {
 }
 
 /**
- * Selects just the second dropdown to be returned for re-rendering
+ * Selects just the second dropdown to be returned for re-rendering.
  *
- * @return renderable array (the second dropdown)
+ * @return
+ *   Renderable array (the second dropdown).
  */
 function ajax_example_dependent_dropdown_degrades_first_callback($form, $form_state) {
   return $form['dropdown_second_fieldset']['dropdown_second'];
@@ -166,11 +159,7 @@ function ajax_example_dependent_dropdown_degrades_first_callback($form, $form_st
  *
  * The third $no_js_use argument is strictly for demonstrating operation
  * without javascript, without making the user/developer turn off javascript.
- *
- * @ingroup ajax_examples
- * @ingroup ajax_degradation_examples
  */
-
 function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) {
 
   // Attach the CSS and JS we need to show this with and without javascript.
@@ -341,10 +330,6 @@ function ajax_example_dynamic_sections_select_callback($form, $form_state) {
  *   Used for this demonstration only. If true means that the form should be
  *   built using a simulated no-javascript approach (ajax.js will not be
  *   loaded.)
- *
- * @ingroup ajax_examples
- * @ingroup ajax_degradation_examples
- *
  */
 function ajax_example_wizard($form, &$form_state, $no_js_use = FALSE) {
 
@@ -462,7 +447,6 @@ function ajax_example_wizard_callback($form, $form_state) {
  * In AJAX this is only submitted when the final submit button is clicked,
  * but in the non-javascript situation, it is submitted with every
  * button click.
- *
  */
 function ajax_example_wizard_submit($form, &$form_state) {
 
@@ -495,7 +479,7 @@ function ajax_example_wizard_submit($form, &$form_state) {
     foreach ($form_state['storage']['values'] as $step => $values) {
       $value_message .= "$step: ";
       foreach ($values as $key => $value) {
-       $value_message .= "$key=$value, ";
+        $value_message .= "$key=$value, ";
       }
     }
     drupal_set_message($value_message);
@@ -523,11 +507,7 @@ function ajax_example_wizard_submit($form, &$form_state) {
  * The $no_js_use argument is simply for demonstration: When set, it prevents
  * '#ajax' from being set, thus making the example behave as if javascript
  * were disabled in the browser.
- *
- * @ingroup ajax_examples
- * @ingroup ajax_degradation_examples
  */
-
 function ajax_example_add_more($form, &$form_state, $no_js_use = FALSE) {
   $form['description'] = array(
     '#markup' => '<div>' . t('This example shows an add-more and a remove-last button. The <a href="!ajax">AJAX version</a> does it without page reloads; the <a href="!multistep">non-js version</a> is the same code but simulates a non-javascript environment, showing it with page reloads.',
@@ -603,7 +583,7 @@ function ajax_example_add_more($form, &$form_state, $no_js_use = FALSE) {
 /**
  * Callback for both ajax-enabled buttons.
  *
- * This simply selects and returns the fieldset with the names in it.
+ * Selects and returns the fieldset with the names in it.
  */
 function ajax_example_add_more_callback($form, $form_state) {
   return $form['names_fieldset'];
@@ -612,7 +592,7 @@ function ajax_example_add_more_callback($form, $form_state) {
 /**
  * Submit handler for the "add-one-more" button.
  *
- * It just increments the max counter and causes a rebuild.
+ * Increments the max counter and causes a rebuild.
  */
 function ajax_example_add_more_add_one($form, &$form_state) {
   $form_state['num_names']++;
@@ -641,3 +621,6 @@ function ajax_example_add_more_submit($form, &$form_state) {
     array('@names' => implode(', ', $form_state['values']['names_fieldset']['name'])) );
   drupal_set_message($output);
 }
+/**
+ * @} End of "defgroup ajax_degradation_example".
+ */

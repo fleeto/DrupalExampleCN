@@ -2,8 +2,18 @@
 
 /**
  * @file
- * Demonstrates uses of the Menu APIs in Drupal, including hook_menu(),
- * hook_menu_alter(), and hook_menu_link_alter().
+ * Module file for menu_example.
+ */
+
+/**
+ * @defgroup menu_example Example: Menu
+ * @ingroup examples
+ * @{
+ * Demonstrates uses of the Menu APIs in Drupal.
+ *
+ * @see hook_menu()
+ * @see hook_menu_alter()
+ * @see hook_menu_link_alter()
  */
 
 /**
@@ -446,7 +456,7 @@ function menu_example_menu_link_alter(&$item, $menu) {
 }
 
 /**
- * Load an item based on its $id.
+ * Loads an item based on its $id.
  *
  * In this case we're just creating a more extensive string. In a real example
  * we would load or create some type of object.
@@ -481,3 +491,6 @@ function menu_example_arg_optional_to_arg($arg) {
   // If our argument is not provided, give a default of 99.
   return (empty($arg) || $arg == '%') ? 99 : $arg;
 }
+/**
+ * @} End of "defgroup menu_example".
+ */

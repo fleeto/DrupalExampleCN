@@ -6,7 +6,8 @@
  */
 
 /**
- * @defgroup ajax_examples AJAX Examples
+ * @defgroup ajax_example Example: AJAX
+ * @ingroup examples
  * @{
  * These examples show basic AJAX concepts.
  *
@@ -15,16 +16,14 @@
  * @link http://drupal.org/node/752056 AJAX Forms handbook page @endlink.
  *
  * The several examples here demonstrate basic AJAX usage.
- * @}
-*/
+ */
 
 /**
  * Implements hook_menu().
  *
  * Sets up calls to drupal_get_form() for all our example cases.
  *
- * See @link menu_example.module Menu Example @endlink for more details on
- * hook_menu().
+ * @see menu_example.module for more details on hook_menu().
  */
 function ajax_example_menu() {
   $items = array();
@@ -202,11 +201,6 @@ function ajax_example_intro() {
   $markup = t('The AJAX example module provides many examples of AJAX including forms, links, and AJAX commands.');
   return $markup;
 }
-
-/**
- * @ingroup ajax_examples
- * @{
- */
 
 /**
  * Simple form whose ajax-enabled 'changethis' member causes a text change
@@ -528,7 +522,8 @@ function _ajax_example_get_first_dropdown_options() {
  * Helper function to populate the second dropdown. This would normally be
  * pulling data from the database.
  *
- * @param key. This will determine which set of options is returned.
+ * @param $key
+ *   This will determine which set of options is returned.
  *
  * @return array of options
  */
@@ -546,4 +541,6 @@ function _ajax_example_get_second_dropdown_options($key = '') {
     return array();
   }
 }
-
+/**
+ * @} End of "defgroup ajax_example".
+ */

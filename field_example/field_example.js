@@ -4,7 +4,7 @@
  */
 
 /**
- * Provide a farbtastic colorpicker for the fancier widget.
+ * Provides a farbtastic colorpicker for the fancier widget.
  */
 (function ($) {
   Drupal.behaviors.field_example_colorpicker = {

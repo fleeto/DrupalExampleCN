@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Simpletest case for email_example module.
@@ -95,4 +94,3 @@ class EmailExampleTestCase extends DrupalWebTestCase {
     );
   }
 }
-

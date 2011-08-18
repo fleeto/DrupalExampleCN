@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Tests for Field Example.
@@ -42,7 +41,6 @@ class FieldExampleTest extends DrupalWebTestCase {
 
     // Create the content type.
     $this->clickLink(t('Add content type'));
-
 
     $edit = array(
       'name' => $content_type_machine,

@@ -2,9 +2,19 @@
 
 /**
  * @file
- * Shows how to use the vertical tabs functionality provided by Drupal 7. This
- * example does not cover how to save / load custom setting, and only deals with
- * elements visibility.
+ * Module file for vertical_tabs_example module.
+ */
+
+/**
+ * @defgroup vertical_tabs_example Example: Vertical Tabs
+ * @ingroup examples
+ * @{
+ * Demonstrates the vertical tabs functionality provided by Drupal 7.
+ *
+ * This example does not cover how to save / load custom setting, and only
+ * deals with elements visibility.
+ *
+ * @see vertical_tabs_example.js
  */
 
 /**
@@ -86,3 +96,6 @@ function vertical_tabs_example_form_alter(&$form, $form_state, $form_id) {
 function _vertical_tabs_example_explanation() {
   return t("The Vertical Tabs Example shows how a custom module can best support vertical tabs. To see the effects of this module, look at the <a href='!node_add'>node/add</a> form", array('!node_add' => url('node/add')));
 }
+/**
+ * @} End of "defgroup vertical_tabs_example".
+ */

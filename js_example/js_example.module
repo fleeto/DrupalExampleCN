@@ -2,7 +2,14 @@
 
 /**
  * @file
- * An example module showing how to use some of the new JavaScript features in Drupal 7.
+ * Examples showing how to use some of the new JavaScript features in Drupal 7.
+ */
+
+/**
+ * @defgroup js_example Example: JavaScript
+ * @ingroup examples
+ * @{
+ * Examples using Drupal 7's built-in JavaScript.
  */
 
 /**
@@ -35,11 +42,13 @@ function js_example_menu() {
   return $items;
 }
 
-
+/**
+ * js_example_weights implementation.
+ */
 function js_example_js_weights() {
-  // add some css to show which line is output by which script
+  // Add some css to show which line is output by which script
   drupal_add_css(drupal_get_path('module', 'js_example') . '/css/jsweights.css');
-  // 
+  //
   $weights = array(
     'red' => 100,
     'blue' => 23,
@@ -59,6 +68,9 @@ function js_example_js_weights() {
   return $output;
 }
 
+/**
+ * js_example_accordion implementation.
+ */
 function js_example_accordion() {
   $title = t('Click sections to expand or collapse:');
   $build['myelement'] = array(

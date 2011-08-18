@@ -2,37 +2,49 @@
 
 /**
  * @file
- * This is an example outlining how a module can be used to define a new
- * node type.  In Drupal 7 we move most of what was once needed in this file
- * to the node_example.install file so that it can be managed efficiently.
+ * Module file for Node Example module.
  *
- * Our example node type will allow users to specify multiple "colors",
- * a "quantity" and an "image" for their nodes; some kind of rudimentary
- * inventory-tracking system, perhaps?
- *
- * In previous versions of Drupal, "teaser" and "page" were node view modes.  In
- * Drupal 7 we can define custom view modes to let the node know how it should
- * return it's data.  This module declares a custom view mode called
- * "example_node_list".
- *
- * We no longer need an extra database table to store this content type's
- * information.
- *
- * Most node types that provide fields do not require any custom code for
- * the fields, as the fields system provides storage and access.
- *
- * See @link http://drupal.org/node/707832 Field API Tutorial @endlink
- *
- * See @link http://drupal.org/node/443536 Field API Handbook Page @endlink
- *
- * See @link field Field API documentation @endlink
- *
- * See @link field_example.install field_example.install @endlink
- *
- * Remember that most node types do not require any custom code, as one
- * simply creates them using the fields UI.
+ * Part of the Examples for Developers project.
  */
 
+/**
+ * @defgroup node_example Example: Node
+ * @ingroup examples
+ * @{
+ * Example defining a node type in code.
+ *
+ * This is an example outlining how a module can be used to define a new
+ * node type. Our example node type will allow users to specify multiple
+ * "colors", a "quantity" and an "image" for their nodes; some kind of
+ * rudimentary inventory-tracking system, perhaps?
+ *
+ * The basic pattern for defining a node type is to tell Drupal about the
+ * node's field types, and view modes. Drupal will then take over and manage
+ * the storage for this node type. This differs from Drupal 6, where we
+ * would have to handle all the database storage ourselves in the module.
+ *
+ * Remember that most node types do not require any custom code, as one
+ * simply creates them using the Drupal user interface. Creating a node like
+ * this in code is a special case.
+ *
+ * Drupal 7 has us defining most of our node structure in arrays,
+ * and passing those to node_type_save(). We use hook_install() as
+ * a convenient place to define these types, and hook_uninstall()
+ * as a convenient place to not only uninstall the data contained
+ * in these nodes, but also remove the node types from Drupal's
+ * knowledge. This means that most of the code to define a new node type
+ * would be in the module's .install file.
+ *
+ * In previous versions of Drupal, "teaser" and "page" were node view modes.
+ * In Drupal 7 we can define custom view modes to let the node know how it
+ * should return it's data.  This module declares a custom view mode called
+ * "example_node_list".
+ *
+ * @see @link http://drupal.org/node/707832 Field API Tutorial @endlink
+ * @see @link http://drupal.org/node/443536 Field API Handbook Page @endlink
+ * @see @link field Field API documentation @endlink
+ * @see field_example.module
+ */
 
 /**
  * Implements hook_menu().
@@ -53,8 +65,10 @@ function node_example_menu() {
  * Custom callback that builds our content and returns it to the browser.
  *
  * @return
- *   a build array
+ *   A build array.
  *
+ * @see node_load
+ * @see node_view
  */
 function node_example_page() {
   $build = array();
@@ -68,8 +82,6 @@ function node_example_page() {
 
   // Loop through each of our node_example nodes and instruct node_view
   // to use our custom "example_node_list" view.
-  // http://api.drupal.org/api/function/node_load/7
-  // http://api.drupal.org/api/function/node_view/7
   foreach ($result as $row) {
     $node = node_load($row->nid);
     $build['node_list'][]= node_view($node, 'example_node_list');
@@ -108,8 +120,8 @@ function node_example_field_formatter_info() {
 /**
  * Implements hook_field_formatter_view().
  *
- * @todo: We need to provide a formatter for the colors that a user is allowed to enter
- * during node creation.
+ * @todo: We need to provide a formatter for the colors that a user is allowed
+ * to enter during node creation.
  */
 function node_example_field_formatter_view($object_type, $object, $field, $instance, $langcode, $items, $display) {
   $element = array();
@@ -165,3 +177,6 @@ function theme_example_node_color($variables) {
   $output = '<span style="background-color: #ccc; padding: 1em; margin-bottom: 1em; float: left; color: ' . $variables['color'] . '">' . $variables['color'] . '</span>';
   return $output;
 }
+/**
+ * @} End of "defgroup node_example".
+ */

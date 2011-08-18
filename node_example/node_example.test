@@ -52,4 +52,3 @@ class NodeExampleTestCase extends DrupalWebTestCase {
 
   }
 }
-

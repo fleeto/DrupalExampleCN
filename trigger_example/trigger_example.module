@@ -3,6 +3,14 @@
 /**
  * @file
  * Trigger definition example module.
+ */
+
+/**
+ * @defgroup trigger_example Example: Trigger
+ * @ingroup examples
+ * @{
+ *
+ * Trigger definition example module.
  *
  * Triggers and actions are a pair of special-purpose functions allowing some
  * Drupal programming without using PHP. Using the
@@ -115,7 +123,8 @@ function trigger_example_trigger_info() {
  * This function is executed during the submission of the example form defined
  * in this module.
  *
- * @param array $options arguments used to call the triggersomething function, if any.
+ * @param $options
+ *   Array of arguments used to call the triggersomething function, if any.
  */
 function trigger_example_triggersomething($options = array()) {
   // Ask the trigger module for all actions enqueued for the 'triggersomething' trigger.
@@ -145,7 +154,6 @@ function trigger_example_triggersomething($options = array()) {
  * it can be used. We use hook_user_login to be informed when a user logs in and
  * try to find if the user has previously logged in before. If the user has not
  * accessed previously, we make a call to our trigger function.
- *
  */
 function trigger_example_user_login(&$edit, $account, $category = NULL) {
   // Verify user has never accessed the site: last access was creation date.
@@ -173,14 +181,13 @@ function trigger_example_user_login(&$edit, $account, $category = NULL) {
  * @endcode
  *
  * @param string $hook
- *   the trigger identification.
+ *   The trigger identification.
  * @param array  $edit
- *   modifications for the account object (should be empty).
+ *   Modifications for the account object (should be empty).
  * @param object $account
- *   user object that has logged in.
+ *   User object that has logged in.
  * @param string $category
- *   category of the profile.
- *
+ *   Category of the profile.
  */
 function _trigger_example_first_time_login($hook, &$edit, $account, $category = NULL) {
   // Keep objects for reuse so that changes actions make to objects can persist.
@@ -245,7 +252,7 @@ function trigger_example_help($path, $arg) {
 /**
  * Implements hook_menu().
  *
- * Provide a form that can be used to fire the module's triggers.
+ * Provides a form that can be used to fire the module's triggers.
  */
 function trigger_example_menu() {
   $items['examples/trigger_example'] = array(
@@ -259,9 +266,9 @@ function trigger_example_menu() {
 }
 
 /**
- * Trigger example test form
+ * Trigger example test form.
  *
- * Provide a button to run the triggersomething event.
+ * Provides a button to run the triggersomething event.
  */
 function trigger_example_form($form_state) {
   $form['triggersomething'] = array(
@@ -272,7 +279,7 @@ function trigger_example_form($form_state) {
 }
 
 /**
- * Submit handler for the trigger_example_form.
+ * Submit handler for the trigger_example_form().
  */
 function trigger_example_form_submit($form, $form_state) {
   // If the user clicked the button, then run the triggersomething trigger.
@@ -283,11 +290,10 @@ function trigger_example_form_submit($form, $form_state) {
 
 
 /**
- * Optional usage of hook_trigger_info_aler()
+ * Optional usage of hook_trigger_info_alter().
  *
  * This function is not required to write your own triggers, but it may be
  * useful when you want to alter existing triggers.
- *
  */
 
 /**
@@ -299,9 +305,9 @@ function trigger_example_form_submit($form, $form_state) {
  * this example implementation a little change is done to the existing trigger
  * provided by core: 'cron'
  *
- * @param array $triggers
- *  Array of trigger information returned by hook_trigger_info()
- *  implementations.
+ * @param $triggers
+ *   Array of trigger information returned by hook_trigger_info()
+ *   implementations.
  *
  * @see hook_trigger_info()
  */

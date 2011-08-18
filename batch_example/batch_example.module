@@ -3,6 +3,13 @@
 /**
  * @file
  * Outlines how a module can use the Batch API.
+ */
+
+/**
+ * @defgroup batch_example Example: Batch API
+ * @ingroup examples
+ * @{
+ * Outlines how a module can use the Batch API.
  *
  * Batches allow heavy processing to be spread out over several page
  * requests, ensuring that the processing does not get interrupted
@@ -13,14 +20,11 @@
  * The @link batch_example.install .install file @endlink also shows how the
  * Batch API can be used to handle long-running hook_update_N() functions.
  *
- * @see batch
- */
-
-/**
  * Two harmless batches are defined:
  * - batch 1: Load the node with the lowest nid 100 times.
  * - batch 2: Load all nodes, 20 times and uses a progressive op, loading nodes
  *   by groups of 5.
+ * @see batch
  */
 
 /**
@@ -80,12 +84,6 @@ function batch_example_simple_form_submit($form, &$form_state) {
   batch_set($batch);
 }
 
-
-/**
- * @defgroup batch_definitions Example batch definitions
- * @{
- * Definitions of the batches used in this module.
- */
 
 /**
  * Batch 1 definition: Load the node with the lowest nid 1000 times.
@@ -262,3 +260,6 @@ function _batch_example_update_http_requests() {
 function _batch_example_get_http_requests() {
   return !empty($_SESSION['http_request_count']) ? $_SESSION['http_request_count'] : 0;
 }
+/**
+ * @} End of "defgroup batch_example".
+ */

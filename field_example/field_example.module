@@ -1,30 +1,49 @@
 <?php
-
 /**
  * @file
- * An example field using the Field API.
+ * An example field using the Field Types API.
+ */
+
+/**
+ * @defgroup field_example Example: Field Types API
+ * @ingroup examples
+ * @{
+ * Examples using Field Types API.
  *
  * This is updated from Barry Jaspan's presentation at Drupalcon Paris,
  * @link http://acquia.com/community/resources/acquia-tv/intro-field-api-module-developers Video Presentation @endlink
  *
  * Providing a field requires:
- * - Defining a field
+ * - Defining a field:
  *   - hook_field_info()
  *   - hook_field_schema()
  *   - hook_field_validate()
  *   - hook_field_is_empty()
  *
  * - Defining a formatter for the field (the portion that outputs the field for
- *   display)
+ *   display):
  *   - hook_field_formatter_info()
  *   - hook_field_formatter_view()
  *
- * - Defining a widget for the edit form
+ * - Defining a widget for the edit form:
  *   - hook_field_widget_info()
  *   - hook_field_widget_form()
  *
- * *
- * See @link field_types Field Types API @endlink
+ * Our module defines the field in field_example_field_info(),
+ * field_example_field_validate() and field_example_field_is_empty().
+ * field_example_field_schema() is implemented in field_example.install.
+ *
+ * Our module sets up a formatter in field_example_field_formatter_info() and
+ * field_example_field_formatter_view(). These are the API hooks that present
+ * formatted and themed output to the user.
+
+ * And finally, our module defines the widet in
+ * field_example_field_widget_info() and field_example_field_widget_form().
+ * The widget is the form element used to receive input from the user
+ * when the field is being populated.
+ *
+ * @see field_types
+ * @see field
  */
 
 /***************************************************************
@@ -38,6 +57,7 @@
  */
 function field_example_field_info() {
   return array(
+    // We name our field as the associative name of the array.
     'field_example_rgb' => array(
       'label' => t('Example Color RGB'),
       'description' => t('Demonstrates a field composed of an RGB color.'),
@@ -50,8 +70,14 @@ function field_example_field_info() {
 /**
  * Implements hook_field_validate().
  *
- * Verifies that the RGB field as combined is valid
- * (6 hex digits with a # at the beginning).
+ * This hook gives us a chance to validate content that's in our
+ * field. We're really only interested in the $items parameter, since
+ * it holds arrays representing content in the field we've defined.
+ * We want to verify that the items only contain RGB hex values like
+ * this: #RRGGBB. If the item validates, we do nothing. If it doesn't
+ * validate, we add our own error notification to the $errors parameter.
+ *
+ * @see field_example_field_widget_error()
  */
 function field_example_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
   foreach ($items as $delta => $item) {
@@ -69,20 +95,23 @@ function field_example_field_validate($entity_type, $entity, $field, $instance, 
 
 /**
  * Implements hook_field_is_empty().
+ *
+ * hook_field_is_emtpy() is where Drupal asks us if this field is empty.
+ * Return TRUE if it does not contain data, FALSE if it does. This lets
+ * the form API flag an error when required fields are empty.
  */
 function field_example_field_is_empty($item, $field) {
   return empty($item['rgb']);
 }
 
-/***********************************************************************
- *  Field Type API: Formatter
- *
- *  These are the api hooks that present formatted (themed) output to the
- *  user.
- **********************************************************************/
-
 /**
  * Implements hook_field_formatter_info().
+ *
+ * We need to tell Drupal that we have two different types of formatters
+ * for this field. One will change the text color, and the other will
+ * change the background color.
+ *
+ * @see field_example_field_formatter_view()
  */
 function field_example_field_formatter_info() {
   return array(
@@ -107,6 +136,8 @@ function field_example_field_formatter_info() {
  *   was entered and uses an inline style to set the text color to that value.
  * - field_example_color_background does the same but also changes the
  *   background color of div.region-content.
+ *
+ * @see field_example_field_formatter_info()
  */
 function field_example_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
@@ -153,14 +184,6 @@ function field_example_field_formatter_view($entity_type, $entity, $field, $inst
   return $element;
 }
 
-
-/**************************************************************************
- * Field Type API: Widget
- *
- * The widget is the form element used to receive input from the user
- * when the field is being populated.
- **************************************************************************/
-
 /**
  * Implements hook_field_widget_info().
  *
@@ -169,6 +192,11 @@ function field_example_field_formatter_view($entity_type, $entity, $field, $inst
  * - A 3-textfield widget that gathers the red, green, and blue values
  *   separately.
  * - A farbtastic colorpicker widget that chooses the value graphically.
+ *
+ * These widget types will eventually show up in hook_field_widget_form,
+ * where we will have to flesh them out.
+ *
+ * @see field_example_field_widget_form()
  */
 function field_example_field_widget_info() {
   return array(
@@ -190,7 +218,11 @@ function field_example_field_widget_info() {
 /**
  * Implements hook_field_widget_form().
  *
- * Three different forms are provided, for the three widget types.
+ * hook_widget_form() is where Drupal tells us to create form elements for
+ * our field's widget.
+ *
+ * We provide one of three different forms, depending on the widget type of
+ * the Form API item provided.
  *
  * The 'field_example_colorpicker' and 'field_example_text' are essentially
  * the same, but field_example_colorpicker adds a javascript colorpicker
@@ -311,6 +343,13 @@ function field_example_3text_validate($element, &$form_state) {
 
 /**
  * Implements hook_field_widget_error().
+ *
+ * hook_field_widget_error() lets us figure out what to do with errors
+ * we might have generated in hook_field_validate(). Generally, we'll just
+ * call form_error().
+ *
+ * @see field_example_field_validate()
+ * @see form_error()
  */
 function field_example_field_widget_error($element, $error, $form, &$form_state) {
   switch ($error['error']) {
@@ -341,3 +380,6 @@ function field_example_menu() {
 function _field_example_page() {
   return t("The Field Example provides a field composed of an HTML RGB value, like #ff00ff. To use it, add the field to a content type.");
 }
+/**
+ * @} End of "defgroup field_example".
+ */

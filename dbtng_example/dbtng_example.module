@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * This is an example outlining how a module can make use of the new DBTNG
@@ -13,13 +12,16 @@
  */
 
 /**
- * @defgroup database_examples Database Examples
+ * @defgroup dbtng_example Example: Database (DBTNG)
+ * @ingroup examples
  * @{
- * These examples show basic database examples, including DBTNG.
+ * Database examples, including DBTNG.
+ *
+ * 'DBTNG' means 'Database: The Next Generation.' Yes, Drupallers are nerds.
  *
  * General documentation is available at
- * @link database Database abstraction layer documentation @endlink and
- * at @link http://drupal.org/node/310069 @endlink.
+ * @link database.inc database abstraction layer documentation @endlink and
+ * at @link http://drupal.org/node/310069 Database API @endlink.
  *
  * The several examples here demonstrate basic database usage.
  *
@@ -62,7 +64,6 @@
  * @see db_update()
  * @see db_delete()
  * @see drupal_write_record()
- * @}
 */
 
 /**
@@ -89,7 +90,6 @@
  * @param $entry
  *   An array containing all the fields of the database record.
  *
- * @ingroup database_examples
  * @see db_insert()
  */
 function dbtng_example_entry_insert($entry) {
@@ -126,7 +126,6 @@ function dbtng_example_entry_insert($entry) {
  * @param $entry
  *   An array containing all the fields of the item to be updated.
  *
- * @ingroup database_examples
  * @see db_update()
  */
 function dbtng_example_entry_update($entry) {
@@ -157,7 +156,6 @@ function dbtng_example_entry_update($entry) {
  *   An array containing at least the person identifier 'pid' element of the
  *   entry to delete.
  *
- * @ingroup database_examples
  * @see db_delete()
  */
 function dbtng_example_entry_delete($entry) {
@@ -239,7 +237,6 @@ function dbtng_example_entry_delete($entry) {
  * @return
  *   An object containing the loaded entries if found.
  *
- * @ingroup database_examples
  * @see db_select()
  * @see db_query()
  * @see http://drupal.org/node/310072
@@ -568,3 +565,6 @@ function dbtng_example_form_update_submit($form, &$form_state) {
   $count = dbtng_example_entry_update($entry);
   drupal_set_message(t("Updated entry @entry (@count row updated)", array('@count' => $count, '@entry' => print_r($entry, TRUE))));
 }
+/**
+ * @} End of "defgroup dbtng_example".
+ */

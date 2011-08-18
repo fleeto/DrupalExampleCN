@@ -2,7 +2,14 @@
 
 /**
  * @file
- * Image example module demonstrates basic use of image API.
+ * Module file for image_example
+ */
+
+/**
+ * @defgroup image_example Example: Image
+ * @ingroup examples
+ * @{
+ * Demonstrates the basic use of image API.
  *
  * This module demonstrates the use of Drupal 7's new image styles and effects
  * including the following topics.
@@ -363,10 +370,11 @@ function image_example_theme() {
  * @param $variables
  *   An associative array containing:
  *   - data: The current configuration for this colorize effect.
- *
- * @ingroup themeable
  */
 function theme_image_example_colorize_summary($variables) {
   $data = $variables['data'];
   return t('as color #@color.', array('@color' => $data['color']));
 }
+/**
+ * @} End of "defgroup image_example".
+ */

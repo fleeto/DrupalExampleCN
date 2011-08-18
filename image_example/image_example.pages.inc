@@ -15,6 +15,8 @@
  * this module are available via Drupal's image handling system.
  *
  * @see theme_image_style()
+ *
+ * @ingroup image_example
  */
 function image_example_style_form($form, &$form_state) {
   // If there is already an uploaded image display the image here.
@@ -59,7 +61,9 @@ function image_example_style_form($form, &$form_state) {
 }
 
 /**
- * Verify that the user supplied an image with the form..
+ * Verifies that the user supplied an image with the form..
+ *
+ * @ingroup image_example
  */
 function image_example_style_form_validate($form, &$form_state) {
   if (!isset($form_state['values']['image_example_image_fid']) || !is_numeric($form_state['values']['image_example_image_fid'])) {
@@ -69,6 +73,8 @@ function image_example_style_form_validate($form, &$form_state) {
 
 /**
  * Form Builder; Display a form for uploading an image.
+ *
+ * @ingroup image_example
  */
 function image_example_style_form_submit($form, &$form_state) {
   // When using the #managed_file form element the file is automatically
@@ -123,6 +129,8 @@ function image_example_style_form_submit($form, &$form_state) {
 
 /**
  * Theme function displays an image rendered using the specified style.
+ *
+ * @ingroup image_example
  */
 function theme_image_example_image($variables) {
   $image = $variables['image'];

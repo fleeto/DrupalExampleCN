@@ -44,8 +44,8 @@
  * true, then you add both of those conditions to the action. See the
  * 'country_writein' element below for an example.
  *
- * Note that the easiest way to select a textfield, checkbox, or select is
- * with the @link http://api.jquery.com/input-selector/ ':input' jquery shortcut @endlink,
+ * Note that the easiest way to select a textfield, checkbox, or select is with
+ * the @link http://api.jquery.com/input-selector/ ':input' jquery shortcut @endlink,
  * which selects any any of those.
  *
  * There are examples below of changing or hiding an element when a checkbox
@@ -260,7 +260,9 @@ function form_example_states_form($form, &$form_state) {
   return $form;
 }
 
-
+/**
+ * Submit handler for form_example_states_form().
+ */
 function form_example_states_form_submit($form, &$form_state) {
   drupal_set_message(t('Submitting values: @values', array('@values' => var_export($form_state['values'], TRUE))));
 }

@@ -3,6 +3,24 @@
 /**
  * @file
  * An example module showing how to define and use tokens.
+ *
+ * The Token module provides an API for providing tokens to other modules.
+ * Tokens are small bits of text that can be placed into larger documents
+ * via simple placeholders, like %site-name or [user].
+ */
+
+/**
+ * @defgroup token_example Example: Token API
+ * @ingroup examples
+ * @{
+ * Examples using the Token API.
+ *
+ * The Token module provides an API for providing tokens to other modules.
+ * Tokens are small bits of text that can be placed into larger documents
+ * via simple placeholders, like %site-name or [user].
+ *
+ * This example is part of the Examples for Developers Project which you can
+ * download and experiment with here: http://drupal.org/project/examples
  */
 
 /**
@@ -117,7 +135,7 @@ function token_example_example_form_submit($form, &$form_state) {
 }
 
 /**
- * Build a list of available content.
+ * Builds a list of available content.
  */
 function _token_example_get_node() {
   if (!user_access('access content') && !user_access('bypass node access')) {
@@ -136,7 +154,7 @@ function _token_example_get_node() {
 }
 
 /**
- * Build a list of available comments.
+ * Builds a list of available comments.
  */
 function _token_example_get_comment() {
   if (!module_exists('comment') || (!user_access('access comments') && !user_access('administer comments'))) {
@@ -157,10 +175,11 @@ function _token_example_get_comment() {
 }
 
 /**
- * Build a list of available user accounts.
+ * Builds a list of available user accounts.
  */
 function _token_example_get_user() {
-  if (!user_access('access user profiles') && !user_access('administer users')) {
+  if (!user_access('access user profiles') &&
+      !user_access('administer users')) {
     return array();
   }
 
@@ -175,7 +194,7 @@ function _token_example_get_user() {
 }
 
 /**
- * Build a list of available taxonomy terms.
+ * Builds a list of available taxonomy terms.
  */
 function _token_example_get_taxonomy_term() {
   $term_query = db_select('taxonomy_term_data', 'ttd');
@@ -188,7 +207,7 @@ function _token_example_get_taxonomy_term() {
 }
 
 /**
- * Build a list of available files.
+ * Builds a list of available files.
  */
 function _token_example_get_file() {
   $file_query = db_select('file_managed', 'f');
@@ -198,3 +217,6 @@ function _token_example_get_file() {
   $files = array_map('check_plain', $files);
   return $files;
 }
+/**
+ * @} End of "defgroup token_example".
+ */

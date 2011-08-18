@@ -1,10 +1,9 @@
 /*
- * @file ajax_example.js
- *   JavaScript for ajax_example.
+ * @file
+ * JavaScript for ajax_example.
  *
  * See @link ajax_example_dependent_dropdown_degrades @endlink for
  * details on what this file does. It is not used in any other example.
- * 
  */
 
 (function($) {

@@ -13,7 +13,10 @@
  *
  * When using the AJAX framework outside the context of a form or a renderable
  * array of type 'link', you have to include ajax.js explicitly.
- * @return unknown_type
+ *
+ * @return
+ *
+ * @ingroup ajax_example
  */
 function ajax_example_render_link() {
   // drupal_add_library is invoked automatically when a form element has the
@@ -40,14 +43,16 @@ URL whether JS was enabled or not, letting it do different things based on that.
  * #ajax property.
  *
  * A link that is constructed as a renderable array can have the #ajax property,
- * which ensures that the link submission is done without a page refresh. The href
- * of the link is used as the ajax callback, but it degrades gracefully without
- * JavaScript because if the 'nojs' portion of the href is not stripped out by js,
- * the callback will return content as required for a full page reload.
+ * which ensures that the link submission is done without a page refresh. The
+ * href of the link is used as the ajax callback, but it degrades gracefully
+ * without JavaScript because if the 'nojs' portion of the href is not stripped
+ * out by js, the callback will return content as required for a full page
+ * reload.
  *
  * The necessary JavaScript file, ajax.js, will be included on the page
  * automatically.
- * @return unknown_type
+ *
+ * @return
  */
 function ajax_example_render_link_ra() {
   $explanation = "
@@ -71,7 +76,6 @@ URL whether JS was enabled or not, letting it do different things based on that.
       'method' => 'html',
     ),
   );
-  
   return $build;
 }
 
@@ -81,13 +85,15 @@ URL whether JS was enabled or not, letting it do different things based on that.
  * Takes different logic paths based on whether Javascript was enabled.
  * If $type == 'ajax', it tells this function that ajax.js has rewritten
  * the URL and thus we are doing an AJAX and can return an array of commands.
+ *
  * @param $type
- *   Either 'ajax' or 'nojs. Type is simply the normal URL argument to this
- *   URL.
+ *   Either 'ajax' or 'nojs. Type is simply the normal URL argument to this URL.
+ *
  * @return
  *   If $type == 'ajax', returns an array of AJAX Commands.
  *   Otherwise, just returns the content, which will end up being a page.
- * @see ajax
+ *
+ * @ingroup ajax_example
  */
 function ajax_link_response($type = 'ajax') {
   if ($type == 'ajax') {

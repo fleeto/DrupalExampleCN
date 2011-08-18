@@ -76,36 +76,35 @@ function nodeapi_example_form_alter(&$form, $form_state, $form_id) {
  * http://api.drupal.org/api/group/hooks/7
  * or in the node API declaration file: modules/node/node.api.php
  *
- * hook_node_access()	- Control access to a node.
- * hook_node_access_records()	-	Set permissions for a node to be written to the database.
- * hook_node_access_records_alter()	-	Alter permissions for a node before it is written to the database.
- * hook_node_build_alter()	-	The node content was built, the module may modify the structured content.
- * hook_node_delete()	-	Act on node deletion.
- * hook_node_grants()	-	Inform the node access system what permissions the user has.
- * hook_node_grants_alter()	-	Alter user access rules when trying to view, edit or delete a node.
- * hook_node_info()	-	Defines module-provided node types.
- * hook_node_insert()	-	Respond to node insertion.
- * hook_node_load()	-	Act on node objects when loaded.
- * hook_node_operations()	-	Add mass node operations.
- * hook_node_prepare()	-	The node is about to be shown on the add/edit form.
- * hook_node_prepare_translation()	-	The node is being cloned for translation.
- * hook_node_presave()	-	The node passed validation and is about to be saved.
- * hook_node_revision_delete()	-	A revision of the node is deleted.
- * hook_node_search_result()	-	The node is being displayed as a search result.
- * hook_node_type_delete()	-	Act on node type deletion.
- * hook_node_type_insert()	-	Act on node type creation.
- * hook_node_type_update()	-	Act on node type changes.
- * hook_node_update()	-	The node being updated.
- * hook_node_update_index()	-	The node is being indexed.
- * hook_node_validate()	-	The user has finished editing the node and is previewing or submitting it.
- * hook_node_view()	-	The node content is being assembled before rendering.
- *
+ * hook_node_access()  - Controls access to a node.
+ * hook_node_access_records()  -  Sets permissions for a node to be written to the database.
+ * hook_node_access_records_alter()  -  Alters permissions for a node before it is written to the database.
+ * hook_node_build_alter()  -  Modifies the structured node content after node content is built.
+ * hook_node_delete()  -  Acts on node deletion.
+ * hook_node_grants()  -  Informs the node access system what permissions the user has.
+ * hook_node_grants_alter()  -  Alters user access rules when trying to view, edit or delete a node.
+ * hook_node_info()  -  Defines module-provided node types.
+ * hook_node_insert()  -  Responds to node insertion.
+ * hook_node_load()  -  Acts on node objects when loaded.
+ * hook_node_operations()  -  Adds mass node operations.
+ * hook_node_prepare()  -  The node is about to be shown on the add/edit form.
+ * hook_node_prepare_translation()  -  The node is being cloned for translation.
+ * hook_node_presave()  -  The node passed validation and is about to be saved.
+ * hook_node_revision_delete()  -  A revision of the node is deleted.
+ * hook_node_search_result()  -  The node is being displayed as a search result.
+ * hook_node_type_delete()  -  Acts on node type deletion.
+ * hook_node_type_insert()  -  Acts on node type creation.
+ * hook_node_type_update()  -  Acts on node type changes.
+ * hook_node_update()  -  The node being updated.
+ * hook_node_update_index()  -  The node is being indexed.
+ * hook_node_validate()  -  The user has finished editing the node and is previewing or submitting it.
+ * hook_node_view()  -  The node content is being assembled before rendering.
  */
 
 /**
  * Implements hook_node_validate().
  *
- * Check that rating attribute is set in the form submission, the field is
+ * Checks that rating attribute is set in the form submission, the field is
  * required
  */
 function nodeapi_example_node_validate($node, $form) {
@@ -119,8 +118,8 @@ function nodeapi_example_node_validate($node, $form) {
 /**
  * Implements hook_node_load().
  *
- * Load the rating information if available for any of the nodes in the argument
- * list.
+ * Loads the rating information if available for any of the nodes in the
+ * argument list.
  */
 function nodeapi_example_node_load($nodes, $types) {
   // We can use $types to figure out if we need to process any of these nodes.
@@ -241,9 +240,9 @@ function nodeapi_example_node_update($node) {
  * HTML teaser and body. We will inject our additional information at the front
  * of the node copy.
  *
- * Using node API 'hook_node_view' is more appropriate than using a filter here, because
- * filters transform user-supplied content, whereas we are extending it with
- * additional information.
+ * Using node API 'hook_node_view' is more appropriate than using a filter here,
+ * because filters transform user-supplied content, whereas we are extending it
+ * with additional information.
  */
 function nodeapi_example_node_view($node, $build_mode = 'full') {
   if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
@@ -272,10 +271,11 @@ function nodeapi_example_theme() {
 /**
  * A custom theme function.
  *
- * By using this function to format our rating, themes can override this presentation
- * if they wish; for example, they could provide a star graphic for the rating. We
- * also wrap the default presentation in a CSS class that is prefixed by the module
- * name. This way, style sheets can modify the output without requiring theme code.
+ * By using this function to format our rating, themes can override this
+ * presentation if they wish; for example, they could provide a star graphic
+ * for the rating. We also wrap the default presentation in a CSS class that
+ * is prefixed by the module name. This way, style sheets can modify the output
+ * without requiring theme code.
  */
 function theme_nodeapi_example_rating($variables) {
   $options = array(
@@ -291,4 +291,3 @@ function theme_nodeapi_example_rating($variables) {
   $output .= '</div>';
   return $output;
 }
-

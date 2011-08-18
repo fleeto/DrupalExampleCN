@@ -1,7 +1,15 @@
 <?php
-
 /**
  * @file
+ * Module file for block_example.
+ */
+
+/**
+ * @defgroup block_example Example: Block
+ * @ingroup examples
+ * @{
+ * Demonstrates code creation of blocks.
+ *
  * This is an example outlining how a module can define blocks that can be
  * displayed on various pages of a site, or how to alter blocks provided by
  * other modules.
@@ -215,3 +223,6 @@ function block_example_block_view_alter(&$data, $block) {
     $data['subject'] = isset($data['subject']) ? drupal_strtoupper($data['subject']) : '';
   }
 }
+/**
+ * @} End of "defgroup block_example".
+ */

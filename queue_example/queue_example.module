@@ -3,6 +3,13 @@
 /**
  * @file
  * Examples demonstrating the Drupal Queue API.
+ */
+
+/**
+ * @defgroup queue_example Example: Queue
+ * @ingroup examples
+ * @{
+ * Demonstrating the Queue API
  *
  * The Queue API provides a traditional FIFO (first-in-first-out) queue,
  * but also provides the concepts of:
@@ -210,7 +217,7 @@ function queue_example_add_remove_form_clear_queue($form, &$form_state) {
 }
 
 /**
- * Retrieve the queue from the database for display purposes only.
+ * Retrieves the queue from the database for display purposes only.
  *
  * It is not recommended to access the database directly, and this is only here
  * so that the user interface can give a good idea of what's going on in the
@@ -231,7 +238,7 @@ function queue_example_retrieve_queue($queue_name) {
 }
 
 /**
- * Theme the queue display.
+ * Themes the queue display.
  *
  * Again, this is not part of the demonstration of the queue API, but is here
  * just to make the user interface more understandable.
@@ -273,3 +280,6 @@ function queue_example_theme() {
     ),
   );
 }
+/**
+ * @} End of "defgroup queue_example".
+ */

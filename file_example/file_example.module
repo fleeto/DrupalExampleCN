@@ -1,11 +1,15 @@
 <?php
-
 /**
  * @file
  * Examples demonstrating the Drupal File API (and Stream Wrappers).
  */
 
 /**
+ * @defgroup file_example Example: Files
+ * @ingroup examples
+ * @{
+ * Examples demonstrating the Drupal File API (and Stream Wrappers).
+ *
  * The File Example module is a part of the Examples for Developers Project
  * and provides various Drupal File API Examples. You can download and
  * experiment with this code at the
@@ -14,8 +18,6 @@
  * See @link http://drupal.org/node/555118 Drupal File API @endlink for handbook
  * documentation on the File API and
  * @link file File summary on api.drupal.org @endlink for the function summary.
- *
- * @defgroup file_example Examples: File Examples
  */
 
 /**
@@ -69,7 +71,6 @@ function file_example_intro() {
  *
  * A simple form that allows creation of a file, managed or unmanaged. It
  * also allows reading/deleting a file and creation of a directory.
- * @ingroup file_example
  */
 function file_example_readwrite($form, &$form_state) {
   if (empty($_SESSION['file_example_default_file'])) {
@@ -197,7 +198,6 @@ function file_example_readwrite($form, &$form_state) {
  * - file_create_url(), which converts a URI in the form public://junk.txt or
  *   private://something/test.txt into a URL like
  *   http://example.com/sites/default/files/junk.txt.
- * @ingroup file_example
  */
 function file_example_managed_write_submit($form, &$form_state) {
   $data = $form_state['values']['write_contents'];
@@ -226,7 +226,6 @@ function file_example_managed_write_submit($form, &$form_state) {
  * - file_create_url(), which converts a URI in the form public://junk.txt or
  *   private://something/test.txt into a URL like
  *   http://example.com/sites/default/files/junk.txt.
- * @ingroup file_example
  */
 
 function file_example_unmanaged_write_submit($form, &$form_state) {
@@ -257,7 +256,6 @@ function file_example_unmanaged_write_submit($form, &$form_state) {
  *   private://something/test.txt into a URL like
  *   http://example.com/sites/default/files/junk.txt.
  * - drupal_tempnam() generates a temporary filename for use.
- * @ingroup file_example
  */
 
 function file_example_unmanaged_php_submit($form, &$form_state) {
@@ -311,7 +309,6 @@ function file_example_unmanaged_php_submit($form, &$form_state) {
  * file_get_contents("public://somefile.txt") just works. Although it's
  * not necessary, we use file_unmanaged_save_data() to save this file locally
  * and then find a local URL for it by using file_create_url().
- * @ingroup file_example
  */
 function file_example_read_submit($form, &$form_state) {
   $uri = $form_state['values']['fileops_file'];
@@ -396,7 +393,6 @@ function file_example_file_check_exists_submit($form, &$form_state) {
  * Submit handler for directory creation.
  * Here we create a directory and set proper permissions on it using
  * file_prepare_directory().
- * @ingroup file_example
  */
 function file_example_create_directory_submit($form, &$form_state) {
   $directory = $form_state['values']['directory_name'];
@@ -422,7 +418,6 @@ function file_example_create_directory_submit($form, &$form_state) {
  *
  * @see file_unmanaged_delete_recursive()
  *
- * @ingroup file_example
  */
 function file_example_delete_directory_submit($form, &$form_state) {
   $directory = $form_state['values']['directory_name'];
@@ -440,8 +435,9 @@ function file_example_delete_directory_submit($form, &$form_state) {
 /**
  * Submit handler to test directory existence.
  * This actually just checks to see if the directory is writable
- * @param unknown_type $form
- * @param unknown_type $form_state
+ *
+ * @param $form
+ * @param $form_state
  */
 function file_example_check_directory_submit($form, &$form_state) {
   $directory = $form_state['values']['directory_name'];
@@ -493,8 +489,6 @@ function file_example_get_managed_file($uri) {
  * is readable and writable as a location in the $_SESSION variable.
  *
  * @see FileExampleSessionStreamWrapper
- *
- * defgroup streamwrapper_example Stream Wrapper Example
  */
 function file_example_stream_wrappers() {
   $wrappers = array(
@@ -524,4 +518,6 @@ function file_example_session_contents() {
   $content = file_get_contents('session://' . $session_path);
   return t('Contents of @path:', array('@path' => check_plain($session_path))) . ' ' . print_r($content, TRUE);
 }
-
+/**
+ * @} End of "defgroup file_example".
+ */

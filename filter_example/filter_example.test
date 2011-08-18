@@ -6,7 +6,6 @@
  *
  * This file contains the test cases to check if module is performing as
  * expected.
- *
  */
 class FilterExampleTestCase extends DrupalWebTestCase {
   protected $web_user;

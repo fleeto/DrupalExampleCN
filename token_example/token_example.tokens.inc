@@ -7,6 +7,8 @@
 
 /**
  * Implements hook_token_info().
+ *
+ * @ingroup token_example
  */
 function token_example_token_info() {
   // Add two different token types. The first is the generic text format. The
@@ -54,6 +56,8 @@ function token_example_token_info() {
 
 /**
  * Implements hook_tokens().
+ *
+ * @ingroup token_example
  */
 function token_example_tokens($type, $tokens, array $data = array(), array $options = array()) {
   $replacements = array();

@@ -2,7 +2,11 @@
 
 /**
  * @file
- * Estensible wizard form example.
+ * Extensible wizard form example.
+ */
+
+/**
+ * Extensible wizard form example.
  *
  * This is an example of a multistep form using a wizard style. It will include
  * the 'Previous' and 'Next' buttons when required, and a 'Finish' button at the
@@ -25,14 +29,17 @@
  * - The most important customization sttep is to change the submit handler and
  *   do whatever you want with the collected information. In this case, the
  *   example just shows the collected values in the various steps.
+ * @ingroup form_example
  */
 
 /**
- * Return the list of steps and their associated forms. This has been separated
+ * Returns the list of steps and their associated forms. This has been separated
  * to clarify and easy the understanding of this example. You should edit this
  * function to include the steps your wizard/multistep form requires.
  *
  * @return $array
+ *
+ * @ingroup form_example
  */
 function _form_example_steps() {
   return array(
@@ -64,6 +71,8 @@ function _form_example_steps() {
  * You are not required to change the next or previous handlers, but you must
  * change the form_example_wizard_sbumit handler to perform the operations you
  * need on the collected information.
+ *
+ * @ingroup form_example
  */
 function form_example_wizard($form, &$form_state) {
 
@@ -109,10 +118,10 @@ function form_example_wizard($form, &$form_state) {
     );
   }
   else {
-    // Just in case there are no more steps, we use the default submit handler of
-    // the form wizard. Call this button Finish, Submit, or whatever you want to
-    // show. When this button is clicked, the form_example_wizard_submit handler
-    // will be called.
+    // Just in case there are no more steps, we use the default submit handler
+    // of the form wizard. Call this button Finish, Submit, or whatever you
+    // want to show. When this button is clicked, the
+    // form_example_wizard_submit handler will be called.
     $form['finish'] = array(
       '#type' => 'submit',
       '#value' => t('Finish'),
@@ -135,6 +144,8 @@ function form_example_wizard($form, &$form_state) {
  * - Forces form rebuild.
  *
  * You are not required to change this function.
+ *
+ * @ingroup form_example
  */
 function form_example_wizard_previous_submit($form, &$form_state) {
   $current_step = &$form_state['step'];
@@ -156,8 +167,10 @@ function form_example_wizard_previous_submit($form, &$form_state) {
  *
  * You are not required to change this function.
  *
- * @param unknown_type $form
- * @param unknown_type $form_state
+ * @param $form
+ * @param $form_state
+ *
+ * @ingroup form_example
  */
 function form_example_wizard_next_submit($form, &$form_state) {
   $current_step = &$form_state['step'];
@@ -176,19 +189,24 @@ function form_example_wizard_next_submit($form, &$form_state) {
   }
 }
 
-// The previous code was a 'skeleton' of a multistep wizard form. You are not
-// required to change a line on the previous code (apart from defining your own
-// steps in the _form_example_steps() function.
-//
-// All the code included from here is the content of the wizard, the steps of
-// the form.
-
-// First, let's show the defined steps for the wizard example.
+/**
+ * The previous code was a 'skeleton' of a multistep wizard form. You are not
+ * required to change a line on the previous code (apart from defining your own
+ * steps in the _form_example_steps() function.
+ *
+ * All the code included from here is the content of the wizard, the steps of
+ * the form.
+ *
+ * First, let's show the defined steps for the wizard example.
+ * @ingroup form_example
+ */
 
 /**
  * Returns form elements for the 'personal info' page of the wizard. This is the
  * first step of the wizard, asking for two textfields: first name and last
  * name.
+ *
+ * @ingroup form_example
  */
 function form_example_wizard_personal_info($form, &$form_state) {
   $form = array();
@@ -209,6 +227,8 @@ function form_example_wizard_personal_info($form, &$form_state) {
  * Returns form elements for the 'location info' page of the wizard. This is the
  * second step of the wizard. This step asks for a textfield value: a City. This
  * step also includes a validation declared later.
+ *
+ * @ingroup form_example
  */
 function form_example_wizard_location_info($form, &$form_state) {
   $form = array();
@@ -224,9 +244,12 @@ function form_example_wizard_location_info($form, &$form_state) {
 }
 
 /**
- * Custom validation form for the 'location info' page of the wizard. This is the
- * validation function for the second step of the wizard. The city cannot be empty
- * or be "San Francisco".
+ * Custom validation form for the 'location info' page of the wizard.
+ *
+ * This is the validation function for the second step of the wizard.
+ * The city cannot be empty or be "San Francisco".
+ *
+ * @ingroup form_example
  */
 function form_example_wizard_location_info_validate($form, &$form_state) {
   if ($form_state['values']['city'] == 'San Francisco') {
@@ -237,6 +260,8 @@ function form_example_wizard_location_info_validate($form, &$form_state) {
 /**
  * Returns form elements for the 'other info' page of the wizard. This is the
  * thid and last step of the example wizard.
+ *
+ * @ingroup form_example
  */
 function form_example_wizard_other_info($form, &$form_state) {
   $form = array();
@@ -258,8 +283,10 @@ function form_example_wizard_other_info($form, &$form_state) {
  * This demonstration handler just do a drupal_set_message() with the information
  * collected on each different step of the wizard.
  *
- * @param unknown_type $form
- * @param unknown_type $form_state
+ * @param $form
+ * @param $form_state
+ *
+ * @ingroup form_example
  */
 function form_example_wizard_submit($form, &$form_state) {
   $current_step = &$form_state['step'];

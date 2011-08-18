@@ -1,14 +1,40 @@
 <?php
-
 /**
  * @file
+ * Module file for filter_example.
+ */
+
+/**
+ * @defgroup filter_example Example: Filter
+ * @ingroup examples
+ * @{
+ * Demonstrates the creation of filters.
+
  * This is an example outlining how a module can be used to define a filter
  * to be run on user-submitted content before it is output to the browser.
  *
  * To show all the capabilities of the filter system, we will define two filters
- * in this module. One will substitute the string "foo" with an administratively-
- * defined replacement string. The other will find a custom XML tag, <time />, and
- * replace it by the current time.
+ * in this module. One will substitute the string "foo" with an
+ * administratively-defined replacement string. The other will find a custom
+ * XML tag, <time />, and replace it by the current time.
+ *
+ * Foo filter
+ *
+ * Drupal has several content formats (they are not filters), and in our example
+ * the foo replacement can be configured for each one of them, allowing an html
+ * or php replacement, so the module includes a settings callback, with options
+ * to configure that replacements. Also, a Tips callback will help showing the
+ * current replacement for the content type being edited.
+ *
+ * Time filter.
+ *
+ * This filter is a little trickier to implement than the previous one.
+ * Since the input involves special HTML characters (< and >) we have to
+ * run the filter before HTML is escaped/stripped by other filters. But
+ * we want to use HTML in our result as well, and so if we run this filter
+ * first our replacement string could be escaped or stripped. The solution
+ * is to use the "prepare" operation to escape the special characters, and
+ * to later replace our escaped version in the "process" step.
  */
 
 /**
@@ -83,8 +109,8 @@ function _filter_example_information() {
  * when "foo" is encountered, we need to provide an interface for this kind of
  * customization. The object format is also an argument of the callback.
  *
- * The settings defined in this form are stored in database by the filter module,
- * and they will be available in the $filter argument
+ * The settings defined in this form are stored in database by the filter
+ * module, and they will be available in the $filter argument.
  */
 function _filter_example_filter_foo_settings($form, $form_state, $filter, $format, $defaults) {
   $settings['filter_example_foo'] = array(
@@ -97,7 +123,7 @@ function _filter_example_filter_foo_settings($form, $form_state, $filter, $forma
 }
 
 /**
- * Foo filter process callback
+ * Foo filter process callback.
  *
  * The actual filtering is performed here. The supplied text should be returned,
  * once any necessary substitutions have taken place. The example just replaces
@@ -112,10 +138,10 @@ function _filter_example_filter_foo_process($text, $filter, $format) {
 /**
  * Filter tips callback for foo filter.
  *
- * The tips callback allows filters to provide help text to users during the content
- * editing process. Short tips are provided on the content editing screen, while
- * long tips are provided on a separate linked page. Short tips are optional,
- * but long tips are highly recommended.
+ * The tips callback allows filters to provide help text to users during the
+ * content editing process. Short tips are provided on the content editing
+ * screen, while long tips are provided on a separate linked page. Short tips
+ * are optional, but long tips are highly recommended.
  */
 function _filter_example_filter_foo_tips($filter, $format, $long = FALSE) {
   $replacement = isset($filter->settings['filter_example_foo']) ? $filter->settings['filter_example_foo'] : 'bar';
@@ -128,20 +154,8 @@ function _filter_example_filter_foo_tips($filter, $format, $long = FALSE) {
   }
 }
 
-/*
- * Time filter.
- *
- * This filter is a little trickier to implement than the previous one.
- * Since the input involves special HTML characters (< and >) we have to
- * run the filter before HTML is escaped/stripped by other filters. But
- * we want to use HTML in our result as well, and so if we run this filter
- * first our replacement string could be escaped or stripped. The solution
- * is to use the "prepare" operation to escape the special characters, and
- * to later replace our escaped version in the "process" step.
- */
-
-/*
- * Time filter prepare callback
+/**
+ * Time filter prepare callback.
  *
  * We'll use [filter-example-time] as a replacement for the time tag.
  * Note that in a more complicated filter a closing tag may also be
@@ -152,8 +166,8 @@ function _filter_example_filter_time_prepare($text, $filter) {
   return preg_replace('!<time ?/>!', '[filter-example-time]', $text);
 }
 
-/*
- * Time filter process callback
+/**
+ * Time filter process callback.
  *
  * Now, in the "process" step, we'll search for our escaped time tags and
  * do the real filtering: replace the xml tag with the date.
@@ -166,11 +180,14 @@ function _filter_example_filter_time_process($text, $filter) {
 /**
  * Filter tips callback for time filter.
  *
- * The tips callback allows filters to provide help text to users during the content
- * editing process. Short tips are provided on the content editing screen, while
- * long tips are provided on a separate linked page. Short tips are optional,
- * but long tips are highly recommended.
+ * The tips callback allows filters to provide help text to users during the
+ * content editing process. Short tips are provided on the content editing
+ * screen, while long tips are provided on a separate linked page. Short tips
+ * are optional, but long tips are highly recommended.
  */
 function _filter_example_filter_time_tips($filter, $format, $long = FALSE) {
   return t('<em>&lt;time /&gt;</em> is replaced with the current time.');
 }
+/**
+ * @} End of "defgroup filter_example".
+ */

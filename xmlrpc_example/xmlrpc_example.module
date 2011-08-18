@@ -2,6 +2,15 @@
 
 /**
  * @file
+ * Module file for xmlrpc_example module.
+ */
+
+/**
+ * @defgroup xmlrpc_example Example: XML-RPC
+ * @ingroup examples
+ * @{
+ * Demonstration of XML-RPC in Drupal 7.
+ *
  * This is an example of how to implement and XML-RPC server by registering
  * callbacks to specific methods and how to make xmlrpc calls using the built-in
  * xmlrpc() factory provided by Drupal.
@@ -24,7 +33,8 @@
 
 /**
  * Implements hook_menu().
- * Register all the demonstration forms.
+ *
+ * Registers all the demonstration forms.
  */
 function xmlrpc_example_menu() {
   $items['examples/xmlrpc'] = array(
@@ -55,7 +65,7 @@ function xmlrpc_example_menu() {
     'access callback' => TRUE,
     'weight'          => 1,
   );
-  // This part is completely optional. It will allow the modification of services
+  // This part is completely optional. It allows the modification of services
   // defined by this or other modules. This configuration form is used to
   // enable the hook_xmlrpc_alter API and alter current existing services
   $items['examples/xmlrpc/alter'] = array(
@@ -643,5 +653,6 @@ function xmlrpc_example_alter_form() {
   );
   return system_settings_form($form);
 }
-
-// The alteration part of the module ends here.
+/**
+ * @} End of "defgroup xmlrpc_example".
+ */

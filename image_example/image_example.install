@@ -6,7 +6,9 @@
  */
 
 /**
- * Implements hook_install(),
+ * Implements hook_install().
+ *
+ * @ingroup image_example
  */
 function image_example_install() {
   // Set a variable containing the name of the style to use when the module
@@ -16,6 +18,8 @@ function image_example_install() {
 
 /**
  * Implements hook_uninstall().
+ *
+ * @ingroup image_example
  */
 function image_example_uninstall() {
   variable_del('image_example_style_name');
@@ -24,6 +28,8 @@ function image_example_uninstall() {
 
 /**
  * Implements hook_enable().
+ *
+ * @ingroup image_example
  */
 function image_example_enable() {
   // There is currently no way to manually flush an image style which causes
@@ -38,7 +44,9 @@ function image_example_enable() {
 }
 
 /**
- * Implemements hook_disable().
+ * Implements hook_disable().
+ *
+ * @ingroup image_example
  */
 function image_example_disable() {
   // Solves the same problem as image_example_enable().

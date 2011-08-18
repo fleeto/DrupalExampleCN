@@ -1,12 +1,10 @@
 <?php
-
 /**
  * @file
  * Test case for Testing the batch example module.
  *
  * This file contains the test cases to check if module is performing as
  * expected.
- *
  */
 class BatchExampleTestCase extends DrupalWebTestCase {
   protected $web_user;

@@ -1,14 +1,15 @@
 <?php
-
 /**
  * @file
- * Implements DrupalStreamWrapperInterface to provide a demonstration session://
- * streamwrapper. This example is nearly fully functional, but has no known
+ * Provides a demonstration session:// streamwrapper.
+ *
+ * This example is nearly fully functional, but has no known
  * practical use. It's an example and demonstration only.
  */
 
 /**
  * Example stream wrapper class to handle session:// streams.
+ *
  * This is just an example, as it could have horrible results if much
  * information were placed in the $_SESSION variable. However, it does
  * demonstrate both the read and write implementation of a stream wrapper.
@@ -33,6 +34,8 @@
  * Note that because this implementation uses simple PHP arrays ($_SESSION)
  * it is limited to string values, so binary files will not work correctly.
  * Only text files can be used.
+ *
+ * @ingroup file_example
  */
 class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
@@ -54,6 +57,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
 
   /**
    * The content of the stream.
+   *
    * Since this trivial example just uses the $_SESSION variable, this is
    * simply a reference to the contents of the related part of
    * $_SESSION['file_example'].
@@ -94,9 +98,10 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   *  Implements getTarget().
-   *  The "target" is the portion of the URI to the right of the scheme.
-   *  So in session://example/test.txt, the target is 'example/test.txt'.
+   * Implements getTarget().
+   *
+   * The "target" is the portion of the URI to the right of the scheme.
+   * So in session://example/test.txt, the target is 'example/test.txt'.
    */
   function getTarget($uri = NULL) {
     if (!isset($uri)) {
@@ -133,7 +138,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
     //   - image.jpeg, and
     //   - awesome.image.jpeg
     while ($additional_part = array_pop($file_parts)) {
-      $extension = strtolower($additional_part . ($extension ? '.' . $extension : ''));
+      $extension = drupal_strtolower($additional_part . ($extension ? '.' . $extension : ''));
       if (isset($mapping['extensions'][$extension])) {
         return $mapping['mimetypes'][$mapping['extensions'][$extension]];
       }
@@ -144,6 +149,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
 
   /**
    * Implements getDirectoryPath().
+   *
    * In this case there is no directory string, so return an empty string.
    */
   public function getDirectoryPath() {
@@ -152,6 +158,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
 
   /**
    * Overrides getExternalUrl().
+   *
    * We have set up a helper function and menu entry to provide access to this
    * key via HTTP; normally it would be accessible some other way.
    */
@@ -230,6 +237,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
 
   /**
    * Return a reference to the correct $_SESSION key.
+   *
    * @param $uri
    *   The uri: session://something
    * @param $create
@@ -244,7 +252,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
     $fail = FALSE;
     $var = &$_SESSION['file_example'];
     // Handle case of just session://.
-    if (strlen($path) == 0) {
+    if (drupal_strlen($path) == 0) {
       return $var;
     }
     foreach ($path_components as $component) {
@@ -257,8 +265,10 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
     }
     return $var;
   }
+
   /**
    * Support for flock().
+   *
    * The $_SESSION variable has no locking capability, so return TRUE.
    *
    * @param $operation
@@ -291,10 +301,10 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
    */
   public function stream_read($count) {
     if (is_string($this->session_content)) {
-      $remaining_chars = strlen($this->session_content) - $this->stream_pointer;
+      $remaining_chars = drupal_strlen($this->session_content) - $this->stream_pointer;
       $number_to_read = min($count, $remaining_chars);
       if ($remaining_chars > 0) {
-        $buffer = substr($this->session_content, $this->stream_pointer, $number_to_read);
+        $buffer = drupal_substr($this->session_content, $this->stream_pointer, $number_to_read);
         $this->stream_pointer += $number_to_read;
         return $buffer;
       }
@@ -318,8 +328,8 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
     // session variable.
     $data = check_plain($data);
     $this->session_content = substr_replace($this->session_content, $data, $this->stream_pointer);
-    $this->stream_pointer += strlen($data);
-    return strlen($data);
+    $this->stream_pointer += drupal_strlen($data);
+    return drupal_strlen($data);
   }
 
   /**
@@ -348,7 +358,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
    * @see http://php.net/manual/en/streamwrapper.stream-seek.php
    */
   public function stream_seek($offset, $whence) {
-    if (strlen($this->session_content) >= $offset) {
+    if (drupal_strlen($this->session_content) >= $offset) {
       $this->stream_pointer = $offset;
       return TRUE;
     }
@@ -543,6 +553,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
 
   /**
    * Support for stat().
+   *
    * This important function goes back to the Unix way of doing things.
    * In this example almost the entire stat array is irrelevant, but the
    * mode is very important. It tells PHP whether we have a file or a

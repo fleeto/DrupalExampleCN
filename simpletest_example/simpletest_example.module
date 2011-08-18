@@ -2,12 +2,18 @@
 
 /**
  * @file
+ * Module file for simpletest_example
+ */
+
+/**
+ * @defgroup simpletest_example Example: Simpletest
+ * @ingroup examples
+ * @{
  * An example of simpletest tests to accompany the tutorial at
  * http://drupal.org/node/890654.
  *
  * This is built on a traditional node-type implementation.
  */
-
 
 /**
  * Implements hook_node_info().
@@ -87,7 +93,7 @@ function simpletest_example_form($node, $form_state) {
 /**
  * Implements hook_menu().
  *
- * Provide an explanation.
+ * Provides an explanation.
  */
 function simpletest_example_menu() {
   $items['examples/simpletest_example'] = array(
@@ -100,7 +106,7 @@ function simpletest_example_menu() {
 }
 
 /**
- * Return an explanation of this module.
+ * Returns an explanation of this module.
  */
 function _simpletest_example_explanation() {
 
@@ -108,4 +114,6 @@ function _simpletest_example_explanation() {
     a simpletest test. Please see the <a href='http://drupal.org/node/890654'>associated tutorial</a>.");
   return $explanation;
 }
-
+/**
+ * @} End of "defgroup simpletest_example".
+ */

@@ -21,6 +21,8 @@
  * To make this update function run again and again, execute the query
  * "update system set schema_version = 0 where name = 'batch_example';"
  * and then run /update.php.
+ *
+ * @ingroup batch_example
  */
 function batch_example_update_7100(&$sandbox) {
   $ret = array();

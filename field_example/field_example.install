@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Install, update, and uninstall functions for the field_example module.
@@ -8,14 +7,19 @@
 /**
  * Implements hook_field_schema().
  *
- * This defines the actual database schema of the field, using the format
- * used by the Schema API.
+ * Defines the database schema of the field, using the format used by the
+ * Schema API.
  *
- * The actual data we store here is just one 7-character element, even
+ * The data we will store here is just one 7-character element, even
  * though the widget presents the three portions separately.
  *
+ * All implementations of hook_field_schema() must be in the module's
+ * .install file.
+ *
+ * @see http://drupal.org/node/146939
+ * @see schemaapi
  * @see hook_field_schema()
- * @link schemaapi Schema API @endlink
+ * @ingroup field_example
  */
 function field_example_field_schema($field) {
   $columns = array(

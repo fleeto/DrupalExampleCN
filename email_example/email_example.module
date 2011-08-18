@@ -1,13 +1,19 @@
 <?php
-
 /**
  * @file
  * Example of how to use Drupal's mail API.
+ */
+
+/**
+ * @defgroup email_example Example: Email
+ * @ingroup examples
+ * @{
+ * Example of how to use Drupal's mail API.
  *
- * This example module provides two different examples of the Drupal email API.
- *  - defines a simple contact form and shows how to use drupal_mail()
+ * This example module provides two different examples of the Drupal email API:
+ *  - Defines a simple contact form and shows how to use drupal_mail()
  *    to send an e-mail (defined in hook_mail()) when the form is submitted.
- *  - shows how modules can alter emails defined by other Drupal modules or
+ *  - Shows how modules can alter emails defined by other Drupal modules or
  *    Core using hook_mail_alter by attaching a custom signature before
  *    they are sent.
  */
@@ -60,7 +66,7 @@ function email_example_mail($key, &$message, $params) {
 }
 
 /**
- * Send an e-mail.
+ * Sends an e-mail.
  *
  * @param $form_values
  *   An array of values from the contact form fields that were submitted.
@@ -199,3 +205,6 @@ function email_example_form_validate($form, &$form_state) {
 function email_example_form_submit($form, &$form_state) {
   email_example_mail_send($form_state['values']);
 }
+/**
+ * @} End of "defgroup email_example".
+ */

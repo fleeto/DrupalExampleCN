@@ -99,7 +99,6 @@ function _form_example_element_info() {
     '#theme_wrappers' => array('form_element'),
   );
 
-
   // form_example_checkbox is mostly a copy of the system-defined checkbox
   // element.
   $types['form_example_checkbox'] = array(
@@ -167,12 +166,13 @@ function _form_example_element_info() {
 
 
 /**
- * Build the current combined value of the phone number only when the form
+ * Builds the current combined value of the phone number only when the form
  * builder is not processing the input.
  *
- * @param array $element
- * @param boolena $input
- * @param array $form_state
+ * @param $element
+ * @param $input
+ * @param $form_state
+ *
  * @return array
  */
 function  form_example_phonenumber_combined_value(&$element, $input = FALSE, $form_state = NULL) {
@@ -205,7 +205,6 @@ function form_type_form_example_checkbox_value($element, $input = FALSE) {
     return isset($input) ? $element['#return_value'] : 0;
   }
 }
-
 
 /**
  * Process callback for the discrete version of phonenumber.
@@ -250,10 +249,10 @@ function form_example_phonenumber_discrete_process($element, &$form_state, $comp
 /**
  * Validation handler for the discrete version of the phone number.
  *
- * Using regular expressions, we check that:
- *  - the area code is a three digit number
- *  - the prefix is numeric 3-digit number
- *  - the extension is a numeric 4-digit number
+ * Uses regular expressions to check that:
+ *  - the area code is a three digit number.
+ *  - the prefix is numeric 3-digit number.
+ *  - the extension is a numeric 4-digit number.
  *
  * Any problems are shown on the form element using form_error().
  */
@@ -275,8 +274,6 @@ function form_example_phonenumber_discrete_validate($element, &$form_state) {
   }
   return $element;
 }
-
-
 
 /**
  * Process callback for the combined version of the phonenumber element.
@@ -325,9 +322,9 @@ function form_example_phonenumber_combined_process($element, &$form_state, $comp
 }
 
 /**
- * Phonenumber validation function for the combined phonenumber.
+ * Phone number validation function for the combined phonenumber.
  *
- * Using regular expressions, we check that:
+ * Uses regular expressions to check that:
  *  - the area code is a three digit number
  *  - the prefix is numeric 3-digit number
  *  - the extension is a numeric 4-digit number
@@ -375,7 +372,7 @@ function _form_example_element_theme() {
 }
 
 /**
- * Theme a custom checkbox.
+ * Themes a custom checkbox.
  *
  * This doesn't actually do anything, but is here to show that theming can
  * be done here.
@@ -384,8 +381,9 @@ function theme_form_example_checkbox($variables) {
   $element = $variables['element'];
   return theme('checkbox', $element);
 }
+
 /**
- * Format child form elements as inline elements.
+ * Formats child form elements as inline elements.
  */
 function theme_form_example_inline_form_element($variables) {
   $element = $variables['element'];
@@ -444,7 +442,7 @@ function theme_form_example_inline_form_element($variables) {
 }
 
 /**
- * This is a simple form to demonstrate how to use the various new FAPI elements
+ * Simple form to demonstrate how to use the various new FAPI elements
  * we've defined.
  */
 function form_example_element_demo_form($form, &$form_state) {
@@ -474,7 +472,7 @@ function form_example_element_demo_form($form, &$form_state) {
     '#title' => t('Combined phone number'),
     '#default_value' => variable_get('form_example_element_combined', '0000000000'),
     '#description' => t('form_example_element_combined one uses a "combined" element type, one with a single 10-digit value which is broken apart when needed.'),
-   );
+  );
 
   $form['submit'] = array(
     '#type' => 'submit',

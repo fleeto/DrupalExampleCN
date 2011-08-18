@@ -2,7 +2,14 @@
 
 /**
  * @file
- * Demonstrates how render arrays are arranged and how they can be altered.
+ * Demonstrates render arrays.
+ */
+
+/**
+ * @defgroup render_example Example: Render
+ * @ingroup examples
+ * @{
+ * Demonstrate how render arrays are arranged and how they can be altered.
  * This alters blocks and the page to show the actual render array
  * that is being used to create each item.
  *
@@ -47,6 +54,7 @@ function render_example_info() {
 
 /**
  * Provides a number of render arrays and show what they do.
+ *
  * Each array is keyed by a description; it's returned for rendering at page
  * render time. It's easy to add new examples to this.
  *
@@ -190,6 +198,7 @@ function render_example_add_suffix($element) {
  *   The rendered element.
  * @param $element
  *   The element which was rendered (for reference)
+ *
  * @return
  *   Markup altered as necessary. In this case we add a little postscript to it.
  */
@@ -199,7 +208,9 @@ function render_example_add_prefix($markup, $element) {
 }
 
 /**
- * A #theme function has the responsibility of consolidating/rendering the
+ * A #theme function.
+ *
+ * This #theme function has the responsibility of consolidating/rendering the
  * children's markup and returning it, where it will be placed in the
  * element's #children property.
  */
@@ -215,6 +226,7 @@ function theme_render_example_aggregate($variables) {
  * The following section of the example builds and arranges the altering
  * example.
  */
+
 /**
  * Builds the form that offers options of what items to show.
  */
@@ -397,6 +409,7 @@ function render_example_page_alter(&$page) {
 
 /**
  * Utility function to build a named form given a set of form elements.
+ *
  * This is a standard form builder function that takes an additional array,
  * which is itself a form.
  *
@@ -433,7 +446,7 @@ function render_example_theme() {
 }
 
 /**
- * Wrap a div around the already-rendered #children.
+ * Wraps a div around the already-rendered #children.
  */
 function theme_render_example_add_div($variables) {
   $element = $variables['element'];
@@ -444,7 +457,7 @@ function theme_render_example_add_div($variables) {
 }
 
 /**
- * Wrap a div and add a little text after the rendered #children.
+ * Wraps a div and add a little text after the rendered #children.
  */
 function theme_render_example_add_notes($variables) {
   $element = $variables['element'];
@@ -457,7 +470,7 @@ function theme_render_example_add_notes($variables) {
 }
 
 /**
- * Theme render array (from the demonstration page).
+ * Themes the render array (from the demonstration page).
  */
 function theme_render_array($variables) {
   $heading = '<div class="render-header">' . $variables['element']['#description'] . '</div>';
@@ -467,8 +480,9 @@ function theme_render_array($variables) {
 }
 
 /**
- * Add a #type to the element before it gets rendered.
+ * Adds a #type to the element before it gets rendered.
  * In this case, changes from the default 'ul' to 'ol'.
+ *
  * @param $element
  *   The element to be altered, in this case a list, ready for theme_item_list.
  *
@@ -485,6 +499,7 @@ function render_example_change_to_ol($element) {
  * theme functions have acted on it, and it receives the original data, so
  * can make decisions based on that. In this example, no use is made of the
  * passed-in $element.
+ *
  * @param $markup
  *   The already-rendered data
  * @param unknown_type $element
@@ -497,3 +512,6 @@ function render_example_add_hr($markup, $element) {
   $output = $markup . '<hr />';
   return $output;
 }
+/**
+ * @} End of "defgroup render_example".
+ */

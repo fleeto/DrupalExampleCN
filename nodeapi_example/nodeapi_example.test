@@ -6,7 +6,6 @@
  *
  * This file contains the test cases to check if module is performing as
  * expected.
- *
  */
 class NodeApiExampleTestCase extends DrupalWebTestCase {
   /**
@@ -30,7 +29,7 @@ class NodeApiExampleTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Enable modules and create user with specific permissions.
+   * Enables modules and create user with specific permissions.
    */
   function setUp() {
     parent::setUp('nodeapi_example');
@@ -49,7 +48,7 @@ class NodeApiExampleTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Login user, create an example node, and use the rating system
+   * Log user in, creates an example node, and uses the rating system.
    */
   function testNodeExampleBasic() {
 
@@ -116,7 +115,7 @@ class NodeApiExampleTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Login user, create an example node, and test rating functionality with
+   * Logs user in, creates an example node, and tests rating functionality with
    * a node using revisions.
    */
   function testNodeExampleRevision() {
