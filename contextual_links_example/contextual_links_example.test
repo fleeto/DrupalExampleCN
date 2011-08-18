@@ -37,9 +37,9 @@ class ContextualLinksExampleTestCase extends DrupalWebTestCase {
 
     // Visit our example overview page and click the third contextual link.
     // This should take us to a page for editing the third object we defined.
-    $this->drupalGet('examples/contextual-links-overview-page');
+    $this->drupalGet('examples/contextual-links');
     $this->clickLink('Edit object', 2);
-    $this->assertUrl('examples/contextual-links/3/edit', array('query' => array('destination' => 'examples/contextual-links-overview-page')));
+    $this->assertUrl('examples/contextual-links/3/edit', array('query' => array('destination' => 'examples/contextual-links')));
 
     // Enable our module's block, go back to the front page, and click the
     // "Edit object" contextual link that we expect to be there.
