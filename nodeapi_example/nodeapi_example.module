@@ -17,10 +17,10 @@
  * changes to two types: a node's content type configuration and edit forms.
  *
  * We need to have a way for administrators to indicate which content types
- * should have our rating field added. This is done by inserting a checkbox in
+ * should have our rating field added. This is done by inserting radios in
  * the node's content type configuration page.
  *
- * Changes made by this hook will be show when editing the settings of any
+ * Changes made by this hook will be shown when editing the settings of any
  * content type.
  *
  * Optionally, hook_form_FORM_ID_alter() could be used with the function name
@@ -49,7 +49,8 @@ function nodeapi_example_form_alter(&$form, $form_state, $form_id) {
       '#description' => t('Should this node have a rating attached to it?'),
     );
   }
-  // If the type and node field are set this may be a node edit form.
+  // Here we check to see if the type and node field are set. If so, it could
+  // be a node edit form.
   elseif (isset($form['type']) && isset($form['#node']) && $form['type']['#value'] . '_node_form' == $form_id) {
     // If the rating is enabled for this node type, we insert our control
     // into the form.
@@ -71,41 +72,42 @@ function nodeapi_example_form_alter(&$form, $form_state, $form_id) {
  * hook_nodeapi() has been replaced in Drupal 7 with a set of different hooks
  * providing the same or improved functionality.
  *
- * The replacement functions providing access to events ocurred to content in
- * Drupal is listed below, and detailled in the following location:
+ * The replacement functions providing access to events affecting nodes in
+ * Drupal are listed below, and detailed in the following location:
  * http://api.drupal.org/api/group/hooks/7
  * or in the node API declaration file: modules/node/node.api.php
  *
- * hook_node_access()  - Controls access to a node.
- * hook_node_access_records()  -  Sets permissions for a node to be written to the database.
- * hook_node_access_records_alter()  -  Alters permissions for a node before it is written to the database.
- * hook_node_build_alter()  -  Modifies the structured node content after node content is built.
- * hook_node_delete()  -  Acts on node deletion.
- * hook_node_grants()  -  Informs the node access system what permissions the user has.
- * hook_node_grants_alter()  -  Alters user access rules when trying to view, edit or delete a node.
- * hook_node_info()  -  Defines module-provided node types.
- * hook_node_insert()  -  Responds to node insertion.
- * hook_node_load()  -  Acts on node objects when loaded.
- * hook_node_operations()  -  Adds mass node operations.
- * hook_node_prepare()  -  The node is about to be shown on the add/edit form.
- * hook_node_prepare_translation()  -  The node is being cloned for translation.
- * hook_node_presave()  -  The node passed validation and is about to be saved.
- * hook_node_revision_delete()  -  A revision of the node is deleted.
- * hook_node_search_result()  -  The node is being displayed as a search result.
- * hook_node_type_delete()  -  Acts on node type deletion.
- * hook_node_type_insert()  -  Acts on node type creation.
- * hook_node_type_update()  -  Acts on node type changes.
- * hook_node_update()  -  The node being updated.
- * hook_node_update_index()  -  The node is being indexed.
- * hook_node_validate()  -  The user has finished editing the node and is previewing or submitting it.
- * hook_node_view()  -  The node content is being assembled before rendering.
+ * hook_node_access()	- Control access to a node.
+ * hook_node_access_records()	-	Set permissions for a node to be written to the database.
+ * hook_node_access_records_alter()	-	Alter permissions for a node before it is written to the database.
+ * hook_node_build_alter() - Modify structured content after it is built.
+ * hook_node_delete()	-	Act on node deletion.
+ * hook_node_grants()	-	Inform the node access system what permissions the user has.
+ * hook_node_grants_alter()	-	Alter user access rules when trying to view, edit or delete a node.
+ * hook_node_info() - Define module-provided node types.
+ * hook_node_insert()	-	Respond to node insertion.
+ * hook_node_load()	-	Act on node objects when loaded.
+ * hook_node_operations()	-	Add mass node operations.
+ * hook_node_prepare()	-	The node is about to be shown on the add/edit form.
+ * hook_node_prepare_translation()	-	The node is being cloned for translation.
+ * hook_node_presave()	-	The node passed validation and is about to be saved.
+ * hook_node_revision_delete()	-	A revision of the node is deleted.
+ * hook_node_search_result()	-	The node is being displayed as a search result.
+ * hook_node_type_delete()	-	Act on node type deletion.
+ * hook_node_type_insert()	-	Act on node type creation.
+ * hook_node_type_update()	-	Act on node type changes.
+ * hook_node_update()	-	The node being updated.
+ * hook_node_update_index()	-	The node is being indexed.
+ * hook_node_validate()	-	The user has finished editing the node and is previewing or submitting it.
+ * hook_node_view()	-	The node content is being assembled before rendering.
+ *
  */
 
 /**
  * Implements hook_node_validate().
  *
- * Checks that rating attribute is set in the form submission, the field is
- * required
+ * Check that the rating attribute is set in the form submission, since the
+ * field is required. If not, send error message.
  */
 function nodeapi_example_node_validate($node, $form) {
   if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
@@ -138,18 +140,18 @@ function nodeapi_example_node_load($nodes, $types) {
 
   // Now we need to make a list of revisions based on $our_types
   foreach ($nodes as $node) {
-    // We are using the revision id instead of node id
-    if (in_array($node->type, $our_types)) {
+    // We are using the revision id instead of node id.
+    if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
       $vids[] = $node->vid;
     }
   }
-  // Check if we should load rating for any of the nodes
+  // Check if we should load rating for any of the nodes.
   if (!isset($vids) || !count($vids)) {
     return;
   }
 
-  // When we read, we don't care about the $node->nid, but we look for the right
-  // revision ID ($node->vid)
+  // When we read, we don't care about the node->nid; we look for the right
+  // revision ID (node->vid).
   $result = db_select('nodeapi_example', 'e')
   ->fields('e', array('nid', 'vid', 'rating'))
   ->where('e.vid IN (:vids)', array(':vids' => $vids))
@@ -198,15 +200,14 @@ function nodeapi_example_node_delete($node) {
  * As an existing node is being updated in the database, we need to do our own
  * database updates.
  *
- * Update is called when an existing node has been changed. Here, we use a
- * DELETE then an INSERT rather than an UPDATE. The reason is that a node
- * created before this module was installed won't already have a rating
- * saved so there would be nothing to update.
+ * This hook is called when an existing node has been changed. We can't simply
+ * update, since the node may not have a rating saved, thus no
+ * database field. So we first check the database for a rating. If there is one,
+ * we update it. Otherwise, we call nodeapi_example_node_insert() to create one.
  */
 function nodeapi_example_node_update($node) {
   if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
-    // If may happen that this node does not have a previous saved rating
-    // value, so we can't just update it, we need to check first if this
+    // Check first if this node has a saved rating.
     $rating = db_select('nodeapi_example', 'e')
       ->fields('e', array(
         'rating',
@@ -215,7 +216,7 @@ function nodeapi_example_node_update($node) {
       ->execute()->fetchField();
 
     if ($rating) {
-      // node has been rated before.
+      // Node has been rated before.
       db_update('nodeapi_example')
         ->fields(array('rating' => $node->nodeapi_example_rating))
         ->condition('vid', $node->vid)
