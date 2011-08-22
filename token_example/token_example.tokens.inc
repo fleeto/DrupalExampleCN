@@ -96,16 +96,20 @@ function token_example_tokens($type, $tokens, array $data = array(), array $opti
     foreach ($tokens as $name => $original) {
       switch ($name) {
         case 'body-format':
-          $format = filter_format_load($node->body[LANGUAGE_NONE][0]['format']);
-          $replacements[$original] = $sanitize ? filter_xss($format->name) : $format->name;
+          if ($items = field_get_items('node', $node, 'body')) {
+            $format = filter_format_load($items[0]['format']);
+            $replacements[$original] = $sanitize ? filter_xss($format->name) : $format->name;
+          }
           break;
       }
     }
 
     // Chained token relationships.
     if ($format_tokens = token_find_with_prefix($tokens, 'body-format')) {
-      $body_format = filter_format_load($node->body[LANGUAGE_NONE][0]['format']);
-      $replacements += token_generate('format', $format_tokens, array('format' => $body_format), $options);
+      if ($items = field_get_items('node', $node, 'body')) {
+        $body_format = filter_format_load($items[0]['format']);
+        $replacements += token_generate('format', $format_tokens, array('format' => $body_format), $options);
+      }
     }
   }
 
@@ -116,16 +120,20 @@ function token_example_tokens($type, $tokens, array $data = array(), array $opti
     foreach ($tokens as $name => $original) {
       switch ($name) {
         case 'body-format':
-          $format = filter_format_load($comment->comment_body[LANGUAGE_NONE][0]['format']);
-          $replacements[$original] = $sanitize ? filter_xss($format->name) : $format->name;
+          if ($items = field_get_items('comment', $comment, 'comment_body')) {
+            $format = filter_format_load($items[0]['format']);
+            $replacements[$original] = $sanitize ? filter_xss($format->name) : $format->name;
+          }
           break;
       }
     }
 
     // Chained token relationships.
     if ($format_tokens = token_find_with_prefix($tokens, 'body-format')) {
-      $body_format = filter_format_load($comment->comment_body[LANGUAGE_NONE][0]['format']);
-      $replacements += token_generate('format', $format_tokens, array('format' => $body_format), $options);
+      if ($items = field_get_items('comment', $comment, 'comment_body')) {
+        $body_format = filter_format_load($items[0]['format']);
+        $replacements += token_generate('format', $format_tokens, array('format' => $body_format), $options);
+      }
     }
   }
 
