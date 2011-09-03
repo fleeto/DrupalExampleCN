@@ -6,6 +6,19 @@
  * http://drupal.org/node/890654.
  */
 
+/**
+ * The SimpletestExampleTestCase is a functional test case, meaning that it
+ * actually exercises a particular sequence of actions through the web UI.
+ * The majority of core test cases are done this way, but the Simpletest suite
+ * also provides unit tests as demonstrated in the unit test case example later
+ * in this file.
+ *
+ * Functional test cases are far slower to execute than unit test cases because
+ * they require a complete Drupal install to be done for each test.
+ *
+ * @see DrupalWebTestCase
+ * @see SimpletestUnitTestExampleTestCase
+ */
 class SimpletestExampleTestCase extends DrupalWebTestCase {
   protected $privileged_user;
 
@@ -68,12 +81,64 @@ class SimpletestExampleTestCase extends DrupalWebTestCase {
 
   /**
    * Detect if we're running on PIFR testbot; skip intentional failure in that
-   * case.
+   * case. It happens that on the testbot the site under test is in a directory
+   * named 'checkout' or 'site_under_test'.
+   *
    * @return boolean
    *   TRUE if running on testbot.
    */
   public function runningOnTestbot() {
-    $testbot_code_directory = "../checkout";
-    return file_exists($testbot_code_directory);
+    return (file_exists("../checkout") || file_exists("../site_under_test"));
+  }
+}
+
+
+/**
+ * Although most core test cases are based on DrupalWebTestCase and are
+ * functional tests (exercising the web UI) we also have DrupalUnitTestCase,
+ * which executes much faster because a Drupal install does not have to be
+ * one. No environment is provided to a test case based on DrupalUnitTestCase;
+ * it must be entirely self-contained.
+ *
+ * @see DrupalUnitTestCase
+ */
+class SimpletestUnitTestExampleTestCase extends DrupalUnitTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Simpletest Example unit tests',
+      'description' => 'Test that simpletest_example_empty_mysql_date works properly.',
+      'group' => 'Examples',
+    );
+  }
+
+  function setUp() {
+    drupal_load('module', 'simpletest_example');
+    parent::setUp();
+  }
+
+  /**
+   * Call simpletest_example_empty_mysql_date and check that it returns correct
+   * result.
+   *
+   * Note that no environment is provided; we're just testing the correct
+   * behavior of a function when passed specific arguments.
+   */
+  public function testSimpletestUnitTestExampleFunction() {
+    $result = simpletest_example_empty_mysql_date(NULL);
+    $message = t('A NULL value should return TRUE.');
+    $this->assertTrue($result, $message);
+
+    $result = simpletest_example_empty_mysql_date('');
+    $message = t('An empty string should return TRUE.');
+    $this->assertTrue($result, $message);
+
+    $result = simpletest_example_empty_mysql_date('0000-00-00');
+    $message = t('An "empty" MySQL DATE should return TRUE.');
+    $this->assertTrue($result, $message);
+
+    $result = simpletest_example_empty_mysql_date(date('Y-m-d'));
+    $message = t('A valid date should return FALSE.');
+    $this->assertFalse($result, $message);
   }
 }

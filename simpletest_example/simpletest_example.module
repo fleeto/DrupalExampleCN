@@ -114,6 +114,19 @@ function _simpletest_example_explanation() {
     a simpletest test. Please see the <a href='http://drupal.org/node/890654'>associated tutorial</a>.");
   return $explanation;
 }
+
+/**
+ * A simple self-contained function used to demonstrate unit tests.
+ *
+ * @see SimpletestUnitTestExampleTestCase
+ */
+function simpletest_example_empty_mysql_date($date_string) {
+  if (empty($date_string) || $date_string == '0000-00-00' || $date_string == '0000-00-00 00:00:00') {
+    return true;
+  }
+  return false;
+}
+
 /**
  * @} End of "defgroup simpletest_example".
  */
