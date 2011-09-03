@@ -27,22 +27,25 @@
  * simply creates them using the Drupal user interface. Creating a node like
  * this in code is a special case.
  *
+ * Since we only have to define our node type once, most of the code
+ * required to do this is moved to the node type's .install file.
  * Drupal 7 has us defining most of our node structure in arrays,
  * and passing those to node_type_save(). We use hook_install() as
  * a convenient place to define these types, and hook_uninstall()
  * as a convenient place to not only uninstall the data contained
  * in these nodes, but also remove the node types from Drupal's
- * knowledge. This means that most of the code to define a new node type
- * would be in the module's .install file.
+ * knowledge.
  *
  * In previous versions of Drupal, "teaser" and "page" were node view modes.
  * In Drupal 7 we can define custom view modes to let the node know how it
  * should return it's data.  This module declares a custom view mode called
  * "example_node_list".
  *
- * @see @link http://drupal.org/node/707832 Field API Tutorial @endlink
- * @see @link http://drupal.org/node/443536 Field API Handbook Page @endlink
- * @see @link field Field API documentation @endlink
+ * Consult the @link http://drupal.org/node/707832 Field API Tutorial @endlink
+ * and @link http://drupal.org/node/443536 Field API Handbook Page @endlink
+ * and @link field Field API documentation @endlink.
+ *
+ * @see node_example.install
  * @see field_example.module
  */
 
@@ -62,16 +65,23 @@ function node_example_menu() {
 }
 
 /**
- * Custom callback that builds our content and returns it to the browser.
+ * Callback that builds our content and returns it to the browser.
+ *
+ * This callback comes from hook_menu().
  *
  * @return
- *   A build array.
+ *   a build array
+ *   a renderable array showing a list of our nodes.
  *
- * @see node_load
- * @see node_view
+ * @see node_load()
+ * @see node_view()
+ * @see node_example_field_formatter_view()
  */
 function node_example_page() {
-  $build = array();
+  // We'll start building a renderable array that will be our page.
+  // For now we just declare the array.
+  $renderable_array = array();
+  // We query the database and find all of the nodes for the type we defined.
   $sql = 'SELECT nid FROM {node} n WHERE n.type = :type AND n.status = :status';
   $result = db_query($sql,
     array(
@@ -79,15 +89,18 @@ function node_example_page() {
       ':status' => 1,
     )
   );
-
+  $renderable_array['explanation'] = array(
+    '#markup' => t("Node Example nodes you've created will be displayed here. Note that the color fields will be displayed differently in this list, than if you view the node normally. Click on the node title to see the difference. This is a result of using our 'example_node_list' node view type."),
+    );
   // Loop through each of our node_example nodes and instruct node_view
-  // to use our custom "example_node_list" view.
+  // to use our "example_node_list" view.
+  // http://api.drupal.org/api/function/node_load/7
+  // http://api.drupal.org/api/function/node_view/7
   foreach ($result as $row) {
     $node = node_load($row->nid);
-    $build['node_list'][]= node_view($node, 'example_node_list');
+    $renderable_array['node_list'][]= node_view($node, 'example_node_list');
   }
-
-  return $build;
+  return $renderable_array;
 }
 
 /**
@@ -95,9 +108,9 @@ function node_example_page() {
  *
  * We need to modify the default node entity info by adding a new view mode to
  * be used in functions like node_view() or node_build_content().
- *
  */
 function node_example_entity_info_alter(&$entity_info) {
+  // Add our new view mode to the list of view modes...
   $entity_info['node']['view modes']['example_node_list'] = array(
     'label' => t('Example Node List'),
     'custom settings' => TRUE,
@@ -157,12 +170,9 @@ function node_example_theme($existing, $type, $theme, $path) {
 function node_example_help($path, $arg) {
   switch ($path) {
     case 'examples/node_example':
-      return "<p>" . t(
-        "The Node Example module provides a custom node type.
-        You can create new nodes using the <a href='!nodeadd'>node add form</a>.
-        Nodes that you create will be displayed here.",
-        array('!nodeadd' => url('node/add/node-example'))
-      ) . "</p>";
+      return "<p>" . t("The Node Example module provides a custom node type.
+        You can create new Example Node nodes using the <a href='!nodeadd'>node add form</a>.",
+        array('!nodeadd' => url('node/add/node-example'))) . "</p>";
   }
 }
 
