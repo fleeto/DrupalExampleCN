@@ -27,6 +27,7 @@
  * - @link render_example.module Demonstrates the render API @endlink
  * - @link simpletest_example.module Writing tests for Drupal @endlink
  * - @link tablesort_example.module Use a render array to present a table with automatic sorting @endlink
+ * - @link theming_example.module Demonstrate how modules shoule use theme functions and provide tpl.php files @endlink
  * - @link token_example.module Using tokens @endlink
  * - @link trigger_example.module Implementing triggers and actions @endlink
  * - @link vertical_tabs_example.module Using vertical tabs @endlink
