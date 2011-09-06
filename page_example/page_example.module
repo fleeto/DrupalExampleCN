@@ -53,25 +53,21 @@ function page_example_permission() {
 /**
  * Implements hook_menu().
  *
- * hook_menu() must be implemented to emit items to place in the main menu.
- * This is a required step for modules wishing to display their own pages,
- * because the process of creating the links also tells Drupal what
- * callback function to use for a given URL. The menu items returned
- * here provide this information to the menu system.
+ * Because hook_menu() registers URL paths for items defined by the function, it
+ * is necessary for modules that create pages. Each item can also specify a
+ * callback function for a given URL. The menu items returned here provide this
+ * information to the menu system.
  *
  * With the below menu definitions, URLs will be interpreted as follows:
  *
- * If the user accesses http://example.com/?q=examples/page_example/simple, then
+ * If the user accesses http://example.com/?q=examples/page_example/simple,
  * the menu system will first look for a menu item with that path. In this case
  * it will find a match, and execute page_example_simple().
  *
  * If the user accesses http://example.com/?q=examples/page_example/arguments,
- * no match will be found, so the system will look for 'examples/page_example',
- * which exists, and that page will be displayed.
- *
- * If the user accesses http://example.com/?q=examples/page_example/arguments,
- * the menu system will find no explicit match so will fall back to execute
- * page_example_description().
+ * no match will be found, so the system will look for 'examples/page_example'.
+ * That URL exists, and its page callback, page_example_description(), will
+ * be executed.
  *
  * If the user accesses
  * http://example.com/?q=examples/page_example/arguments/1/2, the menu
@@ -82,7 +78,7 @@ function page_example_permission() {
  * examples/page_example/arguments/%/%. This time it finds a match, and so will
  * execute page_example_arguments(1, 2). Since the parameters are passed to
  * the function after the match, the function can do additional checking or
- * make use of them without resulting to the arg() function.
+ * make use of them before executing the callback function.
  *
  * The @link menu_example.module Menu Example @endlink provides extensive
  * examples for hook_menu().
@@ -90,7 +86,7 @@ function page_example_permission() {
 function page_example_menu() {
 
   // This is the minimum information you can provide for a menu item. This menu
-  // item will be created in the default menu.
+  // item will be created in the default menu, usually Navigation.
   $items['examples/page_example'] = array(
     'title' => 'Page Example',
     'page callback' => 'page_example_description',
@@ -105,14 +101,14 @@ function page_example_menu() {
   );
 
   // By using the MENU_CALLBACK type, we can register the callback for this
-  // path but do not have the item show up in the menu; the admin is not allowed
-  // to enable the item in the menu, either.
+  // path without the item appearing in the menu; the admin cannot enable the
+  // item in the menu, either.
   //
-  // Notice that the 'page arguments' is an array of numbers. These will be
+  // Notice that 'page arguments' is an array of numbers. These will be
   // replaced with the corresponding parts of the menu path. In this case a 0
-  // would be replaced by 'example', a 1 by 'arguments', and like wise 2 and 3 will
-  // be replaced by what ever the user provides. These will be passed as
-  // arguments to the page_example_arguments() function.
+  // would be replaced by 'example', a 1 by 'page_example', and a 2 by
+  // 'arguments.' 3 and 4 will be replaced by whatever the user provides.
+  // These will be passed as arguments to the page_example_arguments() function.
   $items['examples/page_example/arguments/%/%'] = array(
     'page callback' => 'page_example_arguments',
     'page arguments' => array(3, 4),
