@@ -691,10 +691,9 @@ function form_example_tutorial_9_submit($form, &$form_state) {
  * @ingroup form_example
  */
 function form_example_tutorial_10($form_state) {
-  // enctype="multipart/form-data" required by browsers to handle files.
-  $form = array(
-    '#attributes' => array('enctype' => "multipart/form-data"),
-  );
+  // If you are familiar with how browsers handle files, you know that
+  // enctype="multipart/form-data" is required. Drupal takes care of that, so
+  // you don't need to include it yourself.
 
   $form['file'] = array(
     '#type' => 'file',
