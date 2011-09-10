@@ -11,9 +11,14 @@
  * @{
  * Demonstrates uses of the Menu APIs in Drupal.
  *
+ * The Page Example module also talks about the menu system, as well
+ * as how to use menu arguments to generate pages.
+ *
  * @see hook_menu()
  * @see hook_menu_alter()
  * @see hook_menu_link_alter()
+ * @see page_example
+ * @see page_example_menu()
  */
 
 /**

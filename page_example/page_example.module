@@ -9,8 +9,12 @@
  * @defgroup page_example Example: Page
  * @ingroup examples
  * @{
- * This is an example outlining how a module can be used to display a
- * custom page at a given URL.
+ * This example demonstrates how a module can display a page at a given URL.
+ *
+ * It's important to understand how the menu system works in order to
+ * implement your own pages. See the Menu Example module for some insight.
+ *
+ * @see menu_example
  */
 
 /**
@@ -58,16 +62,15 @@ function page_example_permission() {
  * callback function for a given URL. The menu items returned here provide this
  * information to the menu system.
  *
- * With the below menu definitions, URLs will be interpreted as follows:
+ * We will define some menus, and their paths will be interpreted as follows:
  *
  * If the user accesses http://example.com/?q=examples/page_example/simple,
  * the menu system will first look for a menu item with that path. In this case
  * it will find a match, and execute page_example_simple().
  *
  * If the user accesses http://example.com/?q=examples/page_example/arguments,
- * no match will be found, so the system will look for 'examples/page_example'.
- * That URL exists, and its page callback, page_example_description(), will
- * be executed.
+ * the menu system will find no explicit match, and will fall back to the
+ * closest match, 'examples/page_example', executing page_example_description().
  *
  * If the user accesses
  * http://example.com/?q=examples/page_example/arguments/1/2, the menu
@@ -80,8 +83,8 @@ function page_example_permission() {
  * the function after the match, the function can do additional checking or
  * make use of them before executing the callback function.
  *
- * The @link menu_example.module Menu Example @endlink provides extensive
- * examples for hook_menu().
+ * @see hook_menu()
+ * @see menu_example
  */
 function page_example_menu() {
 
@@ -120,14 +123,19 @@ function page_example_menu() {
 }
 
 /**
- * page_example_description function.
+ * Constructs a descriptive page.
+ *
+ * Our menu maps this function to the path 'examples/page_example'.
+ *
  */
 function page_example_description() {
   return array('#markup' => t('The page_example provides two pages, "simple" and "arguments". The <a href="@simple_link">simple page</a> just returns a renderable array for display. The <a href="@arguments_link">arguments page</a> takes two arguments and displays them, as in @arguments_link', array('@simple_link' => url('examples/page_example/simple', array('absolute' => TRUE)), '@arguments_link' => url('examples/page_example/arguments/23/56', array('absolute' => TRUE)))));
 }
 
 /**
- * A simple page callback.
+ * Constructs a simple page.
+ *
+ * The simple page callback, mapped to the path 'examples/page_example/simple'.
  *
  * Page callbacks return a renderable array with the content area of the page.
  * The theme system will later render and surround the content in the
@@ -143,7 +151,9 @@ function page_example_simple() {
 /**
  * A more complex page callback that takes arguments.
  *
- * The arguments are passed in from the page URL. The in our hook_menu
+ * This callback is mapped to the path 'examples/page_example/arguments/%/%'.
+ *
+ * The % arguments are passed in from the page URL. In our hook_menu
  * implementation we instructed the menu system to extract the last two
  * parameters of the path and pass them to this function as arguments.
  *
@@ -152,6 +162,9 @@ function page_example_simple() {
  * list is left unrendered, and a #theme attached to it so that it can be
  * rendered as late as possible, giving more parts of the system a chance to
  * change it if necessary.
+ *
+ * Consult @link http://drupal.org/node/930760 Render Arrays documentation
+ * @endlink for details.
  */
 function page_example_arguments($first, $second) {
   // Make sure you don't trust the URL to be safe! Always check for exploits.
