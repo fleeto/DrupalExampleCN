@@ -20,16 +20,29 @@
 /**
  * Implements hook_help().
  *
- * Throughout Drupal, hook_help() is used to display help text at the top of
- * pages. Some other parts of Drupal pages get explanatory text from these hooks
- * as well. We use it here to illustrate how to add help text to the pages your
- * module defines.
+ * Through hook_help(), a module can make documentation available to the user
+ * for the module as a whole or for specific paths. Where the help appears
+ * depends on the $path specified.
+ *
+ * In the first example below, the help text will appear on the simple page
+ * defined in hook_menu below in the region designated for help text.
+ *
+ * In the second example, the text will be available through the module page as
+ * a link beside the module or on the admin help page (admin/help) in the list
+ * of help topics using the name of the module. To specify help in the admin
+ * section use the module name in the path as in the second case below.
+ *
+ * @see hook_help()
  */
 function page_example_help($path, $arg) {
   switch ($path) {
-    case 'admin/help#simple':
-      // Here is some help text for a custom page.
-      return t('This sentence contains all the letters in the English alphabet.');
+    case 'examples/page_example/simple':
+      // Help text for the simple page registered for this path.
+      return t('This is help text for the simple page.');
+
+    case 'admin/help#page_example':
+      // Help text for the admin section, using the module name in the path.
+      return t('This is help text created in the page example\'s second case.');
   }
 }
 
