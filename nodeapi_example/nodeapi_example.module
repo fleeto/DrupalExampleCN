@@ -2,12 +2,28 @@
 
 /**
  * @file
- * This is an example outlining how a module can be used to extend existing
- * content types.
+ *
+ * Module implementation for nodeapi_example module.
+ */
+
+/**
+ * @defgroup nodeapi_example Example: NodeAPI
+ * @ingroup examples
+ * @{
+ * Example using NodeAPI.
+ *
+ * This is an example demonstrating how a module can be used to extend existing
+ * node types.
+ *
+ * hook_nodeapi() has been replaced in Drupal 7 with a set of different hooks
+ * providing the same or improved functionality. See the NodeAPI hooks list
+ * at api.drupal.org (linked below).
  *
  * We will add the ability for each node to have a "rating," which will be a
  * number from one to five. The rating will be tracked using the revision
  * system also, so every node revision may have different rating values.
+ *
+ * @see node_api_hooks
  */
 
 /**
@@ -67,41 +83,6 @@ function nodeapi_example_form_alter(&$form, $form_state, $form_id) {
     }
   }
 }
-
-/**
- * hook_nodeapi() has been replaced in Drupal 7 with a set of different hooks
- * providing the same or improved functionality.
- *
- * The replacement functions providing access to events affecting nodes in
- * Drupal are listed below, and detailed in the following location:
- * http://api.drupal.org/api/group/hooks/7
- * or in the node API declaration file: modules/node/node.api.php
- *
- * hook_node_access()	- Control access to a node.
- * hook_node_access_records()	-	Set permissions for a node to be written to the database.
- * hook_node_access_records_alter()	-	Alter permissions for a node before it is written to the database.
- * hook_node_build_alter() - Modify structured content after it is built.
- * hook_node_delete()	-	Act on node deletion.
- * hook_node_grants()	-	Inform the node access system what permissions the user has.
- * hook_node_grants_alter()	-	Alter user access rules when trying to view, edit or delete a node.
- * hook_node_info() - Define module-provided node types.
- * hook_node_insert()	-	Respond to node insertion.
- * hook_node_load()	-	Act on node objects when loaded.
- * hook_node_operations()	-	Add mass node operations.
- * hook_node_prepare()	-	The node is about to be shown on the add/edit form.
- * hook_node_prepare_translation()	-	The node is being cloned for translation.
- * hook_node_presave()	-	The node passed validation and is about to be saved.
- * hook_node_revision_delete()	-	A revision of the node is deleted.
- * hook_node_search_result()	-	The node is being displayed as a search result.
- * hook_node_type_delete()	-	Act on node type deletion.
- * hook_node_type_insert()	-	Act on node type creation.
- * hook_node_type_update()	-	Act on node type changes.
- * hook_node_update()	-	The node being updated.
- * hook_node_update_index()	-	The node is being indexed.
- * hook_node_validate()	-	The user has finished editing the node and is previewing or submitting it.
- * hook_node_view()	-	The node content is being assembled before rendering.
- *
- */
 
 /**
  * Implements hook_node_validate().
@@ -292,3 +273,7 @@ function theme_nodeapi_example_rating($variables) {
   $output .= '</div>';
   return $output;
 }
+
+/**
+ * @} End of "defgroup nodeapi_example".
+ */

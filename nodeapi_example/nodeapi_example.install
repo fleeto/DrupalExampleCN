@@ -7,6 +7,8 @@
 
 /**
  * Implements hook_schema().
+ *
+ * @ingroup nodeapi_example
  */
 function nodeapi_example_schema() {
   $schema['nodeapi_example'] = array(
