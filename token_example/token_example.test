@@ -45,7 +45,6 @@ class TokenExampleTestCase extends DrupalWebTestCase {
       ->execute();
 
     $this->drupalGet('examples/token');
-    $this->assertFieldByName('node');
 
     $edit = array(
       'text' => 'Would you like to view the [node:type-name] [node:title] with text format [node:body-format] (ID [node:body-format:id])?',
