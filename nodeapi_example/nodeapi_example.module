@@ -57,11 +57,14 @@ function nodeapi_example_form_alter(&$form, $form_state, $form_id) {
       '#weight' => -1,
     );
 
-    $form['rating']['nodeapi_example'] = array(
+    $form['rating']['nodeapi_example_node_type'] = array(
       '#type' => 'radios',
       '#title' => t('NodeAPI Example Rating'),
-      '#default_value' => variable_get('nodeapi_example_' . $form['#node_type']->type, FALSE),
-      '#options' => array(FALSE => t('Disabled'), TRUE => t('Enabled')),
+      '#default_value' => variable_get('nodeapi_example_node_type_' . $form['#node_type']->type, FALSE),
+      '#options' => array(
+        FALSE => t('Disabled'),
+        TRUE => t('Enabled')
+      ),
       '#description' => t('Should this node have a rating attached to it?'),
     );
   }
@@ -71,7 +74,7 @@ function nodeapi_example_form_alter(&$form, $form_state, $form_id) {
     // If the rating is enabled for this node type, we insert our control
     // into the form.
     $node = $form['#node'];
-    if (variable_get('nodeapi_example_' . $form['type']['#value'], FALSE)) {
+    if (variable_get('nodeapi_example_node_type_' . $form['type']['#value'], FALSE)) {
       $form['nodeapi_example_rating'] = array(
         '#type' => 'select',
         '#title' => t('Rating'),
@@ -91,7 +94,7 @@ function nodeapi_example_form_alter(&$form, $form_state, $form_id) {
  * field is required. If not, send error message.
  */
 function nodeapi_example_node_validate($node, $form) {
-  if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
+  if (variable_get('nodeapi_example_node_type_' . $node->type, FALSE)) {
     if (isset($node->nodeapi_example_rating) && !$node->nodeapi_example_rating) {
       form_set_error('nodeapi_example_rating', t('You must rate this content.'));
     }
@@ -108,7 +111,7 @@ function nodeapi_example_node_load($nodes, $types) {
   // We can use $types to figure out if we need to process any of these nodes.
   $our_types = array();
   foreach ($types as $type) {
-    if (variable_get('nodeapi_example_' . $type, FALSE)) {
+    if (variable_get('nodeapi_example_node_type_' . $type, FALSE)) {
       $our_types[] = $type;
     }
   }
@@ -122,7 +125,7 @@ function nodeapi_example_node_load($nodes, $types) {
   // Now we need to make a list of revisions based on $our_types
   foreach ($nodes as $node) {
     // We are using the revision id instead of node id.
-    if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
+    if (variable_get('nodeapi_example_node_type_' . $node->type, FALSE)) {
       $vids[] = $node->vid;
     }
   }
@@ -150,7 +153,7 @@ function nodeapi_example_node_load($nodes, $types) {
  * database inserts.
  */
 function nodeapi_example_node_insert($node) {
-  if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
+  if (variable_get('nodeapi_example_node_type_' . $node->type, FALSE)) {
     // Notice that we are ignoring any revision information using $node->nid
     db_insert('nodeapi_example')
     ->fields(array(
@@ -187,7 +190,7 @@ function nodeapi_example_node_delete($node) {
  * we update it. Otherwise, we call nodeapi_example_node_insert() to create one.
  */
 function nodeapi_example_node_update($node) {
-  if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
+  if (variable_get('nodeapi_example_node_type_' . $node->type, FALSE)) {
     // Check first if this node has a saved rating.
     $rating = db_select('nodeapi_example', 'e')
       ->fields('e', array(
@@ -227,7 +230,7 @@ function nodeapi_example_node_update($node) {
  * with additional information.
  */
 function nodeapi_example_node_view($node, $build_mode = 'full') {
-  if (variable_get('nodeapi_example_' . $node->type, FALSE)) {
+  if (variable_get('nodeapi_example_node_type_' . $node->type, FALSE)) {
     // Make sure to set a rating, also for nodes saved previously and not yet rated.
     $rating = isset($node->nodeapi_example_rating) ? $node->nodeapi_example_rating : 0;
     $node->content['nodeapi_example'] = array(
