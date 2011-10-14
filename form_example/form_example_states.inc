@@ -21,15 +21,15 @@
  * @code
  * '#states' => array(
  *   'visible' => array(
- *     ':input[name="student_type"]' => array('value' => t('High School')),
+ *     ':input[name="student_type"]' => array('value' => 'high_school'),
  *   ),
  * ),
  * @endcode
  * Meaning that the element is to be made visible when the condition is met.
  * The condition is a combination of a jQuery selector (which selects the
  * element we want to test) and a condition for that element. In this case,
- * the condition is whether the value of the 'student_type' element is
- * 'High School'. If it is, this element will be visible.
+ * the condition is whether the return value of the 'student_type' element is
+ * 'high_school'. If it is, this element will be visible.
  *
  * So the syntax is:
  * @code
@@ -58,7 +58,11 @@
 function form_example_states_form($form, &$form_state) {
   $form['student_type'] = array(
     '#type' => 'radios',
-    '#options' => drupal_map_assoc(array(t('High School'), t('Undergraduate'), t('Graduate'))),
+    '#options' => array(
+      'high_school'   => t('High School'),
+      'undergraduate' => t('Undergraduate'),
+      'graduate'      => t('Graduate'),
+    ),
     '#title' => t('What type of student are you?')
   );
   $form['high_school'] = array(
@@ -68,7 +72,7 @@ function form_example_states_form($form, &$form_state) {
     // be shown if the "student_type" form element is set to "High School".
     '#states' => array(
       'visible' => array(
-        ':input[name="student_type"]' => array('value' => t('High School')),
+        ':input[name="student_type"]' => array('value' => 'high_school'),
       ),
     ),
   );
@@ -85,7 +89,7 @@ function form_example_states_form($form, &$form_state) {
     // value as the one that triggers visibility.
     '#states' => array(
       'visible' => array(   // action to take.
-        ':input[name="student_type"]' => array('value' => t('High School')),
+        ':input[name="student_type"]' => array('value' => 'high_school'),
       ),
     ),
   );
@@ -124,7 +128,7 @@ function form_example_states_form($form, &$form_state) {
     // be shown if the "student_type" form element is set to "Undergraduate".
     '#states' => array(
       'visible' => array(
-        ':input[name="student_type"]' => array('value' => t('Undergraduate')),
+        ':input[name="student_type"]' => array('value' => 'undergraduate'),
       ),
     ),
   );
@@ -208,7 +212,7 @@ function form_example_states_form($form, &$form_state) {
     // be shown if the "student_type" form element is set to "Graduate".
     '#states' => array(
       'visible' => array(
-        ':input[name="student_type"]' => array('value' => t('Graduate')),
+        ':input[name="student_type"]' => array('value' => 'graduate'),
       ),
     ),
   );
