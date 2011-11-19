@@ -214,7 +214,7 @@ function nodeapi_example_node_update($node) {
 }
 
 /**
- * Implements hook_view().
+ * Implements hook_node_view().
  *
  * This is a typical implementation that simply runs the node text through
  * the output filters.
