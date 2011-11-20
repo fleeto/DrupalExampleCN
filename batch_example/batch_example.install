@@ -62,8 +62,9 @@ function batch_example_update_7100(&$sandbox) {
   }
 
   // Set the "finished" status, to tell batch engine whether this function
-  // needs to run again.
-  $sandbox['#finished'] = ($sandbox['progress'] >= $sandbox['max']);
+  // needs to run again. If you set a float, this will indicate the progress
+  // of the batch so the progress bar will update.
+  $sandbox['#finished'] = ($sandbox['progress'] >= $sandbox['max']) ? TRUE : ($sandbox['progress'] / $sandbox['max']);
 
   // Set up a per-run message; Make a copy of $sandbox so we can change it.
   // This is simply a debugging stanza to illustrate how to capture status
