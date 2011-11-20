@@ -18,6 +18,9 @@
  * The several examples here demonstrate basic AJAX usage.
  */
 
+// The Node Form Alter example needs to be in another file.
+module_load_include('inc', 'ajax_example', 'ajax_example_node_form_alter');
+
 /**
  * Implements hook_menu().
  *
