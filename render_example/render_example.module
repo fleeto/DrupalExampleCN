@@ -133,7 +133,12 @@ function render_example_arrays() {
     // - 'granularity', a bitmask determining at what level the caching is done
     //   (user, role, page).
     t('cache demonstration') => array(
-      '#markup' => t('The current time was %time when this was cached. Updated every %interval seconds', array('%time' => date('r'), '%interval' => $interval)),
+      // If your expensive function were to be executed here it would happen
+      // on every page load regardless of the cache. The actual markup is
+      // added via the #pre_render function, so that drupal_render() will only
+      // execute the expensive function if this array has not been cached.
+      '#markup' => '',
+      '#pre_render' => array('render_example_cache_pre_render'),
       '#cache' => array(
         'keys' => array('render_example', 'cache', 'demonstration'),
         'bin' => 'cache',
@@ -170,6 +175,40 @@ function render_example_arrays() {
   return $page_array;
 }
 
+/**
+ * A '#pre_render' function.
+ *
+ * @param $element
+ *   The element which will be rendered.
+ *
+ * @return
+ *   The altered element. In this case we add the #markup.
+ */
+function render_example_cache_pre_render($element) {
+  $element['#markup'] = render_example_cache_expensive();
+
+  // The following line is due to the bug described in
+  // http://drupal.org/node/914792. A #markup element's #pre_render must set
+  // #children because it replaces the default #markup pre_render, which is
+  // drupal_pre_render_markup().
+  $element['#children'] = $element['#markup'];
+  return $element;
+}
+
+/**
+ * A potentially expensive function.
+ *
+ * @return
+ *   Some demo text.
+ */
+function render_example_cache_expensive() {
+  $interval = 60;
+  $time_message = t('The current time was %time when this was cached. Updated every %interval seconds', array('%time' => date('r'), '%interval' => $interval));
+  // Uncomment the following line to demonstrate that this function is not
+  // being run when the rendered array is cached.
+  // drupal_set_message($time_message);
+  return $time_message;
+}
 
 /**
  * A '#pre_render' function.
