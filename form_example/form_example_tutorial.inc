@@ -3,13 +3,13 @@
 /**
  * @file
  * This is the Form API Tutorial from the handbook.
- * TODO: Update this URL, and update it in the dynamic text below.
- * @see http://drupal.org/node/262422
  *
  * It goes through nine form examples in increasing complexity to demonstrate
  * Drupal 7 Form API.
  *
  * Links are provided inline for the related handbook pages.
+ *
+ * @see http://drupal.org/node/262422
  */
 
 /**
@@ -392,7 +392,7 @@ function form_example_tutorial_7_submit($form, &$form_state) {
  */
 function form_example_tutorial_8($form, &$form_state) {
 
-  // Display page 2 if $form_state['page_num'] == 1
+  // Display page 2 if $form_state['page_num'] == 2
   if (!empty($form_state['page_num']) && $form_state['page_num'] == 2) {
     return form_example_tutorial_8_page_two($form, $form_state);
   }
