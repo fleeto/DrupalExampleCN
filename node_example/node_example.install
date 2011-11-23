@@ -47,15 +47,19 @@ function node_example_install() {
     // our node as if we had designed it in the UI.
     'base' => 'node_content',
     'description' => $t('This is an example node type with a few fields.'),
-    'body_label' => $t('Example Description'),
-    'custom' => TRUE,
+    'title_label' => $t('Example Title'),
+	'custom' => TRUE,
   );
 
   // Complete the node type definition by setting any defaults not explicitly
   // declared above.
   // http://api.drupal.org/api/function/node_type_set_defaults/7
   $content_type = node_type_set_defaults($node_example);
-  node_add_body_field($content_type);
+
+  //We add a body field and set the body label immediately.
+  node_add_body_field($content_type, $t('Example Description'));
+
+
 
   // Save the content type
   node_type_save($content_type);
@@ -64,6 +68,10 @@ function node_example_install() {
   // Load the instance definition for our content type's body
   // http://api.drupal.org/api/function/field_info_instance/7
   $body_instance = field_info_instance('node', 'body', 'node_example');
+
+  //As an alternative for node_add_body_field($type, $label = 'Body')
+  //the 'label'-key can be used to set the body label on the field instance
+  //$body_instance['label'] = $t('Example Description');
 
   // Add our example_node_list view mode to the body instance display by
   // instructing the body to display as a summary
@@ -90,7 +98,6 @@ function node_example_install() {
     field_create_instance($instance);
   }
 }
-
 /**
  * Implements hook_uninstall().
  *
