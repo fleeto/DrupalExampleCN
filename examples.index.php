@@ -9,6 +9,8 @@
  * - @link batch_example.module Using the batch API @endlink
  * - @link block_example.module Defining blocks @endlink
  * - @link contextual_links_example.module Defining contextual links @endlink
+ * - @link cache_example.module Demonstrate Drupal caching @endlink
+ * - @link cron_example.module Using hook_cron() and hook_cron_queue_info() @endlink
  * - @link dbtng_example.module Database examples (DBTNG) @endlink
  * - @link email_example.module Sending e-mail @endlink
  * - @link field_example.module Defining fields in the field API @endlink
