@@ -72,6 +72,13 @@ function block_example_block_info() {
     'pages' => 'node/*', // Not usually provided here.
   );
 
+  $blocks['example_uppercase'] = array(
+    // info: The name of the block.
+    'info' => t('Example: uppercase this please'),
+    'status' => TRUE,
+    'region' => 'sidebar_first',  // Not usually provided.
+  );
+
   return $blocks;
 }
 
@@ -138,6 +145,10 @@ function block_example_block_view($delta = '') {
       $block['subject'] = t('Title of second block (example_empty)');
       $block['content'] = block_example_contents($delta);
       break;
+    case 'example_uppercase':
+      $block['subject'] = t("uppercase this please");
+      $block['content'] = t("This block's title will be changed to uppercase. Any other block with 'uppercase' in the subject or title will also be altered. If you change this block's title through the UI to omit the word 'uppercase', it will still be altered to uppercase as the subject key has not been changed.");
+      break;
   }
   return $block;
 }
@@ -153,6 +164,7 @@ function block_example_contents($which_block) {
       // block configuration or, if none has set, a default value.
       // Block content can be returned in two formats: renderable arrays
       // (as here) are preferred though a simple string will work as well.
+      // Block content created through the UI defaults to a string.
       return array('#markup' => variable_get('block_example_string',  t('A default value. This block was created at %time', array('%time' => date('c')))));
     case 'example_empty':
       // It is possible that a block not have any content, since it is
@@ -200,27 +212,26 @@ function block_example_block_list_alter(&$blocks) {
  *
  * In addition, instead of hook_block_view_alter(), which is called for all
  * blocks, you can also use hook_block_view_MODULE_DELTA_alter() to alter a
- * specific block.
- *
- * We are going to uppercase the title of any block if the string "magic string"
- * is encountered in the content. If we were changing only our block using
- * hook_block_view_MODULE_DELTA_alter to do this, we would have used the
- * function:
+ * specific block. To change only our block using
+ * hook_block_view_MODULE_DELTA_alter, we would use the function:
  * block_example_block_view_block_example_example_configurable_text_alter()
  *
- * To demonstrate the effect of this hook, you can use the
- * 'configurable_text_string' block created by this module and add the
- * text 'magic string' into the configuration.
+ * We are going to uppercase the subject (the title of the block as shown to the
+ * user) of any block if the string "uppercase" appears in the block title or
+ * subject. Default block titles are set programmatically in the subject key;
+ * titles created through the UI are saved in the title key. This module creates
+ * an example block to demonstrate this effect (default title set
+ * programmatically as subject).  You can also demonstrate the effect of this
+ * hook by creating a new block whose title has the string 'uppercase' in it
+ * (set as title through the UI).
  */
 function block_example_block_view_alter(&$data, $block) {
-  // Verify the we have raw text content
-  if (!isset($data['content']) || !is_string($data['content'])) {
-    return;
-  }
-
-  // If the content contains the string: 'magic string', uppercase the title.
-  if (strstr($data['content'], 'magic string')) {
+  // We'll search for the string 'uppercase'.
+  if ((!empty($block->title) && stristr($block->title, 'uppercase')) || (!empty($data['subject']) && stristr($data['subject'], 'uppercase'))) {
+    // This will uppercase the default title.
     $data['subject'] = isset($data['subject']) ? drupal_strtoupper($data['subject']) : '';
+    // This will uppercase a title set in the UI.
+    $block->title = isset($block->title) ? drupal_strtoupper($block->title) : '';
   }
 }
 /**

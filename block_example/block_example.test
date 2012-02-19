@@ -62,15 +62,20 @@ class BlockExampleTestCase extends DrupalWebTestCase {
     $this->drupalGet('/');
     $this->assertRaw( $string, t('Content of configurable text block successfully verified.'));
 
-    // Verify the view_alter hook implementation. Change content of our block
-    // to be 'magic string'
-    $string = 'there is a magic string in content';
-    $this->drupalPost('admin/structure/block/manage/block_example/example_configurable_text/configure', array('block_example_string' => $string), t('Save block'));
+    // Make sure our example uppercased block is shown as altered by the
+    // hook_block_view_alter().
+    $this->assertRaw(t('UPPERCASE THIS PLEASE'));
 
-    // Verify that new content is shown and the title is uppercase
+    // Create a new block and make sure it gets uppercased.
+    $post = array(
+      'title' => t('configurable block to be uppercased'),
+      'info' => t('configurable block to be uppercased'),
+      'body[value]' => t('body of new  block'),
+      'regions[bartik]' => 'sidebar_first',
+    );
+    $this->drupalPost('admin/structure/block/add', $post, t('Save block'));
     $this->drupalGet('/');
-    $this->assertRaw( $string, t('Content of configurable text block successfully verified.'));
-    $this->assertText(t('Title of first block (example_configurable_text)'), t('hook_block_view_alter implementation successfully verified.'));
+    $this->assertRaw(('CONFIGURABLE BLOCK TO BE UPPERCASED'));
 
     // Verify that search block is at the bottom of the region.
 
@@ -82,10 +87,10 @@ class BlockExampleTestCase extends DrupalWebTestCase {
     $this->drupalPost('admin/structure/block', $block_options, t('Save blocks'));
 
     // The first 'configure block' link should be from our configurable block,
-    // the second from the Navigation menu, and the third (#2) from search block
-    // if it was successfully pushed to the bottom.
+    // the second from the Navigation menu, and the fifth (#4) from
+    // search block if it was successfully pushed to the bottom.
     $this->drupalGet('/');
-    $this->clickLink('Configure block', 2);
+    $this->clickLink('Configure block', 4);
     $this->assertText(t("'@search' block", array('@search' => t('Search form'))), t('hook_block_info_alter successfully verified.') );
   }
 }
