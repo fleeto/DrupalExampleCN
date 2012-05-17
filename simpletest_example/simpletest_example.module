@@ -22,7 +22,6 @@ function simpletest_example_node_info() {
   return array(
     'simpletest_example' => array(
       'name' => t('Simpletest Example Node Type'),
-      'module' => 'simpletest_example',
       'base' => 'simpletest_example',
       'description' => t('simpletest_example page node type.'),
   )
