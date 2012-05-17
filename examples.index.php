@@ -27,6 +27,7 @@
  * - @link page_example.module Creating a custom page @endlink
  * - @link pager_example.module Using a table with a pager @endlink
  * - @link queue_example.module Using the Queue API @endlink
+ * - @link rdf_example.module Implementing RDF in Drupal @endlink
  * - @link render_example.module Demonstrates the render API @endlink
  * - @link simpletest_example.module Writing tests for Drupal @endlink
  * - @link tablesort_example.module Use a render array to present a table with automatic sorting @endlink
