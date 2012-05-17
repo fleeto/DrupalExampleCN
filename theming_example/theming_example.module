@@ -96,7 +96,7 @@ function theming_example_theme() {
 function theming_example_page() {
   $content[] = t('Some examples of pages and forms that are run through theme functions.');
   $content[] = l(t('Simple page with a list'), 'examples/theming_example/theming_example_list_page');
-  $content[] = l(t('Simple form 1'), 'examples/theming_example/theming_example_order_form');
+  $content[] = l(t('Simple form 1'), 'examples/theming_example/theming_example_select_form');
   $content[] = l(t('Simple form 2'), 'examples/theming_example/theming_example_text_form');
   $content['#theme_wrappers'] = array('theming_example_content_array');
   return $content;

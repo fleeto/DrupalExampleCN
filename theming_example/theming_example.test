@@ -30,7 +30,7 @@ class ThemingExampleTestCase extends DrupalWebTestCase {
     // Check that the main page has been themed (first line with <b>) and has content.
     $this->drupalGet('examples/theming_example');
     $this->assertRaw('<strong>Some examples of pages');
-    $this->assertRaw('examples/theming_example/theming_example_order_form">Simple form 1</a>');
+    $this->assertRaw('examples/theming_example/theming_example_select_form">Simple form 1</a>');
 
     // Visit the list demonstration page and check that css gets loaded
     // and do some spot checks on how the two lists were themed.
