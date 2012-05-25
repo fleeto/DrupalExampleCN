@@ -194,7 +194,51 @@ function ajax_example_menu() {
     'page arguments' => array('ajax_example_advanced_commands'),
     'access callback' => TRUE,
     'file' => 'ajax_example_advanced.inc',
+    'weight' => 100,
+  );
+
+  // Autocomplete examples.
+  $items['examples/ajax_example/simple_autocomplete'] = array(
+    'title' => 'Autocomplete (simple)',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_simple_autocomplete'),
+    'access arguments' => array('access user profiles'),
+    'file' => 'ajax_example_autocomplete.inc',
     'weight' => 10,
+  );
+  $items['examples/ajax_example/simple_user_autocomplete_callback'] = array(
+    'page callback' => 'ajax_example_simple_user_autocomplete_callback',
+    'file' => 'ajax_example_autocomplete.inc',
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('access user profiles'),
+  );
+  $items['examples/ajax_example/node_autocomplete'] = array(
+    'title' => 'Autocomplete (node with nid)',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_unique_autocomplete'),
+    'access arguments' => array('access content'),
+    'file' => 'ajax_example_autocomplete.inc',
+    'weight' => 11,
+  );
+  $items['examples/ajax_example/unique_node_autocomplete_callback'] = array(
+    'page callback' => 'ajax_example_unique_node_autocomplete_callback',
+    'file' => 'ajax_example_autocomplete.inc',
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('access content'),
+  );
+  $items['examples/ajax_example/node_by_author'] = array(
+    'title' => 'Autocomplete (node limited by author)',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_node_by_author_autocomplete'),
+    'access callback' => TRUE,
+    'file' => 'ajax_example_autocomplete.inc',
+    'weight' => 12,
+  );
+  $items['examples/ajax_example/node_by_author_autocomplete'] = array(
+    'page callback' => 'ajax_example_node_by_author_node_autocomplete_callback',
+    'file' => 'ajax_example_autocomplete.inc',
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('access content'),
   );
 
   return $items;
