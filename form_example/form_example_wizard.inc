@@ -26,7 +26,7 @@
  * - Optionally, you may include custom validation functions using the regular
  *   validation hook (formname_validate). The wizard uses these validation
  *   functions for each step.
- * - The most important customization sttep is to change the submit handler and
+ * - The most important customization step is to change the submit handler and
  *   do whatever you want with the collected information. In this case, the
  *   example just shows the collected values in the various steps.
  * @ingroup form_example
