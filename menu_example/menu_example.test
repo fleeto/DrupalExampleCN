@@ -30,23 +30,30 @@ class MenuExampleTestCase extends DrupalWebTestCase {
     $this->clickLink(t('Menu Example'));
     $this->assertText(t('This is the base page of the Menu Example'));
 
-    $this->clickLink(t('Permissioned Example'));
-    $this->assertText(t('Permissioned Example'));
 
-    $this->clickLink('menu_example/permissioned/controlled');
+    $this->clickLink(t('Custom Access Example'));
+    $this->assertText(t('Custom Access Example'));
+
+    $this->clickLink(t('examples/menu_example/custom_access/page'));
     $this->assertResponse(403);
 
-    $this->drupalGet('menu_example');
+    $this->drupalGet('examples/menu_example/permissioned');
+    $this->assertText(t('Permissioned Example'));
+
+    $this->clickLink('examples/menu_example/permissioned/controlled');
+    $this->assertResponse(403);
+
+    $this->drupalGet('examples/menu_example');
 
     $this->clickLink(t('MENU_CALLBACK example'));
 
-    $this->drupalGet('menu_example/path_only/callback');
+    $this->drupalGet('examples/menu_example/path_only/callback');
     $this->assertText(t('The menu entry for this page is of type MENU_CALLBACK'));
 
     $this->clickLink(t('Tabs'));
     $this->assertText(t('This is the "tabs" menu entry'));
 
-    $this->drupalGet('menu_example/tabs/second');
+    $this->drupalGet('examples/menu_example/tabs/second');
     $this->assertText(t('This is the tab "second" in the "basic tabs" example'));
 
     $this->clickLink(t('third'));
@@ -54,12 +61,12 @@ class MenuExampleTestCase extends DrupalWebTestCase {
 
     $this->clickLink(t('Extra Arguments'));
 
-    $this->drupalGet('menu_example/use_url_arguments/one/two');
+    $this->drupalGet('examples/menu_example/use_url_arguments/one/two');
     $this->assertText(t('Argument 1=one'));
 
     $this->clickLink(t('Placeholder Arguments'));
 
-    $this->clickLink(t('menu_example/placeholder_argument/3343/display'));
+    $this->clickLink(t('examples/menu_example/placeholder_argument/3343/display'));
     $this->assertRaw('<div>3343</div>');
 
     $this->clickLink(t('Processed Placeholder Arguments'));
@@ -77,14 +84,20 @@ class MenuExampleTestCase extends DrupalWebTestCase {
     $this->assertRaw(t("@name&#039;s account", array('@name' => format_username($web_user))), t('Title successfully changed to account name: %name.', array('%name' => $web_user->name)));
 
     // Now start testing other menu entries.
-    $this->drupalGet('menu_example');
+    $this->drupalGet('examples/menu_example');
 
-    $this->clickLink(t('Permissioned Example'));
-    $this->clickLink('menu_example/permissioned/controlled');
+    $this->clickLink(t('Custom Access Example'));
+    $this->assertText(t('Custom Access Example'));
+
+    $this->drupalGet('examples/menu_example/custom_access/page');
     $this->assertResponse(200);
+
+    $this->drupalGet('examples/menu_example/permissioned');
+    $this->assertText('Permissioned Example');
+    $this->clickLink('examples/menu_example/permissioned/controlled');
     $this->assertText('This menu entry will not show');
 
-    $this->drupalGet('menu_example/menu_altered_path');
+    $this->drupalGet('examples/menu_example/menu_altered_path');
     $this->assertText('This menu item was created strictly to allow the hook_menu_alter()');
 
   }
