@@ -175,8 +175,8 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
     '#type' => 'markup',
     '#markup' => '<div>' . t('This example demonstrates a form which dynamically creates various sections based on the configuration in the form.
       It deliberately allows graceful degradation to a non-javascript environment.
-      In a javascript environment, the "Choose" button next to the select control
-      if displayed; in a non-js environment it is hidden by the module CSS.
+      In a non-javascript environment, the "Choose" button next to the select control
+      is displayed; in a javascript environment it is hidden by the module CSS.
       <br/><br/>The basic idea here is that the form is built up based on
       the selection in the question_type_select field, and it is built the same
       whether we are in a javascript/AJAX environment or not.
