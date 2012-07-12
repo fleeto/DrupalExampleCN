@@ -32,7 +32,7 @@ function batch_example_update_7100(&$sandbox) {
   if (!isset($sandbox['progress'])) {
     $sandbox['progress'] = 0;  // The count of nodes visited so far.
     // Total nodes that must be visited.
-    $sandbox['max'] = db_query('SELECT COUNT(DISTINCT nid) FROM {node}')->fetchField();
+    $sandbox['max'] = db_query('SELECT COUNT(nid) FROM {node}')->fetchField();
     // A place to store messages during the run.
     $sandbox['messages'] = array();
     $sandbox['current_node'] = -1; // Last node read via the query.
