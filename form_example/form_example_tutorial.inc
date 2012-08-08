@@ -382,9 +382,8 @@ function form_example_tutorial_7_submit($form, &$form_state) {
  * The @link ajax_example_wizard AJAX Example's Wizard Example @endlink
  * gives an AJAX version of this same idea.
  *
- * @see form_example_tutorial_8_submit()
- * @see form_example_tutorial_8_validate()
  * @see form_example_tutorial_8_page_two()
+ * @see form_example_tutorial_8_page_two_back()
  * @see form_example_tutorial_8_page_two_submit()
  * @see form_example_tutorial_8_next_submit()
  * @see form_example_tutorial.inc
