@@ -125,7 +125,9 @@ function batch_example_batch_1() {
 function batch_example_op_1($nid, $operation_details, &$context) {
   $node = node_load($nid, NULL, TRUE);
 
-  // Store some result for post-processing in the finished callback.
+  // Store some results for post-processing in the 'finished' callback.
+  // The contents of 'results' will be available as $results in the
+  // 'finished' function (in this example, batch_example_finished()).
   $context['results'][] = $node->nid . ' : ' . check_plain($node->title);
 
   // Optional message displayed under the progressbar.
@@ -152,7 +154,15 @@ function batch_example_batch_2() {
   $batch = array(
     'operations' => $operations,
     'finished' => 'batch_example_finished',
-    // We can define custom messages instead of the default ones.
+    // Message displayed while processing the batch. Available placeholders are:
+    // @current, @remaining, @total, @percentage, @estimate and @elapsed.
+    // These placeholders are replaced with actual values in _batch_process(),
+    // using strtr() instead of t(). The values are determined based on the
+    // number of operations in the 'operations' array (above), NOT by the number
+    // of nodes that will be processed. In this example, there are 20
+    // operations, so @total will always be 20, even though there are multiple
+    // nodes per operation.
+    // Defaults to t('Completed @current of @total.').
     'title' => t('Processing batch 2'),
     'init_message' => t('Batch 2 is starting.'),
     'progress_message' => t('Processed @current out of @total.'),
@@ -198,7 +208,9 @@ function batch_example_op_2($operation_details, &$context) {
     // Here we actually perform our dummy 'processing' on the current node.
     $node = node_load($row->nid, NULL, TRUE);
 
-    // Store some result for post-processing in the finished callback.
+    // Store some results for post-processing in the 'finished' callback.
+    // The contents of 'results' will be available as $results in the
+    // 'finished' function (in this example, batch_example_finished()).
     $context['results'][] = $node->nid . ' : ' . check_plain($node->title) . ' ' . $operation_details;
 
     // Update our progress information.
