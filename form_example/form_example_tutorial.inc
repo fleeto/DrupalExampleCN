@@ -529,8 +529,27 @@ function form_example_tutorial_8_page_two_submit($form, &$form_state) {
   }
   drupal_set_message(t('And the favorite color is @color', array('@color' => $form_state['values']['color'])));
 
-  // If we wanted to redirect on submission, set $form_state['redirect']
-  // $form_state['redirect'] = 'node'; // Redirects the user to /node.
+  // If we wanted to redirect on submission, set $form_state['redirect']. For
+  // simple redirects, the value can be a string of the path to redirect to. For
+  // example, to redirect to /node, one would specify the following:
+  //
+  // $form_state['redirect'] = 'node';
+  //
+  // For more complex redirects, this value can be set to an array of options to
+  // pass to drupal_goto(). For example, to redirect to /foo?bar=1#baz, one
+  // would specify the following:
+  //
+  // $form_state['redirect'] = array(
+  //   'foo',
+  //   array(
+  //     'query' => array('bar' => 1),
+  //     'fragment' => 'baz',
+  //   ),
+  // );
+  //
+  // The first element in the array is the path to redirect to, and the second
+  // element in the array is the array of options. For more information on the
+  // available options, see http://api.drupal.org/url.
 }
 
 //////////////// Tutorial Example 9 //////////////////////
