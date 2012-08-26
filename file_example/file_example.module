@@ -74,11 +74,11 @@ function file_example_intro() {
  */
 function file_example_readwrite($form, &$form_state) {
   if (empty($_SESSION['file_example_default_file'])) {
-    $_SESSION['file_example_default_file'] = 'public://drupal.txt';
+    $_SESSION['file_example_default_file'] = 'session://drupal.txt';
   }
   $default_file = $_SESSION['file_example_default_file'];
   if (empty($_SESSION['file_example_default_directory'])) {
-    $_SESSION['file_example_default_directory'] = 'public://directory1';
+    $_SESSION['file_example_default_directory'] = 'session://directory1';
   }
   $default_directory = $_SESSION['file_example_default_directory'];
 
@@ -171,11 +171,6 @@ function file_example_readwrite($form, &$form_state) {
   $form['debug'] = array(
     '#type' => 'fieldset',
     '#title' => t('Debugging'),
-  );
-  $form['debug']['show_session'] = array(
-    '#type' => 'submit',
-    '#value' => t('Show $_SESSION contents'),
-    '#submit' => array('file_example_show_session_contents_submit'),
   );
   $form['debug']['show_raw_session'] = array(
     '#type' => 'submit',
@@ -451,14 +446,15 @@ function file_example_check_directory_submit($form, &$form_state) {
 }
 
 /**
- * Utility submit function for debugging: Show $_SESSION.
+ * Utility submit function to show the contents of $_SESSION.
  */
 function file_example_show_session_contents_submit($form, &$form_state) {
-  if ($form_state['triggering_element']['#value'] == t('Show raw $_SESSION contents')) {
-    drupal_set_message('<pre>' . print_r($_SESSION['file_example'], TRUE) . '</pre>');
+  // If the devel module is installed, use it's nicer message format.
+  if (module_exists('devel')) {
+    dsm($_SESSION['file_example'], t('Entire $_SESSION["file_example"]'));
   }
   else {
-    return file_example_session_contents(NULL);
+    drupal_set_message('<pre>' . print_r($_SESSION['file_example'], TRUE) . '</pre>');
   }
 }
 
@@ -502,22 +498,36 @@ function file_example_stream_wrappers() {
 }
 
 /**
- * A utility function to allow us to see what is in a session "file".
+ * Show the contents of a session file.
  *
- * @param $session_path
- *   The path, as in 'example/some/thing.txt'. This actually is a $_SESSION
- *   key. example/some/thing.txt would be
- *   $_SESSION['file_example']['some']['thing.txt']
+ * This page callback function is called by the Menu API for the path
+ * examples/file_example/access_session. Any extra path elements
+ * beyond this are considered to be the session path. E.g.:
+ * examples/file_example/access_session/foo/bar.txt would be the
+ * equivalent of session://foo/bar.txt, which will map into
+ * $_SESSION as keys: $_SESSION['foo']['bar.txt']
+ *
+ * @param $path-elements
+ *   The elements of the path will come from Menu API as the
+ *   function arguments. See explanation above.
+ *
+ * @return A message containing the contents of the session file.
+ *
+ * @see file_get_contents()
  */
 function file_example_session_contents() {
-  if (module_exists('devel')) {
-    dsm($_SESSION['file_example'], t('Entire $_SESSION["file_example"]'));
-  }
   $path_components = func_get_args();
-  $session_path = join('/', $path_components);
-  $content = file_get_contents('session://' . $session_path);
-  return t('Contents of @path:', array('@path' => check_plain($session_path))) . ' ' . print_r($content, TRUE);
+  $session_path = 'session://' . join('/', $path_components);
+  $content = file_get_contents($session_path);
+  if ($content !== FALSE) {
+    return t('Contents of @path :',
+      array('@path' => check_plain($session_path))) . ' ' .
+      print_r($content, TRUE);
+  }
+  return t('Unable to load contents of: @path',
+    array('@path' => check_plain($session_path)));
 }
+
 /**
  * @} End of "defgroup file_example".
  */

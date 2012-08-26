@@ -223,7 +223,6 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
    */
   public function stream_open($uri, $mode, $options, &$opened_path) {
     $this->uri = $uri;
-
     // We make $session_content a reference to the appropriate key in the
     // $_SESSION variable. So if the local path were
     // /example/test.txt it $session_content would now be a
@@ -244,22 +243,30 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
    *   If TRUE, create the key
    *
    * @return
-   *   TRUE if the key exists (which it will if $create was set)
+   *   A reference to the array at the end of the key-path, or
+   *   FALSE if the path doesn't map to a key-path (and $create is FALSE).
    */
   protected function &uri_to_session_key($uri, $create = TRUE) {
-    $path = $this->getLocalPath($uri);
-    $path_components = preg_split('/\//', $path);
+    // Since our uri_to_session_key() method returns a reference, we
+    // have to set up a failure flag variable.
     $fail = FALSE;
+    $path = $this->getLocalPath($uri);
+    $path_components = explode('/', $path);
+    // Set up a reference to the root session:// 'directory.'
     $var = &$_SESSION['file_example'];
     // Handle case of just session://.
-    if (drupal_strlen($path) == 0) {
+    if (count($path_components) < 1) {
       return $var;
     }
+    // Walk through the path components and create keys in $_SESSION,
+    // unless we're told not to create them.
     foreach ($path_components as $component) {
       if ($create || isset($var[$component])) {
         $var = &$var[$component];
       }
       else {
+        // This path doesn't exist as keys, either because the
+        // key doesn't exist, or because we're told not to create it.
         return $fail;
       }
     }
@@ -572,11 +579,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
    * @see http://php.net/manual/en/streamwrapper.url-stat.php
    */
   public function url_stat($uri, $flags) {
-
-    // PHP does not necessarily construct the object before all operations,
-    // so here we make sure that the startup work is done.
-    $this->__construct();
-
+    // Get a reference to the $_SESSION key for this URI.
     $key = $this->uri_to_session_key($uri, FALSE);
     $return = FALSE; // Default to fail.
     $mode = 0;
