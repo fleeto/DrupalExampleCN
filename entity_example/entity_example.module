@@ -1,7 +1,7 @@
 <?php
 
 /**
- *@file
+ * @file
  * Implements the basic functionality required to create and display an entity.
  *
  * This example does not use the
@@ -18,7 +18,7 @@
  */
 
 /**
- * Implements hook_entity_info()
+ * Implements hook_entity_info().
  *
  * This is the fundamental description of the entity.
  *
@@ -131,14 +131,15 @@ function entity_example_basic_uri($basic) {
 }
 
 /**
- * Implements hook_menu()
+ * Implements hook_menu().
  */
 function entity_example_menu() {
   $items['examples/entity_example'] = array(
     'title' => 'Entity Example',
     'page callback' => 'entity_example_info_page',
-    'access callback' => TRUE,
+    'access arguments' => array('view any entity_example_basic entity'),
   );
+
   // This provides a place for Field API to hang its own
   // interface and has to be the same as what was defined
   // in basic_entity_info() above.
@@ -187,23 +188,24 @@ function entity_example_menu() {
 
 /**
  * Basic information for the page.
- *
- * @todo: Give links to admin pages, etc.
  */
 function entity_example_info_page() {
-  $content[] = array(
+  $content['preface'] = array(
     '#type' => 'item',
-    '#markup' => t('The entity example provides a simple example entity. You can administer these and add fields and change the view !link.',
-      array('!link' => l(t('here'), 'admin/structure/entity_example_basic/manage'))
-    ),
+    '#markup' => t('The entity example provides a simple example entity.')
   );
+  if (user_access('administer entity_example_basic entities')) {
+    $content['preface']['#markup'] =  t('You can administer these and add fields and change the view !link.',
+      array('!link' => l(t('here'), 'admin/structure/entity_example_basic/manage'))
+    );
+  }
   $content['table'] = entity_example_basic_list_entities();
 
   return $content;
 }
 
 /**
- * Implements hook_permission()
+ * Implements hook_permission().
  */
 function entity_example_permission() {
   $permissions = array(
@@ -247,24 +249,22 @@ function entity_example_basic_admin_page() {
 
 /**
  * Returns a render array with all entity_example_basic entities.
+ *
+ * In this basic example we know that there won't be many entities,
+ * so we'll just load them all for display. See pager_example.module
+ * to implement a pager. Most implementations would probably do this
+ * with the contrib Entity API module, or a view using views module,
+ * but we avoid using non-core features in the Examples project.
+ *
+ * @see pager_example.module
  */
 function entity_example_basic_list_entities() {
   $content = array();
-
-  if (!user_access('view any entity_example_basic entity')) {
-    $content[] = array(
-      '#type' => 'item',
-      '#markup' => t('This user does not have permission to view entity_example_basic entities.'),
-    );
-    return $content;
-  }
-  // In this basic example we know that there won't be many entities,
-  // so just load them all. @see pager_example.module to implement a pager.
-  // Most implementations would probably do this with a view using views module,
-  // but we avoid using non-core features in the Examples project.
+  // Load all of our entities.
   $entities = entity_example_basic_load_multiple();
   if (!empty($entities)) {
     foreach ( $entities as $entity ) {
+      // Create tabular rows for our entities.
       $rows[] = array(
         'data' => array(
           'id' => $entity->basic_id,
@@ -273,6 +273,7 @@ function entity_example_basic_list_entities() {
         ),
       );
     }
+    // Put our entities into a themed table. See theme_table() for details.
     $content['entity_table'] = array(
       '#theme' => 'table',
       '#rows' => $rows,
@@ -280,6 +281,7 @@ function entity_example_basic_list_entities() {
     );
   }
   else {
+    // There were no entities. Tell the user.
     $content[] = array(
       '#type' => 'item',
       '#markup' => t('No entity_example_basic entities currently exist.'),
@@ -353,7 +355,7 @@ function entity_example_basic_view($entity, $view_mode = 'tweaky') {
 }
 
 /**
- * Implements hook_field_extra_fields()
+ * Implements hook_field_extra_fields().
  *
  * This exposes the "extra fields" (usually properties that can be configured
  * as if they were fields) of the entity as pseudo-fields
