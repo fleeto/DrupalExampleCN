@@ -1,7 +1,7 @@
 (function ($) {
 
 /**
- * Custom summary for the module vertical tab.
+ * Update the summary for the module's vertical tab.
  */
 Drupal.behaviors.vertical_tabs_exampleFieldsetSummaries = {
   attach: function (context) {
