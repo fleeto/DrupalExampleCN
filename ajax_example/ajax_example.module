@@ -26,7 +26,8 @@ module_load_include('inc', 'ajax_example', 'ajax_example_node_form_alter');
  *
  * Sets up calls to drupal_get_form() for all our example cases.
  *
- * @see menu_example.module for more details on hook_menu().
+ * @see menu_example.module
+ * @see menu_example_menu()
  */
 function ajax_example_menu() {
   $items = array();
@@ -246,6 +247,29 @@ function ajax_example_menu() {
 
 function ajax_example_intro() {
   $markup = t('The AJAX example module provides many examples of AJAX including forms, links, and AJAX commands.');
+
+  $list[] = l(t('Simplest AJAX Example'), 'examples/ajax_example/simplest');
+  $list[] = l(t('Generate checkboxes'), 'examples/ajax_example/autocheckboxes');
+  $list[] = l(t('Generate textfields'), 'examples/ajax_example/autotextfields');
+  $list[] = l(t('Submit-driven AJAX'), 'examples/ajax_example/submit_driven_ajax');
+  $list[] = l(t('Dependent dropdown'), 'examples/ajax_example/dependent_dropdown');
+  $list[] = l(t('Dependent dropdown (with graceful degradation)'), 'examples/ajax_example/dependent_dropdown_degrades');
+  $list[] = l(t('Dynamic Sections w/JS turned off'), 'examples/ajax_example/dependent_dropdown_degrades_no_js');
+  $list[] = l(t('Wizard (with graceful degradation)'), 'examples/ajax_example/wizard');
+  $list[] = l(t('Wizard w/JS turned off'), 'examples/ajax_example/wizard_no_js');
+  $list[] = l(t('Add-more button (with graceful degradation)'), 'examples/ajax_example/add_more');
+  $list[] = l(t('Add-more button w/JS turned off'), 'examples/ajax_example/add_more_no_js');
+  $list[] = l(t('Ajax Link ("use-ajax" class)'), 'examples/ajax_example/ajax_link');
+  $list[] = l(t('Ajax Link (Renderable Array)'), 'examples/ajax_example/ajax_link_renderable');
+  $list[] = l(t('AJAX framework commands'), 'examples/ajax_example/advanced_commands');
+  $list[] = l(t('Autocomplete (simple)'), 'examples/ajax_example/simple_autocomplete');
+  $list[] = l(t('Autocomplete (node with nid)'), 'examples/ajax_example/node_autocomplete');
+  $list[] = l(t('Autocomplete (node limited by author)'), 'examples/ajax_example/node_by_author');
+
+  $variables['items'] = $list;
+  $variables['type'] = 'ul';
+  $markup .= theme('item_list', $variables);
+
   return $markup;
 }
 
@@ -273,7 +297,7 @@ function ajax_example_simplest($form, &$form_state) {
       // There are also several optional keys - see ajax_example_autocheckboxes
       // below for details on 'method', 'effect' and 'speed' and
       // ajax_example_dependent_dropdown for 'event'.
-     ),
+    ),
   );
 
   // This entire form element will be replaced whenever 'changethis' is updated.

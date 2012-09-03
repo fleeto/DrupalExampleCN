@@ -299,8 +299,8 @@ function ajax_example_dynamic_sections_submit($form, &$form_state) {
     // Any other form element will cause rebuild of the form and present
     // it again.
     case t('Choose'):
-      $form_state['values']['question_type_select']
-	= $form_state['input']['question_type_select'];
+      $form_state['values']['question_type_select'] =
+        $form_state['input']['question_type_select'];
       // Fall through.
     default:
       $form_state['rebuild'] = TRUE;
