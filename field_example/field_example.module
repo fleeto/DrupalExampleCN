@@ -301,8 +301,11 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
           '#size' => 2,
           '#default_value' => array_shift($match[0]),
           '#attributes' => array('class' => array('rgb-entry')),
-          // '#description' => t('The 2-digit hexadecimal representation of the @color saturation, like "a1" or "ff"', array('@color' => $title)),
+          '#description' => t('The 2-digit hexadecimal representation of @color saturation, like "a1" or "ff"', array('@color' => $title)),
         );
+        // Since Form API doesn't allow a fieldset to be required, we
+        // have to require each field element individually.
+        if ($instance['required'] == 1) $widget[$key]['#required'] = 1;
       }
       break;
 
