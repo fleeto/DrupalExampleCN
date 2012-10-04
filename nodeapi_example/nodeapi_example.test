@@ -64,8 +64,8 @@ class NodeApiExampleTestCase extends DrupalWebTestCase {
     $this->assertResponse(200);
 
     // Check if the new Rating options appear in the settings page
-    $this->assertText(t('NodeAPI Example Rating'), t('Rating options found in content type.'));
-    $this->assertFieldByName('nodeapi_example_node_type', 1, t('Rating is Disabled by default.'));
+    $this->assertText(t('NodeAPI Example Rating'), 'Rating options found in content type.');
+    $this->assertFieldByName('nodeapi_example_node_type', 1, 'Rating is Disabled by default.');
 
     // Disable the rating for this content type: 0 for Disabled, 1 for Enabled.
     $content_settings = array(
@@ -73,7 +73,7 @@ class NodeApiExampleTestCase extends DrupalWebTestCase {
     );
     $this->drupalPost('admin/structure/types/manage/' . $type, $content_settings, t('Save content type'));
     $this->assertResponse(200);
-    $this->assertRaw(' has been updated.', t('Settings modified successfully for content type.'));
+    $this->assertRaw(' has been updated.', 'Settings modified successfully for content type.');
 
     // Create an example node
     $langcode = LANGUAGE_NONE;
@@ -84,7 +84,7 @@ class NodeApiExampleTestCase extends DrupalWebTestCase {
     $this->assertResponse(200);
 
     // Check that the rating is not shown, as we have not yet enabled it
-    $this->assertNoRaw('Rating: <em>', t('Extended rating information is not shown.'));
+    $this->assertNoRaw('Rating: <em>', 'Extended rating information is not shown.');
 
     // Save current current url (we are viewing the new node)
     $node_url = $this->getUrl();
@@ -95,12 +95,12 @@ class NodeApiExampleTestCase extends DrupalWebTestCase {
     );
     $this->drupalPost('admin/structure/types/manage/' . $type, $content_settings, t('Save content type'));
     $this->assertResponse(200);
-    $this->assertRaw(' has been updated.', t('Settings modified successfully for content type.'));
+    $this->assertRaw(' has been updated.', 'Settings modified successfully for content type.');
 
     // Check previously create node. It should be not rated
     $this->drupalGet($node_url);
     $this->assertResponse(200);
-    $this->assertRaw(t('Rating: %rating', array('%rating' => t('Unrated'))), t('Content is not rated.'));
+    $this->assertRaw(t('Rating: %rating', array('%rating' => t('Unrated'))), 'Content is not rated.');
 
     // Rate the content, 4 is for "Good"
     $rate = array(
@@ -110,7 +110,7 @@ class NodeApiExampleTestCase extends DrupalWebTestCase {
     $this->assertResponse(200);
 
     // Check that content has been rated
-    $this->assertRaw(t('Rating: %rating', array('%rating' => t('Good'))), t('Content is successfully rated.'));
+    $this->assertRaw(t('Rating: %rating', array('%rating' => t('Good'))), 'Content is successfully rated.');
 
   }
 
@@ -132,8 +132,8 @@ class NodeApiExampleTestCase extends DrupalWebTestCase {
     $this->assertResponse(200);
 
     // Check if the new Rating options appear in the settings page
-    $this->assertText(t('NodeAPI Example Rating'), t('Rating options found in content type.'));
-    $this->assertFieldByName('nodeapi_example_node_type', 1, t('Rating is Disabled by default.'));
+    $this->assertText(t('NodeAPI Example Rating'), 'Rating options found in content type.');
+    $this->assertFieldByName('nodeapi_example_node_type', 1, 'Rating is Disabled by default.');
 
     // Disable the rating for this content type: 0 for Disabled, 1 for Enabled.
     $content_settings = array(
@@ -141,7 +141,7 @@ class NodeApiExampleTestCase extends DrupalWebTestCase {
     );
     $this->drupalPost('admin/structure/types/manage/' . $type, $content_settings, t('Save content type'));
     $this->assertResponse(200);
-    $this->assertRaw(' has been updated.', t('Settings modified successfully for content type.'));
+    $this->assertRaw(' has been updated.', 'Settings modified successfully for content type.');
 
     // Create an example node
     $langcode = LANGUAGE_NONE;
@@ -152,7 +152,7 @@ class NodeApiExampleTestCase extends DrupalWebTestCase {
     $this->assertResponse(200);
 
     // Check that the rating is not shown, as we have not yet enabled it
-    $this->assertNoRaw('Rating: <em>', t('Extended rating information is not shown.'));
+    $this->assertNoRaw('Rating: <em>', 'Extended rating information is not shown.');
 
     // Save current current url (we are viewing the new node)
     $node_url = $this->getUrl();
@@ -163,12 +163,12 @@ class NodeApiExampleTestCase extends DrupalWebTestCase {
     );
     $this->drupalPost('admin/structure/types/manage/' . $type, $content_settings, t('Save content type'));
     $this->assertResponse(200);
-    $this->assertRaw(' has been updated.', t('Settings modified successfully for content type.'));
+    $this->assertRaw(' has been updated.', 'Settings modified successfully for content type.');
 
     // Check previously create node. It should be not rated
     $this->drupalGet($node_url);
     $this->assertResponse(200);
-    $this->assertRaw(t('Rating: %rating', array('%rating' => t('Unrated'))), t('Content is not rated.'));
+    $this->assertRaw(t('Rating: %rating', array('%rating' => t('Unrated'))), 'Content is not rated.');
 
     // Rate the content, 4 is for "Good"
     $rate = array(
@@ -178,7 +178,7 @@ class NodeApiExampleTestCase extends DrupalWebTestCase {
     $this->assertResponse(200);
 
     // Check that content has been rated
-    $this->assertRaw(t('Rating: %rating', array('%rating' => t('Good'))), t('Content is successfully rated.'));
+    $this->assertRaw(t('Rating: %rating', array('%rating' => t('Good'))), 'Content is successfully rated.');
 
     // Rate the content to poor using a new revision, 1 is for "Poor"
     $rate = array(
@@ -189,7 +189,7 @@ class NodeApiExampleTestCase extends DrupalWebTestCase {
     $this->assertResponse(200);
 
     // Check that content has been rated
-    $this->assertRaw(t('Rating: %rating', array('%rating' => t('Poor'))), t('Content is successfully rated.'));
+    $this->assertRaw(t('Rating: %rating', array('%rating' => t('Poor'))), 'Content is successfully rated.');
 
     //Now switch back to previous revision of the node.
     $this->drupalGet($node_url . '/revisions');
@@ -203,7 +203,7 @@ class NodeApiExampleTestCase extends DrupalWebTestCase {
     $this->assertResponse(200);
 
     // Check that content has been rated
-    $this->assertRaw(t('Rating: %rating', array('%rating' => t('Good'))), t('Content rating matches reverted revision.'));
+    $this->assertRaw(t('Rating: %rating', array('%rating' => t('Good'))), 'Content rating matches reverted revision.');
 
   }
 

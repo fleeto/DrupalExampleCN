@@ -31,7 +31,7 @@ class RenderExampleTestCase extends DrupalWebTestCase {
   function assertRenderResults($xpath_array) {
     foreach ($xpath_array as $xpath) {
       $result = $this->xpath($xpath);
-      $this->assertTrue(!empty($result), t('Found xpath %xpath', array('%xpath' => $xpath)));
+      $this->assertTrue(!empty($result), format_string('Found xpath %xpath', array('%xpath' => $xpath)));
     }
   }
 
@@ -46,7 +46,7 @@ class RenderExampleTestCase extends DrupalWebTestCase {
   function assertRenderedText($xpath_array) {
     foreach ($xpath_array as $xpath => $text) {
       $result = $this->xpath($xpath);
-      $this->assertTrue((string)$result[0][0] == $text, t('%ary selects text %text', array('%ary' => $xpath, '%text' => $text)));
+      $this->assertTrue((string)$result[0][0] == $text, format_string('%ary selects text %text', array('%ary' => $xpath, '%text' => $text)));
     }
   }
 

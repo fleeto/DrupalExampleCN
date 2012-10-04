@@ -45,13 +45,13 @@ class FileExampleTest extends DrupalWebTestCase {
           'directory_name' => $dirname,
         );
         $this->drupalPost('examples/file_example/fileapi', $edit, t('Check to see if directory exists'));
-        $this->assertRaw(t('Directory %dirname does not exist', array('%dirname' => $dirname)), t('Verify that directory does not exist.'));
+        $this->assertRaw(t('Directory %dirname does not exist', array('%dirname' => $dirname)), 'Verify that directory does not exist.');
 
         $this->drupalPost('examples/file_example/fileapi', $edit, t('Create directory'));
         $this->assertRaw(t('Directory %dirname is ready for use', array('%dirname' => $dirname)));
 
         $this->drupalPost('examples/file_example/fileapi', $edit, t('Check to see if directory exists'));
-        $this->assertRaw(t('Directory %dirname exists', array('%dirname' => $dirname)), t('Verify that directory now does exist.'));
+        $this->assertRaw(t('Directory %dirname exists', array('%dirname' => $dirname)), 'Verify that directory now does exist.');
 
         // Create a file in the directory we created.
         $content = $this->randomName(30);
@@ -62,7 +62,7 @@ class FileExampleTest extends DrupalWebTestCase {
           'fileops_file' => $filename,
         );
         $this->drupalPost('examples/file_example/fileapi', $edit, t('Check to see if file exists'));
-        $this->assertRaw(t('The file %filename does not exist', array('%filename' => $filename)), t('Verify that file does not yet exist.'));
+        $this->assertRaw(t('The file %filename does not exist', array('%filename' => $filename)), 'Verify that file does not yet exist.');
 
         debug(t('Processing button=%button, scheme=%scheme, dir=%dirname, file=%filename', array('%button' => $button, '%scheme' => $scheme, '%filename' => $filename, '%dirname' => $dirname)));
         $edit = array(
@@ -91,7 +91,7 @@ class FileExampleTest extends DrupalWebTestCase {
           'fileops_file' => $filename,
         );
         $this->drupalPost('examples/file_example/fileapi', $edit, t('Check to see if file exists'));
-        $this->assertRaw(t('The file %filename exists', array('%filename' => $filename)), t('Verify that file now exists.'));
+        $this->assertRaw(t('The file %filename exists', array('%filename' => $filename)), 'Verify that file now exists.');
 
         // Now read the file that got written above and verify that we can use
         // the writing tools.
@@ -108,14 +108,14 @@ class FileExampleTest extends DrupalWebTestCase {
         $this->drupalPost('examples/file_example/fileapi', $edit, t('Delete file'));
         $this->assertText(t('Successfully deleted'));
         $this->drupalPost('examples/file_example/fileapi', $edit, t('Check to see if file exists'));
-        $this->assertRaw(t('The file %filename does not exist', array('%filename' => $filename)), t('Verify file has been deleted.'));
+        $this->assertRaw(t('The file %filename does not exist', array('%filename' => $filename)), 'Verify file has been deleted.');
 
         $edit = array(
           'directory_name' => $dirname,
         );
         $this->drupalPost('examples/file_example/fileapi', $edit, t('Delete directory'));
         $this->drupalPost('examples/file_example/fileapi', $edit, t('Check to see if directory exists'));
-        $this->assertRaw(t('Directory %dirname does not exist', array('%dirname' => $dirname)), t('Verify that directory does not exist after deletion.'));
+        $this->assertRaw(t('Directory %dirname does not exist', array('%dirname' => $dirname)), 'Verify that directory does not exist after deletion.');
       }
     }
   }

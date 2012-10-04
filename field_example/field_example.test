@@ -124,11 +124,11 @@ class FieldExampleTest extends DrupalWebTestCase {
 
     $output_strings = $this->xpath("//div[contains(@class,'field-type-field-example-rgb')]/div/div/p/text()");
 
-    $this->assertEqual((string)$output_strings[0], t("The color code in this field is #000001"));
-    $this->assertEqual((string)$output_strings[1], t("The color code in this field is #000002"));
-    $this->assertEqual((string)$output_strings[2], t("The color code in this field is #000003"));
-    $this->assertEqual((string)$output_strings[3], t("The color code in this field is #000004"));
-    $this->assertEqual((string)$output_strings[4], t("The color code in this field is #000005"));
+    $this->assertEqual((string)$output_strings[0], "The color code in this field is #000001");
+    $this->assertEqual((string)$output_strings[1], "The color code in this field is #000002");
+    $this->assertEqual((string)$output_strings[2], "The color code in this field is #000003");
+    $this->assertEqual((string)$output_strings[3], "The color code in this field is #000004");
+    $this->assertEqual((string)$output_strings[4], "The color code in this field is #000005");
   }
 
   /**

@@ -91,6 +91,6 @@ class FilterExampleTestCase extends DrupalWebTestCase {
     $this->assertResponse(200);
 
     // Only foo filter is enabled
-    $this->assertRaw("What " . $replacement . " is it", t('Foo filter successfully verified.'));
+    $this->assertRaw("What " . $replacement . " is it", 'Foo filter successfully verified.');
   }
 }

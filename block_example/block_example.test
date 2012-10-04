@@ -34,25 +34,25 @@ class BlockExampleTestCase extends DrupalWebTestCase {
 
     // Find the blocks in the settings page.
     $this->drupalGet('admin/structure/block');
-    $this->assertRaw(t('Example: configurable text string'), t('Block configurable-string found.'));
-    $this->assertRaw(t('Example: empty block'), t('Block empty-block found.'));
+    $this->assertRaw(t('Example: configurable text string'), 'Block configurable-string found.');
+    $this->assertRaw(t('Example: empty block'), 'Block empty-block found.');
 
     // Verify the default settings for block are processed.
-    $this->assertFieldByName('blocks[block_example_example_empty][region]', 'sidebar_first', t('Empty block is enabled in first sidebar successfully verified.') );
-    $this->assertFieldByName('blocks[block_example_example_configurable_text][region]', -1, t('Configurable text block is disabled in first sidebar successfully verified.') );
+    $this->assertFieldByName('blocks[block_example_example_empty][region]', 'sidebar_first', 'Empty block is enabled in first sidebar successfully verified.');
+    $this->assertFieldByName('blocks[block_example_example_configurable_text][region]', -1, 'Configurable text block is disabled in first sidebar successfully verified.');
 
     // Verify that blocks are not shown
     $this->drupalGet('/');
-    $this->assertNoRaw( t('Title of first block (example_configurable_text)'), t('Block configurable test not found.'));
-    $this->assertNoRaw( t('Title of second block (example_empty)'), t('Block empty not found.'));
+    $this->assertNoRaw(t('Title of first block (example_configurable_text)'), 'Block configurable test not found.');
+    $this->assertNoRaw(t('Title of second block (example_empty)'), 'Block empty not found.');
 
     // Enable the Configurable text block and verify
     $this->drupalPost('admin/structure/block', array('blocks[block_example_example_configurable_text][region]' => 'sidebar_first'), t('Save blocks'));
-    $this->assertFieldByName('blocks[block_example_example_configurable_text][region]', 'sidebar_first', t('Configurable text block is enabled in first sidebar successfully verified.') );
+    $this->assertFieldByName('blocks[block_example_example_configurable_text][region]', 'sidebar_first', 'Configurable text block is enabled in first sidebar successfully verified.');
 
     // Verify that blocks are there. Empty block will not be shown, because it is empty
     $this->drupalGet('/');
-    $this->assertRaw( t('Title of first block (example_configurable_text)'), t('Block configurable text found.'));
+    $this->assertRaw(t('Title of first block (example_configurable_text)'), 'Block configurable text found.');
 
     // Change content of configurable text block
     $string = $this->randomName();
@@ -60,7 +60,7 @@ class BlockExampleTestCase extends DrupalWebTestCase {
 
     // Verify that new content is shown
     $this->drupalGet('/');
-    $this->assertRaw( $string, t('Content of configurable text block successfully verified.'));
+    $this->assertRaw($string, 'Content of configurable text block successfully verified.');
 
     // Make sure our example uppercased block is shown as altered by the
     // hook_block_view_alter().
@@ -91,6 +91,6 @@ class BlockExampleTestCase extends DrupalWebTestCase {
     // search block if it was successfully pushed to the bottom.
     $this->drupalGet('/');
     $this->clickLink('Configure block', 4);
-    $this->assertText(t("'@search' block", array('@search' => t('Search form'))), t('hook_block_info_alter successfully verified.') );
+    $this->assertText(t("'@search' block", array('@search' => t('Search form'))), 'hook_block_info_alter successfully verified.');
   }
 }

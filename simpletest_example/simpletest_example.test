@@ -71,7 +71,7 @@ class SimpletestExampleTestCase extends DrupalWebTestCase {
       debug('We are not running on the PIFR testing server, so will go ahead and catch the failure.');
       $this->drupalGet("node/{$node->nid}/edit");
       // Make sure we don't get a 401 unauthorized response:
-      $this->assertResponse(200, t('User is allowed to edit the content.'));
+      $this->assertResponse(200, 'User is allowed to edit the content.');
 
       // Looking for title text in the page to determine whether we were
       // successful opening edit form.
@@ -126,19 +126,21 @@ class SimpletestUnitTestExampleTestCase extends DrupalUnitTestCase {
    */
   public function testSimpletestUnitTestExampleFunction() {
     $result = simpletest_example_empty_mysql_date(NULL);
-    $message = t('A NULL value should return TRUE.');
+    // Note that test assertion messages should never be translated, so
+    // this string is not wrapped in t().
+    $message = 'A NULL value should return TRUE.';
     $this->assertTrue($result, $message);
 
     $result = simpletest_example_empty_mysql_date('');
-    $message = t('An empty string should return TRUE.');
+    $message = 'An empty string should return TRUE.';
     $this->assertTrue($result, $message);
 
     $result = simpletest_example_empty_mysql_date('0000-00-00');
-    $message = t('An "empty" MySQL DATE should return TRUE.');
+    $message = 'An "empty" MySQL DATE should return TRUE.';
     $this->assertTrue($result, $message);
 
     $result = simpletest_example_empty_mysql_date(date('Y-m-d'));
-    $message = t('A valid date should return FALSE.');
+    $message = 'A valid date should return FALSE.';
     $this->assertFalse($result, $message);
   }
 }

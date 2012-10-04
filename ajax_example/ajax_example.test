@@ -51,7 +51,7 @@ class AjaxExampleTestCase extends DrupalWebTestCase {
       // Submit the initial form.
       $edit = array('question_type_select' => t($style));
       $this->drupalPost($path, $edit, t('Choose'));
-      $this->assertResponse(200, t('Question style "@style" selected.', array('@style' => t($style))));
+      $this->assertResponse(200, format_string('Question style "@style" selected.', array('@style' => t($style))));
       // For convenience, make variables out of the entries in $QandA.
       extract($QandA);
       // Check for the expected input field.
@@ -59,7 +59,7 @@ class AjaxExampleTestCase extends DrupalWebTestCase {
       // Now, submit the dynamically generated form.
       $edit = array('question' => t($answer));
       $this->drupalPost(NULL, $edit, t('Submit your answer'));
-      $this->assertRaw(t($response), t('Dynamic form has been submitted.'));
+      $this->assertRaw(t($response), 'Dynamic form has been submitted.');
     }
   }
 

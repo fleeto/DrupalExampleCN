@@ -81,7 +81,7 @@ class MenuExampleTestCase extends DrupalWebTestCase {
 
     // Check that our title callback changing /user dynamically is working.
     // Using &#039; because of the format_username function.
-    $this->assertRaw(t("@name&#039;s account", array('@name' => format_username($web_user))), t('Title successfully changed to account name: %name.', array('%name' => $web_user->name)));
+    $this->assertRaw(t("@name&#039;s account", array('@name' => format_username($web_user))), format_string('Title successfully changed to account name: %name.', array('%name' => $web_user->name)));
 
     // Now start testing other menu entries.
     $this->drupalGet('examples/menu_example');

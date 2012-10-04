@@ -79,8 +79,8 @@ class PageExampleTestCase extends DrupalWebTestCase {
 
     // Verify that user can access simple content
     $this->drupalGet('examples/page_example/simple');
-    $this->assertResponse(200, t('simple content successfully accessed.'));
-    $this->assertText(t('The quick brown fox jumps over the lazy dog.'), t('Simple content successfully verified.'));
+    $this->assertResponse(200, 'simple content successfully accessed.');
+    $this->assertText(t('The quick brown fox jumps over the lazy dog.'), 'Simple content successfully verified.');
 
     // Check if user can't access arguments page
     $this->pageExampleVerifyNoAccess('examples/page_example/arguments/1/2');
@@ -95,11 +95,11 @@ class PageExampleTestCase extends DrupalWebTestCase {
     $first = $this->randomNumber(3);
     $second = $this->randomNumber(3);
     $this->drupalGet('examples/page_example/arguments/' . $first . '/' . $second);
-    $this->assertResponse(200, t('arguments content successfully accessed.'));
+    $this->assertResponse(200, 'arguments content successfully accessed.');
     // Verify argument usage
-    $this->assertRaw(t("First number was @number.", array('@number' => $first)), t('arguments first argument successfully verified.'));
-    $this->assertRaw(t("Second number was @number.", array('@number' => $second)), t('arguments second argument successfully verified.'));
-    $this->assertRaw(t('The total was @number.', array('@number' => $first + $second)), t('arguments content successfully verified.'));
+    $this->assertRaw(t("First number was @number.", array('@number' => $first)), 'arguments first argument successfully verified.');
+    $this->assertRaw(t("Second number was @number.", array('@number' => $second)), 'arguments second argument successfully verified.');
+    $this->assertRaw(t('The total was @number.', array('@number' => $first + $second)), 'arguments content successfully verified.');
 
     // Verify incomplete argument call to arguments content
     $this->drupalGet('examples/page_example/arguments/' . $first . '/');
@@ -107,11 +107,11 @@ class PageExampleTestCase extends DrupalWebTestCase {
 
     // Verify invalid argument call to arguments content
     $this->drupalGet('examples/page_example/arguments/' . $first . '/' . $this->randomString());
-    $this->assertResponse(403, t('Invalid argument for arguments content successfully verified'));
+    $this->assertResponse(403, 'Invalid argument for arguments content successfully verified');
 
     // Verify invalid argument call to arguments content
     $this->drupalGet('examples/page_example/arguments/' . $this->randomString() . '/' . $second);
-    $this->assertResponse(403, t('Invalid argument for arguments content successfully verified'));
+    $this->assertResponse(403, 'Invalid argument for arguments content successfully verified');
 
     // Check if user can't access simple page
     $this->pageExampleVerifyNoAccess('examples/page_example/simple');

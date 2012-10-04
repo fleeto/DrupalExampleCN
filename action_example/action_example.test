@@ -52,7 +52,7 @@ class ActionExampleTestCase extends TriggerWebTestCase {
     $normal_user = $this->drupalCreateUser();
     user_save($normal_user, array('status' => 0));  // Blocked user.
     $normal_user = user_load($normal_user->uid, TRUE);
-    $this->assertFalse($normal_user->status, t('Normal user status has been set to blocked'));
+    $this->assertFalse($normal_user->status, 'Normal user status has been set to blocked');
 
     $hash = drupal_hash_base64('action_example_unblock_user_action');
     $edit = array('aid' => $hash);
@@ -60,7 +60,7 @@ class ActionExampleTestCase extends TriggerWebTestCase {
 
     $this->drupalGet("user/$normal_user->uid");
     $normal_user = user_load($normal_user->uid, TRUE);
-    $this->assertTrue($normal_user->status, t('Normal user status has been set to unblocked'));
+    $this->assertTrue($normal_user->status, 'Normal user status has been set to unblocked');
     $this->assertRaw(t('Unblocked user %name', array('%name' => $normal_user->name)));
 
     // 3. Create a user whose posts are always to be stickied.
@@ -78,6 +78,6 @@ class ActionExampleTestCase extends TriggerWebTestCase {
     $this->drupalLogout();
     $this->drupalLogin($sticky_user);
     $node = $this->drupalCreateNode();
-    $this->assertTrue($node->sticky, t('Node was set to sticky on creation'));
+    $this->assertTrue($node->sticky, 'Node was set to sticky on creation');
   }
 }

@@ -49,7 +49,7 @@ class TriggerExampleTestCase extends DrupalWebTestCase {
     // Request triggersomething form and submit.
     $this->drupalPost('examples/trigger_example', array(), t('Run triggersomething event'));
     // Verify the message is shown to the user.
-    $this->assertText($action_label, t('The triggersomething event executed the action.'));
+    $this->assertText($action_label, 'The triggersomething event executed the action.');
   }
 
   function testUserLogin() {

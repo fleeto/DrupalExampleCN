@@ -77,7 +77,7 @@ class EntityExampleTestCase extends DrupalWebTestCase {
     // delete entity 5
     $this->drupalPost('examples/entity_example/basic/5/edit' , $edit[5], 'Delete');
     $this->drupalGet('examples/entity_example/basic/5');
-    $this->assertResponse(404, t('Deleted entity 5 no longer exists'));
+    $this->assertResponse(404, 'Deleted entity 5 no longer exists');
     unset($edit[5]);
 
     // Update entity 2 and verify the update.
@@ -114,7 +114,7 @@ class EntityExampleTestCase extends DrupalWebTestCase {
     $this->drupalPost('examples/entity_example/basic/10/edit' , $edit[10], 'Save');
     $this->assertResponse(200);
     $this->assertText('item_description=' . $edit[10]['item_description']);
-    $this->assertText($edit[10]['field_new_junk_field[und][0][value]'], t('Custom field updated successfully'));
+    $this->assertText($edit[10]['field_new_junk_field[und][0][value]'], 'Custom field updated successfully');
 
     // Create and login user without view access.
     $account = $this->drupalCreateUser(array('access content'));
@@ -122,27 +122,27 @@ class EntityExampleTestCase extends DrupalWebTestCase {
     $this->drupalGet('admin/structure/entity_example_basic/manage');
     $this->assertResponse(403);
     $this->drupalGet('examples/entity_example/basic/2');
-    $this->assertResponse(403, t('User does not have permission to view entity'));
+    $this->assertResponse(403, 'User does not have permission to view entity');
 
     // Create and login user with view access but no edit access.
     $account = $this->drupalCreateUser(array('access content', 'view any entity_example_basic entity'));
     $this->drupalLogin($account);
     $this->drupalGet('admin/structure/entity_example_basic/manage');
-    $this->assertResponse(403, t('Denied access to admin manage page'));
+    $this->assertResponse(403, 'Denied access to admin manage page');
     $this->drupalGet('examples/entity_example/basic/2');
-    $this->assertResponse(200, t('User has permission to view entity'));
+    $this->assertResponse(200, 'User has permission to view entity');
     $this->drupalGet('examples/entity_example/basic/2/edit');
-    $this->assertResponse(403, t('User is denied edit privileges'));
+    $this->assertResponse(403, 'User is denied edit privileges');
 
     // Create and login user with view and edit but no manage privs.
     $account = $this->drupalCreateUser(array('access content', 'view any entity_example_basic entity', 'edit any entity_example_basic entity'));
     $this->drupalLogin($account);
     $this->drupalGet('admin/structure/entity_example_basic/manage');
-    $this->assertResponse(403, t('Denied access to admin manage page'));
+    $this->assertResponse(403, 'Denied access to admin manage page');
     $this->drupalGet('examples/entity_example/basic/2');
-    $this->assertResponse(200, t('User has permission to view entity'));
+    $this->assertResponse(200, 'User has permission to view entity');
     $this->drupalGet('examples/entity_example/basic/2/edit');
-    $this->assertResponse(200, t('User has edit privileges'));
+    $this->assertResponse(200, 'User has edit privileges');
 
 
   }

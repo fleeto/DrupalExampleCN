@@ -71,7 +71,7 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
         $nid = db_query('SELECT nid FROM {node} WHERE title = :title', array(':title' => $edit['title']))->fetchField();
         $this->assertText(t('New node @nid was created and private=@private', array('@nid' => $nid, '@private' => $is_private)));
         $private_status = db_query('SELECT private FROM {node_access_example} where nid = :nid', array(':nid' => $nid))->fetchField();
-        $this->assertTrue($is_private == $private_status, t('Node was properly set to private or not private in node_access_example table.'));
+        $this->assertTrue($is_private == $private_status, 'Node was properly set to private or not private in node_access_example table.');
         if ($is_private) {
           $private_nodes[] = $nid;
         }
@@ -92,7 +92,7 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
           foreach ($nodes_by_user[$uid] as $nid => $is_private) {
             $this->drupalGet('node/' . $nid);
             $this->assertResponse(200);
-            $this->assertTitle($titles[$nid] . ' | Drupal', t('Correct title for node found'));
+            $this->assertTitle($titles[$nid] . ' | Drupal', 'Correct title for node found');
           }
         }
         else {
@@ -100,9 +100,9 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
           // but we should be able to read non-private nodes.
           foreach ($nodes_by_user[$uid] as $nid => $is_private) {
             $this->drupalGet('node/' . $nid);
-            $this->assertResponse($is_private ? 403 : 200, t('Node @nid by user @uid should get a @response for this user (@web_user_uid)', array('@nid' => $nid, '@uid' => $uid, '@response' => $is_private ? 403 : 200, '@web_user_uid' => $web_user->uid)));
+            $this->assertResponse($is_private ? 403 : 200, format_string('Node @nid by user @uid should get a @response for this user (@web_user_uid)', array('@nid' => $nid, '@uid' => $uid, '@response' => $is_private ? 403 : 200, '@web_user_uid' => $web_user->uid)));
             if (!$is_private) {
-              $this->assertTitle($titles[$nid] . ' | Drupal', t('Correct title for node was found'));
+              $this->assertTitle($titles[$nid] . ' | Drupal', 'Correct title for node was found');
             }
           }
         }
@@ -111,9 +111,9 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
       // Check to see that the correct nodes are shown on examples/node_access.
       $this->drupalGet('examples/node_access');
       $accessible = $this->xpath("//tr[contains(@class,'accessible')]");
-      $this->assertEqual(count($accessible), 1, t('One private item accessible'));
+      $this->assertEqual(count($accessible), 1, 'One private item accessible');
       foreach ($accessible as $row) {
-        $this->assertEqual($row->td[2], $web_user->uid, t('Accessible row owned by this user'));
+        $this->assertEqual($row->td[2], $web_user->uid, 'Accessible row owned by this user');
       }
     }
 
@@ -160,7 +160,7 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
       $body = $this->randomName();
       $edit = array('body[und][0][value]' => $body);
       $this->drupalPost('node/' . $nid . '/edit', $edit, t('Save'));
-      $this->assertText(t('has been updated'), t('Node was updated by "foobar" user'));
+      $this->assertText(t('has been updated'), 'Node was updated by "foobar" user');
     }
 
     // Test that a privileged user can edit and delete private content.
@@ -191,6 +191,6 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
   function checkSearchResults($search_query, $expected_result_count) {
     $this->drupalPost('search/node', array('keys' => $search_query), t('Search'));
     $search_results = $this->xpath("//ol[contains(@class, 'search-results')]/li");
-    $this->assertEqual(count($search_results), $expected_result_count, t('Found the expected number of search results'));
+    $this->assertEqual(count($search_results), $expected_result_count, 'Found the expected number of search results');
   }
 }
