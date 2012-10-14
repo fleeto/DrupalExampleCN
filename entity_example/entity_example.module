@@ -536,7 +536,7 @@ class EntityExampleBasicController
       $entity->created = time();
     }
     // Invoke hook_entity_presave().
-    module_invoke_all('entity_presave', 'entity_example_basic', $entity);
+    module_invoke_all('entity_presave', $entity, 'entity_example_basic');
     // The 'primary_keys' argument determines whether this will be an insert
     // or an update. So if the entity already has an ID, we'll specify
     // basic_id as the key.
@@ -560,7 +560,7 @@ class EntityExampleBasicController
       $invocation = 'entity_update';
     }
     // Invoke either hook_entity_update() or hook_entity_insert().
-    module_invoke_all($invocation, 'entity_example_basic', $entity);
+    module_invoke_all($invocation, $entity, 'entity_example_basic');
     return $entity;
   }
 
