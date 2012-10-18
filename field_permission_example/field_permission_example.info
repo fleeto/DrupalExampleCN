@@ -1,0 +1,5 @@
+name = Field Permission Example
+description = A Field API Example: Fieldnote with Permissions
+package = Example modules
+core = 7.x
+files[] = tests/field_permission_example.test
