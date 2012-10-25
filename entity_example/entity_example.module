@@ -588,7 +588,6 @@ class EntityExampleBasicController
       $transaction = db_transaction();
       try {
         foreach ($entities as $entity) {
-          module_invoke_all('entity_example_basic_delete', $entity);
           // Invoke hook_entity_delete().
           module_invoke_all('entity_delete', $entity, 'entity_example_basic');
           field_attach_delete('entity_example_basic', $entity);
@@ -597,7 +596,6 @@ class EntityExampleBasicController
         db_delete('entity_example_basic')
           ->condition('basic_id', $basic_ids, 'IN')
           ->execute();
-
       }
       catch (Exception $e) {
         $transaction->rollback();
