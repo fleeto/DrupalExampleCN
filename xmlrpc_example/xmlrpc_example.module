@@ -18,8 +18,8 @@
  * For experimentation you may be interested in the
  * @link http://drupal.org/project/xmlrpctester XML-RPC Tester module @endlink.
  *
- * Note that the @link http://drupal.org/project/services Services module @endlink
- * is another common way to do XML-RPC at this time.
+ * Note that the @link http://drupal.org/project/services Services module
+ * @endlink is another common way to do XML-RPC at this time.
  *
  * @see hook_xmlrpc()
  * @see xmlrpc()
@@ -30,7 +30,7 @@
 // This is the common part of the module, implementing all the code required
 // for the client and the server part (most of this code is UI related). The
 // menu definition is the only part shared in this implementation.
-
+//
 /**
  * Implements hook_menu().
  *
@@ -67,7 +67,7 @@ function xmlrpc_example_menu() {
   );
   // This part is completely optional. It allows the modification of services
   // defined by this or other modules. This configuration form is used to
-  // enable the hook_xmlrpc_alter API and alter current existing services
+  // enable the hook_xmlrpc_alter API and alter current existing services.
   $items['examples/xmlrpc/alter'] = array(
     'title'           => 'XML-RPC Alterations',
     'description'     => 'Demonstrates how to alter defined XML-RPC services',
@@ -95,8 +95,26 @@ function xmlrpc_example_info() {
   }
 
   return array(
-    'basic' => array('#markup' => t('This XML-RPC example presents code that shows <ul><li><a href="!server">XML-RPC server code</a></li><li><a href="!client">XML-RPC client code</a></li><li>and <a href="!alter">an example hook_xmlrpc_alter() call</a></li></ul>', array('!server' => url('examples/xmlrpc/server'), '!client' => url('examples/xmlrpc/client'), '!alter' => url('examples/xmlrpc/alter')))),
-    'method_array' => array('#markup' => theme('item_list', array('title' => t('These methods are supported by !server', array('!server' => $server)), 'items' => $supported_methods))),
+    'basic' => array(
+      '#markup' => t('This XML-RPC example presents code that shows <ul><li><a href="!server">XML-RPC server code</a></li><li><a href="!client">XML-RPC client code</a></li><li>and <a href="!alter">an example hook_xmlrpc_alter() call</a></li></ul>',
+        array(
+          '!server' => url('examples/xmlrpc/server'),
+          '!client' => url('examples/xmlrpc/client'),
+          '!alter' => url('examples/xmlrpc/alter'),
+        )
+      ),
+    ),
+    'method_array' => array(
+      '#markup' => theme(
+        'item_list',
+        array(
+          'title' => t('These methods are supported by !server',
+          array('!server' => $server)
+          ),
+          'items' => $supported_methods,
+        )
+      ),
+    ),
   );
 }
 
@@ -121,11 +139,11 @@ function xmlrpc_example_info() {
 // error number 10002 is returned. Again, this value is arbitrary and could be
 // any other number. Client applications must know the meaning of the error
 // numbers returned by the server.
-
-// The following code is the XML-RPC implementation of the server part. The first
-// step is to define the methods. This methods should be associated to callbacks
-// that will be defined later.
-
+//
+// The following code is the XML-RPC implementation of the server part.
+// The first step is to define the methods. This methods should be associated
+// to callbacks that will be defined later.
+//
 /**
  * Implements hook_xmlrpc().
  *
@@ -152,7 +170,7 @@ function xmlrpc_example_info() {
  * @see hook_xmlrpc()
  */
 function xmlrpc_example_xmlrpc() {
-  $methods[] =  array(
+  $methods[] = array(
     // First argument is the method name.
     'xmlrpc_example.add',
     // Callback to execute when this method is requested.
@@ -168,15 +186,16 @@ function xmlrpc_example_xmlrpc() {
     ),
     // Include a little description that is shown when XML-RPC server is
     // requested for the implemented methods list.
-    t('Returns the sum of the two arguments.') // Method description
+    // Method description.
+    t('Returns the sum of the two arguments.'),
   );
   // The subtract method is similar to the addition, only the method name,
   // callback and description are different.
-  $methods[] =  array(
+  $methods[] = array(
     'xmlrpc_example.subtract',
     '_xmlrpc_example_server_subtract',
     array('int', 'int', 'int'),
-    t('Return difference of the two arguments.')
+    t('Return difference of the two arguments.'),
   );
 
   return $methods;
@@ -188,20 +207,21 @@ function xmlrpc_example_xmlrpc() {
 //
 // If the callbacks associated to the methods don't exist they must be
 // created. This implementation requires two specific callbacks:
-//  - _xmlrpc_example_server_add()
-//  - _xmlrpc_example_server_subtract()
+// - _xmlrpc_example_server_add()
+// - _xmlrpc_example_server_subtract()
 //
-
+//
 /**
  * This is the callback for the xmlrpc_example.add method.
  *
- * Sum the two arguments and return value or an error if the result is out of the
- * configured limits.
+ * Sum the two arguments and return value or an error if the result is out of
+ * the configured limits.
  *
  * @param $num1
  *   The first number to be summed.
  * @param $num2
  *   The second number to be summed.
+ *
  * @return
  *   The sum of the arguments, or error if it is not in server defined bounds.
  *
@@ -209,7 +229,8 @@ function xmlrpc_example_xmlrpc() {
  */
 function _xmlrpc_example_server_add($num1, $num2) {
   $sum = $num1 + $num2;
-  // If result is not within maximum and minimum limits, return corresponding error
+  // If result is not within maximum and minimum limits,
+  // return corresponding error.
   $max = variable_get('xmlrpc_example_server_max', 10);
   $min = variable_get('xmlrpc_example_server_min', 0);
   if ($sum > $max) {
@@ -225,14 +246,17 @@ function _xmlrpc_example_server_add($num1, $num2) {
 /**
  * This is the callback for the xmlrpc_example.subtract xmlrpc method.
  *
- * Return the difference of the two arguments, or an error if the result is out of the
- * configured limits..
+ * Return the difference of the two arguments, or an error if the result is out
+ * of the configured limits.
  *
+ * @param $num1
+ *   First number
+ * @param $num2
+ *   Second number
  *
- * @param numeric $num1
- * @param numeric $num2
  * @return
- *   The difference of the two arguments, or error if it is not in server defined bounds.
+ *   The difference of the two arguments, or error if it is not in server
+ *   defined bounds.
  *
  * @see xmlrpc_error()
  */
@@ -241,7 +265,8 @@ function _xmlrpc_example_server_subtract($num1, $num2) {
   $max = variable_get('xmlrpc_example_server_max', 10);
   $min = variable_get('xmlrpc_example_server_min', 0);
 
-  // If result is not within maximum and minimum limits, return corresponding error
+  // If result is not within maximum and minimum limits,
+  // return corresponding error.
   if ($diference > $max) {
     return xmlrpc_error(10001, t('Result is above the upper limit (@max) defined by the server.', array('@max' => $max)));
   }
@@ -256,8 +281,10 @@ function _xmlrpc_example_server_subtract($num1, $num2) {
 // A server does not require an interface at all. In this implementation we
 // use a server configuration form to set the limits available for the addition
 // and subtraction operations.
-
+//
 /**
+ * Returns form array to configure the service options.
+ *
  * Present a form to configure the service options. In this case the maximum
  * and minimum values for any of the operations (add or subtraction).
  */
@@ -297,17 +324,19 @@ function xmlrpc_example_server_form() {
 
 
 // The server part of the module ends here.
-
+//
 // This is the client part of the module. If defines a form with two input
 // fields to call xmlrpc_example.add or xmlrpc_example.subtract methods on this
 // host. Please note that having a user interface to query an XML-RPC service is
 // not required. A method can be requested to a server using the xmlrpc()
 // function directly. We have included an user interface to make the testing
 // easier.
-
+//
 //  The client user interface part of the module starts here.
-
+//
 /**
+ * Returns a form array to take input for two arguments.
+ *
  * Present a form to get two arguments, and make a call to an XML-RPC server
  * using these arguments as input, showing the result in a message.
  */
@@ -316,7 +345,8 @@ function xmlrpc_example_client_form() {
   $form['explanation'] = array(
     '#markup' => '<div>' . t('This example demonstrates how to make XML-RPC calls with Drupal. <br />The "Request methods" button makes a request to the server and asks for the available list of methods, as a service discovery request. <br/>The "Add integers" and "Subtract integers" use the xmlrpc() function to act as a client, calling the XML-RPC server defined in this same example for some defined methods.<br />An XML-RPC error will result if the result in the addition or subtraction requested is out of bounds defined by the server. These error numbers are defined by the server. <br />The "Add and Subtract" button performs a multicall operation on the XML-RPC server: several requests in a single XML-RPC call.<br />') . '</div>',
   );
-  // We are going to call add and subtract methods, and they work with integer values.
+  // We are going to call add and subtract methods, and
+  // they work with integer values.
   $form['num1'] = array(
     '#type' => 'textfield',
     '#title' => t('Enter an integer'),
@@ -366,6 +396,8 @@ function xmlrpc_example_client_form() {
 }
 
 /**
+ * Submit handler to query system.listMethods.
+ *
  * Submit: query the XML-RPC endpoint for the method system.listMethods
  * and report the result as a Drupal message. The result is a list of the
  * available methods in this XML-RPC server.
@@ -374,7 +406,9 @@ function xmlrpc_example_client_form() {
  * built-in XML-RPC server implements this method by default.
  *
  * @param $form
+ *   form array
  * @param $form_state
+ *   form_state array
  *
  * @see xmlrpc()
  * @see xmlrpc_errno()
@@ -408,11 +442,15 @@ function xmlrpc_example_client_request_methods_submit($form, &$form_state) {
 }
 
 /**
+ * Submit handler to query xmlrpc_example.add.
+ *
  * Submit: query the XML-RPC endpoint for the method xmlrpc_example.add
  * and report the result as a Drupal message.
  *
  * @param $form
+ *   form array
  * @param $form_state
+ *   form_state array
  *
  * @see xmlrpc()
  * @see xmlrpc_errno()
@@ -449,11 +487,15 @@ function xmlrpc_example_client_add_submit($form, &$form_state) {
 }
 
 /**
+ * Submit handler to query xmlrpc_example.subtract.
+ *
  * Submit: query the XML-RPC endpoint for the method xmlrpc_example.subtract
  * and report the result as a Drupal message.
  *
  * @param $form
+ *   form array
  * @param $form_state
+ *   form_state array
  *
  * @see xmlrpc()
  * @see xmlrpc_errno()
@@ -486,13 +528,17 @@ function xmlrpc_example_client_subtract_submit($form, &$form_state) {
 }
 
 /**
+ * Submit a multicall request.
+ *
  * Submit a multicall request: query the XML-RPC endpoint for the methods
  * xmlrpc_example.add and xmlrpc_example.subtract and report the result as a
  * Drupal message. Drupal's XML-RPC client builds the system.multicall request
  * automatically when there is more than one method to call.
  *
  * @param $form
+ *   form array
  * @param $form_state
+ *   form_state array
  *
  * @see xmlrpc()
  * @see xmlrpc_errno()
@@ -543,7 +589,7 @@ function xmlrpc_example_client_multicall_submit($form, &$form_state) {
 }
 
 // The client part of the module ends here.
-
+//
 // The alteration part of the module starts here. hook_xmlrpc_alter() is
 // useful when you want to extend, limit or alter methods defined by other
 // modules. This part is not required to have an XML-RPC server or client
@@ -558,15 +604,13 @@ function xmlrpc_example_client_multicall_submit($form, &$form_state) {
 // make use of this hook. A configuration form is included to enable/disable
 // this functionality, but this part is optional if you want to implement
 // hook_xmlrpc_alter()
-
-
+//
 // This is the XML-RPC code for the alteration part. It will check if an option
 // to enable the functionality is enabled and then alter it. We alter the
 // 'xmlrpc_example.add' and 'xmlrpc_example.subtract' methods, changing the
 // associated callback with custom functions. The modified methods (with
 // new callbacks associated) will perform the addition or subtraction of the
 // integer inputs, but will never check for limits nor return errors.
-
 /**
  * Implements hook_xmlrpc_alter().
  *
@@ -581,11 +625,12 @@ function xmlrpc_example_xmlrpc_alter(&$methods) {
   if (!variable_get('xmlrpc_example_alter_enabled', 0)) {
     return;
   }
-  // Loop all defined methods (other modules may have include additional methods)
+  // Loop all defined methods (other modules may include additional methods).
   foreach ($methods as $index => $method) {
     // First element in the method array is the method name.
     if ($method[0] == 'xmlrpc_example.add') {
-      // Replace current callback with custom callback (second argument of the array)
+      // Replace current callback with custom callback
+      // (second argument of the array).
       $methods[$index][1] = '_xmlrpc_example_alter_add';
     }
     // Do the same for the substraction method.
@@ -596,17 +641,19 @@ function xmlrpc_example_xmlrpc_alter(&$methods) {
 }
 
 // Now we define the custom callbacks replacing the original defined by the
-// altered methods: xmlrpc_example.add and _xmlrpc_example.subtract . These
+// altered methods: xmlrpc_example.add and _xmlrpc_example.subtract. These
 // new callbacks will not check if the result of the operation is within the
-// limits defined by the server and will always return the value of the operation.
-
+// limits defined by the server and will always return value of the operation.
 /**
  * Sum the two arguments without limit checking.
  *
  * This is the replacement callback for the xmlrpc_example.add xmlrpc method.
  *
  * @param $num1
+ *   First number
  * @param $num2
+ *   Second Number
+ *
  * @return
  *   The sum of the arguments
  */
@@ -617,10 +664,13 @@ function _xmlrpc_example_alter_add($num1, $num2) {
 /**
  * Return the difference of the two arguments without limit checking.
  *
- * This is the replacement callback for the xmlrpc_example.subtract xmlrpc method.
+ * This is the replacement callback for xmlrpc_example.subtract xmlrpc method.
  *
- * @param numeric $num1
- * @param numeric $num2
+ * @param $num1
+ *   First number
+ * @param $num2
+ *   Second Number
+ *
  * @return
  *   The difference of the two arguments
  */
@@ -631,11 +681,10 @@ function _xmlrpc_example_alter_subtract($num1, $num2) {
 
 // Our implementation of hook_xmlrpc_alter will work only if a system variable
 // is set to true, and we need a configuration form to enable/disable this
-// 'feature'. This is the user interface to enable or disable the hook_xmlrpc_alter
-// operations.
-
+// 'feature'. This is the user interface to enable or disable the
+// hook_xmlrpc_alter operations.
 /**
- * Present a form to enable or disable the code implemented in hook_xmlrpc_alter.
+ * Present a form to enable/disable the code implemented in hook_xmlrpc_alter.
  */
 function xmlrpc_example_alter_form() {
   $form = array();

@@ -4,6 +4,7 @@
  * @file
  * Test case for the XML-RPC example module.
  */
+
 class XmlrpcExampleTestCase extends DrupalWebTestCase {
   protected $xmlrpc_url;
 
@@ -37,7 +38,7 @@ class XmlrpcExampleTestCase extends DrupalWebTestCase {
     $result = xmlrpc($this->xmlrpc_url, array('xmlrpc_example.subtract' => array(4, 3)));
     $this->assertEqual($result, 1, 'Successfully subtracted 4-3 = 1');
 
-    // Make a multicall request
+    // Make a multicall request.
     $options = array(
       'xmlrpc_example.add' => array(5, 2),
       'xmlrpc_example.subtract' => array(5, 2),
@@ -46,7 +47,7 @@ class XmlrpcExampleTestCase extends DrupalWebTestCase {
     $result = xmlrpc($this->xmlrpc_url, $options);
     $this->assertEqual($result, $expected, 'Successfully called multicall request');
 
-    // Verify default limits
+    // Verify default limits.
     $result = xmlrpc($this->xmlrpc_url, array('xmlrpc_example.subtract' => array(3, 4)));
     $this->assertEqual(xmlrpc_errno(), 10002, 'Results below minimum return custom error: 10002');
 
@@ -71,9 +72,9 @@ class XmlrpcExampleTestCase extends DrupalWebTestCase {
     $this->drupalPost('examples/xmlrpc/client', $edit, t('Request methods'));
     $this->assertText('xmlrpc_example.add', 'The XML-RPC Add method was found.');
     $this->assertText('xmlrpc_example.subtract', 'The XML-RPC Subtract method was found.');
-    // Before testing multicall, verify that method exists
+    // Before testing multicall, verify that method exists.
     $this->assertText('system.multicall', 'The XML-RPC Multicall method was found.');
-    // Verify multicall request
+    // Verify multicall request.
     $edit = array('num1' => 5, 'num2' => 2);
     $this->drupalPost('examples/xmlrpc/client', $edit, t('Add and Subtract'));
     $this->assertText('[0] =&gt; 7', 'The XML-RPC server returned the addition result.');
@@ -105,7 +106,7 @@ class XmlrpcExampleTestCase extends DrupalWebTestCase {
 
   /**
    * Perform several XML-RPC requests altering the server behaviour with
-   * hook_xmlrpc_alter API
+   * hook_xmlrpc_alter API.
    */
   function testXmlrpcExampleAlter() {
     // Enable XML-RPC service altering functionality.
