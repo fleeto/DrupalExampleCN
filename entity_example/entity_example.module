@@ -107,7 +107,7 @@ function entity_example_entity_info() {
  */
 function entity_example_basic_load($basic_id = NULL, $reset = FALSE) {
   $basic_ids = (isset($basic_id) ? array($basic_id) : array());
-  $basic = entity_example_basic_load_multiple($basic_ids, $reset);
+  $basic = entity_example_basic_load_multiple($basic_ids, array(), $reset);
   return $basic ? reset($basic) : FALSE;
 }
 
