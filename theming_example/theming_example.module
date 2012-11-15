@@ -76,9 +76,13 @@ function theming_example_theme() {
     ),
     'theming_example_text_form'  => array(
       'render element' => 'form',
-      // In this one the rendering will be done by a tpl.php file instead of
-      // being rendered by a function, so we specify a template.
-      'template' => 'theming_example_text_form',
+      // In this one the rendering will be done by a template file
+      // (theming-example-text-form.tpl.php) instead of being rendered by a
+      // function. Note the use of dashes to separate words in place of
+      // underscores. The template file's extension is also left out so that
+      // it may be determined automatically depending on the template engine
+      // the site is using.
+      'template' => 'theming-example-text-form',
     ),
   );
 }
@@ -269,19 +273,25 @@ function theme_theming_example_select_form($variables) {
 }
 
 /**
- * Implements template_preprocess() to add information to the
- * theming_example_text_form().
+ * Implements template_preprocess() to prepare variables for use inside the
+ * theming-example-text-form.tpl.php template file.
  *
- * In this example the form is preprocessed here and $text_form
- * ($variables['text_form]) is ready to be output as prepared here when we get
- * to theming_example_text_form.tpl.php. However, other variables are provided
- * for use there; every key of the $variables array will be available as a
- * variable in the template.
+ * In this example, we create a couple new variables, 'text_form' and
+ * 'text_form_content', that clean up the form output.  Drupal will turn the
+ * array keys in the $variables array into variables for use in the template.
+ *
+ * So $variables['text_form'] becomes available as $text_form in the template.
+ *
+ * @see theming-example-text-form.tpl.php
  */
 function template_preprocess_theming_example_text_form(&$variables) {
   $variables['text_form_content'] = array();
   $text_form_hidden = array();
-  // Provide variables named after form keys so theme can output each element independently.
+
+  // Each form element is rendered and saved as a key in $text_form_content, to
+  // give the themer the power to print each element independently in the
+  // template file.  Hidden form elements have no value in the theme, so they
+  // are grouped into a single element.
   foreach (element_children($variables['form']) as $key) {
     $type = $variables['form'][$key]['#type'];
     if ($type == 'hidden' || $type == 'token') {
@@ -291,8 +301,9 @@ function template_preprocess_theming_example_text_form(&$variables) {
       $variables['text_form_content'][$key] = drupal_render($variables['form'][$key]);
     }
   }
-  // Hidden form elements have no value in the theme. No need for separation.
   $variables['text_form_content']['hidden'] = implode($text_form_hidden);
-  // Collect all form elements to make it easier to print the whole form.
+
+  // The entire form is then saved in the $text_form variable, to make it easy
+  // for the themer to print the whole form.
   $variables['text_form'] = implode($variables['text_form_content']);
 }
