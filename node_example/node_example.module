@@ -53,7 +53,6 @@
  * and @link http://drupal.org/node/443536 Field API Handbook Page @endlink
  * and @link field Field API documentation @endlink.
  *
- * @see node_example.install
  * @see field_example.module
  */
 
