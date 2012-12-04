@@ -23,7 +23,7 @@ function tabledrag_example_help($path, $arg) {
  * Implements hook_menu().
  */
 function tabledrag_example_menu() {
-  // Basic example with single-depth sorting
+  // Basic example with single-depth sorting.
   $items['examples/tabledrag_example_simple'] = array(
     'title' => 'TableDrag example (simple)',
     'description' => 'Show a page with a sortable tabledrag form',
@@ -34,7 +34,7 @@ function tabledrag_example_menu() {
     // into 'undefined index in drupal_retrieve_form()' notices.
     'file' => 'tabledrag_example_simple_form.inc',
   );
-  // Basic parent/child example
+  // Basic parent/child example.
   $items['examples/tabledrag_example_parent'] = array(
     'title' => 'TableDrag example (parent/child)',
     'description' => 'Show a page with a sortable parent/child tabledrag form',
@@ -60,12 +60,12 @@ function tabledrag_example_menu() {
  */
 function tabledrag_example_theme() {
   return array(
-    // Theme function for the 'sortable' example
+    // Theme function for the 'sortable' example.
     'tabledrag_example_simple_form' => array(
       'render element' => 'form',
       'file' => 'tabledrag_example_simple_form.inc',
     ),
-    // Theme function for the 'parent/child' example
+    // Theme function for the 'parent/child' example.
     'tabledrag_example_parent_form' => array(
       'render element' => 'form',
       'file' => 'tabledrag_example_parent_form.inc',

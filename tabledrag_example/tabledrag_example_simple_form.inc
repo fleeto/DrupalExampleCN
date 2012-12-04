@@ -5,7 +5,7 @@
  */
 
 /**
- * Build the tabledrag_simple_example_form form
+ * Build the tabledrag_simple_example_form form.
  *
  * @return
  *   A form array set for theming by theme_tabledrag_example_simple_form()
@@ -21,7 +21,7 @@ function tabledrag_example_simple_form($form_state) {
   // they are intended only for the 'parent/child' tabledrag examples.
   $result = db_query('SELECT id, name, description, weight FROM {tabledrag_example} WHERE id < 8 ORDER BY weight ASC');
 
-  // Iterate through each database result
+  // Iterate through each database result.
   foreach ($result as $item) {
 
     // Create a form entry for this item.
@@ -64,12 +64,12 @@ function tabledrag_example_simple_form($form_state) {
   // The 'actions' wrapper used here isn't strictly necessary for tabledrag,
   // but is included as a Form API recommended practice.
   $form['actions'] = array('#type' => 'actions');
-  $form['actions']['submit'] = array( '#type' => 'submit', '#value' => t('Save Changes'));
+  $form['actions']['submit'] = array('#type' => 'submit', '#value' => t('Save Changes'));
   return $form;
 }
 
 /**
- * Theme callback for the tabledrag_example_simple_form form
+ * Theme callback for the tabledrag_example_simple_form form.
  *
  * The theme callback will format the $form data structure into a table and
  * add our tabledrag functionality.  (Note that drupal_add_tabledrag should be
@@ -83,10 +83,10 @@ function tabledrag_example_simple_form($form_state) {
 function theme_tabledrag_example_simple_form($variables) {
   $form = $variables['form'];
 
-  // Initialize the variable which will store our table rows
+  // Initialize the variable which will store our table rows.
   $rows = array();
 
-  // Iterate over each element in our $form['example_items'] array
+  // Iterate over each element in our $form['example_items'] array.
   foreach (element_children($form['example_items']) as $id) {
 
     // Before we add our 'weight' column to the row, we need to give the
@@ -94,7 +94,7 @@ function theme_tabledrag_example_simple_form($variables) {
     // drupal_add_tabledrag call.
     //
     // This could also have been done during the form declaration by adding
-    //     '#attributes' => array('class' => 'example-item-weight'),
+    // '#attributes' => array('class' => 'example-item-weight'),
     // directy to the 'weight' element in tabledrag_example_simple_form().
     $form['example_items'][$id]['weight']['#attributes']['class'] = array('example-item-weight');
 
@@ -104,11 +104,11 @@ function theme_tabledrag_example_simple_form($variables) {
     // function to generate the final html markup for that element.
     $rows[] = array(
       'data' => array(
-        // Add our 'name' column
+        // Add our 'name' column.
         drupal_render($form['example_items'][$id]['name']),
-        // Add our 'description' column
+        // Add our 'description' column.
         drupal_render($form['example_items'][$id]['description']),
-        // Add our 'weight' column
+        // Add our 'weight' column.
         drupal_render($form['example_items'][$id]['weight']),
       ),
       // To support the tabledrag behaviour, we need to assign each row of the
@@ -130,26 +130,30 @@ function theme_tabledrag_example_simple_form($variables) {
   $table_id = 'example-items-table';
 
   // We can render our tabledrag table for output.
-  $output = theme('table', array('header' => $header, 'rows' => $rows, 'attributes' => array('id' => $table_id)));
+  $output = theme('table', array(
+    'header' => $header,
+    'rows' => $rows,
+    'attributes' => array('id' => $table_id),
+  ));
 
-  // And then render any remaining form elements (such as our submit button)
+  // And then render any remaining form elements (such as our submit button).
   $output .= drupal_render_children($form);
 
   // We now call the drupal_add_tabledrag() function in order to add the
   // tabledrag.js goodness onto our page.
   //
   // For a basic sortable table, we need to pass it:
-  //   - the $table_id of our <table> element,
-  //   - the $action to be performed on our form items ('order'),
-  //   - a string describing where $action should be applied ('siblings'),
-  //   - and the class of the element containing our 'weight' element.
+  // - the $table_id of our <table> element,
+  // - the $action to be performed on our form items ('order'),
+  // - a string describing where $action should be applied ('siblings'),
+  // - and the class of the element containing our 'weight' element.
   drupal_add_tabledrag($table_id, 'order', 'sibling', 'example-item-weight');
 
   return $output;
 }
 
 /**
- * Submit callback for the tabledrag_example_simple_form form
+ * Submit callback for the tabledrag_example_simple_form form.
  *
  * Updates the 'weight' column for each element in our table, taking into
  * account that item's new order after the drag and drop actions have been

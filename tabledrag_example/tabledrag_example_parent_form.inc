@@ -5,7 +5,7 @@
  */
 
 /**
- * Build the parent-child example form
+ * Build the parent-child example form.
  *
  * @return
  *   A form array set for theming by theme_tabledrag_example_parent_form()
@@ -26,7 +26,7 @@ function tabledrag_example_parent_form($form_state) {
   // Fetch the example data from the database, ordered by parent/child/weight.
   $result = tabledrag_example_parent_get_data();
 
-  // Iterate through each database result
+  // Iterate through each database result.
   foreach ($result as $item) {
 
     // Create a form entry for this item.
@@ -64,8 +64,8 @@ function tabledrag_example_parent_form($form_state) {
       // element, which does not support the '#value' property. (Markup
       // elements use the '#markup' property instead.)
       'id' => array(
-        //'#type' => 'hidden',
-        //'#default_value' => $item->id,
+        // '#type' => 'hidden',
+        // '#default_value' => $item->id,
         '#type' => 'textfield',
         '#size' => 3,
         '#default_value' => $item->id,
@@ -75,8 +75,8 @@ function tabledrag_example_parent_form($form_state) {
       // The same information holds true for the parent id field as for the
       // item id field, described above.
       'pid' => array(
-        //'#type' => 'hidden',
-        //'#default_value' => $item->pid,
+        // '#type' => 'hidden',
+        // '#default_value' => $item->pid,
         '#type' => 'textfield',
         '#size' => 3,
         '#default_value' => $item->pid,
@@ -109,12 +109,12 @@ function tabledrag_example_parent_form($form_state) {
   // The 'actions' wrapper used here isn't strictly necessary for tabledrag,
   // but is included as a Form API recommended practice.
   $form['actions'] = array('#type' => 'actions');
-  $form['actions']['submit'] = array( '#type' => 'submit', '#value' => t('Save Changes'));
+  $form['actions']['submit'] = array('#type' => 'submit', '#value' => t('Save Changes'));
   return $form;
 }
 
 /**
- * Theme callback for the tabledrag_example_parent_form form
+ * Theme callback for the tabledrag_example_parent_form form.
  *
  * The theme callback will format the $form data structure into a table and
  * add our tabledrag functionality.  (Note that drupal_add_tabledrag should be
@@ -125,10 +125,10 @@ function tabledrag_example_parent_form($form_state) {
 function theme_tabledrag_example_parent_form($variables) {
   $form = $variables['form'];
 
-  // Initialize the variable which will store our table rows
+  // Initialize the variable which will store our table rows.
   $rows = array();
 
-  // Iterate over each element in our $form['example_items'] array
+  // Iterate over each element in our $form['example_items'] array.
   foreach (element_children($form['example_items']) as $id) {
 
     // Before we add our 'weight' column to the row, we need to give the
@@ -136,7 +136,9 @@ function theme_tabledrag_example_parent_form($variables) {
     // drupal_add_tabledrag call.
     //
     // This could also have been done during the form declaration by adding
-    //     '#attributes' => array('class' => 'example-item-weight'),
+    // @code
+    //   '#attributes' => array('class' => 'example-item-weight'),
+    // @endcode
     // directly to the 'weight' element in tabledrag_example_simple_form().
     $form['example_items'][$id]['weight']['#attributes']['class'] = array('example-item-weight');
 
@@ -172,7 +174,7 @@ function theme_tabledrag_example_parent_form($variables) {
     // so that it appears nested under its parent.  Our $depth parameter was
     // calculated while building the tree in tabledrag_example_parent_get_data
     $indent = theme('indentation', array('size' => $form['example_items'][$id]['depth']['#value']));
-    unset ($form['example_items'][$id]['depth']);
+    unset($form['example_items'][$id]['depth']);
 
     // We are now ready to add each element of our $form data to the $rows
     // array, so that they end up as individual table cells when rendered
@@ -182,13 +184,13 @@ function theme_tabledrag_example_parent_form($variables) {
       'data' => array(
         // Add our 'name' column, being sure to include our indentation.
         $indent . drupal_render($form['example_items'][$id]['name']),
-        // Add our 'description' column
+        // Add our 'description' column.
         drupal_render($form['example_items'][$id]['description']),
-        // Add our 'weight' column
+        // Add our 'weight' column.
         drupal_render($form['example_items'][$id]['weight']),
-        // Add our hidden 'id' column
+        // Add our hidden 'id' column.
         drupal_render($form['example_items'][$id]['id']),
-        // Add our hidden 'parent id' column
+        // Add our hidden 'parent id' column.
         drupal_render($form['example_items'][$id]['pid']),
       ),
       // To support the tabledrag behaviour, we need to assign each row of the
@@ -214,23 +216,27 @@ function theme_tabledrag_example_parent_form($variables) {
   $table_id = 'example-items-table';
 
   // We can render our tabledrag table for output.
-  $output = theme('table', array('header' => $header, 'rows' => $rows, 'attributes' => array('id' => $table_id)));
+  $output = theme('table', array(
+    'header' => $header,
+    'rows' => $rows,
+    'attributes' => array('id' => $table_id),
+  ));
 
-  // And then render any remaining form elements (such as our submit button)
+  // And then render any remaining form elements (such as our submit button).
   $output .= drupal_render_children($form);
 
   // We now call the drupal_add_tabledrag() function in order to add the
   // tabledrag.js goodness onto our page.
   //
   // For our parent/child tree table, we need to pass it:
-  //   - the $table_id of our <table> element (example-items-table),
-  //   - the $action to be performed on our form items ('match'),
-  //   - a string describing where $action should be applied ('parent'),
-  //   - the $group value (pid column) class name ('example-item-pid'),
-  //   - the $subgroup value (pid column) class name ('example-item-pid'),
-  //   - the $source value (id column) class name ('example-item-id'),
-  //   - an optional $hidden flag identifying if the columns should be hidden,
-  //   - an optional $limit parameter to control the max parenting depth
+  // - the $table_id of our <table> element (example-items-table),
+  // - the $action to be performed on our form items ('match'),
+  // - a string describing where $action should be applied ('parent'),
+  // - the $group value (pid column) class name ('example-item-pid'),
+  // - the $subgroup value (pid column) class name ('example-item-pid'),
+  // - the $source value (id column) class name ('example-item-id'),
+  // - an optional $hidden flag identifying if the columns should be hidden,
+  // - an optional $limit parameter to control the max parenting depth.
   drupal_add_tabledrag($table_id, 'match', 'parent', 'example-item-pid', 'example-item-pid', 'example-item-id', FALSE);
 
   // Because we also want to sort in addition to providing parenting, we call
@@ -242,7 +248,7 @@ function theme_tabledrag_example_parent_form($variables) {
 }
 
 /**
- * Submit callback for the tabledrag_example_parent_form form
+ * Submit callback for the tabledrag_example_parent_form form.
  *
  * Updates the 'weight' column for each element in our table, taking into
  * account that item's new order after the drag and drop actions have been
@@ -260,7 +266,7 @@ function tabledrag_example_parent_form_submit($form, &$form_state) {
 }
 
 /**
- * Retrives the tree structure from database, and sorts by parent/child/weight
+ * Retrives the tree structure from database, and sorts by parent/child/weight.
  *
  * The sorting should result in children items immediately following their
  * parent items, with items at the same level of the hierarchy sorted by
@@ -275,7 +281,7 @@ function tabledrag_example_parent_get_data() {
                        FROM {tabledrag_example}
                        WHERE (pid = 0)
                        ORDER BY weight ASC');
-  // Initialize a variable to store our ordered tree structure
+  // Initialize a variable to store our ordered tree structure.
   $itemtree = array();
   // Depth will be incremented in our _get_tree() function for the first
   // parent item, so we start it at -1.
@@ -288,23 +294,23 @@ function tabledrag_example_parent_get_data() {
 }
 
 /**
- * Recursively adds to the $itemtree array, ordered by parent/child/weight
+ * Recursively adds to the $itemtree array, ordered by parent/child/weight.
  */
 function tabledrag_example_get_tree($parentitem, &$itemtree = array(), &$depth = 0) {
-  // Increase our $depth value by one
+  // Increase our $depth value by one.
   $depth++;
-  // Set the current tree 'depth' for this item, used to calculate indentation
+  // Set the current tree 'depth' for this item, used to calculate indentation.
   $parentitem->depth = $depth;
-  // Add the parent item to the tree
+  // Add the parent item to the tree.
   $itemtree[$parentitem->id] = $parentitem;
-  // Retrieve each of the children belonging to this parent
+  // Retrieve each of the children belonging to this parent.
   $children = db_query('SELECT id, name, description, weight, pid
                       FROM {tabledrag_example}
                       WHERE (pid = :pid)
                       ORDER BY weight ASC',
                       array(':pid' => $parentitem->id));
   foreach ($children as $child) {
-    // Make sure this child does not already exist in the tree, to avoid loops
+    // Make sure this child does not already exist in the tree, to avoid loops.
     if (!in_array($child->id, array_keys($itemtree))) {
       // Add this child's tree to the $itemtree array.
       tabledrag_example_get_tree($child, $itemtree, $depth);
@@ -313,6 +319,6 @@ function tabledrag_example_get_tree($parentitem, &$itemtree = array(), &$depth =
   // Finished processing this tree branch.  Decrease our $depth value by one
   // to represent moving to the next branch.
   $depth--;
-  // Return
+  // Return.
   return;
 }

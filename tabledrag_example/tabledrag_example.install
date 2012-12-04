@@ -5,7 +5,6 @@
  *
  * This file contains the functions required to perform install and
  * uninstall operations.
- *
  */
 
 /**
@@ -79,17 +78,55 @@ function tabledrag_example_schema() {
  * This datafills the example item info which will be used in the example.
  */
 function tabledrag_example_install() {
-  // Insert some values into the database
+  // Ensure translations don't break at install time.
+  $t = get_t();
+  // Insert some values into the database.
   $rows = array(
-    array('name' => st('Item One'), 'description' => st('The first item'), 'itemgroup' => st('Group1')),
-    array('name' => st('Item Two'), 'description' => st('The second item'), 'itemgroup' => st('Group1')),
-    array('name' => st('Item Three'), 'description' => st('The third item'), 'itemgroup' => st('Group1')),
-    array('name' => st('Item Four'), 'description' => st('The fourth item'), 'itemgroup' => st('Group2')),
-    array('name' => st('Item Five'), 'description' => st('The fifth item'), 'itemgroup' => st('Group2')),
-    array('name' => st('Item Six'), 'description' => st('The sixth item'), 'itemgroup' => st('Group2')),
-    array('name' => st('Item Seven'), 'description' => st('The seventh item'), 'itemgroup' => st('Group3')),
-    array('name' => st('A Root Node'), 'description' => st('This item cannot be nested under a parent item'), 'itemgroup' => st('Group3')),
-    array('name' => st('A Leaf Item'), 'description' => st('This item cannot have child items'), 'itemgroup' => st('Group3')),
+    array(
+      'name' => $t('Item One'),
+      'description' => $t('The first item'),
+      'itemgroup' => $t('Group1'),
+    ),
+    array(
+      'name' => $t('Item Two'),
+      'description' => $t('The second item'),
+      'itemgroup' => $t('Group1'),
+    ),
+    array(
+      'name' => $t('Item Three'),
+      'description' => $t('The third item'),
+      'itemgroup' => $t('Group1'),
+    ),
+    array(
+      'name' => $t('Item Four'),
+      'description' => $t('The fourth item'),
+      'itemgroup' => $t('Group2'),
+    ),
+    array(
+      'name' => $t('Item Five'),
+      'description' => $t('The fifth item'),
+      'itemgroup' => $t('Group2'),
+    ),
+    array(
+      'name' => $t('Item Six'),
+      'description' => $t('The sixth item'),
+      'itemgroup' => $t('Group2'),
+    ),
+    array(
+      'name' => $t('Item Seven'),
+      'description' => $t('The seventh item'),
+      'itemgroup' => $t('Group3'),
+    ),
+    array(
+      'name' => $t('A Root Node'),
+      'description' => $t('This item cannot be nested under a parent item'),
+      'itemgroup' => $t('Group3'),
+    ),
+    array(
+      'name' => $t('A Leaf Item'),
+      'description' => $t('This item cannot have child items'),
+      'itemgroup' => $t('Group3'),
+    ),
   );
   if (db_table_exists('tabledrag_example')) {
     foreach ($rows as $row) {
