@@ -234,6 +234,21 @@ function form_example_states_form($form, &$form_state) {
     ),
   );
 
+  $form['average'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Enter your average'),
+    // To trigger a state when the same controlling element can have more than
+    // one possible value, put all values in a higher-level array.
+    '#states' => array(
+      'visible' => array(
+        ':input[name="student_type"]' => array(
+          array('value' => 'high_school'),
+          array('value' => 'undergraduate'),
+        ),
+      ),
+    ),
+  );
+
   $form['expand_more_info'] = array(
     '#type' => 'checkbox',
     '#title' => t('Check here if you want to add more information.'),
