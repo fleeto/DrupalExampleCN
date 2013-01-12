@@ -743,7 +743,7 @@ function form_example_tutorial_10_validate($form, &$form_state) {
       $form_state['storage']['file'] = $file;
     }
     else {
-      form_set_error('file', t('Failed to write the uploaded file the site\'s file folder.'));
+      form_set_error('file', t('Failed to write the uploaded file to the site\'s file folder.'));
     }
   }
   else {
