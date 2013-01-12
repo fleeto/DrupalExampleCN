@@ -4,7 +4,7 @@
  * @file
  * This is the Form API Tutorial from the handbook.
  *
- * It goes through nine form examples in increasing complexity to demonstrate
+ * It goes through 10 form examples of increasing complexity to demonstrate
  * Drupal 7 Form API.
  *
  * Links are provided inline for the related handbook pages.
@@ -29,7 +29,7 @@
  * @ingroup form_example
  */
 function form_example_tutorial() {
-  return t('This is a set of nine form tutorials tied to the <a href="http://drupal.org/node/262422">Drupal handbook</a>.');
+  return t('This is a set of 10 form tutorials tied to the <a href="http://drupal.org/node/262422">Drupal handbook</a>.');
 }
 
 //////////////// Tutorial Example 1 //////////////////////
