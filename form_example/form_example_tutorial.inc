@@ -141,7 +141,7 @@ function form_example_tutorial_3($form, &$form_state) {
 function form_example_tutorial_4($form, &$form_state) {
   $form['description'] = array(
     '#type' => 'item',
-    '#title' => t('A form with validation'),
+    '#title' => t('A form with required fields'),
   );
 
   $form['name'] = array(
