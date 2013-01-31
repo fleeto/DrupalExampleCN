@@ -488,7 +488,6 @@ function ajax_example_submit_driven_ajax($form, &$form_state) {
     '#ajax' => array(
       'callback' => 'ajax_example_submit_driven_callback',
       'wrapper' => 'box',
-      'name' => 'submit1',
     ),
     '#value' => t('Submit'),
   );
