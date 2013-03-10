@@ -50,6 +50,28 @@ function filter_example_menu() {
 }
 
 /**
+ * Implements hook_help().
+ */
+function filter_example_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#filter_example':
+      return _filter_example_information();
+  }
+}
+
+/**
+ * Simply returns a little bit of information about the example.
+ */
+function _filter_example_information() {
+  return t("<p>This example provides two filters.</p><p>Foo Filter replaces
+    'foo' with a configurable replacement.</p><p>Time Tag replaces the string
+    '&lt;time /&gt;' with the current time.</p><p>To use these filters, go to !link and
+    configure an input format, or create a new one.</p>",
+    array('!link' => l("admin/config/content/formats", "admin/config/content/formats"))
+  );
+}
+
+/**
  * Implements hook_filter_info().
  *
  * Here we define the different filters provided by the module. For this example,
@@ -59,7 +81,7 @@ function filter_example_menu() {
  */
 function filter_example_filter_info() {
   $filters['filter_foo'] = array(
-    'title' => t('Foo filter'),
+    'title' => t('Foo Filter (example)'),
     'description' => t('Every instance of "foo" in the input text will be replaced with a preconfigured replacement.'),
     'process callback'  => '_filter_example_filter_foo_process',
     'default settings' => array(
@@ -69,26 +91,13 @@ function filter_example_filter_info() {
     'tips callback' => '_filter_example_filter_foo_tips',
   );
   $filters['filter_time'] = array(
-    'title' => t('Time tag'),
+    'title' => t('Time Tag (example)'),
     'description' => t('Every instance of the special &lt;time /&gt; tag will be replaced with the current date and time in the user\'s specified time zone.'),
     'prepare callback' => '_filter_example_filter_time_prepare',
     'process callback' => '_filter_example_filter_time_process',
     'tips callback' => '_filter_example_filter_time_tips',
   );
   return $filters;
-}
-
-/**
- * Simply returns a little bit of information about the example.
- */
-function _filter_example_information() {
-  return t(
-    "There are two filters in this example. The first (foo filter) just replaces
-    'foo' with a configurable replacement. The second replaces the string
-    '&lt;time /&gt;' with the current time. To use these filters, go to !link and
-    configure one of the input formats.",
-    array('!link' => l("admin/config/content/formats", "admin/config/content/formats"))
-  );
 }
 
 /*
@@ -188,6 +197,7 @@ function _filter_example_filter_time_process($text, $filter) {
 function _filter_example_filter_time_tips($filter, $format, $long = FALSE) {
   return t('<em>&lt;time /&gt;</em> is replaced with the current time.');
 }
+
 /**
  * @} End of "defgroup filter_example".
  */
