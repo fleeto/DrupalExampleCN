@@ -145,9 +145,18 @@ function entity_example_menu() {
   // in basic_entity_info() above.
   $items['admin/structure/entity_example_basic/manage'] = array(
     'title' => 'Administer entity_example_basic entity type',
-    'page callback' => 'entity_example_basic_admin_page',
+    'page callback' => 'entity_example_basic_list_entities',
     'access arguments' => array('administer entity_example_basic entities'),
   );
+
+  // Add example entities.
+  $items['admin/structure/entity_example_basic/manage/add'] = array(
+    'title' => 'Add an Entity Example Basic Entity',
+    'page callback' => 'entity_example_basic_add',
+    'access arguments' => array('create entity_example_basic entities'),
+    'type' => MENU_LOCAL_ACTION,
+  );
+
   // List of all entity_example_basic entities.
   $items['admin/structure/entity_example_basic/manage/list'] = array(
     'title' => 'List',
@@ -228,28 +237,6 @@ function entity_example_permission() {
     ),
   );
   return $permissions;
-}
-
-
-/**
- * Provides a list of existing entities and the ability to add more. Tabs
- * provide field and display management.
- */
-function entity_example_basic_admin_page() {
-  $content = array();
-  $content[] = array(
-    '#type' => 'item',
-    '#markup' => t('Administration page for Entity Example Basic Entities.')
-  );
-
-  $content[] = array(
-    '#type' => 'item',
-    '#markup' => l(t('Add an entity_example_basic entity'), 'examples/entity_example/basic/add'),
-  );
-
-  $content['table'] = entity_example_basic_list_entities();
-
-  return $content;
 }
 
 /**
