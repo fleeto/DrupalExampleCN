@@ -148,6 +148,11 @@ function entity_example_menu() {
     'page callback' => 'entity_example_basic_admin_page',
     'access arguments' => array('administer entity_example_basic entities'),
   );
+  // List of all entity_example_basic entities.
+  $items['admin/structure/entity_example_basic/manage/list'] = array(
+    'title' => 'List',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
 
   // The page to view our entities - needs to follow what
   // is defined in basic_uri and will use load_basic to retrieve
