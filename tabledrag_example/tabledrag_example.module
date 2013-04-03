@@ -1,16 +1,13 @@
 <?php
 /**
  * @file
- * This is an example describing how to build a sortable form using tabledrag
- *
- * See:
- * @link http://drupal.org/node/508796 Extenders @endlink
+ * An example of how to build a sortable form using tabledrag.
  */
 
 /**
  * Implements hook_help().
  *
- * Show a bit of information about this module on the example page
+ * Show a bit of information about this module on the example page.
  */
 function tabledrag_example_help($path, $arg) {
   switch ($path) {
@@ -21,6 +18,11 @@ function tabledrag_example_help($path, $arg) {
 
 /**
  * Implements hook_menu().
+ *
+ * We'll let drupal_get_form() generate the form page for us, for both of
+ * these menu items.
+ *
+ * @see drupal_get_form()
  */
 function tabledrag_example_menu() {
   // Basic example with single-depth sorting.
@@ -30,8 +32,6 @@ function tabledrag_example_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('tabledrag_example_simple_form'),
     'access callback' => TRUE,
-    // Do not name an includes file the same as your form name, as you may run
-    // into 'undefined index in drupal_retrieve_form()' notices.
     'file' => 'tabledrag_example_simple_form.inc',
   );
   // Basic parent/child example.
@@ -60,7 +60,7 @@ function tabledrag_example_menu() {
  */
 function tabledrag_example_theme() {
   return array(
-    // Theme function for the 'sortable' example.
+    // Theme function for the 'simple' example.
     'tabledrag_example_simple_form' => array(
       'render element' => 'form',
       'file' => 'tabledrag_example_simple_form.inc',
