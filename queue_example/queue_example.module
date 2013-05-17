@@ -71,12 +71,27 @@ function queue_example_add_remove_form($form, &$form_state) {
 
   $form['queue_name'] = array(
     '#type' => 'select',
-    '#title' => t('Choose queue'),
+    '#title' => t('Choose queue to examine'),
     '#options' => drupal_map_assoc(array('queue_example_first_queue', 'queue_example_second_queue')),
+    '#default_value' => $queue_name,
+  );
+  $form['queue_show'] = array(
+    '#type' => 'submit',
+    '#value' => t('Show queue'),
+    '#submit' => array('queue_example_show_queue'),
+  );
+  $form['status_fieldset'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Queue status for @name', array('@name' => $queue_name)),
+    '#collapsible' => TRUE,
+  );
+  $form['status_fieldset']['status'] = array(
+    '#type' => 'markup',
+    '#markup' => theme('queue_items', array('items' => $items)),
   );
   $form['insert_fieldset'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Insert into queue'),
+    '#title' => t('Insert into @name', array('@name' => $queue_name)),
   );
   $form['insert_fieldset']['string_to_add'] = array(
     '#type' => 'textfield',
@@ -121,15 +136,6 @@ function queue_example_add_remove_form($form, &$form_state) {
     '#value' => t('Delete the queue and items in it'),
     '#submit' => array('queue_example_add_remove_form_clear_queue'),
   );
-  $form['status_fieldset'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Queue status'),
-    '#collapsible' => TRUE,
-  );
-  $form['status_fieldset']['status'] = array(
-    '#type' => 'markup',
-    '#markup' => t('Queue status for queue @name:', array('@name' => $queue_name)) . '<br/>' . theme('queue_items', array('items' => $items)),
-  );
   return $form;
 }
 
@@ -152,6 +158,25 @@ function queue_example_add_remove_form_insert($form, &$form_state) {
   // for the user so they don't have to type anything.
   unset($form_state['input']['string_to_add']);
   $form_state['storage']['insert_counter']++;
+}
+
+/**
+ * Submit function for the show-queue button.
+ */
+function queue_example_show_queue($form, &$form_state) {
+  $queue = DrupalQueue::get($form_state['values']['queue_name']);
+  $queue->createQueue();  // There is no harm in trying to recreate existing.
+
+  // Get the number of items.
+  $count = $queue->numberOfItems();
+
+  // Update the form item counter.
+  $form_state['storage']['insert_counter'] = $count +1;
+
+  // Unset the string_to_add textbox.
+  unset($form_state['input']['string_to_add']);
+
+  $form_state['rebuild'] = TRUE;
 }
 
 /**
