@@ -258,9 +258,6 @@ function batch_example_lowest_nid() {
   $nid = $select->execute()->fetchField();
   return $nid;
 }
-/**
- * @} End of "defgroup batch_definitions".
- */
 
 /**
  * Utility function to count the HTTP requests in a session variable.
