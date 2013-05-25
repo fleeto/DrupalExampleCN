@@ -9,6 +9,8 @@
 
 /**
  * Functionality tests for enitity example module.
+ *
+ * @ingroup entity_example
  */
 class EntityExampleTestCase extends DrupalWebTestCase {
 
@@ -143,8 +145,5 @@ class EntityExampleTestCase extends DrupalWebTestCase {
     $this->assertResponse(200, 'User has permission to view entity');
     $this->drupalGet('examples/entity_example/basic/2/edit');
     $this->assertResponse(200, 'User has edit privileges');
-
-
   }
 }
-

@@ -18,6 +18,16 @@
  */
 
 /**
+ * @defgroup entity_example Example: Entity
+ * @ingroup examples
+ * @{
+ * Example creating a core Entity API entity.
+ *
+ * Note that this example does not use or demonstrate the contrib Entity API,
+ * which you can find here: http://drupal.org/project/entity
+ */
+
+/**
  * Implements hook_entity_info().
  *
  * This is the fundamental description of the entity.
@@ -597,3 +607,7 @@ class EntityExampleBasicController
     }
   }
 }
+
+/**
+ * @} End of "defgroup entity_example".
+ */

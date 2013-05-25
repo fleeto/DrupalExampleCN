@@ -9,6 +9,8 @@
 
 /**
  * Implements hook_schema().
+ *
+ * @ingroup entity_example
  */
 function entity_example_schema() {
   $schema = array();
@@ -61,6 +63,8 @@ function entity_example_schema() {
  *
  * At uninstall time we'll notify field.module that the entity was deleted
  * so that attached fields can be cleaned up.
+ *
+ * @ingroup entity_example
  */
 function entity_example_uninstall() {
   field_attach_delete_bundle('entity_example_basic' , 'first_example_bundle' );
