@@ -12,6 +12,13 @@
  */
 
 /**
+ * @defgroup pager_example Example: Pager
+ * @ingroup examples
+ * @{
+ * Example of a results pager.
+ */
+
+/**
  * Implements hook_help().
  */
 function pager_help($path, $arg) {
@@ -85,3 +92,6 @@ function pager_example_page() {
 
   return $build;
 }
+/**
+ * @} End of "defgroup pager_example".
+ */

@@ -7,6 +7,8 @@
 
 /**
  * Functionality tests for the pager example module.
+ *
+ * @ingroup pager_example
  */
 class PagerExampleTestCase extends DrupalWebTestCase {
 
