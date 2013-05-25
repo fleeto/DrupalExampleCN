@@ -11,6 +11,8 @@
 
 /**
  * Implements hook_install().
+ *
+ * @ingroup tablesort_example
  */
 function tablesort_example_install() {
   // let's fill the database with some values for sorting
@@ -35,6 +37,8 @@ function tablesort_example_install() {
  * Implements hook_uninstall().
  *
  * It's good to clean up after ourselves
+ *
+ * @ingroup tablesort_example
  */
 function tablesort_example_uninstall() {
   db_drop_table('tablesort_example');
@@ -42,6 +46,8 @@ function tablesort_example_uninstall() {
 
 /**
  * Implements hook_schema().
+ *
+ * @ingroup tablesort_example
  */
 function tablesort_example_schema() {
   $schema['tablesort_example'] = array(

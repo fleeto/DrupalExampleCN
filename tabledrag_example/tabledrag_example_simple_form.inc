@@ -9,6 +9,8 @@
  *
  * @return
  *   A form array set for theming by theme_tabledrag_example_simple_form()
+ *
+ * @ingroup tabledrag_example
  */
 function tabledrag_example_simple_form($form_state) {
   // Identify that the elements in 'example_items' are a collection, to
@@ -79,6 +81,8 @@ function tabledrag_example_simple_form($form_state) {
  *
  * @return
  *   The rendered tabledrag form
+ *
+ * @ingroup tabledrag_example
  */
 function theme_tabledrag_example_simple_form($variables) {
   $form = $variables['form'];
@@ -158,6 +162,8 @@ function theme_tabledrag_example_simple_form($variables) {
  * Updates the 'weight' column for each element in our table, taking into
  * account that item's new order after the drag and drop actions have been
  * performed.
+ *
+ * @ingroup tabledrag_example
  */
 function tabledrag_example_simple_form_submit($form, &$form_state) {
   // Because the form elements were keyed with the item ids from the database,

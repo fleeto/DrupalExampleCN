@@ -9,6 +9,8 @@
  *
  * @return
  *   A form array set for theming by theme_tabledrag_example_parent_form()
+ *
+ * @ingroup tabledrag_example
  */
 function tabledrag_example_parent_form($form_state) {
   // Identify that the elements in 'example_items' are a collection, to
@@ -121,6 +123,8 @@ function tabledrag_example_parent_form($form_state) {
  * called from the theme layer, and not from a form declaration.  This helps
  * keep template files clean and readable, and prevents tabledrag.js from
  * being added twice accidently.
+ *
+ * @ingroup tabledrag_example
  */
 function theme_tabledrag_example_parent_form($variables) {
   $form = $variables['form'];
@@ -253,6 +257,8 @@ function theme_tabledrag_example_parent_form($variables) {
  * Updates the 'weight' column for each element in our table, taking into
  * account that item's new order after the drag and drop actions have been
  * performed.
+ *
+ * @ingroup tabledrag_example
  */
 function tabledrag_example_parent_form_submit($form, &$form_state) {
   // Because the form elements were keyed with the item ids from the database,
@@ -274,6 +280,8 @@ function tabledrag_example_parent_form_submit($form, &$form_state) {
  *
  * The approach used here may be considered too database-intensive.
  * Optimization of the approach is left as an exercise for the reader. :)
+ *
+ * @ingroup tabledrag_example
  */
 function tabledrag_example_parent_get_data() {
   // Get all 'root node' items (items with no parents), sorted by weight.
@@ -295,6 +303,8 @@ function tabledrag_example_parent_get_data() {
 
 /**
  * Recursively adds to the $itemtree array, ordered by parent/child/weight.
+ *
+ * @ingroup tabledrag_example
  */
 function tabledrag_example_get_tree($parentitem, &$itemtree = array(), &$depth = 0) {
   // Increase our $depth value by one.

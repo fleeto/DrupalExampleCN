@@ -10,6 +10,13 @@
  */
 
 /**
+ * @defgroup tablesort_example Example: Tablesort
+ * @ingroup examples
+ * @{
+ * Example of a sortable table display.
+ */
+
+/**
  * Implements hook_help().
  *
  * Show a bit of information about this module on the example page
@@ -78,3 +85,6 @@ function tablesort_example_page() {
 
   return $build;
 }
+/**
+ * @} End of "defgroup tablesort_example".
+ */

@@ -5,6 +5,13 @@
  */
 
 /**
+ * @defgroup tabledrag_example Example: Tabledrag
+ * @ingroup examples
+ * @{
+ * Example of draggable table rows.
+ */
+
+/**
  * Implements hook_help().
  *
  * Show a bit of information about this module on the example page.
@@ -72,3 +79,6 @@ function tabledrag_example_theme() {
     ),
   );
 }
+/**
+ * @} End of "defgroup tabledrag_example".
+ */

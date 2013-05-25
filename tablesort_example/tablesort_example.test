@@ -6,6 +6,8 @@
 
 /**
  * Functionality tests for the tablesort example module.
+ *
+ * @ingroup tablesort_example
  */
 class TableSortExampleTestCase extends DrupalWebTestCase {
 
