@@ -7,6 +7,8 @@
 
 /**
  * Test RDFa markup generation.
+ *
+ * @ingroup rdf_example
  */
 class RdfExampleRdfaMarkupTestCase extends DrupalWebTestCase {
   public static function getInfo() {

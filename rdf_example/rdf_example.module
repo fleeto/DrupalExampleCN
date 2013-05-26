@@ -7,6 +7,13 @@
  */
 
 /**
+ * @defgroup rdf_example Example: RDF
+ * @ingroup examples
+ * @{
+ * Example RDF Mapping.
+ */
+
+/**
  * Implements hook_rdf_mapping().
  *
  * This hook should only be used to define the RDF mapping for an entity or
@@ -74,3 +81,6 @@ function rdf_example_help($path, $arg) {
       ) . "</p>";
   }
 }
+/**
+ * @} End of "defgroup rdf_example".
+ */

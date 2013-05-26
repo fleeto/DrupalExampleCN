@@ -8,6 +8,13 @@
  */
 
 /**
+ * @defgroup contextual_links_example Example: Contextual Links
+ * @ingroup examples
+ * @{
+ * Example of implementing contextual links.
+ */
+
+/**
  * Implements hook_menu().
  *
  * Drupal's menu system allows you to indicate that particular menu items
@@ -376,3 +383,6 @@ function contextual_links_example_node_action_form($form, &$form_state, $node) {
 function contextual_links_example_node_action_form_submit($form, &$form_state) {
   drupal_set_message(t('The example action was performed on node @nid.', array('@nid' => $form_state['values']['nid'])));
 }
+/**
+ * @} End of "defgroup contextual_links_example".
+ */

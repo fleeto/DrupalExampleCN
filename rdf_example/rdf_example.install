@@ -18,6 +18,8 @@
  * @see field_update_instance()
  * @see field_create_field()
  * @see field_create_instance()
+ *
+ * @ingroup rdf_example
  */
 function rdf_example_install() {
   // use get_t() to get the name of our localization function for translation
@@ -53,6 +55,8 @@ function rdf_example_install() {
 
 /**
  * Return a structured array defining the fields created by this content type.
+ *
+ * @ingroup rdf_example
  */
 function _rdf_example_installed_fields() {
   $t = get_t();
@@ -75,6 +79,8 @@ function _rdf_example_installed_fields() {
 
 /**
  * Return a structured array defining the instances for this content type.
+ *
+ * @ingroup rdf_example
  */
 function _rdf_example_installed_instances() {
   $t = get_t();
@@ -96,6 +102,8 @@ function _rdf_example_installed_instances() {
 
 /**
  * Implements hook_uninstall().
+ *
+ * @ingroup rdf_example
  */
 function rdf_example_uninstall() {
   // Delete recipe content.

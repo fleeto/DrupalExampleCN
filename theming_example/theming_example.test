@@ -5,7 +5,9 @@
  */
 
 /**
- * Functionality tests for the theming example module.
+ * Functional tests for the theming example module.
+ *
+ * @ingroup theming_example
  */
 class ThemingExampleTestCase extends DrupalWebTestCase {
 

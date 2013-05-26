@@ -2,7 +2,13 @@
 
 /**
  * @file
- * Tests for the contextual links example module.
+ * Functional tests for the contextual_links_example module.
+ */
+
+/**
+ * Functional tests for the contextual_links_example module.
+ *
+ * @ingroup contextual_links_example
  */
 class ContextualLinksExampleTestCase extends DrupalWebTestCase {
   protected $web_user;
