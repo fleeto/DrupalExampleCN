@@ -19,6 +19,12 @@
  * Tokens are small bits of text that can be placed into larger documents
  * via simple placeholders, like %site-name or [user].
  *
+ * Drupal 7 documentation on Token can be found here:
+ * http://drupal.org/documentation/modules/token
+ *
+ * A list of existing tokens can be found here:
+ * http://drupal.org/node/390482#drupal7tokenslist
+ *
  * This example is part of the Examples for Developers Project which you can
  * download and experiment with here: http://drupal.org/project/examples
  */
