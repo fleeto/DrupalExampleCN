@@ -410,6 +410,7 @@ function render_example_page_alter(&$page) {
         $page[$region_name][$block_name] = array(
           $block_name => $old_block,
         );
+        $form = array();
         $form['render_example_block_fieldset'] = array(
           '#type' => 'fieldset',
           '#title' => t('Block render array'),
