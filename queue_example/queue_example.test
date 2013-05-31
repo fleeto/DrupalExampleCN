@@ -48,7 +48,7 @@ class QueueExampleTestCase extends DrupalWebTestCase {
     sleep(1);
 
     // Run cron to release expired items.
-    $this->drupalPost(NULL, array(), t('Run cron manually (to expire claimed items)'));
+    $this->drupalPost(NULL, array(), t('Run cron manually to expire claims'));
 
     $queue_items = queue_example_retrieve_queue('queue_example_first_queue');
 

@@ -25,6 +25,8 @@
  * default queue implementation, which is SystemQueue, managed using
  * persistent database storage.
  *
+ * @see system.queue.inc
+ *
  * Further resources include the limited @link queue @endlink documentation and
  * @link http://www.ent.iastate.edu/it/Batch_and_Queue.pdf Batch vs Queue Presentation slides by John VanDyk @endlink
  * and @link http://sf2010.drupal.org/conference/sessions/batch-vs-queue-api-smackdown session video. @endlink
@@ -126,9 +128,9 @@ function queue_example_add_remove_form($form, &$form_state) {
     '#value' => t('Claim the next item and delete it'),
     '#submit' => array('queue_example_add_remove_form_delete'),
   );
-  $form['run_cron'] = array(
+  $form['claim_fieldset']['run_cron'] = array(
     '#type' => 'submit',
-    '#value' => t('Run cron manually (to expire claimed items)'),
+    '#value' => t('Run cron manually to expire claims'),
     '#submit' => array('queue_example_add_remove_form_run_cron'),
   );
   $form['delete_queue'] = array(
