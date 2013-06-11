@@ -6,6 +6,7 @@
  */
 
 class TokenExampleTestCase extends DrupalWebTestCase {
+
   protected $web_user;
 
   public static function getInfo() {
@@ -13,7 +14,6 @@ class TokenExampleTestCase extends DrupalWebTestCase {
       'name' => 'Token example functionality',
       'description' => 'Verify the token example interface.',
       'group' => 'Examples',
-      'dependencies' => array('token'),
     );
   }
 
