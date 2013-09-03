@@ -56,7 +56,7 @@ function tabledrag_example_simple_form($form_state) {
         '#title' => t('Weight'),
         '#default_value' => $item->weight,
         '#delta' => 10,
-        '#title-display' => 'invisible',
+        '#title_display' => 'invisible',
       ),
     );
   }

@@ -92,7 +92,7 @@ function tabledrag_example_parent_form($form_state) {
         '#title' => t('Weight'),
         '#default_value' => $item->weight,
         '#delta' => 10,
-        '#title-display' => 'invisible',
+        '#title_display' => 'invisible',
       ),
 
       // We'll use a hidden form element to pass the current 'depth' of each
