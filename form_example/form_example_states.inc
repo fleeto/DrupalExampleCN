@@ -187,8 +187,8 @@ function form_example_states_form($form, &$form_state) {
     '#states' => array(
       // Here visibility requires that two separate conditions be true.
       'visible' => array(
-        'input[name="school_country"]' => array('value' => t('Other')),
-        'input[name="country_writein"]' => array('filled' => TRUE),
+        ':input[name="school_country"]' => array('value' => t('Other')),
+        ':input[name="country_writein"]' => array('filled' => TRUE),
       ),
     ),
   );
@@ -198,8 +198,8 @@ function form_example_states_form($form, &$form_state) {
     '#states' => array(
       // Here visibility requires that two separate conditions be true.
       'visible' => array(
-        'input[name="school_country"]' => array('value' => t('Other')),
-        'input[name="country_writein"]' => array('filled' => TRUE),
+        ':input[name="school_country"]' => array('value' => t('Other')),
+        ':input[name="country_writein"]' => array('filled' => TRUE),
       ),
     ),
   );
