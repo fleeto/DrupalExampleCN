@@ -102,7 +102,7 @@ function block_example_block_configure($delta = '') {
       '#title' => t('Block contents'),
       '#size' => 60,
       '#description' => t('This text will appear in the example block.'),
-      '#default_value' => variable_get('block_example_string',  t('Some example content.')),
+      '#default_value' => variable_get('block_example_string', t('Some example content.')),
     );
   }
   return $form;
@@ -121,7 +121,6 @@ function block_example_block_save($delta = '', $edit = array()) {
     // Have Drupal save the string to the database.
     variable_set('block_example_string', $edit['block_example_string']);
   }
-  return;
 }
 
 /**
@@ -130,7 +129,7 @@ function block_example_block_save($delta = '', $edit = array()) {
  * This hook generates the contents of the blocks themselves.
  */
 function block_example_block_view($delta = '') {
-  //The $delta parameter tells us which block is being requested.
+  // The $delta parameter tells us which block is being requested.
   switch ($delta) {
     case 'example_configurable_text':
       // The subject is displayed at the top of the block. Note that it
@@ -141,10 +140,12 @@ function block_example_block_view($delta = '') {
       // function.
       $block['content'] = block_example_contents($delta);
       break;
+
     case 'example_empty':
       $block['subject'] = t('Title of second block (example_empty)');
       $block['content'] = block_example_contents($delta);
       break;
+
     case 'example_uppercase':
       $block['subject'] = t("uppercase this please");
       $block['content'] = t("This block's title will be changed to uppercase. Any other block with 'uppercase' in the subject or title will also be altered. If you change this block's title through the UI to omit the word 'uppercase', it will still be altered to uppercase as the subject key has not been changed.");
@@ -165,7 +166,8 @@ function block_example_contents($which_block) {
       // Block content can be returned in two formats: renderable arrays
       // (as here) are preferred though a simple string will work as well.
       // Block content created through the UI defaults to a string.
-      return array('#markup' => variable_get('block_example_string',  t('A default value. This block was created at %time', array('%time' => date('c')))));
+      return array('#markup' => variable_get('block_example_string', t('A default value. This block was created at %time', array('%time' => date('c')))));
+
     case 'example_empty':
       // It is possible that a block not have any content, since it is
       // probably dynamically constructed. In this case, Drupal will not display
