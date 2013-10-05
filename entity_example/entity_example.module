@@ -343,8 +343,8 @@ function entity_example_basic_view($entity, $view_mode = 'tweaky') {
 
   // Now to invoke some hooks. We need the language code for
   // hook_entity_view(), so let's get that.
-  global $language ;
-  $langcode = $language->language ;
+  global $language;
+  $langcode = $language->language;
   // And now invoke hook_entity_view().
   module_invoke_all('entity_view', $entity, $entity_type, $view_mode,
     $langcode);
