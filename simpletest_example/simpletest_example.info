@@ -1,4 +1,4 @@
-name = Simpletest Example
+name = SimpleTest Example
 description = Provides simpletest_example page node type.
 package = Example modules
 core = 7.x

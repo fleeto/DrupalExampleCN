@@ -7,9 +7,9 @@
  */
 
 /**
- * The SimpletestExampleTestCase is a functional test case, meaning that it
+ * The SimpleTestExampleTestCase is a functional test case, meaning that it
  * actually exercises a particular sequence of actions through the web UI.
- * The majority of core test cases are done this way, but the Simpletest suite
+ * The majority of core test cases are done this way, but the SimpleTest suite
  * also provides unit tests as demonstrated in the unit test case example later
  * in this file.
  *
@@ -17,24 +17,48 @@
  * they require a complete Drupal install to be done for each test.
  *
  * @see DrupalWebTestCase
- * @see SimpletestUnitTestExampleTestCase
+ * @see SimpleTestUnitTestExampleTestCase
+ *
+ * @ingroup simpletest_example
  */
-class SimpletestExampleTestCase extends DrupalWebTestCase {
+class SimpleTestExampleTestCase extends DrupalWebTestCase {
+
   protected $privileged_user;
 
+  /**
+   * Give display information to the SimpleTest system.
+   *
+   * getInfo() returns a keyed array of information for SimpleTest to show.
+   *
+   * It's a good idea to organize your tests consistently using the 'group'
+   * key.
+   */
   public static function getInfo() {
     return array(
-      'name' => 'Simpletest Example',
+      'name' => 'SimpleTest Example',
       'description' => 'Ensure that the simpletest_example content type provided functions properly.',
       'group' => 'Examples',
     );
   }
 
+  /**
+   * Set up the test environment.
+   *
+   * This method is called once per test method, before the test is executed.
+   * It gives you a chance to control the setup of the test environment.
+   *
+   * If you need a different test environment, then you should create another
+   * test class which overloads DrupalWebTestCase::setUp() differently.
+   *
+   * @see DrupalWebTestCase::setUp()
+   */
   public function setUp() {
-    parent::setUp('simpletest_example');  // Enable any modules required for the test
+    // We call parent::setUp() with the list of modules we want to enable.
+    // This can be an array or just a list of arguments.
+    parent::setUp('simpletest_example');
     // Create and log in our user. The user has the arbitrary privilege
-    // 'extra special edit any simpletest_example' which the code uses
-    // to grant access.
+    // 'extra special edit any simpletest_example' which is provided by
+    // our module to grant access.
     $this->privileged_user = $this->drupalCreateUser(array('create simpletest_example content', 'extra special edit any simpletest_example'));
     $this->drupalLogin($this->privileged_user);
   }
@@ -46,7 +70,7 @@ class SimpletestExampleTestCase extends DrupalWebTestCase {
     $edit['title'] = $this->randomName(8);
     $edit["body[und][0][value]"] = $this->randomName(16);
     $this->drupalPost('node/add/simpletest-example', $edit, t('Save'));
-    $this->assertText(t('Simpletest Example Node Type @title has been created.', array('@title' => $edit['title'])));
+    $this->assertText(t('SimpleTest Example Node Type @title has been created.', array('@title' => $edit['title'])));
   }
 
   // Create a simpletest_example node and then see if our user can edit it
@@ -101,17 +125,29 @@ class SimpletestExampleTestCase extends DrupalWebTestCase {
  * it must be entirely self-contained.
  *
  * @see DrupalUnitTestCase
+ *
+ * @ingroup simpletest_example
  */
-class SimpletestUnitTestExampleTestCase extends DrupalUnitTestCase {
+class SimpleTestUnitTestExampleTestCase extends DrupalUnitTestCase {
 
   public static function getInfo() {
     return array(
-      'name' => 'Simpletest Example unit tests',
+      'name' => 'SimpleTest Example unit tests',
       'description' => 'Test that simpletest_example_empty_mysql_date works properly.',
       'group' => 'Examples',
     );
   }
 
+  /**
+   * Set up the test environment.
+   *
+   * Note that we use drupal_load() instead of passing our module dependency
+   * to parent::setUp(). That's because we're using DrupalUnitTestCase, and
+   * thus we don't want to install the module, only load it's code.
+   *
+   * Also, DrupalUnitTestCase can't actually install modules. This is by
+   * design.
+   */
   function setUp() {
     drupal_load('module', 'simpletest_example');
     parent::setUp();
@@ -124,7 +160,7 @@ class SimpletestUnitTestExampleTestCase extends DrupalUnitTestCase {
    * Note that no environment is provided; we're just testing the correct
    * behavior of a function when passed specific arguments.
    */
-  public function testSimpletestUnitTestExampleFunction() {
+  public function testSimpleTestUnitTestExampleFunction() {
     $result = simpletest_example_empty_mysql_date(NULL);
     // Note that test assertion messages should never be translated, so
     // this string is not wrapped in t().

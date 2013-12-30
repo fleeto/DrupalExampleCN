@@ -12,7 +12,8 @@
  * An example of simpletest tests to accompany the tutorial at
  * http://drupal.org/node/890654.
  *
- * This is built on a traditional node-type implementation.
+ * This module creates a new node type called 'SimpleTest Example Node Type,'
+ * so that we can test it.
  */
 
 /**
@@ -21,7 +22,7 @@
 function simpletest_example_node_info() {
   return array(
     'simpletest_example' => array(
-      'name' => t('Simpletest Example Node Type'),
+      'name' => t('SimpleTest Example Node Type'),
       'base' => 'simpletest_example',
       'description' => t('simpletest_example page node type.'),
   )
@@ -36,7 +37,7 @@ function simpletest_example_node_info() {
  */
 function simpletest_example_permission() {
   $perms = array();
-  $perms['extra special edit any simpletest_example'] = array('title' => t('Extra special edit any Simpletest Example'), 'description' => t('Extra special edit any Simpletest Example'));
+  $perms['extra special edit any simpletest_example'] = array('title' => t('Extra special edit any SimpleTest Example'), 'description' => t('Extra special edit any SimpleTest Example'));
   return $perms;
 }
 

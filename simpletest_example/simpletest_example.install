@@ -7,6 +7,8 @@
 
 /**
  * Implements hook_install().
+ *
+ * @ingroup simpletest_example
  */
 function simpletest_example_install() {
   // Ensure the simpletest_example node type is available.
@@ -17,6 +19,8 @@ function simpletest_example_install() {
 
 /**
  * Adds a body field to the simpletest_example node type.
+ *
+ * @ingroup simpletest_example
  */
 function simpletest_example_update_7001() {
   node_types_rebuild();
