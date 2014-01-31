@@ -6,7 +6,12 @@
  *
  * This file contains the test cases to check if module is performing as
  * expected.
+ */
+
+/**
+ * Functional tests for the Page Example module.
  *
+ * @ingroup page_example
  */
 class PageExampleTestCase extends DrupalWebTestCase {
   protected $web_user;

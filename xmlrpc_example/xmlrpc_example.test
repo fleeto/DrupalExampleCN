@@ -5,6 +5,11 @@
  * Test case for the XML-RPC example module.
  */
 
+/**
+ * Functional tests for the XMLRPC Example module.
+ *
+ * @ingroup xmlrpc_example
+ */
 class XmlrpcExampleTestCase extends DrupalWebTestCase {
   protected $xmlrpc_url;
 

@@ -4,6 +4,11 @@
  * Tests for File Example.
  */
 
+/**
+ * Functional tests for the File Example module.
+ *
+ * @ingroup file_example
+ */
 class FileExampleTest extends DrupalWebTestCase {
 
   protected $privileged_user;

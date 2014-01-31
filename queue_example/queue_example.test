@@ -4,6 +4,12 @@
  * @file
  * Test the queue example module.
  */
+
+/**
+ * Functional tests for the Queue Example module.
+ *
+ * @ingroup queue_example
+ */
 class QueueExampleTestCase extends DrupalWebTestCase {
 
   public static function getInfo() {

@@ -7,6 +7,8 @@
 
 /**
  * Default test case for the form_example module.
+ *
+ * @ingroup form_example
  */
 class FormExampleTestCase extends DrupalWebTestCase {
 

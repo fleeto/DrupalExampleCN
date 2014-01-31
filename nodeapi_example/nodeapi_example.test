@@ -7,6 +7,12 @@
  * This file contains the test cases to check if module is performing as
  * expected.
  */
+
+/**
+ * Functional tests for the NodeAPI Example module.
+ *
+ * @ingroup nodeapi_example
+ */
 class NodeApiExampleTestCase extends DrupalWebTestCase {
   /**
    * User object to perform site browsing

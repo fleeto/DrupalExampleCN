@@ -3,6 +3,12 @@
  * @file
  * Test ajax example module.
  */
+
+/**
+ * Functional tests for AJAX Example module.
+ *
+ * @ingroup ajax_example
+ */
 class AjaxExampleTestCase extends DrupalWebTestCase {
 
   public static function getInfo() {

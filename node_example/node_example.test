@@ -9,6 +9,8 @@
 
 /**
  * Functionality tests for node example module.
+ *
+ * @ingroup node_example
  */
 class NodeExampleTestCase extends DrupalWebTestCase {
 

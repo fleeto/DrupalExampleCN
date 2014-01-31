@@ -7,6 +7,12 @@
  * This file contains the tests cases to check if the module is performing as
  * expected.
  */
+
+/**
+ * Functional tests for the Image Example module.
+ *
+ * @ingroup image_example
+ */
 class ImageExampleTestCase extends DrupalWebTestCase {
   protected $web_user;
 

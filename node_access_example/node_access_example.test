@@ -4,6 +4,12 @@
  * @file
  * Tests for Node Access example module.
  */
+
+/**
+ * Functional tests for the Node Access Example module.
+ *
+ * @ingroup node_access_example
+ */
 class NodeAccessExampleTestCase extends DrupalWebTestCase {
 
   public static function getInfo() {

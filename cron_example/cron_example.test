@@ -5,12 +5,9 @@
  */
 
 /**
- * @addtogroup cron_example
- * @{
- */
-
-/**
  * cron_example test class
+ *
+ * @ingroup cron_example
  */
 class CronExampleTestCase extends DrupalWebTestCase {
   protected $web_user;

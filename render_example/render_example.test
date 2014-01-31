@@ -4,6 +4,12 @@
  * @file
  * Test for the render example module.
  */
+
+/**
+ * Functional tests for the Render Example module.
+ *
+ * @ingroup render_example
+ */
 class RenderExampleTestCase extends DrupalWebTestCase {
   public static function getInfo() {
     return array(

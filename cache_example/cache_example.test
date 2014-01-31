@@ -3,6 +3,12 @@
  * @file
  * Test case for testing the cache example module.
  */
+
+/**
+ * Functional tests for the Cache Example module.
+ *
+ * @ingroup cache_example
+ */
 class CacheExampleTestCase extends DrupalWebTestCase {
 
   public static function getInfo() {

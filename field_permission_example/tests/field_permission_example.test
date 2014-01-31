@@ -20,6 +20,8 @@
  *
  * 'code_' and 'form_' prefixes denote the type of test:
  * using code only, or through Drupal page forms.
+ *
+ * @ingroup field_permission_example
  */
 class GenericFieldTest extends DrupalWebTestCase {
 

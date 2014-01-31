@@ -8,6 +8,8 @@
 
 /**
  * Functionality tests for email example module.
+ *
+ * @ingroup email_example
  */
 class EmailExampleTestCase extends DrupalWebTestCase {
 

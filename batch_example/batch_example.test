@@ -6,6 +6,12 @@
  * This file contains the test cases to check if module is performing as
  * expected.
  */
+
+/**
+ * Functional tests for the Batch Example module.
+ *
+ * @ingroup batch_example
+ */
 class BatchExampleTestCase extends DrupalWebTestCase {
   protected $web_user;
 

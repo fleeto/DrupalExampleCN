@@ -6,6 +6,8 @@
 
 /**
  * Default test case for the dbtng_example module.
+ *
+ * @ingroup dbtng_example
  */
 class DBTNGExampleUnitTestCase extends DrupalWebTestCase {
 

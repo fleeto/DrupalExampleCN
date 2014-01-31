@@ -5,6 +5,11 @@
  * Test cases for Testing the token example module.
  */
 
+/**
+ * Functional tests for the Token Example module.
+ *
+ * @ingroup token_example
+ */
 class TokenExampleTestCase extends DrupalWebTestCase {
 
   protected $web_user;

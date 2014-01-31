@@ -4,6 +4,12 @@
  * @file
  * Tests for menu example module.
  */
+
+/**
+ * Functional tests for the Menu Example module.
+ *
+ * @ingroup menu_example
+ */
 class MenuExampleTestCase extends DrupalWebTestCase {
   protected $web_user;
 

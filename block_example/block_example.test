@@ -3,6 +3,12 @@
  * @file
  * Test case for testing the block example module.
  */
+
+/**
+ * Functional tests for the Block Example module.
+ *
+ * @ingroup block_example
+ */
 class BlockExampleTestCase extends DrupalWebTestCase {
   protected $web_user;
 
