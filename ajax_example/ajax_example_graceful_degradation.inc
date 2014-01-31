@@ -13,13 +13,15 @@
  * available.
  *
  * In each of these the key idea is that the form is rebuilt different ways
- * depending on form input. In order to accomplish that, the formbuilder function
- * is in charge of almost all logic.
+ * depending on form input. In order to accomplish that, the formbuilder
+ * function is in charge of almost all logic.
  */
 
 /**
- * A form with a dropdown whose options are dependent on a
- * choice made in a previous dropdown.
+ * Dropdown form based on previous choices.
+ *
+ * A form with a dropdown whose options are dependent on a choice made in a
+ * previous dropdown.
  *
  * On changing the first dropdown, the options in the second
  * are updated. Gracefully degrades if no javascript.
@@ -64,8 +66,8 @@ function ajax_example_dependent_dropdown_degrades($form, &$form_state, $no_js_us
     '#options' => $options_first,
     '#attributes' => array('class' => array('enabled-for-ajax')),
 
-    // The '#ajax' property allows us to bind a callback to the server whenever this
-    // form element changes. See ajax_example_autocheckboxes and
+    // The '#ajax' property allows us to bind a callback to the server whenever
+    // this form element changes. See ajax_example_autocheckboxes and
     // ajax_example_dependent_dropdown in ajax_example.module for more details.
     '#ajax' => array(
       'callback' => 'ajax_example_dependent_dropdown_degrades_first_callback',
@@ -129,7 +131,8 @@ function ajax_example_dependent_dropdown_degrades_submit($form, &$form_state) {
   // Now handle the case of the next, previous, and submit buttons.
   // only submit will result in actual submission, all others rebuild.
   switch ($form_state['triggering_element']['#value']) {
-    case t('OK'): // Submit: We're done.
+    case t('OK'):
+      // Submit: We're done.
       drupal_set_message(t('Your values have been submitted. dropdown_first=@first, dropdown_second=@second', array('@first' => $form_state['values']['dropdown_first'], '@second' => $form_state['values']['dropdown_second'])));
       return;
   }
@@ -141,7 +144,7 @@ function ajax_example_dependent_dropdown_degrades_submit($form, &$form_state) {
 /**
  * Selects just the second dropdown to be returned for re-rendering.
  *
- * @return
+ * @return array
  *   Renderable array (the second dropdown).
  */
 function ajax_example_dependent_dropdown_degrades_first_callback($form, $form_state) {
@@ -150,6 +153,8 @@ function ajax_example_dependent_dropdown_degrades_first_callback($form, $form_st
 
 
 /**
+ * Dynamically-enabled form with graceful no-JS degradation.
+ *
  * Example of a form with portions dynamically enabled or disabled, but
  * with graceful degradation in the case of no javascript.
  *
@@ -182,12 +187,19 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
       whether we are in a javascript/AJAX environment or not.
       <br/><br/>
       Try the <a href="!ajax_link">AJAX version</a> and the <a href="!non_ajax_link">simulated-non-AJAX version</a>.
-    ', array('!ajax_link' => url('examples/ajax_example/dynamic_sections'), '!non_ajax_link' => url('examples/ajax_example/dynamic_sections_no_js') )) . '</div>',
+    ', array('!ajax_link' => url('examples/ajax_example/dynamic_sections'), '!non_ajax_link' => url('examples/ajax_example/dynamic_sections_no_js'))) . '</div>',
   );
   $form['question_type_select'] = array(
     '#type' => 'select',
     '#title' => t('Question style'),
-    '#options' => drupal_map_assoc(array(t('Choose question style'), t('Multiple Choice'), t('True/False'), t('Fill-in-the-blanks'))),
+    '#options' => drupal_map_assoc(
+      array(
+        t('Choose question style'),
+        t('Multiple Choice'),
+        t('True/False'),
+        t('Fill-in-the-blanks'),
+      )
+    ),
     '#ajax' => array(
       'wrapper' => 'questions-fieldset-wrapper',
       'callback' => 'ajax_example_dynamic_sections_select_callback',
@@ -198,7 +210,8 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
     '#type' => 'submit',
     '#value' => t('Choose'),
     '#attributes' => array('class' => array('next-button')),
-    '#limit_validation_errors' => array(),  // No need to validate when submitting this.
+    // No need to validate when submitting this.
+    '#limit_validation_errors' => array(),
     '#validate' => array(),
   );
 
@@ -231,7 +244,14 @@ function ajax_example_dynamic_sections($form, &$form_state, $no_js_use = FALSE) 
         $form['questions_fieldset']['question'] = array(
           '#type' => 'radios',
           '#title' => t('Who was the first president of the United States'),
-          '#options' => drupal_map_assoc(array(t('George Bush'), t('Adam McGuire'), t('Abraham Lincoln'), t('George Washington'))),
+          '#options' => drupal_map_assoc(
+            array(
+              t('George Bush'),
+              t('Adam McGuire'),
+              t('Abraham Lincoln'),
+              t('George Washington'),
+            )
+          ),
         );
         break;
 
@@ -280,7 +300,8 @@ function ajax_example_dynamic_sections_submit($form, &$form_state) {
   // Now handle the case of the next, previous, and submit buttons.
   // Only submit will result in actual submission, all others rebuild.
   switch ($form_state['triggering_element']['#value']) {
-    case t('Submit your answer'): // Submit: We're done.
+    case t('Submit your answer'):
+      // Submit: We're done.
       $form_state['rebuild'] = FALSE;
       $answer = $form_state['values']['question'];
 
@@ -296,11 +317,11 @@ function ajax_example_dynamic_sections_submit($form, &$form_state) {
       }
       $form_state['rebuild'] = FALSE;
       return;
+
     // Any other form element will cause rebuild of the form and present
     // it again.
     case t('Choose'):
-      $form_state['values']['question_type_select'] =
-        $form_state['input']['question_type_select'];
+      $form_state['values']['question_type_select'] = $form_state['input']['question_type_select'];
       // Fall through.
     default:
       $form_state['rebuild'] = TRUE;
@@ -316,20 +337,26 @@ function ajax_example_dynamic_sections_select_callback($form, $form_state) {
   return $form['questions_fieldset'];
 }
 
-
 /**
+ * Wizard form.
+ *
  * This example is a classic wizard, where a different and sequential form
  * is presented on each step of the form.
  *
  * In the AJAX version, the form is replaced for each wizard section. In the
  * multistep version, it causes a new page load.
  *
- * @param $form
- * @param $form_state
- * @param $no_js_use
+ * @param array $form
+ *   Form API form.
+ * @param array $form_state
+ *   Form API form.
+ * @param bool $no_js_use
  *   Used for this demonstration only. If true means that the form should be
  *   built using a simulated no-javascript approach (ajax.js will not be
  *   loaded.)
+ *
+ * @return array
+ *   Form array.
  */
 function ajax_example_wizard($form, &$form_state, $no_js_use = FALSE) {
 
@@ -337,8 +364,8 @@ function ajax_example_wizard($form, &$form_state, $no_js_use = FALSE) {
   // thing with each submit.
   $form['#prefix'] = '<div id="wizard-form-wrapper">';
   $form['#suffix'] = '</div>';
-  $form['#tree'] = TRUE; // We want to deal with hierarchical form values.
-
+  // We want to deal with hierarchical form values.
+  $form['#tree'] = TRUE;
   $form['description'] = array(
     '#markup' => '<div>' . t('This example is a step-by-step wizard. The <a href="!ajax">AJAX version</a> does it without page reloads; the <a href="!multistep">multistep version</a> is the same code but simulates a non-javascript environment, showing it with page reloads.',
       array('!ajax' => url('examples/ajax_example/wizard'), '!multistep' => url('examples/ajax_example/wizard_no_js')))
@@ -437,6 +464,17 @@ function ajax_example_wizard($form, &$form_state, $no_js_use = FALSE) {
   return $form;
 }
 
+/**
+ * Wizard callback function.
+ *
+ * @param array $form
+ *   Form API form.
+ * @param array $form_state
+ *   Form API form.
+ *
+ * @return array
+ *   Form array.
+ */
 function ajax_example_wizard_callback($form, $form_state) {
   return $form;
 }
@@ -493,6 +531,8 @@ function ajax_example_wizard_submit($form, &$form_state) {
 
 
 /**
+ * Form with 'add more' and 'remove' buttons.
+ *
  * This example shows a button to "add more" - add another textfield, and
  * the corresponding "remove" button.
  *
@@ -618,7 +658,10 @@ function ajax_example_add_more_remove_one($form, &$form_state) {
  */
 function ajax_example_add_more_submit($form, &$form_state) {
   $output = t('These people are coming to the picnic: @names',
-    array('@names' => implode(', ', $form_state['values']['names_fieldset']['name'])) );
+    array(
+      '@names' => implode(', ', $form_state['values']['names_fieldset']['name']),
+    )
+  );
   drupal_set_message($output);
 }
 /**

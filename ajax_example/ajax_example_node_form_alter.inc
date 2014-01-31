@@ -9,7 +9,7 @@
  */
 
 /**
- * Implements hook_form_FORM_ID_alter() for the node form.
+ * Implements hook_form_FORM_ID_alter().
  *
  * Adds two fields to the node form, second only appears after first is enabled.
  */
@@ -24,7 +24,7 @@ function ajax_example_form_node_form_alter(&$form, &$form_state, $form_id) {
       'callback' => 'ajax_example_form_node_callback',
       'wrapper' => 'ajax-example-form-node',
       'effect' => 'fade',
-    )
+    ),
   );
   $form['container'] = array(
     '#prefix' => '<div id="ajax-example-form-node">',
@@ -41,9 +41,7 @@ function ajax_example_form_node_form_alter(&$form, &$form_state, $form_id) {
       '#type' => 'textfield',
       '#title' => t('AJAX Example 2'),
       '#description' => t('AJAX Example 2'),
-      '#default_value' => empty($form_state['values']['ajax_example_2']) ?
-                          $node->ajax_example['example_2'] :
-                          $form_state['values']['ajax_example_2'],
+      '#default_value' => empty($form_state['values']['ajax_example_2']) ? $node->ajax_example['example_2'] : $form_state['values']['ajax_example_2'],
     );
   }
 }
@@ -51,7 +49,8 @@ function ajax_example_form_node_form_alter(&$form, &$form_state, $form_id) {
 /**
  * Returns changed part of the form.
  *
- * @return renderable array
+ * @return array
+ *   Form API array.
  *
  * @see ajax_example_form_node_form_alter()
  */
@@ -93,11 +92,11 @@ function ajax_example_node_load($nodes, $types) {
   $result = db_query('SELECT * FROM {ajax_example_node_form_alter} WHERE nid IN(:nids)', array(':nids' => array_keys($nodes)))->fetchAllAssoc('nid');
 
   foreach ($nodes as &$node) {
-    $node->ajax_example['example_1'] =
-      isset($result[$node->nid]->example_1) ?
+    $node->ajax_example['example_1']
+      = isset($result[$node->nid]->example_1) ?
       $result[$node->nid]->example_1 : 0;
-    $node->ajax_example['example_2'] =
-      isset($result[$node->nid]->example_2) ?
+    $node->ajax_example['example_2']
+      = isset($result[$node->nid]->example_2) ?
       $result[$node->nid]->example_2 : '';
   }
 }

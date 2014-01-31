@@ -12,6 +12,9 @@
  */
 class ActionExampleTestCase extends TriggerWebTestCase {
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'Action example',
@@ -20,11 +23,14 @@ class ActionExampleTestCase extends TriggerWebTestCase {
     );
   }
 
-  function setUp() {
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
     parent::setUp('trigger', 'action_example');
   }
 
- /**
+  /**
    * Test Action Example.
    *
    * 1. action_example_basic_action: Configure a action_example_basic_action to
@@ -35,9 +41,20 @@ class ActionExampleTestCase extends TriggerWebTestCase {
    *    to always be stickied using advanced configuration. Have the user
    *    create content; verify that it gets stickied.
    */
-  function testActionExample() {
+  public function testActionExample() {
     // Create an administrative user.
-    $admin_user = $this->drupalCreateUser(array('administer actions', 'access comments', 'access content', 'post comments', 'skip comment approval', 'create article content', 'access user profiles', 'administer users'));
+    $admin_user = $this->drupalCreateUser(
+      array(
+        'administer actions',
+        'access comments',
+        'access content',
+        'post comments',
+        'skip comment approval',
+        'create article content',
+        'access user profiles',
+        'administer users',
+      )
+    );
     $this->drupalLogin($admin_user);
 
     // 1. Assign basic action; then logout and login user and see if it puts
@@ -52,7 +69,8 @@ class ActionExampleTestCase extends TriggerWebTestCase {
 
     // 2. Unblock: When a user's profile is being viewed, unblock.
     $normal_user = $this->drupalCreateUser();
-    user_save($normal_user, array('status' => 0));  // Blocked user.
+    // Create blocked user.
+    user_save($normal_user, array('status' => 0));
     $normal_user = user_load($normal_user->uid, TRUE);
     $this->assertFalse($normal_user->status, 'Normal user status has been set to blocked');
 
@@ -66,12 +84,20 @@ class ActionExampleTestCase extends TriggerWebTestCase {
     $this->assertRaw(t('Unblocked user %name', array('%name' => $normal_user->name)));
 
     // 3. Create a user whose posts are always to be stickied.
-    $sticky_user = $this->drupalCreateUser(array('access comments', 'access content', 'post comments', 'skip comment approval', 'create article content'));
+    $sticky_user = $this->drupalCreateUser(
+      array(
+        'access comments',
+        'access content',
+        'post comments',
+        'skip comment approval',
+        'create article content',
+      )
+    );
 
     $action_label = $this->randomName();
     $edit = array(
       'actions_label' => $action_label,
-      'author' => $sticky_user -> name,
+      'author' => $sticky_user->name,
     );
     $aid = $this->configureAdvancedAction('action_example_node_sticky_action', $edit);
     $edit = array('aid' => drupal_hash_base64($aid));

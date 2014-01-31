@@ -23,7 +23,7 @@ function ajax_example_advanced_commands($form, &$form_state) {
   // Shows the 'after' command with a callback generating commands.
   $form['after_command_example_fieldset'] = array(
     '#type' => 'fieldset',
-    '#title' => t("This shows the Ajax 'after' command. Click to put something below the div that says 'Something can be inserted after this'")
+    '#title' => t("This shows the Ajax 'after' command. Click to put something below the div that says 'Something can be inserted after this'"),
   );
 
   $form['after_command_example_fieldset']['after_command_example'] = array(
@@ -52,7 +52,7 @@ function ajax_example_advanced_commands($form, &$form_state) {
   // Shows the 'append' command.
   $form['append_command_example_fieldset'] = array(
     '#type' => 'fieldset',
-    '#title' => t("This shows the Ajax 'append' command. Click to put something below the div that says 'Something can be inserted after this'")
+    '#title' => t("This shows the Ajax 'append' command. Click to put something below the div that says 'Something can be inserted after this'"),
   );
 
   $form['append_command_example_fieldset']['append_command_example'] = array(
@@ -62,14 +62,13 @@ function ajax_example_advanced_commands($form, &$form_state) {
       'callback' => 'ajax_example_advanced_commands_append_callback',
     ),
     '#suffix' => "<div id='append_div'>Something can be appended inside this div... </div>
-                  <div id='append_status'>'After' Command Status: Unknown</div>"
+                  <div id='append_status'>'After' Command Status: Unknown</div>",
   );
-
 
   // Shows the 'before' command.
   $form['before_command_example_fieldset'] = array(
     '#type' => 'fieldset',
-    '#title' => t("This shows the Ajax 'before' command.")
+    '#title' => t("This shows the Ajax 'before' command."),
   );
 
   $form['before_command_example_fieldset']['before_command_example'] = array(
@@ -79,7 +78,7 @@ function ajax_example_advanced_commands($form, &$form_state) {
       'callback' => 'ajax_example_advanced_commands_before_callback',
     ),
     '#suffix' => "<div id='before_div'>Something can be inserted before this</div>
-                  <div id='before_status'>'before' Command Status: Unknown</div>"
+                  <div id='before_status'>'before' Command Status: Unknown</div>",
   );
 
   // Shows the 'changed' command.
@@ -96,7 +95,7 @@ function ajax_example_advanced_commands($form, &$form_state) {
       'callback' => 'ajax_example_advanced_commands_changed_callback',
     ),
     '#suffix' => "<div id='changed_div'> <div id='changed_div_mark_this'>This div can be marked as changed or not.</div></div>
-                  <div id='changed_status'>Status: Unknown</div>"
+                  <div id='changed_status'>Status: Unknown</div>",
   );
 
   // Shows the AJAX 'css' command.
@@ -114,7 +113,7 @@ function ajax_example_advanced_commands($form, &$form_state) {
       'callback' => 'ajax_example_advanced_commands_css_callback',
     ),
     '#suffix' => "<div id='css_div' style='height: 50px; width: 50px; border: 1px solid black'> box</div>
-                  <div id='css_status'>Status: Unknown</div>"
+                  <div id='css_status'>Status: Unknown</div>",
   );
 
   // Shows the AJAX 'data' command. But there is no use of this information,
@@ -132,7 +131,7 @@ function ajax_example_advanced_commands($form, &$form_state) {
       'callback' => 'ajax_example_advanced_commands_data_callback',
     ),
     '#suffix' => "<div id='data_div'>This div should have key='time'/value='a time string' attached.</div>
-                  <div id='data_status'>Status: Unknown</div>"
+                  <div id='data_status'>Status: Unknown</div>",
   );
 
   // Shows the AJAX 'html' command.
@@ -149,13 +148,13 @@ function ajax_example_advanced_commands($form, &$form_state) {
       'callback' => 'ajax_example_advanced_commands_html_callback',
     ),
     '#suffix' => "<div id='html_div'>Original contents</div>
-                  <div id='html_status'>Status: Unknown</div>"
+                  <div id='html_status'>Status: Unknown</div>",
   );
 
   // Shows the AJAX 'prepend' command.
   $form['prepend_command_example_fieldset'] = array(
     '#type' => 'fieldset',
-    '#title' => t("This shows the AJAX 'prepend' command. Click to put something below the div that says 'Something can be inserted after this'")
+    '#title' => t("This shows the AJAX 'prepend' command. Click to put something below the div that says 'Something can be inserted after this'"),
   );
 
   $form['prepend_command_example_fieldset']['prepend_command_example'] = array(
@@ -165,13 +164,13 @@ function ajax_example_advanced_commands($form, &$form_state) {
       'callback' => 'ajax_example_advanced_commands_prepend_callback',
     ),
     '#suffix' => "<div id='prepend_div'>Something can be prepended to this div... </div>
-                  <div id='prepend_status'>'After' Command Status: Unknown</div>"
+                  <div id='prepend_status'>'After' Command Status: Unknown</div>",
   );
 
   // Shows the AJAX 'remove' command.
   $form['remove_command_example_fieldset'] = array(
     '#type' => 'fieldset',
-    '#title' => t("Shows the Ajax 'remove' command.")
+    '#title' => t("Shows the Ajax 'remove' command."),
   );
 
   $form['remove_command_example_fieldset']['remove_command_example'] = array(
@@ -182,14 +181,14 @@ function ajax_example_advanced_commands($form, &$form_state) {
       'callback' => 'ajax_example_advanced_commands_remove_callback',
     ),
     '#suffix' => "<div id='remove_div'><div id='remove_text'>text to be removed</div></div>
-                  <div id='remove_status'>'After' Command Status: Unknown</div>"
+                  <div id='remove_status'>'After' Command Status: Unknown</div>",
   );
 
   // Show off the AJAX 'restripe' command. Also shows classic AJAX replacement
   // on the "how many rows" processing.
   $form['restripe_command_example_fieldset'] = array(
     '#type' => 'fieldset',
-    '#title' => t("Demonstrates the Ajax 'restripe' command.")
+    '#title' => t("Demonstrates the Ajax 'restripe' command."),
   );
 
   $form['restripe_command_example_fieldset']['restripe_num_rows'] = array(
@@ -226,7 +225,7 @@ function ajax_example_advanced_commands($form, &$form_state) {
 }
 
 /**
- * 'after' callback.
+ * Callback for 'after'.
  *
  * @see ajax_command_after()
  */
@@ -240,7 +239,7 @@ function ajax_example_advanced_commands_after_callback($form, $form_state) {
 }
 
 /**
- * 'alert' callback.
+ * Callback for 'alert'.
  *
  * @see ajax_command_alert()
  */
@@ -251,7 +250,7 @@ function ajax_example_advanced_commands_alert_callback($form, $form_state) {
 }
 
 /**
- * 'append' callback.
+ * Callback for 'append'.
  *
  * @see ajax_command_append()
  */
@@ -265,7 +264,7 @@ function ajax_example_advanced_commands_append_callback($form, $form_state) {
 }
 
 /**
- * 'before' callback.
+ * Callback for 'before'.
  *
  * @see ajax_command_before()
  */
@@ -279,7 +278,7 @@ function ajax_example_advanced_commands_before_callback($form, $form_state) {
 }
 
 /**
- * 'changed' callback.
+ * Callback for 'changed'.
  *
  * @see ajax_command_changed()
  */
@@ -288,7 +287,7 @@ function ajax_example_advanced_commands_changed_callback($form, $form_state) {
   $checkbox_value_string = $checkbox_value ? "TRUE" : "FALSE";
   $commands = array();
   if ($checkbox_value) {
-    $commands[] = ajax_command_changed( '#changed_div', '#changed_div_mark_this');
+    $commands[] = ajax_command_changed('#changed_div', '#changed_div_mark_this');
   }
   else {
     $commands[] = ajax_command_replace('#changed_div', "<div id='changed_div'> <div id='changed_div_mark_this'>This div can be marked as changed or not.</div></div>");
@@ -298,7 +297,7 @@ function ajax_example_advanced_commands_changed_callback($form, $form_state) {
 }
 
 /**
- * 'css' callback.
+ * Callback for 'css'.
  *
  * @see ajax_command_css()
  */
@@ -313,7 +312,7 @@ function ajax_example_advanced_commands_css_callback($form, $form_state) {
 }
 
 /**
- * 'data' callback.
+ * Callback for 'data'.
  *
  * @see ajax_command_data()
  */
@@ -329,7 +328,7 @@ function ajax_example_advanced_commands_data_callback($form, $form_state) {
 }
 
 /**
- * 'html' callback.
+ * Callback for 'html'.
  *
  * @see ajax_command_html()
  */
@@ -343,7 +342,7 @@ function ajax_example_advanced_commands_html_callback($form, $form_state) {
 }
 
 /**
- * 'prepend' callback.
+ * Callback for 'prepend'.
  *
  * @see ajax_command_prepend()
  */
@@ -355,7 +354,7 @@ function ajax_example_advanced_commands_prepend_callback($form, $form_state) {
 }
 
 /**
- * 'remove' callback.
+ * Callback for 'remove'.
  *
  * @see ajax_command_remove()
  */
@@ -374,14 +373,14 @@ function ajax_example_advanced_commands_remove_callback($form, $form_state) {
 }
 
 /**
- * 'restripe' rows callback.
+ * Callback for 'restripe'.
  *
  * Rebuilds the table with the selected number of rows.
  */
 function ajax_example_advanced_commands_restripe_num_rows($form, $form_state) {
   $num_rows = $form_state['values']['restripe_num_rows'];
   $output = "<table id='restripe_table' style='border: 1px solid black'>";
-  for ($i=1; $i<=$num_rows; $i++) {
+  for ($i = 1; $i <= $num_rows; $i++) {
     $output .= "<tr><td>Row $i</td></tr>";
   }
   $output .= "</table>";
@@ -389,7 +388,7 @@ function ajax_example_advanced_commands_restripe_num_rows($form, $form_state) {
 }
 
 /**
- * 'restripe' callback.
+ * Callback for 'restripe'.
  *
  * @see ajax_command_restripe()
  */

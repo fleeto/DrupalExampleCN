@@ -11,6 +11,9 @@
  */
 class AjaxExampleTestCase extends DrupalWebTestCase {
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'Ajax example',
@@ -22,14 +25,14 @@ class AjaxExampleTestCase extends DrupalWebTestCase {
   /**
    * Enable module.
    */
-  function setUp() {
+  public function setUp() {
     parent::setUp('ajax_example');
   }
 
   /**
    * Check the non-JS version of the "Dynamic Sections" example.
    */
-  function testDynamicSectionsNoJs() {
+  public function testDynamicSectionsNoJs() {
     // The path to the example form.
     $path = 'examples/ajax_example/dynamic_sections_no_js';
     // Confirmation text for right and wrong answers.
@@ -53,13 +56,13 @@ class AjaxExampleTestCase extends DrupalWebTestCase {
         'response' => $right,
       ),
     );
-    foreach ($params as $style => $QandA) {
+    foreach ($params as $style => $q_and_a) {
       // Submit the initial form.
       $edit = array('question_type_select' => t($style));
       $this->drupalPost($path, $edit, t('Choose'));
       $this->assertResponse(200, format_string('Question style "@style" selected.', array('@style' => t($style))));
       // For convenience, make variables out of the entries in $QandA.
-      extract($QandA);
+      extract($q_and_a);
       // Check for the expected input field.
       $this->assertFieldByName('question', t($value));
       // Now, submit the dynamically generated form.

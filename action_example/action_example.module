@@ -164,8 +164,6 @@ function action_example_action_info() {
   );
 }
 
-
-
 /**
  * Implements hook_menu().
  *
@@ -195,20 +193,18 @@ function _action_example_page() {
  * This action is not expecting any type of entity object, and can be used with
  * any trigger type or any event.
  *
- * @param $entity
+ * @param object $entity
  *   An optional entity object.
- * @param $context
+ * @param array $context
  *   Array with parameters for this action: depends on the trigger.
  *
  * @see action_example_action_info()
  */
 function action_example_basic_action(&$entity, $context = array()) {
-  //
   // In this case we are ignoring the entity and the context. This case of
   // action is useful when your action does not depend on the context, and
   // the function must do something regardless the scope of the trigger.
   // Simply announces that the action was executed using a message.
-
   drupal_set_message(t('action_example_basic_action fired'));
   watchdog('action_example', 'action_example_basic_action fired.');
 }
@@ -226,10 +222,10 @@ function action_example_basic_action(&$entity, $context = array()) {
  * - Other: (including system or custom defined types), current user will be
  *   unblocked. (Yes, this seems like an incomprehensible use-case.)
  *
- * @param $entity
+ * @param object $entity
  *   An optional user object (could be a user, or an author if context is
  *   node or comment)
- * @param $context
+ * @param array $context
  *   Array with parameters for this action: depends on the trigger. The context
  *   is not used in this example.
  */
@@ -275,10 +271,11 @@ function action_example_unblock_user_action(&$entity, $context = array()) {
 /**
  * Generates settings form for action_example_node_sticky_action().
  *
- * @param $context
+ * @param array $context
  *   An array of options of this action (in case it is being edited)
  *
- * @return array $form
+ * @return array
+ *   Settings form as Form API array.
  *
  * @see action_example_action_info()
  */
@@ -309,10 +306,11 @@ function action_example_node_sticky_action_form($context) {
 
 /**
  * Validates settings form for action_example_node_sticky_action().
+ *
  * Verifies that user exists before continuing.
  */
 function action_example_node_sticky_action_validate($form, $form_state) {
-  if (! $account = user_load_by_name($form_state['values']['author']) ) {
+  if (!$account = user_load_by_name($form_state['values']['author'])) {
     form_set_error('author', t('Please, provide a valid username'));
   }
 }
@@ -334,9 +332,9 @@ function action_example_node_sticky_action_submit($form, $form_state) {
  * customized using the configuration form, validated with the validation
  * function, and submitted with the submit function.
  *
- * @param $node
+ * @param object $node
  *   A node object provided by the associated trigger.
- * @param $context
+ * @param array $context
  *   Array with the following elements:
  *   - 'author': username of the author's content this function will promote and
  *     set as sticky.
@@ -352,8 +350,23 @@ function action_example_node_sticky_action($node, $context) {
   if ($account->uid == $node->uid) {
     $node->promote = NODE_PROMOTED;
     $node->sticky  = NODE_STICKY;
-    watchdog('action', 'Set @type %title to sticky and promoted by special action for user %username.', array('@type' => node_type_get_name($node), '%title' => $node->title, '%username' => $account->name));
-    drupal_set_message(t('Set @type %title to sticky and promoted by special action for user %username.', array('@type' => node_type_get_name($node), '%title' => $node->title, '%username' => $account->name)));
+    watchdog('action',
+      'Set @type %title to sticky and promoted by special action for user %username.',
+        array(
+          '@type' => node_type_get_name($node),
+          '%title' => $node->title,
+          '%username' => $account->name,
+        )
+    );
+    drupal_set_message(
+      t('Set @type %title to sticky and promoted by special action for user %username.',
+        array(
+          '@type' => node_type_get_name($node),
+          '%title' => $node->title,
+          '%username' => $account->name,
+        )
+      )
+    );
   }
 }
 /**
