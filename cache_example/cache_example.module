@@ -44,7 +44,7 @@ function cache_example_menu() {
 }
 
 /**
- * cache_example page/form callback.
+ * Main page for cache_example.
  *
  * Displays a page/form which outlines how Drupal's cache works.
  */
@@ -52,14 +52,13 @@ function cache_example_page_form($form, &$form_state) {
   // Log execution time.
   $start_time = microtime(TRUE);
 
-
-   // Try to load the files count from cache. This function will accept two
-   // arguments:
-   // - cache object name (cid)
-   // - cache bin, the (optional) cache bin (most often a database table) where
-   //   the object is to be saved.
-   //
-   // cache_get() returns the cached object or FALSE if object does not exist.
+  // Try to load the files count from cache. This function will accept two
+  // arguments:
+  // - cache object name (cid)
+  // - cache bin, the (optional) cache bin (most often a database table) where
+  //   the object is to be saved.
+  //
+  // cache_get() returns the cached object or FALSE if object does not exist.
   if ($cache = cache_get('cache_example_files_count')) {
     /*
      * Get cached data. Complex data types will be unserialized automatically.
@@ -71,7 +70,6 @@ function cache_example_page_form($form, &$form_state) {
     // Recursively get all files from Drupal's folder.
     $files_count = count(file_scan_directory('.', '/.*/'));
 
-
     // Since we have recalculated, we now need to store the new data into cache.
     // Complex data types will be automatically serialized before being saved
     // into cache.
@@ -82,7 +80,6 @@ function cache_example_page_form($form, &$form_state) {
 
   $end_time = microtime(TRUE);
   $duration = $end_time - $start_time;
-
 
   // Format intro message.
   $intro_message = '<p>' . t('This example will search the entire drupal folder and display a count of the files in it.') . ' ';
@@ -147,7 +144,7 @@ function cache_example_page_form($form, &$form_state) {
       300 => t('5 minutes from form submission'),
     ),
     '#default_value' => -10,
-    '#description' => t('Any cache item can be set to only expire when explicitly cleared, or to expire at a given time.')
+    '#description' => t('Any cache item can be set to only expire when explicitly cleared, or to expire at a given time.'),
   );
   $form['expiration_demo']['create_cache_item'] = array(
     '#type' => 'submit',
@@ -226,12 +223,14 @@ function cache_example_form_cache_clearing($form, &$form_state) {
       cache_clear_all(NULL, 'cache');
       drupal_set_message(t('cache_clear_all(NULL, "cache") was called, removing any expired cache items.'));
       break;
+
     case 'remove_all':
       // This removes all keys in a bin using a super-wildcard. This
       // has nothing to do with expiration. It's just brute-force removal.
       cache_clear_all('*', 'cache', TRUE);
       drupal_set_message(t('ALL entries in the "cache" bin were removed with cache_clear_all("*", "cache", TRUE).'));
       break;
+
     case 'remove_wildcard':
       // We can also explicitly remove all cache items whose cid begins with
       // 'cache_example' by using a wildcard. This again is brute-force

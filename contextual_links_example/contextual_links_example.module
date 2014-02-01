@@ -149,10 +149,10 @@ function contextual_links_example_menu() {
 /**
  * Menu loader callback for the object defined by this module.
  *
- * @param $id
+ * @param int $id
  *   The ID of the object to load.
  *
- * @return
+ * @return object|FALSE
  *   A fully loaded object, or FALSE if the object does not exist.
  */
 function contextual_links_example_object_load($id) {

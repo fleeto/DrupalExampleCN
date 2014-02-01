@@ -11,8 +11,12 @@
  * @ingroup contextual_links_example
  */
 class ContextualLinksExampleTestCase extends DrupalWebTestCase {
-  protected $web_user;
 
+  protected $webUser;
+
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'Contextual links example functionality',
@@ -26,14 +30,14 @@ class ContextualLinksExampleTestCase extends DrupalWebTestCase {
    */
   public function setUp() {
     parent::setUp('contextual', 'contextual_links_example');
-    $this->web_user = $this->drupalCreateUser(array('access contextual links', 'administer blocks'));
-    $this->drupalLogin($this->web_user);
+    $this->webUser = $this->drupalCreateUser(array('access contextual links', 'administer blocks'));
+    $this->drupalLogin($this->webUser);
   }
 
   /**
    * Test the various contextual links that this module defines and displays.
    */
-  function testContextualLinksExample() {
+  public function testContextualLinksExample() {
     // Create a node and promote it to the front page. Then view the front page
     // and verify that the "Example action" contextual link works.
     $node = $this->drupalCreateNode(array('type' => 'page', 'promote' => 1));

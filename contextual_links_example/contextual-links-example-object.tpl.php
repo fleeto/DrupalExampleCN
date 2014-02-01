@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Default theme implementation to display a sample object with contextual links.
+ * Default theme implementation: Display a sample object with contextual links.
  *
  * Available variables:
  * - $title: The sanitized title of the object.

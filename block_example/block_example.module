@@ -48,17 +48,18 @@ function block_example_block_info() {
   // This hook returns an array, each component of which is an array of block
   // information. The array keys are the 'delta' values used in other block
   // hooks.
-
+  //
   // The required block information is a block description, which is shown
   // to the site administrator in the list of possible blocks. You can also
   // provide initial settings for block weight, status, etc.
-
+  //
   // Many options are defined in hook_block_info():
   $blocks['example_configurable_text'] = array(
     // info: The name of the block.
     'info' => t('Example: configurable text string'),
     // Block caching options (per role, per user, etc.)
-    'cache' => DRUPAL_CACHE_PER_ROLE, // default
+    // DRUPAL_CACHE_PER_ROLE is the default.
+    'cache' => DRUPAL_CACHE_PER_ROLE,
   );
 
   // This sample shows how to provide default settings. In this case we'll
@@ -67,16 +68,16 @@ function block_example_block_info() {
   $blocks['example_empty'] = array(
     'info' => t('Example: empty block'),
     'status' => TRUE,
-    'region' => 'sidebar_first',  // Not usually provided.
-    'visibility' => BLOCK_VISIBILITY_LISTED,  // Not usually provided.
-    'pages' => 'node/*', // Not usually provided here.
+    'region' => 'sidebar_first',
+    'visibility' => BLOCK_VISIBILITY_LISTED,
+    'pages' => 'node/*',
   );
 
   $blocks['example_uppercase'] = array(
     // info: The name of the block.
     'info' => t('Example: uppercase this please'),
     'status' => TRUE,
-    'region' => 'sidebar_first',  // Not usually provided.
+    'region' => 'sidebar_first',
   );
 
   return $blocks;
@@ -88,11 +89,10 @@ function block_example_block_info() {
  * This hook declares configuration options for blocks provided by this module.
  */
 function block_example_block_configure($delta = '') {
+  $form = array();
   // The $delta parameter tells us which block is being configured.
   // In this example, we'll allow the administrator to customize
   // the text of the 'configurable text string' block defined in this module.
-
-  $form = array();
   if ($delta == 'example_configurable_text') {
     // All we need to provide is the specific configuration options for our
     // block. Drupal will take care of the standard block configuration options
@@ -166,7 +166,13 @@ function block_example_contents($which_block) {
       // Block content can be returned in two formats: renderable arrays
       // (as here) are preferred though a simple string will work as well.
       // Block content created through the UI defaults to a string.
-      return array('#markup' => variable_get('block_example_string', t('A default value. This block was created at %time', array('%time' => date('c')))));
+      return array(
+        '#markup' => variable_get('block_example_string',
+          t('A default value. This block was created at %time',
+            array('%time' => date('c'))
+          )
+        ),
+      );
 
     case 'example_empty':
       // It is possible that a block not have any content, since it is

@@ -10,8 +10,12 @@
  * @ingroup block_example
  */
 class BlockExampleTestCase extends DrupalWebTestCase {
-  protected $web_user;
 
+  protected $webUser;
+
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'Block example functionality',
@@ -23,20 +27,28 @@ class BlockExampleTestCase extends DrupalWebTestCase {
   /**
    * Enable modules and create user with specific permissions.
    */
-  function setUp() {
+  public function setUp() {
     parent::setUp('block_example', 'search');
     // Create user. Search content permission granted for the search block to
     // be shown.
-    $this->web_user = $this->drupalCreateUser(array('administer blocks', 'search content', 'access contextual links'));
+    $this->webUser = $this->drupalCreateUser(
+      array(
+        'administer blocks',
+        'search content',
+        'access contextual links',
+      )
+    );
   }
 
   /**
+   * Functional test for our block example.
+   *
    * Login user, create an example node, and test block functionality through
    * the admin and user interfaces.
    */
-  function testBlockExampleBasic() {
+  public function testBlockExampleBasic() {
     // Login the admin user.
-    $this->drupalLogin($this->web_user);
+    $this->drupalLogin($this->webUser);
 
     // Find the blocks in the settings page.
     $this->drupalGet('admin/structure/block');
@@ -47,24 +59,25 @@ class BlockExampleTestCase extends DrupalWebTestCase {
     $this->assertFieldByName('blocks[block_example_example_empty][region]', 'sidebar_first', 'Empty block is enabled in first sidebar successfully verified.');
     $this->assertFieldByName('blocks[block_example_example_configurable_text][region]', -1, 'Configurable text block is disabled in first sidebar successfully verified.');
 
-    // Verify that blocks are not shown
+    // Verify that blocks are not shown.
     $this->drupalGet('/');
     $this->assertNoRaw(t('Title of first block (example_configurable_text)'), 'Block configurable test not found.');
     $this->assertNoRaw(t('Title of second block (example_empty)'), 'Block empty not found.');
 
-    // Enable the Configurable text block and verify
+    // Enable the Configurable text block and verify.
     $this->drupalPost('admin/structure/block', array('blocks[block_example_example_configurable_text][region]' => 'sidebar_first'), t('Save blocks'));
     $this->assertFieldByName('blocks[block_example_example_configurable_text][region]', 'sidebar_first', 'Configurable text block is enabled in first sidebar successfully verified.');
 
-    // Verify that blocks are there. Empty block will not be shown, because it is empty
+    // Verify that blocks are there. Empty block will not be shown, because it
+    // is empty.
     $this->drupalGet('/');
     $this->assertRaw(t('Title of first block (example_configurable_text)'), 'Block configurable text found.');
 
-    // Change content of configurable text block
+    // Change content of configurable text block.
     $string = $this->randomName();
     $this->drupalPost('admin/structure/block/manage/block_example/example_configurable_text/configure', array('block_example_string' => $string), t('Save block'));
 
-    // Verify that new content is shown
+    // Verify that new content is shown.
     $this->drupalGet('/');
     $this->assertRaw($string, 'Content of configurable text block successfully verified.');
 
@@ -84,7 +97,6 @@ class BlockExampleTestCase extends DrupalWebTestCase {
     $this->assertRaw(('CONFIGURABLE BLOCK TO BE UPPERCASED'));
 
     // Verify that search block is at the bottom of the region.
-
     // Enable the search block on top of sidebar_first.
     $block_options = array(
       'blocks[search_form][region]' => 'sidebar_first',
