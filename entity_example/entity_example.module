@@ -46,7 +46,7 @@ function entity_example_entity_info() {
     // The table for this entity defined in hook_schema()
     'base table' => 'entity_example_basic',
 
-    // Returns the uri elements of an entity
+    // Returns the uri elements of an entity.
     'uri callback' => 'entity_example_basic_uri',
 
     // IF fieldable == FALSE, we can't attach fields.
@@ -56,8 +56,10 @@ function entity_example_entity_info() {
     // functions. It is not required if we don't have bundles or revisions.
     // Here we do not support a revision, so that entity key is omitted.
     'entity keys' => array(
-      'id' => 'basic_id' , // The 'id' (basic_id here) is the unique id.
-      'bundle' => 'bundle_type' // Bundle will be determined by the 'bundle_type' field
+      // The 'id' (basic_id here) is the unique id.
+      'id' => 'basic_id' ,
+      // Bundle will be determined by the 'bundle_type' field.
+      'bundle' => 'bundle_type',
     ),
     'bundle keys' => array(
       'bundle' => 'bundle_type',
@@ -85,9 +87,9 @@ function entity_example_entity_info() {
     'view modes' => array(
       'tweaky' => array(
         'label' => t('Tweaky'),
-        'custom settings' =>  FALSE,
+        'custom settings' => FALSE,
       ),
-    )
+    ),
   );
 
   return $info;
@@ -105,11 +107,12 @@ function entity_example_entity_info() {
  * the path: examples/entity_example/basic/%entity_example_basic in
  * hook_menu() tells Drupal to call entity_example_basic_load().
  *
- * @param $basic_id
+ * @param int $basic_id
  *   Integer specifying the basic entity id.
- * @param $reset
+ * @param bool $reset
  *   A boolean indicating that the internal cache should be reset.
- * @return
+ *
+ * @return object
  *   A fully-loaded $basic object or FALSE if it cannot be loaded.
  *
  * @see entity_example_basic_load_multiple()
@@ -216,10 +219,10 @@ function entity_example_menu() {
 function entity_example_info_page() {
   $content['preface'] = array(
     '#type' => 'item',
-    '#markup' => t('The entity example provides a simple example entity.')
+    '#markup' => t('The entity example provides a simple example entity.'),
   );
   if (user_access('administer entity_example_basic entities')) {
-    $content['preface']['#markup'] =  t('You can administer these and add fields and change the view !link.',
+    $content['preface']['#markup'] = t('You can administer these and add fields and change the view !link.',
       array('!link' => l(t('here'), 'admin/structure/entity_example_basic/manage'))
     );
   }
@@ -233,7 +236,7 @@ function entity_example_info_page() {
  */
 function entity_example_permission() {
   $permissions = array(
-    'administer entity_example_basic entities' =>  array(
+    'administer entity_example_basic entities' => array(
       'title' => t('Administer entity_example_basic entities'),
     ),
     'view any entity_example_basic entity' => array(
@@ -265,7 +268,7 @@ function entity_example_basic_list_entities() {
   // Load all of our entities.
   $entities = entity_example_basic_load_multiple();
   if (!empty($entities)) {
-    foreach ( $entities as $entity ) {
+    foreach ($entities as $entity) {
       // Create tabular rows for our entities.
       $rows[] = array(
         'data' => array(
@@ -441,6 +444,7 @@ function entity_example_basic_form($form, &$form_state, $entity) {
 
 /**
  * Validation handler for entity_example_basic_add_form form.
+ *
  * We pass things straight through to the Field API to handle validation
  * of the attached fields.
  */
@@ -450,7 +454,7 @@ function entity_example_basic_form_validate($form, &$form_state) {
 
 
 /**
- * Form submit handler: submits basic_add_form information
+ * Form submit handler: Submits basic_add_form information.
  */
 function entity_example_basic_form_submit($form, &$form_state) {
   $entity = $form_state['values']['basic_entity'];
@@ -465,7 +469,7 @@ function entity_example_basic_form_submit($form, &$form_state) {
  *
  * @todo: 'Are you sure?' message.
  */
-function entity_example_basic_edit_delete( $form , &$form_state ) {
+function entity_example_basic_edit_delete($form, &$form_state) {
   $entity = $form_state['values']['basic_entity'];
   entity_example_basic_delete($entity);
   drupal_set_message(t('The entity %item_description (ID %id) has been deleted',
@@ -498,12 +502,30 @@ function entity_example_basic_delete($entity) {
  *
  * @see hook_entity_info_alter()
  */
-
 interface EntityExampleBasicControllerInterface
   extends DrupalEntityControllerInterface {
+
+  /**
+   * Create an entity.
+   */
   public function create();
+
+  /**
+   * Save an entity.
+   *
+   * @param object $entity
+   *   The entity to save.
+   */
   public function save($entity);
+
+  /**
+   * Delete an entity.
+   *
+   * @param object $entity
+   *   The entity to delete.
+   */
   public function delete($entity);
+
 }
 
 /**
@@ -529,7 +551,7 @@ class EntityExampleBasicController
   }
 
   /**
-   * Saves the custom fields using drupal_write_record()
+   * Saves the custom fields using drupal_write_record().
    */
   public function save($entity) {
     // If our entity has no basic_id, then we need to give it a
@@ -569,10 +591,10 @@ class EntityExampleBasicController
   /**
    * Delete a single entity.
    *
-   * Really a convenience function for delete_multiple().
+   * Really a convenience function for deleteMultiple().
    */
   public function delete($entity) {
-    $this->delete_multiple(array($entity));
+    $this->deleteMultiple(array($entity));
   }
 
   /**
@@ -581,10 +603,10 @@ class EntityExampleBasicController
    * Deletion is unfortunately not supported in the base
    * DrupalDefaultEntityController class.
    *
-   * @param $basic_ids
+   * @param array $entities
    *   An array of entity IDs or a single numeric ID.
    */
-  public function delete_multiple($entities) {
+  public function deleteMultiple($entities) {
     $basic_ids = array();
     if (!empty($entities)) {
       $transaction = db_transaction();

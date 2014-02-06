@@ -36,7 +36,7 @@
  * Our module sets up a formatter in field_example_field_formatter_info() and
  * field_example_field_formatter_view(). These are the API hooks that present
  * formatted and themed output to the user.
-
+ *
  * And finally, our module defines the widet in
  * field_example_field_widget_info() and field_example_field_widget_form().
  * The widget is the form element used to receive input from the user
@@ -82,7 +82,7 @@ function field_example_field_info() {
 function field_example_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
   foreach ($items as $delta => $item) {
     if (!empty($item['rgb'])) {
-      if (! preg_match('@^#[0-9a-f]{6}$@', $item['rgb'])) {
+      if (!preg_match('@^#[0-9a-f]{6}$@', $item['rgb'])) {
         $errors[$field['field_name']][$langcode][$delta][] = array(
           'error' => 'field_example_invalid',
           'message' => t('Color must be in the HTML format #abcdef.'),
@@ -205,8 +205,8 @@ function field_example_field_widget_info() {
       'field types' => array('field_example_rgb'),
     ),
     'field_example_3text' => array(
-       'label' => t('RGB text field'),
-       'field types' => array('field_example_rgb'),
+      'label' => t('RGB text field'),
+      'field types' => array('field_example_rgb'),
     ),
     'field_example_colorpicker' => array(
       'label' => t('Color Picker'),
@@ -255,9 +255,8 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
           'js' => array(drupal_get_path('module', 'field_example') . '/field_example.js'),
         ),
       );
-
-    // DELIBERATE fall-through: From here on the field_example_text and
-    // field_example_colorpicker are exactly the same.
+      // DELIBERATE fall-through: From here on the field_example_text and
+      // field_example_colorpicker are exactly the same.
     case 'field_example_text':
       $widget += array(
         '#type' => 'textfield',
@@ -305,7 +304,9 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
         );
         // Since Form API doesn't allow a fieldset to be required, we
         // have to require each field element individually.
-        if ($instance['required'] == 1) $widget[$key]['#required'] = 1;
+        if ($instance['required'] == 1) {
+          $widget[$key]['#required'] = 1;
+        }
       }
       break;
 
@@ -317,11 +318,11 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
 
 
 /**
- * Validate the individual fields and then convert them into a single HTML RGB
- * value as text.
+ * Validate the individual fields and then convert to RGB string.
  */
 function field_example_3text_validate($element, &$form_state) {
-  $delta = $element['#delta']; // TODO: Isn't there a better way to find out which element?
+  // @todo: Isn't there a better way to find out which element?
+  $delta = $element['#delta'];
   $field = $form_state['field'][$element['#field_name']][$element['#language']]['field'];
   $field_name = $field['field_name'];
   if (isset($form_state['values'][$field_name][$element['#language']][$delta]['rgb'])) {
@@ -334,7 +335,7 @@ function field_example_3text_validate($element, &$form_state) {
         return;
       }
       // If they gave us anything that's not hex, reject it.
-      if ( (strlen($values[$colorfield]) != 2) || $colorfield_value < 0 || $colorfield_value > 255) {
+      if ((strlen($values[$colorfield]) != 2) || $colorfield_value < 0 || $colorfield_value > 255) {
         form_error($element[$colorfield], t("Saturation value must be a 2-digit hexadecimal value between 00 and ff."));
       }
     }

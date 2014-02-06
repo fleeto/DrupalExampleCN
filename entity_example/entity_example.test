@@ -14,6 +14,9 @@
  */
 class EntityExampleTestCase extends DrupalWebTestCase {
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'Entity example',
@@ -22,7 +25,10 @@ class EntityExampleTestCase extends DrupalWebTestCase {
     );
   }
 
-  function setUp() {
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
     // Enable the module.
     parent::setUp('entity_example');
 
@@ -38,17 +44,17 @@ class EntityExampleTestCase extends DrupalWebTestCase {
     $account = $this->drupalCreateUser($permissions);
     $this->drupalLogin($account);
 
-    // Attach a field
+    // Attach a field.
     $field = array(
       'field_name' => 'entity_example_test_text' ,
-      'type' => 'text'
+      'type' => 'text',
     );
     field_create_field($field);
     $instance = array(
       'label' => 'Subject',
       'field_name' => 'entity_example_test_text',
       'entity_type' => 'entity_example_basic',
-      'bundle' => 'first_example_bundle'
+      'bundle' => 'first_example_bundle',
     );
     field_create_instance($instance);
   }
@@ -56,19 +62,19 @@ class EntityExampleTestCase extends DrupalWebTestCase {
   /**
    * Test Entity Example features.
    *
-   * CRUD
-   * Table display
-   * User access
-   * Field management
-   * Display management
+   * - CRUD
+   * - Table display
+   * - User access
+   * - Field management
+   * - Display management
    */
-  function testEntityExampleBasic() {
+  public function testEntityExampleBasic() {
     // Create 10 entities.
     for ($i = 1; $i <= 10; $i++) {
       $edit[$i]['item_description'] = $this->randomName();
       $edit[$i]['entity_example_test_text[und][0][value]'] = $this->randomName(32);
 
-      $this->drupalPost('examples/entity_example/basic/add' , $edit[$i], 'Save');
+      $this->drupalPost('examples/entity_example/basic/add', $edit[$i], 'Save');
       $this->assertText('item_description=' . $edit[$i]['item_description']);
 
       $this->drupalGet('examples/entity_example/basic/' . $i);
@@ -76,8 +82,8 @@ class EntityExampleTestCase extends DrupalWebTestCase {
       $this->assertText($edit[$i]['entity_example_test_text[und][0][value]']);
     }
 
-    // delete entity 5
-    $this->drupalPost('examples/entity_example/basic/5/edit' , $edit[5], 'Delete');
+    // Delete entity 5.
+    $this->drupalPost('examples/entity_example/basic/5/edit', $edit[5], 'Delete');
     $this->drupalGet('examples/entity_example/basic/5');
     $this->assertResponse(404, 'Deleted entity 5 no longer exists');
     unset($edit[5]);
@@ -87,7 +93,7 @@ class EntityExampleTestCase extends DrupalWebTestCase {
       'item_description' => 'updated entity 2 ',
       'entity_example_test_text[und][0][value]' => 'updated entity 2 test text',
     );
-    $this->drupalPost('examples/entity_example/basic/2/edit' , $edit[2], 'Save');
+    $this->drupalPost('examples/entity_example/basic/2/edit', $edit[2], 'Save');
     $this->assertText('item_description=' . $edit[2]['item_description']);
     $this->assertText('updated entity 2 test text');
 
@@ -113,7 +119,7 @@ class EntityExampleTestCase extends DrupalWebTestCase {
 
     // Now verify that we can edit and view this entity with fields.
     $edit[10]['field_new_junk_field[und][0][value]'] = $this->randomName();
-    $this->drupalPost('examples/entity_example/basic/10/edit' , $edit[10], 'Save');
+    $this->drupalPost('examples/entity_example/basic/10/edit', $edit[10], 'Save');
     $this->assertResponse(200);
     $this->assertText('item_description=' . $edit[10]['item_description']);
     $this->assertText($edit[10]['field_new_junk_field[und][0][value]'], 'Custom field updated successfully');
@@ -137,7 +143,13 @@ class EntityExampleTestCase extends DrupalWebTestCase {
     $this->assertResponse(403, 'User is denied edit privileges');
 
     // Create and login user with view and edit but no manage privs.
-    $account = $this->drupalCreateUser(array('access content', 'view any entity_example_basic entity', 'edit any entity_example_basic entity'));
+    $account = $this->drupalCreateUser(
+      array(
+        'access content',
+        'view any entity_example_basic entity',
+        'edit any entity_example_basic entity',
+      )
+    );
     $this->drupalLogin($account);
     $this->drupalGet('admin/structure/entity_example_basic/manage');
     $this->assertResponse(403, 'Denied access to admin manage page');

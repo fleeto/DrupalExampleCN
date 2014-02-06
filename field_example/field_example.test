@@ -11,6 +11,9 @@
  */
 class FieldExampleTest extends DrupalWebTestCase {
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'Field Example',
@@ -18,7 +21,11 @@ class FieldExampleTest extends DrupalWebTestCase {
       'group' => 'Examples',
     );
   }
-  function setUp() {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
     // Enable the email_example module.
     parent::setUp(array('field_ui', 'field_example'));
   }
@@ -34,7 +41,7 @@ class FieldExampleTest extends DrupalWebTestCase {
    * - Populates the multivalued field with two items.
    * - Tests the result.
    */
-  function testExampleFieldBasic() {
+  public function testExampleFieldBasic() {
     $content_type_machine = strtolower($this->randomName(10));
     $title = $this->randomName(20);
 
@@ -78,7 +85,7 @@ class FieldExampleTest extends DrupalWebTestCase {
     );
 
     foreach ($fields as $fieldname => $details) {
-      $this->create_field($fieldname, $details['widget'], $details['cardinality']);
+      $this->createField($fieldname, $details['widget'], $details['cardinality']);
     }
 
     // Somehow clicking "save" isn't enough, and we have to do a
@@ -126,27 +133,27 @@ class FieldExampleTest extends DrupalWebTestCase {
     $this->drupalPost(NULL, $edit, t('Save'));
     $this->assertText(t('@content_type_machine @title has been created', array('@content_type_machine' => $content_type_machine, '@title' => $title)));
 
-
     $output_strings = $this->xpath("//div[contains(@class,'field-type-field-example-rgb')]/div/div/p/text()");
 
-    $this->assertEqual((string)$output_strings[0], "The color code in this field is #000001");
-    $this->assertEqual((string)$output_strings[1], "The color code in this field is #000002");
-    $this->assertEqual((string)$output_strings[2], "The color code in this field is #000003");
-    $this->assertEqual((string)$output_strings[3], "The color code in this field is #000004");
-    $this->assertEqual((string)$output_strings[4], "The color code in this field is #000005");
+    $this->assertEqual((string) $output_strings[0], "The color code in this field is #000001");
+    $this->assertEqual((string) $output_strings[1], "The color code in this field is #000002");
+    $this->assertEqual((string) $output_strings[2], "The color code in this field is #000003");
+    $this->assertEqual((string) $output_strings[3], "The color code in this field is #000004");
+    $this->assertEqual((string) $output_strings[4], "The color code in this field is #000005");
   }
 
   /**
    * Utility function to create fields on a content type.
-   * @param $field_name
+   *
+   * @param string $field_name
    *   Name of the field, like field_something
-   * @param $widget_type
+   * @param string $widget_type
    *   Widget type, like field_example_3text
-   * @param $cardinality
+   * @param int $cardinality
    *   Cardinality
    */
-  protected function create_field($field_name, $widget_type, $cardinality) {
-        // Add a singleton field_example_text field.
+  protected function createField($field_name, $widget_type, $cardinality) {
+    // Add a singleton field_example_text field.
     $edit = array(
       'fields[_add_new_field][label]' => $field_name,
       'fields[_add_new_field][field_name]' => $field_name,
@@ -159,11 +166,19 @@ class FieldExampleTest extends DrupalWebTestCase {
     // There are no settings for this, so just press the button.
     $this->drupalPost(NULL, array(), t('Save field settings'));
 
-    $edit = array('field[cardinality]' => (string)$cardinality);
+    $edit = array('field[cardinality]' => (string) $cardinality);
 
     // Using all the default settings, so press the button.
     $this->drupalPost(NULL, $edit, t('Save settings'));
-    debug(t('Saved settings for field %field_name with widget %widget_type and cardinality %cardinality', array('%field_name' => $field_name, '%widget_type' => $widget_type, '%cardinality' => $cardinality)));
+    debug(
+      t('Saved settings for field %field_name with widget %widget_type and cardinality %cardinality',
+        array(
+          '%field_name' => $field_name,
+          '%widget_type' => $widget_type,
+          '%cardinality' => $cardinality,
+        )
+      )
+    );
     $this->assertText(t('Saved @name configuration.', array('@name' => $field_name)));
   }
 }

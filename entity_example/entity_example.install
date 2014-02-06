@@ -19,38 +19,38 @@ function entity_example_schema() {
   // table with the module name is best practice.
   $schema['entity_example_basic'] = array(
     'description' => 'The base table for our basic entity.',
-      'fields' => array(
-        'basic_id' => array(
-          'description' => 'Primary key of the basic entity.',
-          'type' => 'serial',
-          'unsigned' => TRUE,
-          'not null' => TRUE,
-        ),
-        // If we allow multiple bundles, then the schema must handle that;
-        // We'll put it in the 'bundle_type' field to avoid confusion with the
-        // entity type.
-        'bundle_type' => array(
-          'description' => 'The bundle type',
-          'type' => 'text',
-          'size' => 'medium',
-          'not null' => TRUE
-        ),
-        // Additional properties are just things that are common to all
-        // entities and don't require field storage.
-        'item_description' => array(
-          'description' => 'A description of the item',
-          'type' => 'varchar',
-          'length' => 255,
-          'not null' => TRUE,
-          'default' => '',
-        ),
-        'created' => array(
-          'description' => 'The Unix timestamp of the entity creation time.',
-          'type' => 'int',
-          'not null' => TRUE,
-          'default' => 0,
-        ),
+    'fields' => array(
+      'basic_id' => array(
+        'description' => 'Primary key of the basic entity.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
       ),
+      // If we allow multiple bundles, then the schema must handle that;
+      // We'll put it in the 'bundle_type' field to avoid confusion with the
+      // entity type.
+      'bundle_type' => array(
+        'description' => 'The bundle type',
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+      ),
+      // Additional properties are just things that are common to all
+      // entities and don't require field storage.
+      'item_description' => array(
+        'description' => 'A description of the item',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'created' => array(
+        'description' => 'The Unix timestamp of the entity creation time.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
     'primary key' => array('basic_id'),
   );
 
@@ -58,7 +58,7 @@ function entity_example_schema() {
 }
 
 
-/*
+/**
  * Implements hook_uninstall().
  *
  * At uninstall time we'll notify field.module that the entity was deleted
@@ -67,5 +67,5 @@ function entity_example_schema() {
  * @ingroup entity_example
  */
 function entity_example_uninstall() {
-  field_attach_delete_bundle('entity_example_basic' , 'first_example_bundle' );
+  field_attach_delete_bundle('entity_example_basic', 'first_example_bundle');
 }
