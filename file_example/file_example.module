@@ -21,8 +21,9 @@
  */
 
 /**
- * Implements hook_menu() to set up the URLs (menu entries) for the
- * file examples.
+ * Implements hook_menu().
+ *
+ * Set up the URLs (menu entries) for the file examples.
  */
 function file_example_menu() {
   $items = array();
@@ -52,7 +53,7 @@ function file_example_menu() {
  */
 function file_example_permission() {
   return array(
-    'use file example' =>  array(
+    'use file example' => array(
       'title' => t('Use the examples in the File Example module'),
     ),
   );
@@ -66,8 +67,7 @@ function file_example_intro() {
   return array('#markup' => $markup);
 }
 /**
- * Form builder function for the file example readwrite and directory creation
- * example.
+ * Form builder function.
  *
  * A simple form that allows creation of a file, managed or unmanaged. It
  * also allows reading/deleting a file and creation of a directory.
@@ -203,7 +203,15 @@ function file_example_managed_write_submit($form, &$form_state) {
   if (!empty($file_object)) {
     $url = file_create_url($file_object->uri);
     $_SESSION['file_example_default_file'] = $file_object->uri;
-    drupal_set_message(t('Saved managed file: %file to destination %destination (accessible via !url, actual uri=<span id="uri">@uri</span>)', array('%file' => print_r($file_object, TRUE), '%destination' => $uri, '@uri' => $file_object->uri, '!url' => l(t('this URL'), $url))));
+    drupal_set_message(
+      t('Saved managed file: %file to destination %destination (accessible via !url, actual uri=<span id="uri">@uri</span>)',
+        array(
+          '%file' => print_r($file_object, TRUE),
+          '%destination' => $uri, '@uri' => $file_object->uri,
+          '!url' => l(t('this URL'), $url),
+        )
+      )
+    );
   }
   else {
     drupal_set_message(t('Failed to save the managed file'), 'error');
@@ -222,7 +230,6 @@ function file_example_managed_write_submit($form, &$form_state) {
  *   private://something/test.txt into a URL like
  *   http://example.com/sites/default/files/junk.txt.
  */
-
 function file_example_unmanaged_write_submit($form, &$form_state) {
   $data = $form_state['values']['write_contents'];
   $destination = !empty($form_state['values']['destination']) ? $form_state['values']['destination'] : NULL;
@@ -232,14 +239,20 @@ function file_example_unmanaged_write_submit($form, &$form_state) {
   if ($filename) {
     $url = file_create_url($filename);
     $_SESSION['file_example_default_file'] = $filename;
-    drupal_set_message(t('Saved file as %filename (accessible via !url, uri=<span id="uri">@uri</span>)', array('%filename' => $filename, '@uri' => $filename, '!url' => l(t('this URL'), $url))));
+    drupal_set_message(
+      t('Saved file as %filename (accessible via !url, uri=<span id="uri">@uri</span>)',
+        array(
+          '%filename' => $filename,
+          '@uri' => $filename,
+          '!url' => l(t('this URL'), $url),
+        )
+      )
+    );
   }
   else {
     drupal_set_message(t('Failed to save the file'), 'error');
   }
 }
-
-
 
 /**
  * Submit handler to write an unmanaged file using plain PHP functions.
@@ -252,7 +265,6 @@ function file_example_unmanaged_write_submit($form, &$form_state) {
  *   http://example.com/sites/default/files/junk.txt.
  * - drupal_tempnam() generates a temporary filename for use.
  */
-
 function file_example_unmanaged_php_submit($form, &$form_state) {
   $data = $form_state['values']['write_contents'];
   $destination = !empty($form_state['values']['destination']) ? $form_state['values']['destination'] : NULL;
@@ -282,7 +294,15 @@ function file_example_unmanaged_php_submit($form, &$form_state) {
   }
   $url = file_create_url($destination);
   $_SESSION['file_example_default_file'] = $destination;
-  drupal_set_message(t('Saved file as %filename (accessible via !url, uri=<span id="uri">@uri</span>)', array('%filename' => $destination, '@uri' => $destination, '!url' => l(t('this URL'), $url))));
+  drupal_set_message(
+    t('Saved file as %filename (accessible via !url, uri=<span id="uri">@uri</span>)',
+      array(
+        '%filename' => $destination,
+        '@uri' => $destination,
+        '!url' => l(t('this URL'), $url),
+      )
+    )
+  );
 }
 
 /**
@@ -324,13 +344,21 @@ function file_example_read_submit($form, &$form_state) {
     if ($sourcename) {
       $url = file_create_url($sourcename);
       $_SESSION['file_example_default_file'] = $sourcename;
-      drupal_set_message(t('The file was read and copied to %filename which is accessible at !url', array('%filename' => $sourcename, '!url' => l($url, $url))));
+      drupal_set_message(
+        t('The file was read and copied to %filename which is accessible at !url',
+          array(
+            '%filename' => $sourcename,
+            '!url' => l($url, $url),
+          )
+        )
+      );
     }
     else {
       drupal_set_message(t('Failed to save the file'));
     }
   }
-  else { // We failed to get the contents of the requested file
+  else {
+    // We failed to get the contents of the requested file.
     drupal_set_message(t('Failed to retrieve the file %file', array('%file' => $uri)));
   }
 }
@@ -351,14 +379,19 @@ function file_example_delete_submit($form, &$form_state) {
   if (!empty($file_object)) {
     $result = file_delete($file_object);
     if ($result !== TRUE) {
-      drupal_set_message(t('Failed deleting managed file %uri. Result was %result', array('%uri' => $uri, '%result' => print_r($result, TRUE))), 'error');
+      drupal_set_message(t('Failed deleting managed file %uri. Result was %result',
+        array(
+          '%uri' => $uri,
+          '%result' => print_r($result, TRUE),
+        )
+      ), 'error');
     }
     else {
       drupal_set_message(t('Successfully deleted managed file %uri', array('%uri' => $uri)));
       $_SESSION['file_example_default_file'] = $uri;
     }
   }
-  // else use file_unmanaged_delete().
+  // Else use file_unmanaged_delete().
   else {
     $result = file_unmanaged_delete($uri);
     if ($result !== TRUE) {
@@ -386,6 +419,7 @@ function file_example_file_check_exists_submit($form, &$form_state) {
 }
 /**
  * Submit handler for directory creation.
+ *
  * Here we create a directory and set proper permissions on it using
  * file_prepare_directory().
  */
@@ -412,7 +446,6 @@ function file_example_create_directory_submit($form, &$form_state) {
  * Submit handler for directory deletion.
  *
  * @see file_unmanaged_delete_recursive()
- *
  */
 function file_example_delete_directory_submit($form, &$form_state) {
   $directory = $form_state['values']['directory_name'];
@@ -429,10 +462,13 @@ function file_example_delete_directory_submit($form, &$form_state) {
 
 /**
  * Submit handler to test directory existence.
+ *
  * This actually just checks to see if the directory is writable
  *
- * @param $form
- * @param $form_state
+ * @param array $form
+ *   FormAPI form.
+ * @param array $form_state
+ *   FormAPI form state.
  */
 function file_example_check_directory_submit($form, &$form_state) {
   $directory = $form_state['values']['directory_name'];
@@ -460,12 +496,13 @@ function file_example_show_session_contents_submit($form, &$form_state) {
 
 /**
  * Utility function to check for and return a managed file.
+ *
  * In this demonstration code we don't necessarily know if a file is managed
  * or not, so often need to check to do the correct behavior. Normal code
  * would not have to do this, as it would be working with either managed or
  * unmanaged files.
  *
- * @param $uri
+ * @param string $uri
  *   The URI of the file, like public://test.txt.
  */
 function file_example_get_managed_file($uri) {
@@ -479,6 +516,7 @@ function file_example_get_managed_file($uri) {
 
 /**
  * Implements hook_stream_wrappers().
+ *
  * hook_stream_wrappers() is Drupal's way of exposing the class that PHP will
  * use to provide a new stream wrapper class. In this case, we'll expose the
  * 'session' scheme, so a file reference like "session://example/example.txt"
@@ -511,13 +549,14 @@ function file_example_stream_wrappers() {
  *   The elements of the path will come from Menu API as the
  *   function arguments. See explanation above.
  *
- * @return A message containing the contents of the session file.
+ * @return string
+ *   A message containing the contents of the session file.
  *
  * @see file_get_contents()
  */
 function file_example_session_contents() {
   $path_components = func_get_args();
-  $session_path = 'session://' . join('/', $path_components);
+  $session_path = 'session://' . implode('/', $path_components);
   $content = file_get_contents($session_path);
   if ($content !== FALSE) {
     return t('Contents of @path :',

@@ -62,23 +62,26 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
    * simply a reference to the contents of the related part of
    * $_SESSION['file_example'].
    */
-  protected $session_content;
+  protected $sessionContent;
 
   /**
    * Pointer to where we are in a directory read.
    */
-  protected $directory_pointer;
+  protected $directoryPointer;
 
   /**
    * List of keys in a given directory.
    */
-  protected $directory_keys;
+  protected $directoryKeys;
 
   /**
    * The pointer to the next read or write within the session variable.
    */
-  protected $stream_pointer;
+  protected $streamPointer;
 
+  /**
+   * Constructor method.
+   */
   public function __construct() {
     $_SESSION['file_example']['.isadir.txt'] = TRUE;
   }
@@ -86,14 +89,14 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * Implements setUri().
    */
-  function setUri($uri) {
+  public function setUri($uri) {
     $this->uri = $uri;
   }
 
   /**
    * Implements getUri().
    */
-  function getUri() {
+  public function getUri() {
     return $this->uri;
   }
 
@@ -103,7 +106,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
    * The "target" is the portion of the URI to the right of the scheme.
    * So in session://example/test.txt, the target is 'example/test.txt'.
    */
-  function getTarget($uri = NULL) {
+  public function getTarget($uri = NULL) {
     if (!isset($uri)) {
       $uri = $this->uri;
     }
@@ -118,7 +121,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * Implements getMimeType().
    */
-  static function getMimeType($uri, $mapping = NULL) {
+  public static function getMimeType($uri, $mapping = NULL) {
     if (!isset($mapping)) {
       // The default file map, defined in file.mimetypes.inc is quite big.
       // We only load it when necessary.
@@ -134,9 +137,9 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
 
     // Iterate over the file parts, trying to find a match.
     // For my.awesome.image.jpeg, we try:
-    //   - jpeg
-    //   - image.jpeg, and
-    //   - awesome.image.jpeg
+    // - jpeg
+    // - image.jpeg, and
+    // - awesome.image.jpeg
     while ($additional_part = array_pop($file_parts)) {
       $extension = drupal_strtolower($additional_part . ($extension ? '.' . $extension : ''));
       if (isset($mapping['extensions'][$extension])) {
@@ -162,7 +165,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
    * We have set up a helper function and menu entry to provide access to this
    * key via HTTP; normally it would be accessible some other way.
    */
-  function getExternalUrl() {
+  public function getExternalUrl() {
     $path = $this->getLocalPath();
     $url = url('examples/file_example/access_session/' . $path, array('absolute' => TRUE));
     return $url;
@@ -171,19 +174,20 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * We have no concept of chmod, so just return TRUE.
    */
-  function chmod($mode) {
+  public function chmod($mode) {
     return TRUE;
   }
 
   /**
    * Implements realpath().
    */
-  function realpath() {
+  public function realpath() {
     return 'session://' . $this->getLocalPath();
   }
 
   /**
    * Returns the local path.
+   *
    * Here we aren't doing anything but stashing the "file" in a key in the
    * $_SESSION variable, so there's not much to do but to create a "path"
    * which is really just a key in the $_SESSION variable. So something
@@ -191,7 +195,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
    * $_SESSION['file_example']['one']['two']['three.txt'] and the actual path
    * is "one/two/three.txt".
    *
-   * @param $uri
+   * @param string $uri
    *   Optional URI, supplied when doing a move or rename.
    */
   protected function getLocalPath($uri = NULL) {
@@ -205,18 +209,18 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Opens a stream, as for fopen(), file_get_contents(), file_put_contents()
+   * Opens a stream, as for fopen(), file_get_contents(), file_put_contents().
    *
-   * @param $uri
+   * @param string $uri
    *   A string containing the URI to the file to open.
-   * @param $mode
+   * @param string $mode
    *   The file mode ("r", "wb" etc.).
-   * @param $options
+   * @param int $options
    *   A bit mask of STREAM_USE_PATH and STREAM_REPORT_ERRORS.
-   * @param &$opened_path
+   * @param string &$opened_path
    *   A string containing the path actually opened.
    *
-   * @return
+   * @return bool
    *   Returns TRUE if file was opened successfully. (Always returns TRUE).
    *
    * @see http://php.net/manual/en/streamwrapper.stream-open.php
@@ -227,22 +231,22 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
     // $_SESSION variable. So if the local path were
     // /example/test.txt it $session_content would now be a
     // reference to $_SESSION['file_example']['example']['test.txt'].
-    $this->session_content = &$this->uri_to_session_key($uri);
+    $this->sessionContent = &$this->uri_to_session_key($uri);
 
     // Reset the stream pointer since this is an open.
-    $this->stream_pointer = 0;
+    $this->streamPointer = 0;
     return TRUE;
   }
 
   /**
    * Return a reference to the correct $_SESSION key.
    *
-   * @param $uri
+   * @param string $uri
    *   The uri: session://something
-   * @param $create
+   * @param bool $create
    *   If TRUE, create the key
    *
-   * @return
+   * @return array|bool
    *   A reference to the array at the end of the key-path, or
    *   FALSE if the path doesn't map to a key-path (and $create is FALSE).
    */
@@ -278,7 +282,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
    *
    * The $_SESSION variable has no locking capability, so return TRUE.
    *
-   * @param $operation
+   * @param int $operation
    *   One of the following:
    *   - LOCK_SH to acquire a shared lock (reader).
    *   - LOCK_EX to acquire an exclusive lock (writer).
@@ -286,7 +290,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
    *   - LOCK_NB if you don't want flock() to block while locking (not
    *     supported on Windows).
    *
-   * @return
+   * @return bool
    *   Always returns TRUE at the present time. (no support)
    *
    * @see http://php.net/manual/en/streamwrapper.stream-lock.php
@@ -298,21 +302,21 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * Support for fread(), file_get_contents() etc.
    *
-   * @param $count
+   * @param int $count
    *   Maximum number of bytes to be read.
    *
-   * @return
+   * @return string
    *   The string that was read, or FALSE in case of an error.
    *
    * @see http://php.net/manual/en/streamwrapper.stream-read.php
    */
   public function stream_read($count) {
-    if (is_string($this->session_content)) {
-      $remaining_chars = drupal_strlen($this->session_content) - $this->stream_pointer;
+    if (is_string($this->sessionContent)) {
+      $remaining_chars = drupal_strlen($this->sessionContent) - $this->streamPointer;
       $number_to_read = min($count, $remaining_chars);
       if ($remaining_chars > 0) {
-        $buffer = drupal_substr($this->session_content, $this->stream_pointer, $number_to_read);
-        $this->stream_pointer += $number_to_read;
+        $buffer = drupal_substr($this->sessionContent, $this->streamPointer, $number_to_read);
+        $this->streamPointer += $number_to_read;
         return $buffer;
       }
     }
@@ -322,10 +326,10 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * Support for fwrite(), file_put_contents() etc.
    *
-   * @param $data
+   * @param string $data
    *   The string to be written.
    *
-   * @return
+   * @return int
    *   The number of bytes written (integer).
    *
    * @see http://php.net/manual/en/streamwrapper.stream-write.php
@@ -334,15 +338,15 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
     // Sanitize the data in a simple way since we're putting it into the
     // session variable.
     $data = check_plain($data);
-    $this->session_content = substr_replace($this->session_content, $data, $this->stream_pointer);
-    $this->stream_pointer += drupal_strlen($data);
+    $this->sessionContent = substr_replace($this->sessionContent, $data, $this->streamPointer);
+    $this->streamPointer += drupal_strlen($data);
     return drupal_strlen($data);
   }
 
   /**
    * Support for feof().
    *
-   * @return
+   * @return bool
    *   TRUE if end-of-file has been reached.
    *
    * @see http://php.net/manual/en/streamwrapper.stream-eof.php
@@ -354,19 +358,19 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * Support for fseek().
    *
-   * @param $offset
+   * @param int $offset
    *   The byte offset to got to.
-   * @param $whence
+   * @param int $whence
    *   SEEK_SET, SEEK_CUR, or SEEK_END.
    *
-   * @return
+   * @return bool
    *   TRUE on success.
    *
    * @see http://php.net/manual/en/streamwrapper.stream-seek.php
    */
   public function stream_seek($offset, $whence) {
-    if (drupal_strlen($this->session_content) >= $offset) {
-      $this->stream_pointer = $offset;
+    if (drupal_strlen($this->sessionContent) >= $offset) {
+      $this->streamPointer = $offset;
       return TRUE;
     }
     return FALSE;
@@ -375,7 +379,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * Support for fflush().
    *
-   * @return
+   * @return bool
    *   TRUE if data was successfully stored (or there was no data to store).
    *   This always returns TRUE, as this example provides and needs no
    *   flush support.
@@ -389,19 +393,19 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * Support for ftell().
    *
-   * @return
+   * @return int
    *   The current offset in bytes from the beginning of file.
    *
    * @see http://php.net/manual/en/streamwrapper.stream-tell.php
    */
   public function stream_tell() {
-    return $this->stream_pointer;
+    return $this->streamPointer;
   }
 
   /**
    * Support for fstat().
    *
-   * @return
+   * @return array
    *   An array with file status, or FALSE in case of an error - see fstat()
    *   for a description of this array.
    *
@@ -409,31 +413,32 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
    */
   public function stream_stat() {
     return array(
-      'size' => drupal_strlen($this->session_content),
+      'size' => drupal_strlen($this->sessionContent),
     );
   }
 
   /**
    * Support for fclose().
    *
-   * @return
+   * @return bool
    *   TRUE if stream was successfully closed.
    *
    * @see http://php.net/manual/en/streamwrapper.stream-close.php
    */
   public function stream_close() {
-    $this->stream_pointer = 0;
-    unset($this->session_content); // Unassign the reference.
+    $this->streamPointer = 0;
+    // Unassign the reference.
+    unset($this->sessionContent);
     return TRUE;
   }
 
   /**
    * Support for unlink().
    *
-   * @param $uri
+   * @param string $uri
    *   A string containing the uri to the resource to delete.
    *
-   * @return
+   * @return bool
    *   TRUE if resource was successfully deleted.
    *
    * @see http://php.net/manual/en/streamwrapper.unlink.php
@@ -456,12 +461,12 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * Support for rename().
    *
-   * @param $from_uri,
+   * @param string $from_uri
    *   The uri to the file to rename.
-   * @param $to_uri
+   * @param string $to_uri
    *   The new uri for file.
    *
-   * @return
+   * @return bool
    *   TRUE if file was successfully renamed.
    *
    * @see http://php.net/manual/en/streamwrapper.rename.php
@@ -480,10 +485,10 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * Gets the name of the directory from a given path.
    *
-   * @param $uri
+   * @param string $uri
    *   A URI.
    *
-   * @return
+   * @return string
    *   A string containing the directory name.
    *
    * @see drupal_dirname()
@@ -503,14 +508,14 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * Support for mkdir().
    *
-   * @param $uri
+   * @param string $uri
    *   A string containing the URI to the directory to create.
-   * @param $mode
+   * @param int $mode
    *   Permission flags - see mkdir().
-   * @param $options
+   * @param int $options
    *   A bit mask of STREAM_REPORT_ERRORS and STREAM_MKDIR_RECURSIVE.
    *
-   * @return
+   * @return bool
    *   TRUE if directory was successfully created.
    *
    * @see http://php.net/manual/en/streamwrapper.mkdir.php
@@ -533,12 +538,12 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * Support for rmdir().
    *
-   * @param $uri
+   * @param string $uri
    *   A string containing the URI to the directory to delete.
-   * @param $options
+   * @param int $options
    *   A bit mask of STREAM_REPORT_ERRORS.
    *
-   * @return
+   * @return bool
    *   TRUE if directory was successfully removed.
    *
    * @see http://php.net/manual/en/streamwrapper.rmdir.php
@@ -567,12 +572,12 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
    * directory and what the permissions are. All that is packed up in a
    * bitmask. This is not normal PHP fodder.
    *
-   * @param $uri
+   * @param string $uri
    *   A string containing the URI to get information about.
-   * @param $flags
+   * @param int $flags
    *   A bit mask of STREAM_URL_STAT_LINK and STREAM_URL_STAT_QUIET.
    *
-   * @return
+   * @return array|bool
    *   An array with file status, or FALSE in case of an error - see fstat()
    *   for a description of this array.
    *
@@ -581,15 +586,18 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   public function url_stat($uri, $flags) {
     // Get a reference to the $_SESSION key for this URI.
     $key = $this->uri_to_session_key($uri, FALSE);
-    $return = FALSE; // Default to fail.
+    // Default to fail.
+    $return = FALSE;
     $mode = 0;
 
     // We will call an array a directory and the root is always an array.
     if (is_array($key) && array_key_exists('.isadir.txt', $key)) {
-      $mode = 0040000; // S_IFDIR means it's a directory.
+      // S_IFDIR means it's a directory.
+      $mode = 0040000;
     }
     elseif ($key !== FALSE) {
-      $mode = 0100000; // S_IFREG, means it's a file.
+      // S_IFREG, means it's a file.
+      $mode = 0100000;
     }
 
     if ($mode) {
@@ -598,7 +606,8 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
         $size = drupal_strlen($key);
       }
 
-      $mode |= 0777;  // There are no protections on this, so all writable.
+      // There are no protections on this, so all writable.
+      $mode |= 0777;
       $return = array(
         'dev' => 0,
         'ino' => 0,
@@ -621,12 +630,12 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * Support for opendir().
    *
-   * @param $uri
+   * @param string $uri
    *   A string containing the URI to the directory to open.
-   * @param $options
-   *   Unknown (parameter is not documented in PHP Manual).
+   * @param int $options
+   *   Whether or not to enforce safe_mode (0x04).
    *
-   * @return
+   * @return bool
    *   TRUE on success.
    *
    * @see http://php.net/manual/en/streamwrapper.dir-opendir.php
@@ -639,25 +648,25 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
 
     // We grab the list of key names, flip it so that .isadir.txt can easily
     // be removed, then flip it back so we can easily walk it as a list.
-    $this->directory_keys = array_flip(array_keys($var));
-    unset($this->directory_keys['.isadir.txt']);
-    $this->directory_keys = array_keys($this->directory_keys);
-    $this->directory_pointer = 0;
+    $this->directoryKeys = array_flip(array_keys($var));
+    unset($this->directoryKeys['.isadir.txt']);
+    $this->directoryKeys = array_keys($this->directoryKeys);
+    $this->directoryPointer = 0;
     return TRUE;
   }
 
   /**
    * Support for readdir().
    *
-   * @return
+   * @return string|bool
    *   The next filename, or FALSE if there are no more files in the directory.
    *
    * @see http://php.net/manual/en/streamwrapper.dir-readdir.php
    */
   public function dir_readdir() {
-    if ($this->directory_pointer < count($this->directory_keys)) {
-      $next = $this->directory_keys[$this->directory_pointer];
-      $this->directory_pointer++;
+    if ($this->directoryPointer < count($this->directoryKeys)) {
+      $next = $this->directoryKeys[$this->directoryPointer];
+      $this->directoryPointer++;
       return $next;
     }
     return FALSE;
@@ -666,26 +675,26 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * Support for rewinddir().
    *
-   * @return
+   * @return bool
    *   TRUE on success.
    *
    * @see http://php.net/manual/en/streamwrapper.dir-rewinddir.php
    */
   public function dir_rewinddir() {
-    $this->directory_pointer = 0;
+    $this->directoryPointer = 0;
   }
 
   /**
    * Support for closedir().
    *
-   * @return
+   * @return bool
    *   TRUE on success.
    *
    * @see http://php.net/manual/en/streamwrapper.dir-closedir.php
    */
   public function dir_closedir() {
-    $this->directory_pointer = 0;
-    unset($this->directory_keys);
+    $this->directoryPointer = 0;
+    unset($this->directoryKeys);
     return TRUE;
   }
 }

@@ -146,7 +146,9 @@ function field_permission_example_field_access($op, $field, $entity_type, $entit
         // While administering the field itself, $entity will be
         // NULL, so we have to check it.
         if ($entity) {
-          if ($entity->uid == $account->uid) $context = 'own';
+          if ($entity->uid == $account->uid) {
+            $context = 'own';
+          }
         }
     }
     // Assemble a permission string, such as
@@ -155,7 +157,9 @@ function field_permission_example_field_access($op, $field, $entity_type, $entit
     // Finally, ask Drupal if this account has that permission.
     $access = user_access($permission, $account);
     $status = 'FALSE';
-    if ($access) $status = 'TRUE';
+    if ($access) {
+      $status = 'TRUE';
+    }
     drupal_set_message($permission . ': ' . $status);
     return $access;
   }
@@ -235,12 +239,12 @@ function field_permission_example_field_formatter_view($entity_type, $entity, $f
           // Let's give the note a nice sticky-note CSS appearance.
           '#attributes' => array(
             'class' => 'stickynote',
-            ),
+          ),
           // ..And this is the CSS for the stickynote.
           '#attached' => array(
             'css' => array(drupal_get_path('module', 'field_permission_example') .
               '/field_permission_example.css'),
-            ),
+          ),
         );
       }
       break;
@@ -316,7 +320,7 @@ function field_permission_example_menu() {
  */
 function _field_permission_example_page() {
   $page = t("<p>The Field Permission Example module shows how you can restrict view and edit permissions within your field implementation. It adds a new field type called Fieldnote. Fieldnotes appear as simple text boxes on the create/edit form, and as sticky notes when viewed. By 'sticky note' we mean 'Post-It Note' but that's a trademarked term.</p><p>To see this field in action, add it to a content type or user profile. Go to the permissions page (");
-  $page .= l('admin/people/permissions', 'admin/people/permissions');
+  $page .= l(t('admin/people/permissions'), 'admin/people/permissions');
   $page .= t(") and look at the 'Field Permission Example' section. This allows you to change which roles can see and edit Fieldnote fields.</p><p>Creating different users with different capabilities will let you see these behaviors in action. Fieldnote helpfully displays a message telling you which permissions it is trying to resolve for the current field/user combination.</p><p>Definitely look through the code to see various implementation details.</p>");
   return $page;
 }
