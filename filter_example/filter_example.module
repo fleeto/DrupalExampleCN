@@ -9,7 +9,7 @@
  * @ingroup examples
  * @{
  * Demonstrates the creation of filters.
-
+ *
  * This is an example outlining how a module can be used to define a filter
  * to be run on user-submitted content before it is output to the browser.
  *
@@ -67,16 +67,16 @@ function _filter_example_information() {
     'foo' with a configurable replacement.</p><p>Time Tag replaces the string
     '&lt;time /&gt;' with the current time.</p><p>To use these filters, go to !link and
     configure an input format, or create a new one.</p>",
-    array('!link' => l("admin/config/content/formats", "admin/config/content/formats"))
+    array('!link' => l(t('admin/config/content/formats'), 'admin/config/content/formats'))
   );
 }
 
 /**
  * Implements hook_filter_info().
  *
- * Here we define the different filters provided by the module. For this example,
- * time_filter is a very static and simple replacement, but it requires some
- * preparation of the string because of the special html tags < and >. The
+ * Here we define the different filters provided by the module. For this
+ * example, time_filter is a very static and simple replacement, but it requires
+ * some preparation of the string because of the special html tags < and >. The
  * foo_filter is more complex, including its own settings and inline tips.
  */
 function filter_example_filter_info() {
@@ -111,7 +111,7 @@ function filter_example_filter_info() {
  */
 
 /**
- * Settings callback for foo filter
+ * Settings callback for foo filter.
  *
  * Make use of $format to have different replacements for every input format.
  * Since we allow the administrator to define the string that gets substituted
@@ -126,7 +126,7 @@ function _filter_example_filter_foo_settings($form, $form_state, $filter, $forma
     '#type' => 'textfield',
     '#title' => t('Substitution string'),
     '#default_value' => isset($filter->settings['filter_example_foo']) ? $filter->settings['filter_example_foo'] : $defaults['filter_example_foo'],
-    '#description' => t('The string to substitute for "foo" everywhere in the text.')
+    '#description' => t('The string to substitute for "foo" everywhere in the text.'),
   );
   return $settings;
 }
@@ -155,7 +155,7 @@ function _filter_example_filter_foo_process($text, $filter, $format) {
 function _filter_example_filter_foo_tips($filter, $format, $long = FALSE) {
   $replacement = isset($filter->settings['filter_example_foo']) ? $filter->settings['filter_example_foo'] : 'bar';
   if (!$long) {
-    // This string will be shown in the content add/edit form
+    // This string will be shown in the content add/edit form.
     return t('<em>foo</em> replaced with %replacement.', array('%replacement' => $replacement));
   }
   else {

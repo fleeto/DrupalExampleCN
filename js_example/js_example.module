@@ -43,19 +43,18 @@ function js_example_menu() {
 }
 
 /**
- * js_example_weights implementation.
+ * Demonstrate example weights.
  */
 function js_example_js_weights() {
-  // Add some css to show which line is output by which script
+  // Add some css to show which line is output by which script.
   drupal_add_css(drupal_get_path('module', 'js_example') . '/css/jsweights.css');
-  //
   $weights = array(
     'red' => 100,
     'blue' => 23,
     'green' => 3,
     'brown' => 45,
     'black' => 5,
-    'purple' => 60
+    'purple' => 60,
   );
   drupal_add_js(array('js_weights' => $weights), array('type' => 'setting'));
   drupal_add_js(drupal_get_path('module', 'js_example') . '/js/red.js', array('weight' => $weights['red']));
@@ -69,7 +68,7 @@ function js_example_js_weights() {
 }
 
 /**
- * js_example_accordion implementation.
+ * Demonstrate accordion effect.
  */
 function js_example_accordion() {
   $title = t('Click sections to expand or collapse:');

@@ -14,8 +14,11 @@
  * @ingroup image_example
  */
 class ImageExampleTestCase extends DrupalWebTestCase {
-  protected $web_user;
+  protected $webUser;
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'Image example functionality',
@@ -27,18 +30,18 @@ class ImageExampleTestCase extends DrupalWebTestCase {
   /**
    * Enable modules and create user with specific permissions.
    */
-  function setUp() {
+  public function setUp() {
     parent::setUp('image_example');
     // Create user with permission to administer image styles.
-    $this->web_user = $this->drupalCreateUser(array('administer image styles', 'administer blocks'));
+    $this->webUser = $this->drupalCreateUser(array('administer image styles', 'administer blocks'));
   }
 
   /**
    * Test implementations of image API hooks.
    */
-  function testImageExample() {
+  public function testImageExample() {
     // Login the admin user.
-    $this->drupalLogin($this->web_user);
+    $this->drupalLogin($this->webUser);
 
     // Verify that the default style added by
     // image_example_image_default_styles() is in the list of image styles.
@@ -71,7 +74,6 @@ class ImageExampleTestCase extends DrupalWebTestCase {
 
     // Set the variable 'image_example_style_name' to the name of our new style
     // then rename the style and ensure the variable name is changed.
-
     // @todo Enable this block once http://drupal.org/node/713872 is fixed.
     if (defined('bug_713872_fixed')) {
       $style = image_style_load($new_style['name']);
@@ -86,9 +88,9 @@ class ImageExampleTestCase extends DrupalWebTestCase {
   /**
    * Tests for image block provided by module.
    */
-  function testImageExamplePage() {
+  public function testImageExamplePage() {
     // Login the admin user.
-    $this->drupalLogin($this->web_user);
+    $this->drupalLogin($this->webUser);
     $this->drupalCreateNode(array('promote' => 1));
 
     // Upload an image to the image page.

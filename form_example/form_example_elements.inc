@@ -102,7 +102,8 @@ function _form_example_element_info() {
   // form_example_checkbox is mostly a copy of the system-defined checkbox
   // element.
   $types['form_example_checkbox'] = array(
-    '#input' => TRUE,  // This is an HTML <input>.
+    // This is an HTML <input>.
+    '#input' => TRUE,
 
     // @todo: Explain #return_value.
     '#return_value' => TRUE,
@@ -139,8 +140,8 @@ function _form_example_element_info() {
     // areacode, prefix, and extension.
     '#process' => array('form_example_phonenumber_discrete_process'),
 
-    // validation handlers for this element. These are in addition to any
-    // validation handlers that might
+    // Validation handlers for this element. These are in addition to any
+    // validation handlers that might.
     '#element_validate' => array('form_example_phonenumber_discrete_validate'),
     '#autocomplete_path' => FALSE,
     '#theme_wrappers' => array('form_example_inline_form_element'),
@@ -166,21 +167,24 @@ function _form_example_element_info() {
 
 
 /**
+ * Value callback for form_example_phonenumber_combined.
+ *
  * Builds the current combined value of the phone number only when the form
  * builder is not processing the input.
  *
- * @param $element
- * @param $input
+ * @param array $element
+ * @param array $input
  * @param $form_state
  *
  * @return array
  */
-function  form_example_phonenumber_combined_value(&$element, $input = FALSE, $form_state = NULL) {
+function form_example_phonenumber_combined_value(&$element, $input = FALSE, $form_state = NULL) {
   if (!$form_state['process_input']) {
     $matches = array();
     $match = preg_match('/^(\d{3})(\d{3})(\d{4})$/', $element['#default_value'], $matches);
     if ($match) {
-      array_shift($matches); // get rid of the "all match" element
+      // Get rid of the "all match" element.
+      array_shift($matches);
       list($element['areacode'], $element['prefix'], $element['extension']) = $matches;
     }
   }
@@ -189,13 +193,17 @@ function  form_example_phonenumber_combined_value(&$element, $input = FALSE, $fo
 
 /**
  * Value callback for form_example_checkbox element type.
+ *
  * Copied from form_type_checkbox_value().
  *
- * @param $element
+ * @param array $element
  *   The form element whose value is being populated.
- * @param $input
+ * @param mixed $input
  *   The incoming input to populate the form element. If this is FALSE, meaning
  *   there is no input, the element's default value should be returned.
+ *
+ * @return int
+ *   The value represented by the form element.
  */
 function form_type_form_example_checkbox_value($element, $input = FALSE) {
   if ($input === FALSE) {
@@ -229,14 +237,14 @@ function form_example_phonenumber_discrete_process($element, &$form_state, $comp
     '#prefix' => '(',
     '#suffix' => ')',
   );
-  $element['prefix'] =  array(
+  $element['prefix'] = array(
     '#type' => 'textfield',
     '#size' => 3,
     '#maxlength' => 3,
     '#required' => TRUE,
     '#value' => $element['#value']['prefix'],
   );
-  $element['extension'] =  array(
+  $element['extension'] = array(
     '#type' => 'textfield',
     '#size' => 4,
     '#maxlength' => 4,
@@ -286,7 +294,6 @@ function form_example_phonenumber_combined_process($element, &$form_state, $comp
   // $form_state['values']['<element_name>']['prefix'],
   // etc. This technique is preferred when an element has member form
   // elements.
-
   $element['#tree'] = TRUE;
 
   // Normal FAPI field definitions, except that #value is defined.
@@ -298,13 +305,13 @@ function form_example_phonenumber_combined_process($element, &$form_state, $comp
     '#prefix' => '(',
     '#suffix' => ')',
   );
-  $element['prefix'] =  array(
+  $element['prefix'] = array(
     '#type' => 'textfield',
     '#size' => 3,
     '#maxlength' => 3,
     '#required' => TRUE,
   );
-  $element['extension'] =  array(
+  $element['extension'] = array(
     '#type' => 'textfield',
     '#size' => 4,
     '#maxlength' => 4,
@@ -314,7 +321,8 @@ function form_example_phonenumber_combined_process($element, &$form_state, $comp
   $matches = array();
   $match = preg_match('/^(\d{3})(\d{3})(\d{4})$/', $element['#default_value'], $matches);
   if ($match) {
-    array_shift($matches); // get rid of the "all match" element
+    // Get rid of the "all match" element.
+    array_shift($matches);
     list($element['areacode']['#default_value'], $element['prefix']['#default_value'], $element['extension']['#default_value']) = $matches;
   }
 
@@ -398,7 +406,14 @@ function theme_form_example_inline_form_element($variables) {
     $attributes['class'][] = 'form-type-' . strtr($element['#type'], '_', '-');
   }
   if (!empty($element['#name'])) {
-    $attributes['class'][] = 'form-item-' . strtr($element['#name'], array(' ' => '-', '_' => '-', '[' => '-', ']' => ''));
+    $attributes['class'][] = 'form-item-' . strtr($element['#name'],
+      array(
+        ' ' => '-',
+        '_' => '-',
+        '[' => '-',
+        ']' => '',
+      )
+    );
   }
   // Add a class for disabled elements to facilitate cross-browser styling.
   if (!empty($element['#attributes']['disabled'])) {
@@ -442,6 +457,8 @@ function theme_form_example_inline_form_element($variables) {
 }
 
 /**
+ * Form content for examples/form_example/element_example.
+ *
  * Simple form to demonstrate how to use the various new FAPI elements
  * we've defined.
  */
@@ -463,7 +480,14 @@ function form_example_element_demo_form($form, &$form_state) {
   $form['a_form_example_element_discrete'] = array(
     '#type' => 'form_example_phonenumber_discrete',
     '#title' => t('Discrete phone number'),
-    '#default_value' => variable_get('form_example_element_discrete', array('areacode' => '999', 'prefix' => '999', 'extension' => '9999')),
+    '#default_value' => variable_get(
+      'form_example_element_discrete',
+      array(
+        'areacode' => '999',
+        'prefix' => '999',
+        'extension' => '9999',
+      )
+    ),
     '#description' => t('A phone number : areacode (XXX), prefix (XXX) and extension (XXXX). This one uses a "discrete" element type, one which stores the three parts of the telephone number separately.'),
   );
 
@@ -491,6 +515,13 @@ function form_example_element_demo_form_submit($form, &$form_state) {
 
   foreach ($form_state['values'] as $key => $value) {
     variable_set($key, $value);
-    drupal_set_message(t('%name has value %value', array('%name' => $key, '%value' => print_r($value, TRUE))));
+    drupal_set_message(
+      t('%name has value %value',
+        array(
+          '%name' => $key,
+          '%value' => print_r($value, TRUE),
+        )
+      )
+    );
   }
 }

@@ -33,33 +33,37 @@
  */
 
 /**
- * Returns the list of steps and their associated forms. This has been separated
- * to clarify and easy the understanding of this example. You should edit this
- * function to include the steps your wizard/multistep form requires.
+ * Returns the list of steps and their associated forms.
  *
- * @return $array
+ * This has been separated to clarify and easy the understanding of this
+ * example. You should edit this function to include the steps your
+ * wizard/multistep form requires.
+ *
+ * @return array
+ *   List of steps and their forms.
  *
  * @ingroup form_example
  */
 function _form_example_steps() {
   return array(
-      1 => array(
-        'form' => 'form_example_wizard_personal_info',
-      ),
-      2 => array(
-        'form' => 'form_example_wizard_location_info',
-      ),
-      3 => array(
-        'form' => 'form_example_wizard_other_info',
-      ),
-    );
+    1 => array(
+      'form' => 'form_example_wizard_personal_info',
+    ),
+    2 => array(
+      'form' => 'form_example_wizard_location_info',
+    ),
+    3 => array(
+      'form' => 'form_example_wizard_other_info',
+    ),
+  );
 }
 
 /**
- * The primary formbuilder function for the wizard form. This is the form that
- * you should call with drupal_get_form() from your code, and it will include
- * the rest of the step forms defined. You are not required to change this
- * function, as this will handle all the step actions for you.
+ * The primary formbuilder function for the wizard form.
+ *
+ * This is the form that you should call with drupal_get_form() from your code,
+ * and it will include the rest of the step forms defined. You are not required
+ * to change this function, as this will handle all the step actions for you.
  *
  * This form has two defined submit handlers to process the different steps:
  *  - Previous: handles the way to get back one step in the wizard.
@@ -109,7 +113,7 @@ function form_example_wizard($form, &$form_state) {
 
   // Show the Next button only if there are more steps defined.
   if ($step < count($form_state['step_information'])) {
-    // The Next button should be included on every step
+    // The Next button should be included on every step.
     $form['next'] = array(
       '#type' => 'submit',
       '#value' => t('Next'),
@@ -138,6 +142,8 @@ function form_example_wizard($form, &$form_state) {
 
 /**
  * Submit handler for the "previous" button.
+ *
+ * This function:
  * - Stores away $form_state['values']
  * - Decrements the step counter
  * - Replaces $form_state['values'] with the values from the previous state.
@@ -159,6 +165,8 @@ function form_example_wizard_previous_submit($form, &$form_state) {
 
 /**
  * Submit handler for the 'next' button.
+ *
+ * This function:
  * - Saves away $form_state['values']
  * - Increments the step count.
  * - Replace $form_state['values'] from the last time we were at this page
@@ -166,9 +174,6 @@ function form_example_wizard_previous_submit($form, &$form_state) {
  * - Force form rebuild.
  *
  * You are not required to change this function.
- *
- * @param $form
- * @param $form_state
  *
  * @ingroup form_example
  */
@@ -184,7 +189,8 @@ function form_example_wizard_next_submit($form, &$form_state) {
     else {
       $form_state['values'] = array();
     }
-    $form_state['rebuild'] = TRUE;  // Force rebuild with next step.
+    // Force rebuild with next step.
+    $form_state['rebuild'] = TRUE;
     return;
   }
 }
@@ -202,9 +208,10 @@ function form_example_wizard_next_submit($form, &$form_state) {
  */
 
 /**
- * Returns form elements for the 'personal info' page of the wizard. This is the
- * first step of the wizard, asking for two textfields: first name and last
- * name.
+ * Returns form elements for the 'personal info' page of the wizard.
+ *
+ * This is the first step of the wizard, asking for two textfields: first name
+ * and last name.
  *
  * @ingroup form_example
  */
@@ -224,9 +231,10 @@ function form_example_wizard_personal_info($form, &$form_state) {
 }
 
 /**
- * Returns form elements for the 'location info' page of the wizard. This is the
- * second step of the wizard. This step asks for a textfield value: a City. This
- * step also includes a validation declared later.
+ * Returns form elements for the 'location info' page of the wizard.
+ *
+ * This is the second step of the wizard. This step asks for a textfield value:
+ * a City. This step also includes a validation declared later.
  *
  * @ingroup form_example
  */
@@ -258,8 +266,9 @@ function form_example_wizard_location_info_validate($form, &$form_state) {
 }
 
 /**
- * Returns form elements for the 'other info' page of the wizard. This is the
- * thid and last step of the example wizard.
+ * Returns form elements for the 'other info' page of the wizard.
+ *
+ * This is the thid and last step of the example wizard.
  *
  * @ingroup form_example
  */
@@ -273,18 +282,18 @@ function form_example_wizard_other_info($form, &$form_state) {
   return $form;
 }
 
-// And now comes the magic of the wizard, the function that should handle all the
-// inputs from the user on each different step.
 /**
  * Wizard form submit handler.
+ *
+ * This function:
  * - Saves away $form_state['values']
  * - Process all the form values.
  *
- * This demonstration handler just do a drupal_set_message() with the information
- * collected on each different step of the wizard.
+ * And now comes the magic of the wizard, the function that should handle all
+ * the inputs from the user on each different step.
  *
- * @param $form
- * @param $form_state
+ * This demonstration handler just do a drupal_set_message() with the
+ * information collected on each different step of the wizard.
  *
  * @ingroup form_example
  */
@@ -296,15 +305,21 @@ function form_example_wizard_submit($form, &$form_state) {
   // submitted information.
   drupal_set_message(t('This information was collected by this wizard:'));
   foreach ($form_state['step_information'] as $index => $value) {
-    // Remove FAPI fields included in the values (form_token, form_id and form_build_id
-    // This is not required, you may access the values using $value['stored_values']
-    // but I'm removing them to make a more clear representation of the collected
-    // information as the complete array will be passed through drupal_set_message().
+    // Remove FAPI fields included in the values (form_token, form_id and
+    // form_build_id. This is not required, you may access the values using
+    // $value['stored_values'] but I'm removing them to make a more clear
+    // representation of the collected information as the complete array will
+    // be passed through drupal_set_message().
     unset($value['stored_values']['form_id']);
     unset($value['stored_values']['form_build_id']);
     unset($value['stored_values']['form_token']);
 
     // Now show all the values.
-    drupal_set_message(t('Step @num collected the following values: <pre>@result</pre>', array('@num' => $index, '@result' => print_r($value['stored_values'], TRUE))));
+    drupal_set_message(t('Step @num collected the following values: <pre>@result</pre>',
+      array(
+        '@num' => $index,
+        '@result' => print_r($value['stored_values'], TRUE),
+      )
+    ));
   }
 }

@@ -32,10 +32,11 @@ function form_example_tutorial() {
   return t('This is a set of 10 form tutorials tied to the <a href="http://drupal.org/node/262422">Drupal handbook</a>.');
 }
 
-//////////////// Tutorial Example 1 //////////////////////
-
 /**
- * This first form function is from the @link http://drupal.org/node/717722 Form Tutorial handbook page @endlink
+ * Tutorial Example 1.
+ *
+ * This first form function is from the
+ * @link http://drupal.org/node/717722 Form Tutorial handbook page @endlink
  *
  * It just creates a very basic form with a textfield.
  *
@@ -58,9 +59,6 @@ function form_example_tutorial_1($form, &$form_state) {
   );
   return $form;
 }
-
-
-//////////////// Tutorial Example 2 //////////////////////
 
 /**
  * This is Example 2, a basic form with a submit button.
@@ -87,8 +85,6 @@ function form_example_tutorial_2($form, &$form_state) {
   );
   return $form;
 }
-
-//////////////// Tutorial Example 3 //////////////////////
 
 /**
  * Example 3: A basic form with fieldsets.
@@ -122,16 +118,12 @@ function form_example_tutorial_3($form, &$form_state) {
     '#title' => t('Last name'),
   );
 
-
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => 'Submit',
   );
   return $form;
 }
-
-
-//////////////// Tutorial Example 4 //////////////////////
 
 /**
  * Example 4: Basic form with required fields.
@@ -148,20 +140,20 @@ function form_example_tutorial_4($form, &$form_state) {
     '#type' => 'fieldset',
     '#title' => t('Name'),
     // Make the fieldset collapsible.
-    '#collapsible' => TRUE, // Added
-    '#collapsed' => FALSE,  // Added
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
   );
 
   // Make these fields required.
   $form['name']['first'] = array(
     '#type' => 'textfield',
     '#title' => t('First name'),
-    '#required' => TRUE, // Added
+    '#required' => TRUE,
   );
   $form['name']['last'] = array(
     '#type' => 'textfield',
     '#title' => t('Last name'),
-    '#required' => TRUE, // Added
+    '#required' => TRUE,
   );
 
   $form['submit'] = array(
@@ -171,18 +163,13 @@ function form_example_tutorial_4($form, &$form_state) {
   return $form;
 }
 
-
-//////////////// Tutorial Example 5 //////////////////////
-
 /**
  * Example 5: Basic form with additional element attributes.
  *
  * This demonstrates additional attributes of text form fields.
  *
- * For a more extensive example on element types
- * @see http://drupal.org/node/751826
- *
- * See the @link http://api.drupal.org/api/file/developer/topics/forms_api.html complete form reference @endlink
+ * See the
+ * @link http://api.drupal.org/api/file/developer/topics/forms_api.html complete form reference @endlink
  *
  * @ingroup form_example
  */
@@ -203,10 +190,10 @@ function form_example_tutorial_5($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('First name'),
     '#required' => TRUE,
-    '#default_value' => "First name", // added default value.
-    '#description' => "Please enter your first name.", // added description
-    '#size' => 20, // added
-    '#maxlength' => 20, // added
+    '#default_value' => "First name",
+    '#description' => "Please enter your first name.",
+    '#size' => 20,
+    '#maxlength' => 20,
   );
   $form['name']['last'] = array(
     '#type' => 'textfield',
@@ -219,9 +206,6 @@ function form_example_tutorial_5($form, &$form_state) {
   );
   return $form;
 }
-
-
-//////////////// Tutorial Example 6 //////////////////////
 
 /**
  * Example 6: A basic form with a validate handler.
@@ -272,9 +256,9 @@ function form_example_tutorial_6($form, &$form_state) {
   return $form;
 }
 
-
-
 /**
+ * Validation handler for Tutorial 6.
+ *
  * Now we add a handler/function to validate the data entered into the
  * "year of birth" field to make sure it's between the values of 1900
  * and 2000. If not, it displays an error. The value report is
@@ -293,9 +277,6 @@ function form_example_tutorial_6_validate($form, &$form_state) {
     form_set_error('year_of_birth', t('Enter a year between 1900 and 2000.'));
   }
 }
-
-
-//////////////// Tutorial Example 7 //////////////////////
 
 /**
  * Example 7: With a submit handler.
@@ -363,11 +344,13 @@ function form_example_tutorial_7_validate($form, &$form_state) {
  */
 function form_example_tutorial_7_submit($form, &$form_state) {
   drupal_set_message(t('The form has been submitted. name="@first @last", year of birth=@year_of_birth',
-    array('@first' => $form_state['values']['first'], '@last' => $form_state['values']['last'], '@year_of_birth' => $form_state['values']['year_of_birth'])));
+    array(
+      '@first' => $form_state['values']['first'],
+      '@last' => $form_state['values']['last'],
+      '@year_of_birth' => $form_state['values']['year_of_birth'],
+    )
+  ));
 }
-
-
-//////////////// Tutorial Example 8 //////////////////////
 
 /**
  * Example 8: A simple multistep form with a Next and a Back button.
@@ -521,11 +504,21 @@ function form_example_tutorial_8_page_two_submit($form, &$form_state) {
   // to validate that the code worked.
   $page_one_values = $form_state['page_values'][1];
   drupal_set_message(t('The form has been submitted. name="@first @last", year of birth=@year_of_birth',
-  array('@first' => $page_one_values['first'], '@last' => $page_one_values['last'], '@year_of_birth' => $page_one_values['year_of_birth'])));
+    array(
+      '@first' => $page_one_values['first'],
+      '@last' => $page_one_values['last'],
+      '@year_of_birth' => $page_one_values['year_of_birth'],
+    )
+  ));
 
   if (!empty($page_one_values['first2'])) {
     drupal_set_message(t('Second name: name="@first @last", year of birth=@year_of_birth',
-    array('@first' => $page_one_values['first2'], '@last' => $page_one_values['last2'], '@year_of_birth' => $page_one_values['year_of_birth2'])));
+      array(
+        '@first' => $page_one_values['first2'],
+        '@last' => $page_one_values['last2'],
+        '@year_of_birth' => $page_one_values['year_of_birth2'],
+      )
+    ));
   }
   drupal_set_message(t('And the favorite color is @color', array('@color' => $form_state['values']['color'])));
 
@@ -539,6 +532,7 @@ function form_example_tutorial_8_page_two_submit($form, &$form_state) {
   // pass to drupal_goto(). For example, to redirect to /foo?bar=1#baz, one
   // would specify the following:
   //
+  // @code
   // $form_state['redirect'] = array(
   //   'foo',
   //   array(
@@ -546,13 +540,12 @@ function form_example_tutorial_8_page_two_submit($form, &$form_state) {
   //     'fragment' => 'baz',
   //   ),
   // );
+  // @endcode
   //
   // The first element in the array is the path to redirect to, and the second
   // element in the array is the array of options. For more information on the
   // available options, see http://api.drupal.org/url.
 }
-
-//////////////// Tutorial Example 9 //////////////////////
 
 /**
  * Example 9: A form with a dynamically added new fields.
@@ -616,7 +609,7 @@ function form_example_tutorial_9($form, &$form_state) {
     '#value' => 'Submit',
   );
 
-  // Adds "Add another name" button
+  // Adds "Add another name" button.
   $form['add_name'] = array(
     '#type' => 'submit',
     '#value' => t('Add another name'),
@@ -657,7 +650,9 @@ function form_example_tutorial_9_add_name($form, &$form_state) {
   $form_state['rebuild'] = TRUE;
 }
 
-
+/**
+ * Submit handler for "Remove name" button on form_example_tutorial_9().
+ */
 function form_example_tutorial_9_remove_name($form, &$form_state) {
   if ($form_state['num_names'] > 1) {
     $form_state['num_names']--;
@@ -690,13 +685,17 @@ function form_example_tutorial_9_validate($form, &$form_state) {
 function form_example_tutorial_9_submit($form, &$form_state) {
   $output = t("Form 9 has been submitted.");
   for ($i = 1; $i <= $form_state['num_names']; $i++) {
-    $output .= t("@num: @first @last (@date)... ", array('@num' => $i, '@first' => $form_state['values']['name'][$i]['first'],
-      '@last' =>  $form_state['values']['name'][$i]['last'], '@date' =>  $form_state['values']['name'][$i]['year_of_birth']));
+    $output .= t("@num: @first @last (@date)...",
+      array(
+        '@num' => $i,
+        '@first' => $form_state['values']['name'][$i]['first'],
+        '@last' => $form_state['values']['name'][$i]['last'],
+        '@date' => $form_state['values']['name'][$i]['year_of_birth'],
+      )
+    ) . ' ';
   }
   drupal_set_message($output);
 }
-
-//////////////// Tutorial Example 10 //////////////////////
 
 /**
  * Example 10: A form with a file upload field.
@@ -712,7 +711,6 @@ function form_example_tutorial_10($form_state) {
   // If you are familiar with how browsers handle files, you know that
   // enctype="multipart/form-data" is required. Drupal takes care of that, so
   // you don't need to include it yourself.
-
   $form['file'] = array(
     '#type' => 'file',
     '#title' => t('Image'),
@@ -732,18 +730,20 @@ function form_example_tutorial_10($form_state) {
  */
 function form_example_tutorial_10_validate($form, &$form_state) {
   $file = file_save_upload('file', array(
-    'file_validate_is_image' => array(), // Validates file is really an image.
-    'file_validate_extensions' => array('png gif jpg jpeg'), // Validate extensions.
+    // Validates file is really an image.
+    'file_validate_is_image' => array(),
+    // Validate extensions.
+    'file_validate_extensions' => array('png gif jpg jpeg'),
   ));
   // If the file passed validation:
   if ($file) {
-    // Move the file, into the Drupal file system
+    // Move the file into the Drupal file system.
     if ($file = file_move($file, 'public://')) {
       // Save the file for use in the submit handler.
       $form_state['storage']['file'] = $file;
     }
     else {
-      form_set_error('file', t('Failed to write the uploaded file to the site\'s file folder.'));
+      form_set_error('file', t("Failed to write the uploaded file to the site's file folder."));
     }
   }
   else {
@@ -758,7 +758,7 @@ function form_example_tutorial_10_submit($form, &$form_state) {
   $file = $form_state['storage']['file'];
   // We are done with the file, remove it from storage.
   unset($form_state['storage']['file']);
-  // Make the storage of the file permanent
+  // Make the storage of the file permanent.
   $file->status = FILE_STATUS_PERMANENT;
   // Save file status.
   file_save($file);

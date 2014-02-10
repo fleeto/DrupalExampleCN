@@ -80,8 +80,7 @@ function image_example_style_form_submit($form, &$form_state) {
   // When using the #managed_file form element the file is automatically
   // uploaded an saved to the {file} table. The value of the corresponding
   // form element is set to the {file}.fid of the new file.
-
-
+  //
   // If fid is not 0 we have a valid file.
   if ($form_state['values']['image_example_image_fid'] != 0) {
     // The new file's status is set to 0 or temporary and in order to ensure
@@ -97,7 +96,13 @@ function image_example_style_form_submit($form, &$form_state) {
 
     // Save the fid of the file so that the module can reference it later.
     variable_set('image_example_image_fid', $file->fid);
-    drupal_set_message(t('The image @image_name was uploaded and saved with an ID of @fid and will be displayed using the style @style.', array('@image_name' => $file->filename, '@fid' => $file->fid, '@style' => $form_state['values']['image_example_style_name'])));
+    drupal_set_message(t('The image @image_name was uploaded and saved with an ID of @fid and will be displayed using the style @style.',
+      array(
+        '@image_name' => $file->filename,
+        '@fid' => $file->fid,
+        '@style' => $form_state['values']['image_example_style_name'],
+      )
+    ));
   }
   // If the file was removed we need to remove the module's reference to the
   // removed file's fid, and remove the file.
@@ -139,16 +144,23 @@ function theme_image_example_image($variables) {
   // theme_image_style() is the primary method for displaying images using
   // one of the defined styles. The $variables array passed to the theme
   // contains the following two important values:
-  //   'style_name': the name of the image style to use when displaying the
+  // - 'style_name': the name of the image style to use when displaying the
   //   image.
-  //   'path': the $file->uri of the image to display.
+  // - 'path': the $file->uri of the image to display.
+  //
   // When given a style and an image path the function will first determine
   // if a derivative image already exists, in which case the existing image
   // will be displayed. If the derivative image does not already exist the
   // function returns an <img> tag with a specially crafted callback URL
   // as the src attribute for the tag. When accessed, the callback URL will
   // generate the derivative image and serve it to the browser.
-  $output = theme('image_style', array('style_name' => $style, 'path' => $image->uri, 'getsize' => FALSE));
+  $output = theme('image_style',
+    array(
+      'style_name' => $style,
+      'path' => $image->uri,
+      'getsize' => FALSE,
+    )
+  );
   $output .= '<p>' . t('This image is being displayed using the image style %style_name.', array('%style_name' => $style)) . '</p>';
   return $output;
 }

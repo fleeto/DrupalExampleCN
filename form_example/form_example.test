@@ -12,6 +12,9 @@
  */
 class FormExampleTestCase extends DrupalWebTestCase {
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'Form Example',
@@ -20,14 +23,17 @@ class FormExampleTestCase extends DrupalWebTestCase {
     );
   }
 
-  function setUp() {
+  /**
+   * Enable modules.
+   */
+  public function setUp() {
     parent::setUp('form_example');
   }
 
   /**
-   * Test each tutorial
+   * Test each tutorial.
    */
-  function testTutorials() {
+  public function testTutorials() {
     // Tutorial #1
     $this->drupalGet('examples/form_example/tutorial');
     $this->assertText(t('#9'));
@@ -51,31 +57,60 @@ class FormExampleTestCase extends DrupalWebTestCase {
     $this->assertText(t('Last name field is required'));
 
     // #6
-    $this->drupalPost('examples/form_example/tutorial/6',
-      array('first' => t('firstname'), 'last' => t('lastname'), 'year_of_birth' => 1955),
+    $this->drupalPost(
+      'examples/form_example/tutorial/6',
+      array(
+        'first' => t('firstname'),
+        'last' => t('lastname'),
+        'year_of_birth' => 1955,
+      ),
       t('Submit'));
     $this->assertNoText(t('Enter a year between 1900 and 2000'));
-    $this->drupalPost('examples/form_example/tutorial/6',
-      array('first' => t('firstname'), 'last' => t('lastname'), 'year_of_birth' => 1855),
-      t('Submit'));
+    $this->drupalPost(
+      'examples/form_example/tutorial/6',
+      array(
+        'first' => t('firstname'),
+        'last' => t('lastname'),
+        'year_of_birth' => 1855,
+      ),
+      t('Submit')
+    );
 
     $this->assertText(t('Enter a year between 1900 and 2000'));
 
     // #7
-    $this->drupalPost('examples/form_example/tutorial/7',
-      array('first' => t('firstname'), 'last' => t('lastname'), 'year_of_birth' => 1955),
-      t('Submit'));
+    $this->drupalPost(
+      'examples/form_example/tutorial/7',
+      array(
+        'first' => t('firstname'),
+        'last' => t('lastname'),
+        'year_of_birth' => 1955,
+      ),
+      t('Submit')
+    );
     $this->assertText(t('The form has been submitted. name="firstname lastname", year of birth=1955'));
-    $this->drupalPost('examples/form_example/tutorial/7',
-      array('first' => t('firstname'), 'last' => t('lastname'), 'year_of_birth' => 1855),
-      t('Submit'));
+    $this->drupalPost(
+      'examples/form_example/tutorial/7',
+      array(
+        'first' => t('firstname'),
+        'last' => t('lastname'),
+        'year_of_birth' => 1855,
+      ),
+      t('Submit')
+    );
 
     $this->assertText(t('Enter a year between 1900 and 2000'));
 
-      // #8
-    $this->drupalPost('examples/form_example/tutorial/8',
-      array('first' => t('firstname'), 'last' => t('lastname'), 'year_of_birth' => 1955),
-      t('Next >>'));
+    // Test tutorial #8.
+    $this->drupalPost(
+      'examples/form_example/tutorial/8',
+      array(
+        'first' => t('firstname'),
+        'last' => t('lastname'),
+        'year_of_birth' => 1955,
+      ),
+      t('Next >>')
+    );
 
     $this->drupalPost(NULL, array('color' => t('green')), t('<< Back'));
     $this->drupalPost(NULL, array(), t('Next >>'));
@@ -87,11 +122,18 @@ class FormExampleTestCase extends DrupalWebTestCase {
     $url = 'examples/form_example/tutorial/9';
     for ($i = 1; $i <= 4; $i++) {
       if ($i > 1) {
-        $url = NULL;  // later steps of multistep form take NULL.
+        // Later steps of multistep form take NULL.
+        $url = NULL;
       }
-      $this->drupalPost($url,
-        array("name[$i][first]" => "firstname $i", "name[$i][last]" => "lastname $i", "name[$i][year_of_birth]" => 1950 + $i),
-        t('Add another name'));
+      $this->drupalPost(
+        $url,
+        array(
+          "name[$i][first]" => "firstname $i",
+          "name[$i][last]" => "lastname $i",
+          "name[$i][year_of_birth]" => 1950 + $i,
+        ),
+        t('Add another name')
+      );
       $this->assertText(t('Name #@num', array('@num' => $i + 1)));
     }
 
@@ -121,11 +163,12 @@ class FormExampleTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Test Wizard tutorial
+   * Test Wizard tutorial.
+   *
    * @TODO improve this using drupal_form_submit
    */
-  function testWizard() {
-    // Is the wizard there
+  public function testWizard() {
+    // Check if the wizard is there.
     $this->drupalGet('examples/form_example/wizard');
     $this->assertText(t('Extensible wizard example'));
 
@@ -134,14 +177,14 @@ class FormExampleTestCase extends DrupalWebTestCase {
     $city = $this->randomName(8);
     $aunts_name = $this->randomName(8);
 
-    // Submit the first step of the wizard
+    // Submit the first step of the wizard.
     $options = array(
       'first_name' => $first_name,
       'last_name'  => $last_name,
     );
     $this->drupalPost('examples/form_example/wizard', $options, t('Next'));
 
-    // A label city is created, and two buttons appear, Preivous and Next
+    // A label city is created, and two buttons appear, Preivous and Next.
     $this->assertText(t('Hint: Do not enter "San Francisco", and do not leave this out.'));
 
     // Go back to the beginning and verify that the value is there.
@@ -178,7 +221,7 @@ class FormExampleTestCase extends DrupalWebTestCase {
   /**
    * Test the element_example form for correct behavior.
    */
-  function testElementExample() {
+  public function testElementExample() {
     // Make one basic POST with a set of values and check for correct responses.
     $edit = array(
       'a_form_example_textfield' => $this->randomName(),

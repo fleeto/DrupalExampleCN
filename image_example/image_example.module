@@ -63,7 +63,7 @@ function image_example_menu() {
 function image_example_help($path) {
   switch ($path) {
     case 'image_example/styles':
-      $output =  '<p>' . t('Use this form to upload an image and choose an Image Style to use when displaying the image. This demonstrates basic use of the Drupal 7 Image styles & effects system.') . '</p>';
+      $output = '<p>' . t('Use this form to upload an image and choose an Image Style to use when displaying the image. This demonstrates basic use of the Drupal 7 Image styles & effects system.') . '</p>';
       $output .= '<p>' . t('Image styles can be added/edited using the !link.', array('!link' => l(t('Image styles UI'), 'admin/config/media/image-styles'))) . '</p>';
       return $output;
   }
@@ -138,7 +138,7 @@ function image_example_image_style_save($style) {
   // When a user has choosen to replace a deleted style with another style the
   // $style['name'] property contains the name of the replacement style and
   // $style['old_name'] contains the name of the style being deleted.
-
+  //
   // Here we update a variable that contains the name of the image style that
   // the block provided by this module uses when formating images to use the
   // new user choosen style name.
@@ -157,7 +157,7 @@ function image_example_image_style_save($style) {
 function image_example_image_style_delete($style) {
   // See information about $style paramater in documentation for
   // image_example_style_save().
-
+  //
   // Update the modules variable that contains the name of the image style
   // being deleted to the name of the replacement style.
   if (isset($style['old_name']) && $style['old_name'] == variable_get('image_example_style_name', '')) {
@@ -182,8 +182,6 @@ function image_example_image_style_delete($style) {
  * does not use any caches. It is demonstrated here for completeness sake only.
  */
 function image_example_style_flush($style) {
-  // The $style parameter is an image style array.
-
   // Empty any caches populated by our module that could contain stale data
   // after the style has been flushed. Stale data occurs because the module may
   // have cached content with a reference to the derivative image which is
@@ -205,7 +203,6 @@ function image_example_image_styles_alter(&$styles) {
   // The $styles paramater is an array of image style arrays keyed by style
   // name. You can check to see if a style has been overriden by checking the
   // $styles['stylename']['storage'] property.
-
   // Verify that the effect has not been overriden.
   if ($styles['thumbnail']['storage'] == IMAGE_STORAGE_DEFAULT) {
     // Add an additional colorize effect to the system provided thumbnail
@@ -270,7 +267,7 @@ function image_example_image_effect_info() {
  * form for configuring the colorize options. Therefore it does not not need to
  * include metadata about the effect, nor a submit button.
  *
- * @param $data
+ * @param array $data
  *   The current configuration for this colorize effect.
  */
 function image_example_colorize_form($data) {
@@ -293,13 +290,14 @@ function image_example_colorize_form($data) {
 /**
  * Image effect callback; Colorize an image resource.
  *
- * @param $image
+ * @param object $image
  *   An image object returned by image_load().
- * @param $data
+ * @param array $data
  *   An array of attributes to use when performing the colorize effect with the
  *   following items:
  *   - "color": The web-style hex color to use when colorizing the image.
- * @return
+ *
+ * @return bool
  *   TRUE on success. FALSE on failure to colorize image.
  */
 function image_example_colorize_effect(&$image, $data) {
@@ -309,7 +307,7 @@ function image_example_colorize_effect(&$image, $data) {
   // information stored in the $image->info array (width, height, etc.) you
   // should update that information as well. See modules/system/image.gd.inc
   // for examples of functions that perform image manipulations.
-
+  //
   // Not all GD installations are created equal. It is a good idea to check for
   // the existence of image manipulation functions before using them.
   // PHP installations using non-bundled GD do not have imagefilter(). More
@@ -367,7 +365,7 @@ function image_example_theme() {
 /**
  * Formats a summary of an image colorize effect.
  *
- * @param $variables
+ * @param array $variables
  *   An associative array containing:
  *   - data: The current configuration for this colorize effect.
  */
