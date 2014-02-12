@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * This is an example describing how a module can display data in a sortable
@@ -44,7 +45,7 @@ function tablesort_example_menu() {
 /**
  * Build the table render array.
  *
- * @return
+ * @return array
  *   A render array set for theming by theme_table().
  */
 function tablesort_example_page() {
@@ -58,25 +59,26 @@ function tablesort_example_page() {
     array('data' => t('Mixture'), 'field' => 't.random'),
   );
 
+  // Using the TableSort Extender is what tells the the query object that we
+  // are sorting.
   $query = db_select('tablesort_example', 't')
-    ->extend('TableSort'); // Using the TableSort Extender is what tells the
-                           // the query object that we are sorting.
+      ->extend('TableSort');
   $query->fields('t');
 
+  // Don't forget to tell the query object how to find the header information.
   $result = $query
-    ->orderByHeader($header) // Don't forget to tell the query object how to
-                             // find the header information.
-    ->execute();
+      ->orderByHeader($header)
+      ->execute();
 
   $rows = array();
   foreach ($result as $row) {
-    // normally we would add some nice formatting to our rows
+    // Normally we would add some nice formatting to our rows
     // but for our purpose we are simply going to add our row
     // to the array.
     $rows[] = array('data' => (array) $row);
   }
 
-  // build the table for the nice output.
+  // Build the table for the nice output.
   $build['tablesort_table'] = array(
     '#theme' => 'table',
     '#header' => $header,
@@ -85,6 +87,7 @@ function tablesort_example_page() {
 
   return $build;
 }
+
 /**
  * @} End of "defgroup tablesort_example".
  */

@@ -7,7 +7,7 @@
 /**
  * Build the tabledrag_simple_example_form form.
  *
- * @return
+ * @return array
  *   A form array set for theming by theme_tabledrag_example_simple_form()
  *
  * @ingroup tabledrag_example
@@ -79,7 +79,7 @@ function tabledrag_example_simple_form($form_state) {
  * keep template files clean and readable, and prevents tabledrag.js from
  * being added twice accidently.
  *
- * @return
+ * @return array
  *   The rendered tabledrag form
  *
  * @ingroup tabledrag_example

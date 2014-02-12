@@ -7,7 +7,16 @@
 /**
  * Build the parent-child example form.
  *
- * @return
+ * Tabledrag will take care of updating the parent_id relationship on each
+ * row of our table when we drag items around, but we need to build out the
+ * initial tree structure ourselves.  This means ordering our items such
+ * that children items come directly after their parent items, and all items
+ * are sorted by weight relative to their siblings.
+ *
+ * To keep this from cluttering the actual tabledrag code, we have moved
+ * this to a dedicated function.
+ *
+ * @return array
  *   A form array set for theming by theme_tabledrag_example_parent_form()
  *
  * @ingroup tabledrag_example
@@ -16,14 +25,6 @@ function tabledrag_example_parent_form($form_state) {
   // Identify that the elements in 'example_items' are a collection, to
   // prevent Form API from flattening the array when submitted.
   $form['example_items']['#tree'] = TRUE;
-
-  // Tabledrag will take care of updating the parent_id relationship on each
-  // row of our table when we drag items around, but we need to build out the
-  // initial tree structure ourselves.  This means ordering our items such
-  // that children items come directly after their parent items, and all items
-  // are sorted by weight relative to their siblings.
-  // To keep this from cluttering the actual tabledrag code, we have moved
-  // this to a dedicated function.
 
   // Fetch the example data from the database, ordered by parent/child/weight.
   $result = tabledrag_example_parent_get_data();
@@ -329,6 +330,4 @@ function tabledrag_example_get_tree($parentitem, &$itemtree = array(), &$depth =
   // Finished processing this tree branch.  Decrease our $depth value by one
   // to represent moving to the next branch.
   $depth--;
-  // Return.
-  return;
 }

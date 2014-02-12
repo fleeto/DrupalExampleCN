@@ -23,7 +23,7 @@
  */
 class SimpleTestExampleTestCase extends DrupalWebTestCase {
 
-  protected $privileged_user;
+  protected $privilegedUser;
 
   /**
    * Give display information to the SimpleTest system.
@@ -59,11 +59,13 @@ class SimpleTestExampleTestCase extends DrupalWebTestCase {
     // Create and log in our user. The user has the arbitrary privilege
     // 'extra special edit any simpletest_example' which is provided by
     // our module to grant access.
-    $this->privileged_user = $this->drupalCreateUser(array('create simpletest_example content', 'extra special edit any simpletest_example'));
-    $this->drupalLogin($this->privileged_user);
+    $this->privilegedUser = $this->drupalCreateUser(array('create simpletest_example content', 'extra special edit any simpletest_example'));
+    $this->drupalLogin($this->privilegedUser);
   }
 
-  // Create a simpletest_example node using the node form
+  /**
+   * Create a simpletest_example node using the node form.
+   */
   public function testSimpleTestExampleCreate() {
     // Create node to edit.
     $edit = array();
@@ -73,7 +75,9 @@ class SimpleTestExampleTestCase extends DrupalWebTestCase {
     $this->assertText(t('SimpleTest Example Node Type @title has been created.', array('@title' => $edit['title'])));
   }
 
-  // Create a simpletest_example node and then see if our user can edit it
+  /**
+   * Create a simpletest_example node and then see if our user can edit it.
+   */
   public function testSimpleTestExampleEdit() {
     $settings = array(
       'type' => 'simpletest_example',
@@ -83,8 +87,8 @@ class SimpleTestExampleTestCase extends DrupalWebTestCase {
     $node = $this->drupalCreateNode($settings);
 
     // For debugging, we might output the node structure with $this->verbose()
-    $this->verbose('Node created: ' . var_export($node, TRUE));
     // It would only be output if the testing settings had 'verbose' set.
+    $this->verbose('Node created: ' . var_export($node, TRUE));
 
     // We'll run this test normally, but not on the testbot, as it would
     // indicate that the examples module was failing tests.
@@ -104,11 +108,12 @@ class SimpleTestExampleTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Detect if we're running on PIFR testbot; skip intentional failure in that
-   * case. It happens that on the testbot the site under test is in a directory
-   * named 'checkout' or 'site_under_test'.
+   * Detect if we're running on PIFR testbot.
    *
-   * @return boolean
+   * Skip intentional failure in that case. It happens that on the testbot the
+   * site under test is in a directory named 'checkout' or 'site_under_test'.
+   *
+   * @return bool
    *   TRUE if running on testbot.
    */
   public function runningOnTestbot() {
@@ -130,6 +135,9 @@ class SimpleTestExampleTestCase extends DrupalWebTestCase {
  */
 class SimpleTestUnitTestExampleTestCase extends DrupalUnitTestCase {
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'SimpleTest Example unit tests',
@@ -148,14 +156,13 @@ class SimpleTestUnitTestExampleTestCase extends DrupalUnitTestCase {
    * Also, DrupalUnitTestCase can't actually install modules. This is by
    * design.
    */
-  function setUp() {
+  public function setUp() {
     drupal_load('module', 'simpletest_example');
     parent::setUp();
   }
 
   /**
-   * Call simpletest_example_empty_mysql_date and check that it returns correct
-   * result.
+   * Test simpletest_example_empty_mysql_date().
    *
    * Note that no environment is provided; we're just testing the correct
    * behavior of a function when passed specific arguments.
@@ -235,9 +242,9 @@ class SimpleTestExampleMockModuleTestCase extends DrupalWebTestCase {
    */
   public function testSimpleTestExampleMockModule() {
     // Create a user.
-    $testUser = $this->drupalCreateUser(array('access content'));
+    $test_user = $this->drupalCreateUser(array('access content'));
     // Log them in.
-    $this->drupalLogin($testUser);
+    $this->drupalLogin($test_user);
     // Set up some content.
     $settings = array(
       'type' => 'simpletest_example',

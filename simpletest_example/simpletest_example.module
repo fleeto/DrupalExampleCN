@@ -25,7 +25,7 @@ function simpletest_example_node_info() {
       'name' => t('SimpleTest Example Node Type'),
       'base' => 'simpletest_example',
       'description' => t('simpletest_example page node type.'),
-  )
+    ),
   );
 }
 
@@ -57,12 +57,12 @@ function simpletest_example_node_access($node, $op, $account) {
   }
 
   // This code has a BUG that we'll find in testing.
-
+  //
   // This is the incorrect version we'll use to demonstrate test failure.
   // The correct version should have ($op == 'update' || $op == 'delete').
   // The author had mistakenly always tested with User 1 so it always
   // allowed access and the bug wasn't noticed!
-  if ( ($op == 'delete')  && (user_access('extra special edit any simpletest_example', $account) && ($account->uid == $node->uid))) {
+  if (($op == 'delete')  && (user_access('extra special edit any simpletest_example', $account) && ($account->uid == $node->uid))) {
     return NODE_ACCESS_ALLOW;
   }
 
@@ -110,7 +110,7 @@ function simpletest_example_menu() {
  */
 function _simpletest_example_explanation() {
 
-  $explanation =  t("This Simpletest Example is designed to give an introductory tutorial to writing
+  $explanation = t("This Simpletest Example is designed to give an introductory tutorial to writing
     a simpletest test. Please see the <a href='http://drupal.org/node/890654'>associated tutorial</a>.");
   return $explanation;
 }
@@ -122,9 +122,9 @@ function _simpletest_example_explanation() {
  */
 function simpletest_example_empty_mysql_date($date_string) {
   if (empty($date_string) || $date_string == '0000-00-00' || $date_string == '0000-00-00 00:00:00') {
-    return true;
+    return TRUE;
   }
-  return false;
+  return FALSE;
 }
 
 /**

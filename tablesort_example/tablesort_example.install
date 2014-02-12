@@ -6,7 +6,6 @@
  *
  * This file contains the functions required to perform install and
  * uninstall operations.
- *
  */
 
 /**
@@ -15,7 +14,7 @@
  * @ingroup tablesort_example
  */
 function tablesort_example_install() {
-  // let's fill the database with some values for sorting
+  // Let's fill the database with some values for sorting.
   $rows = array(
     array('numbers' => 1, 'alpha' => 'e', 'random' => '912cv21'),
     array('numbers' => 2, 'alpha' => 'a', 'random' => '0kuykuh'),
