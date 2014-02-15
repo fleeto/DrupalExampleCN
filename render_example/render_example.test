@@ -11,6 +11,10 @@
  * @ingroup render_example
  */
 class RenderExampleTestCase extends DrupalWebTestCase {
+
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'Render example functionality',
@@ -23,7 +27,7 @@ class RenderExampleTestCase extends DrupalWebTestCase {
   /**
    * Enable modules and create user with specific permissions.
    */
-  function setUp() {
+  public function setUp() {
     parent::setUp('devel', 'render_example');
   }
 
@@ -31,10 +35,10 @@ class RenderExampleTestCase extends DrupalWebTestCase {
   /**
    * Assert that all of the xpaths in the array have results.
    *
-   * @param $xpath_array
+   * @param array $xpath_array
    *   An array of xpaths, each of which must return something.
    */
-  function assertRenderResults($xpath_array) {
+  public function assertRenderResults($xpath_array) {
     foreach ($xpath_array as $xpath) {
       $result = $this->xpath($xpath);
       $this->assertTrue(!empty($result), format_string('Found xpath %xpath', array('%xpath' => $xpath)));
@@ -45,22 +49,25 @@ class RenderExampleTestCase extends DrupalWebTestCase {
   /**
    * Asserts that the string value of the result is the same as the passed text.
    *
-   * @param $xpath_array
+   * @param array $xpath_array
    *   Array of keyed arrays of tests to be made. Each child array consists of
    *   $xpath => $expected_text
    */
-  function assertRenderedText($xpath_array) {
+  public function assertRenderedText($xpath_array) {
     foreach ($xpath_array as $xpath => $text) {
       $result = $this->xpath($xpath);
-      $this->assertTrue((string)$result[0][0] == $text, format_string('%ary selects text %text', array('%ary' => $xpath, '%text' => $text)));
+      $this->assertTrue((string) $result[0][0] == $text, format_string('%ary selects text %text', array('%ary' => $xpath, '%text' => $text)));
     }
   }
 
 
   /**
-   * Login user, create an example node, and test blog functionality through the admin and user interfaces.
+   * Basic test of rendering through user interaction.
+   *
+   * Login user, create an example node, and test blog functionality through
+   * the admin and user interfaces.
    */
-  function testRenderExampleBasic() {
+  public function testRenderExampleBasic() {
 
     // Create a user that can access devel information and log in.
     $web_user = $this->drupalCreateUser(array('access devel information', 'access content'));
@@ -77,7 +84,6 @@ class RenderExampleTestCase extends DrupalWebTestCase {
       '//*[@id="content"]//fieldset[contains(@id,"edit-render-example-block-fieldset")]',
     );
     $this->assertRenderResults($xpath_array);
-
 
     // Turn off block render array display and turn on the page render array
     // display.
@@ -114,7 +120,7 @@ class RenderExampleTestCase extends DrupalWebTestCase {
 
     // Skip a test for reversing order of sidebar_first as I think it would
     // be too fragile.
-
+    //
     // Test the addition of #prefix and #suffix
     $edit = array(
       'render_example_prefix' => TRUE,
@@ -125,7 +131,7 @@ class RenderExampleTestCase extends DrupalWebTestCase {
     );
     $this->assertRenderResults($xpath_array);
 
-    // Test some rendering facets of the various render examples
+    // Test some rendering facets of the various render examples.
     $this->drupalGet('examples/render_example/arrays');
     $content = $this->xpath('//*[@class="render-array"][1]');
 

@@ -87,7 +87,7 @@ function token_example_example_form($form, &$form_state) {
   $form['text'] = array(
     '#type' => 'textarea',
     '#title' => t('Enter your text here'),
-    '#default_value' => 'Hello [current-user:name]!'
+    '#default_value' => 'Hello [current-user:name]!',
   );
 
   // Display the results of tokenized text.

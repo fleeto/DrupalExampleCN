@@ -20,7 +20,6 @@
  * element names.
  *
  * <?php print '<!--' . print_r($text_form_content, TRUE) . '-->'; ?>
- *
  */
 ?>
 <!-- theming-example-text-form template -->

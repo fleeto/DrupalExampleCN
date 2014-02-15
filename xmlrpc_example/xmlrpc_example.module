@@ -217,12 +217,12 @@ function xmlrpc_example_xmlrpc() {
  * Sum the two arguments and return value or an error if the result is out of
  * the configured limits.
  *
- * @param $num1
+ * @param int|float $num1
  *   The first number to be summed.
- * @param $num2
+ * @param int|float $num2
  *   The second number to be summed.
  *
- * @return
+ * @return int|float
  *   The sum of the arguments, or error if it is not in server defined bounds.
  *
  * @see xmlrpc_error()
@@ -249,12 +249,12 @@ function _xmlrpc_example_server_add($num1, $num2) {
  * Return the difference of the two arguments, or an error if the result is out
  * of the configured limits.
  *
- * @param $num1
+ * @param int|float $num1
  *   First number
- * @param $num2
+ * @param int|float $num2
  *   Second number
  *
- * @return
+ * @return int|float
  *   The difference of the two arguments, or error if it is not in server
  *   defined bounds.
  *
@@ -405,10 +405,10 @@ function xmlrpc_example_client_form() {
  * Important note: Not all XML-RPC servers implement this method. Drupal's
  * built-in XML-RPC server implements this method by default.
  *
- * @param $form
- *   form array
- * @param $form_state
- *   form_state array
+ * @param array $form
+ *   Form array.
+ * @param array $form_state
+ *   Form_state array.
  *
  * @see xmlrpc()
  * @see xmlrpc_errno()
@@ -447,10 +447,10 @@ function xmlrpc_example_client_request_methods_submit($form, &$form_state) {
  * Submit: query the XML-RPC endpoint for the method xmlrpc_example.add
  * and report the result as a Drupal message.
  *
- * @param $form
- *   form array
- * @param $form_state
- *   form_state array
+ * @param array $form
+ *   Form array.
+ * @param array $form_state
+ *   Form_state array.
  *
  * @see xmlrpc()
  * @see xmlrpc_errno()
@@ -492,10 +492,10 @@ function xmlrpc_example_client_add_submit($form, &$form_state) {
  * Submit: query the XML-RPC endpoint for the method xmlrpc_example.subtract
  * and report the result as a Drupal message.
  *
- * @param $form
- *   form array
- * @param $form_state
- *   form_state array
+ * @param array $form
+ *   Form array.
+ * @param array $form_state
+ *   Form_state array.
  *
  * @see xmlrpc()
  * @see xmlrpc_errno()
@@ -535,10 +535,10 @@ function xmlrpc_example_client_subtract_submit($form, &$form_state) {
  * Drupal message. Drupal's XML-RPC client builds the system.multicall request
  * automatically when there is more than one method to call.
  *
- * @param $form
- *   form array
- * @param $form_state
- *   form_state array
+ * @param array $form
+ *   Form array.
+ * @param array $form_state
+ *   Form_state array.
  *
  * @see xmlrpc()
  * @see xmlrpc_errno()
@@ -649,12 +649,12 @@ function xmlrpc_example_xmlrpc_alter(&$methods) {
  *
  * This is the replacement callback for the xmlrpc_example.add xmlrpc method.
  *
- * @param $num1
+ * @param int|float $num1
  *   First number
- * @param $num2
+ * @param int|float $num2
  *   Second Number
  *
- * @return
+ * @return int|float
  *   The sum of the arguments
  */
 function _xmlrpc_example_alter_add($num1, $num2) {
@@ -666,12 +666,12 @@ function _xmlrpc_example_alter_add($num1, $num2) {
  *
  * This is the replacement callback for xmlrpc_example.subtract xmlrpc method.
  *
- * @param $num1
+ * @param int|float $num1
  *   First number
- * @param $num2
+ * @param int|float $num2
  *   Second Number
  *
- * @return
+ * @return int|float
  *   The difference of the two arguments
  */
 function _xmlrpc_example_alter_subtract($num1, $num2) {

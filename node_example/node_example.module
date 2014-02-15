@@ -118,7 +118,7 @@ function node_example_node_type_insert($content_type) {
     $body_instance = node_add_body_field($content_type, t('Example Description'));
 
     // Add our example_node_list view mode to the body instance
-    // display by instructing the body to display as a summary
+    // display by instructing the body to display as a summary.
     $body_instance['display']['example_node_list'] = array(
       'label' => 'hidden',
       'type' => 'text_summary_or_trimmed',
@@ -142,7 +142,7 @@ function node_example_node_type_insert($content_type) {
 }
 
 /**
- * Implement hook_form().
+ * Implements hook_form().
  *
  * Drupal needs for us to provide a form that lets the user
  * add content. This is the form that the user will see if
@@ -160,9 +160,8 @@ function node_example_form($node, $form_state) {
  *
  * This callback comes from hook_menu().
  *
- * @return
- *   a build array
- *   a renderable array showing a list of our nodes.
+ * @return array
+ *   A renderable array showing a list of our nodes.
  *
  * @see node_load()
  * @see node_view()
@@ -182,14 +181,14 @@ function node_example_page() {
   );
   $renderable_array['explanation'] = array(
     '#markup' => t("Node Example nodes you've created will be displayed here. Note that the color fields will be displayed differently in this list, than if you view the node normally. Click on the node title to see the difference. This is a result of using our 'example_node_list' node view type."),
-    );
+  );
   // Loop through each of our node_example nodes and instruct node_view
   // to use our "example_node_list" view.
   // http://api.drupal.org/api/function/node_load/7
   // http://api.drupal.org/api/function/node_view/7
   foreach ($result as $row) {
     $node = node_load($row->nid);
-    $renderable_array['node_list'][]= node_view($node, 'example_node_list');
+    $renderable_array['node_list'][] = node_view($node, 'example_node_list');
   }
   return $renderable_array;
 }
@@ -284,9 +283,9 @@ function theme_example_node_color($variables) {
  *
  * This big array is factored into this function for readability.
  *
- * @return
- *  An associative array specifying the fields we wish to add to our
- *  new node type.
+ * @return array
+ *   An associative array specifying the fields we wish to add to our
+ *   new node type.
  */
 function _node_example_installed_fields() {
   return array(
@@ -322,9 +321,9 @@ function _node_example_installed_fields() {
  *
  * This big array is factored into this function for readability.
  *
- * @return
- *  An associative array specifying the instances we wish to add to our new
- *  node type.
+ * @return array
+ *   An associative array specifying the instances we wish to add to our new
+ *   node type.
  */
 function _node_example_installed_instances() {
   return array(

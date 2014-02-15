@@ -12,6 +12,9 @@
  */
 class QueueExampleTestCase extends DrupalWebTestCase {
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'Queue Example functionality',
@@ -23,14 +26,14 @@ class QueueExampleTestCase extends DrupalWebTestCase {
   /**
    * Enable modules and create user with specific permissions.
    */
-  function setUp() {
+  public function setUp() {
     parent::setUp('queue_example');
   }
 
   /**
-   * Login user, create an example node, and test blog functionality through the admin and user interfaces.
+   * Test the queue behavior through user interaction.
    */
-  function testQueueExampleBasic() {
+  public function testQueueExampleBasic() {
 
     // Load the queue with 5 items.
     for ($i = 1; $i <= 5; $i++) {
@@ -50,7 +53,7 @@ class QueueExampleTestCase extends DrupalWebTestCase {
 
     // Sleep a second so we can make sure that the timeouts actually time out.
     // Local systems work fine with this but apparently the PIFR server is so
-    /// fast that it needs a sleep before the cron run.
+    // fast that it needs a sleep before the cron run.
     sleep(1);
 
     // Run cron to release expired items.

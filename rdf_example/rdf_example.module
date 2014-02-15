@@ -50,13 +50,13 @@ function rdf_example_rdf_mapping() {
   );
 }
 
-/*
+/**
  * Implements hook_rdf_namespaces().
  *
  * This hook should be used to define any prefixes used by this module that are
  * not already defined in core by rdf_rdf_namespaces.
  *
- * http://api.drupal.org/api/drupal/modules--rdf--rdf.api.php/function/hook_rdf_namespaces/7
+ * @see hook_rdf_namespaces()
  */
 function rdf_example_rdf_namespaces() {
   return array(

@@ -2,7 +2,6 @@
 
 /**
  * @file
- *
  * Module implementation for nodeapi_example module.
  */
 
@@ -63,7 +62,7 @@ function nodeapi_example_form_alter(&$form, $form_state, $form_id) {
       '#default_value' => variable_get('nodeapi_example_node_type_' . $form['#node_type']->type, FALSE),
       '#options' => array(
         FALSE => t('Disabled'),
-        TRUE => t('Enabled')
+        TRUE => t('Enabled'),
       ),
       '#description' => t('Should this node have a rating attached to it?'),
     );
@@ -231,11 +230,12 @@ function nodeapi_example_node_update($node) {
  */
 function nodeapi_example_node_view($node, $build_mode = 'full') {
   if (variable_get('nodeapi_example_node_type_' . $node->type, FALSE)) {
-    // Make sure to set a rating, also for nodes saved previously and not yet rated.
+    // Make sure to set a rating, also for nodes saved previously and not yet
+    // rated.
     $rating = isset($node->nodeapi_example_rating) ? $node->nodeapi_example_rating : 0;
     $node->content['nodeapi_example'] = array(
       '#markup' => theme('nodeapi_example_rating', array('rating' => $rating)),
-        '#weight' => -1,
+      '#weight' => -1,
     );
   }
 }
@@ -249,7 +249,7 @@ function nodeapi_example_theme() {
   return array(
     'nodeapi_example_rating' => array(
       'variables' => array('rating' => NULL),
-  ),
+    ),
   );
 }
 

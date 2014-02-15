@@ -12,6 +12,9 @@
  */
 class TriggerExampleTestCase extends DrupalWebTestCase {
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'Trigger example',
@@ -20,19 +23,22 @@ class TriggerExampleTestCase extends DrupalWebTestCase {
     );
   }
 
-  function setUp() {
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
     parent::setUp('trigger', 'trigger_example');
   }
 
   /**
    * Test assigning a configurable action to the triggersomething event.
    */
-  function testTriggersomethingEvent() {
+  public function testTriggersomethingEvent() {
     // Create an administrative user.
     $test_user = $this->drupalCreateUser(array('administer actions'));
     $this->drupalLogin($test_user);
 
-    // Create a configurable action for display a message to the user
+    // Create a configurable action for display a message to the user.
     $hash = drupal_hash_base64('system_message_action');
     $action_label = $this->randomName();
     $edit = array(
@@ -54,12 +60,15 @@ class TriggerExampleTestCase extends DrupalWebTestCase {
     $this->assertText($action_label, 'The triggersomething event executed the action.');
   }
 
-  function testUserLogin() {
+  /**
+   * Test triggers at user login.
+   */
+  public function testUserLogin() {
     // Create an administrative user.
     $admin_user = $this->drupalCreateUser(array('administer actions'));
     $this->drupalLogin($admin_user);
 
-    // Create a configurable action for display a message to the user
+    // Create a configurable action for display a message to the user.
     $hash = drupal_hash_base64('system_message_action');
     $action_label = $this->randomName();
     $edit = array(
@@ -70,7 +79,7 @@ class TriggerExampleTestCase extends DrupalWebTestCase {
     $aid = db_query('SELECT aid FROM {actions} WHERE callback = :callback', array(':callback' => 'system_message_action'))->fetchField();
     $edit = array('aid' => drupal_hash_base64($aid));
 
-    // Find the correct trigger
+    // Find the correct trigger.
     $this->drupalPost('admin/structure/trigger/user', $edit, t('Assign'), array(), array(), 'trigger-user-first-time-login-assign-form');
 
     $test_user = $this->drupalCreateUser();

@@ -113,7 +113,8 @@ function node_access_example_menu() {
  * use of the 'node_access' tag to make sure that we don't show inappropriate
  * information to unprivileged users.
  *
- * @return Page content.
+ * @return string
+ *   Page content.
  *
  * @see page_example
  */
@@ -163,7 +164,14 @@ function node_access_example_private_node_listing() {
     $node['nid'] = l($node['nid'], 'node/' . $node['nid']);
     $rows[] = array('data' => $node,  'class' => array('accessible'));
   }
-  $content .= '<div>' . t('Accessible rows:') . theme('table', array('header' => array('nid', 'title', 'uid', 'username'), 'rows' => $rows)) . '</div>';
+  $content .= '<div>' . t('Accessible rows:') .
+     theme('table',
+       array(
+         'header' => array('nid', 'title', 'uid', 'username'),
+         'rows' => $rows,
+       )
+     ) .
+  '</div>';
 
   return array('#markup' => $content);
 }
@@ -412,7 +420,12 @@ function node_access_example_node_delete($node) {
  */
 function node_access_example_node_insert($node) {
   if (isset($node->private)) {
-    db_insert('node_access_example')->fields(array('nid' => $node->nid, 'private' => (int)$node->private))->execute();
+    db_insert('node_access_example')->fields(
+      array(
+        'nid' => $node->nid,
+        'private' => (int) $node->private,
+      )
+    )->execute();
   }
   drupal_set_message(t('New node @nid was created and private=@private', array('@nid' => $node->nid, '@private' => !empty($node->private) ? 1 : 0)));
 }
@@ -426,7 +439,8 @@ function node_access_example_node_insert($node) {
  */
 function node_access_example_node_update($node) {
   // Find out if there is already a node_access_example record.
-  $exists =  db_query('SELECT nid FROM {node_access_example} WHERE nid = :nid', array(':nid' => $node->nid))->fetchField();
+  $exists = db_query('SELECT nid FROM {node_access_example} WHERE nid = :nid',
+    array(':nid' => $node->nid))->fetchField();
 
   // If there is already a record, update it with the new private value.
   if ($exists) {
@@ -437,7 +451,15 @@ function node_access_example_node_update($node) {
     ))
     ->condition('nid', $node->nid)
     ->execute();
-    drupal_set_message(t("Updated node @nid to set private=@private (@num nodes actually updated)", array('@private' => $node->private, '@num' => $num_updated, '@nid' => $node->nid)));
+    drupal_set_message(
+      t("Updated node @nid to set private=@private (@num nodes actually updated)",
+        array(
+          '@private' => $node->private,
+          '@num' => $num_updated,
+          '@nid' => $node->nid,
+        )
+      )
+    );
   }
   // Otherwise, create a new record.
   else {

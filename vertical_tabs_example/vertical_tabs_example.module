@@ -18,7 +18,9 @@
  */
 
 /**
- * Implements hook_menu for a simple explanation page.
+ * Implements hook_menu().
+ *
+ * Gives us a simple explanation page.
  */
 function vertical_tabs_example_menu() {
   $items['examples/vertical_tabs'] = array(
@@ -31,7 +33,7 @@ function vertical_tabs_example_menu() {
 }
 
 /**
- * Implement hook_form_alter().
+ * Implements hook_form_alter().
  *
  * Adds custom fieldset to the node form, and attach ajax behaviour for vertical
  * panels to update the settings description.
@@ -67,7 +69,7 @@ function vertical_tabs_example_form_alter(&$form, $form_state, $form_id) {
 
     // The form elements below provide a demonstration of how a fieldset
     // summary can be displayed in a collapsed tab.
-
+    //
     // This checkbox is used to show or hide the custom settings form using
     // javascript (altering states of a container defined later).
     $form['vertical_tabs_example']['enabled'] = array(

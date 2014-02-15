@@ -17,7 +17,7 @@
  */
 
 // This allows drupal_var_export() to work.
-require_once('includes/utility.inc');
+require_once 'includes/utility.inc';
 
 /**
  * Implements hook_menu().
@@ -63,7 +63,8 @@ function render_example_info() {
  */
 function render_example_arrays() {
 
-  $interval = 60; // Interval in seconds for cache update with #cache.
+  // Interval in seconds for cache update with #cache.
+  $interval = 60;
 
   $demos = array(
     // Demonstrate the simplest markup, a #markup element.
@@ -93,7 +94,8 @@ function render_example_arrays() {
         t('This is some text that should be put together'),
         t('This is some more text that we need'),
       ),
-      '#separator' => ' | ',  // Made up for this theme function.
+      // An element we've created which will be used by our theming function.
+      '#separator' => ' | ',
       '#theme' => 'render_example_aggregate',
     ),
 
@@ -148,7 +150,6 @@ function render_example_arrays() {
     ),
   );
 
-
   // The rest of this function just places the above arrays in a context where
   // they can be rendered (hopefully attractively and usefully) on the page.
   $page_array = array();
@@ -178,10 +179,10 @@ function render_example_arrays() {
 /**
  * A '#pre_render' function.
  *
- * @param $element
+ * @param array $element
  *   The element which will be rendered.
  *
- * @return
+ * @return array
  *   The altered element. In this case we add the #markup.
  */
 function render_example_cache_pre_render($element) {
@@ -198,7 +199,7 @@ function render_example_cache_pre_render($element) {
 /**
  * A potentially expensive function.
  *
- * @return
+ * @return string
  *   Some demo text.
  */
 function render_example_cache_expensive() {
@@ -213,10 +214,10 @@ function render_example_cache_expensive() {
 /**
  * A '#pre_render' function.
  *
- * @param $element
+ * @param array $element
  *   The element which will be rendered.
  *
- * @return
+ * @return array
  *   The altered element. In this case we add a #prefix to it.
  */
 function render_example_add_suffix($element) {
@@ -233,12 +234,12 @@ function render_example_add_suffix($element) {
 /**
  * A '#post_render' function to add a little markup onto the end markup.
  *
- * @param $markup
+ * @param string $markup
  *   The rendered element.
- * @param $element
+ * @param array $element
  *   The element which was rendered (for reference)
  *
- * @return
+ * @return string
  *   Markup altered as necessary. In this case we add a little postscript to it.
  */
 function render_example_add_prefix($markup, $element) {
@@ -373,7 +374,6 @@ function render_example_page_alter(&$page) {
     $page['sidebar_first']['#sorted'] = FALSE;
   }
 
-
   // Move the navigation menu into the content area.
   if (variable_get('render_example_move_navigation_menu', FALSE) && !empty($page['sidebar_first']['system_navigation']) && !empty($page['content'])) {
     $page['content']['system_navigation'] = $page['sidebar_first']['system_navigation'];
@@ -400,7 +400,7 @@ function render_example_page_alter(&$page) {
     $page['content']['#sorted'] = FALSE;
   }
 
-  // Add render array to the bottom of each block
+  // Add render array to the bottom of each block.
   if (variable_get('render_example_show_block', FALSE)) {
     foreach (element_children($page) as $region_name) {
       foreach (element_children($page[$region_name]) as $block_name) {
@@ -427,7 +427,7 @@ function render_example_page_alter(&$page) {
         );
 
         // Add the new block that contains the render array.
-        $page[$region_name][$block_name]['render_example_block_render_array'] =  drupal_get_form('render_example_embedded_form', $form);
+        $page[$region_name][$block_name]['render_example_block_render_array'] = drupal_get_form('render_example_embedded_form', $form);
         $page[$region_name][$block_name]['render_example_block_render_array']['#weight'] = 999;
       }
     }
@@ -453,11 +453,11 @@ function render_example_page_alter(&$page) {
  * This is a standard form builder function that takes an additional array,
  * which is itself a form.
  *
- * @param $form
- *   The standard $form
- * @param $form_state
- *   The standard $form_state
- * @param $form_items
+ * @param array $form
+ *   Form API form array.
+ * @param array $form_state
+ *   Form API form state array.
+ * @param array $form_items
  *   The form items to be included in this form.
  */
 function render_example_embedded_form($form, &$form_state, $form_items) {
@@ -521,12 +521,13 @@ function theme_render_array($variables) {
 
 /**
  * Adds a #type to the element before it gets rendered.
+ *
  * In this case, changes from the default 'ul' to 'ol'.
  *
- * @param $element
+ * @param array $element
  *   The element to be altered, in this case a list, ready for theme_item_list.
  *
- * @return
+ * @return array
  *   The altered list (with '#type')
  */
 function render_example_change_to_ol($element) {
@@ -535,17 +536,19 @@ function render_example_change_to_ol($element) {
 }
 
 /**
+ * Alter the rendered output after all other theming.
+ *
  * This #post_render function gets to alter the rendered output after all
  * theme functions have acted on it, and it receives the original data, so
  * can make decisions based on that. In this example, no use is made of the
  * passed-in $element.
  *
- * @param $markup
+ * @param string $markup
  *   The already-rendered data
- * @param unknown_type $element
+ * @param array $element
  *   The data element that was rendered
  *
- * @return
+ * @return string
  *   The altered data.
  */
 function render_example_add_hr($markup, $element) {

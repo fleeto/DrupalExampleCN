@@ -74,6 +74,7 @@ function token_example_tokens($type, $tokens, array $data = array(), array $opti
           // text, it does not need to ever be sanitized.
           $replacements[$original] = $format->format;
           break;
+
         case 'name':
           // Since the format name is user-entered text, santize when requested.
           $replacements[$original] = $sanitize ? filter_xss($format->name) : $format->name;

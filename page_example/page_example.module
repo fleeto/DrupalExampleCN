@@ -42,7 +42,7 @@ function page_example_help($path, $arg) {
 
     case 'admin/help#page_example':
       // Help text for the admin section, using the module name in the path.
-      return t('This is help text created in the page example\'s second case.');
+      return t("This is help text created in the page example's second case.");
   }
 }
 
@@ -139,10 +139,17 @@ function page_example_menu() {
  * Constructs a descriptive page.
  *
  * Our menu maps this function to the path 'examples/page_example'.
- *
  */
 function page_example_description() {
-  return array('#markup' => t('<p>The page_example provides two pages, "simple" and "arguments".</p><p>The <a href="@simple_link">simple page</a> just returns a renderable array for display.</p><p>The <a href="@arguments_link">arguments page</a> takes two arguments and displays them, as in @arguments_link</p>', array('@simple_link' => url('examples/page_example/simple', array('absolute' => TRUE)), '@arguments_link' => url('examples/page_example/arguments/23/56', array('absolute' => TRUE)))));
+  return array(
+    '#markup' =>
+    t('<p>The page_example provides two pages, "simple" and "arguments".</p><p>The <a href="@simple_link">simple page</a> just returns a renderable array for display.</p><p>The <a href="@arguments_link">arguments page</a> takes two arguments and displays them, as in @arguments_link</p>',
+      array(
+        '@simple_link' => url('examples/page_example/simple', array('absolute' => TRUE)),
+        '@arguments_link' => url('examples/page_example/arguments/23/56', array('absolute' => TRUE)),
+      )
+    ),
+  );
 }
 
 /**
@@ -184,7 +191,8 @@ function page_example_arguments($first, $second) {
   if (!is_numeric($first) || !is_numeric($second)) {
     // We will just show a standard "access denied" page in this case.
     drupal_access_denied();
-    return;  // We actually don't get here.
+    // We actually don't get here.
+    return;
   }
 
   $list[] = t("First number was @number.", array('@number' => $first));
@@ -192,8 +200,10 @@ function page_example_arguments($first, $second) {
   $list[] = t('The total was @number.', array('@number' => $first + $second));
 
   $render_array['page_example_arguments'] = array(
-    '#theme' => 'item_list',  // The theme function to apply to the #items
-    '#items' => $list,  // The list itself.
+    // The theme function to apply to the #items.
+    '#theme' => 'item_list',
+    // The list itself.
+    '#items' => $list,
     '#title' => t('Argument Information'),
   );
   return $render_array;

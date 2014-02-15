@@ -106,11 +106,10 @@ function trigger_example_trigger_info() {
  * Triggers are used most of the time to do something when an event happens.
  * The most common type of event is a hook invocation,
  * but that is not the only possibility.
- *
  */
 
 /**
- * triggersomething trigger: Run actions associated with an arbitrary event.
+ * Trigger: triggersomething. Run actions associated with an arbitrary event.
  *
  * Here pressing a button is a trigger. We have defined a
  * custom function as a trigger (trigger_example_triggersomething).
@@ -123,17 +122,18 @@ function trigger_example_trigger_info() {
  * This function is executed during the submission of the example form defined
  * in this module.
  *
- * @param $options
+ * @param array $options
  *   Array of arguments used to call the triggersomething function, if any.
  */
 function trigger_example_triggersomething($options = array()) {
-  // Ask the trigger module for all actions enqueued for the 'triggersomething' trigger.
+  // Ask the trigger module for all actions enqueued for the 'triggersomething'
+  // trigger.
   $aids = trigger_get_assigned_actions('triggersomething');
-  // prepare a basic context, indicating group and "hook", and call all the
+  // Prepare a basic context, indicating group and "hook", and call all the
   // actions with this context as arguments.
   $context = array(
     'group' => 'trigger_example',
-    'hook' => 'triggersomething'
+    'hook' => 'triggersomething',
   );
   actions_do(array_keys($aids), (object) $options, $context);
 }
@@ -158,13 +158,13 @@ function trigger_example_triggersomething($options = array()) {
 function trigger_example_user_login(&$edit, $account, $category = NULL) {
   // Verify user has never accessed the site: last access was creation date.
   if ($account->access == 0) {
-    // Call the aproppriate trigger function
+    // Call the aproppriate trigger function.
     _trigger_example_first_time_login('user_first_time_login', $edit, $account, $category);
   }
 }
 
 /**
- * Trigger function for "User first time login"
+ * Trigger function for "User first time login".
  *
  * This trigger is a user-type triggers, so is grouped with other user-type
  * triggers. It needs to provide all the context that user-type triggers
@@ -218,7 +218,8 @@ function _trigger_example_first_time_login($hook, &$edit, $account, $category = 
 }
 
 /**
- * Helper functions for the module interface to test the triggersomething trigger.
+ * Helper functions for the module interface to test the triggersomething
+ * trigger.
  */
 
 /**
@@ -238,13 +239,16 @@ function trigger_example_help($path, $arg) {
         assign an action to the "After a user has logged in for the first time" trigger
         and then log a user in.', array('@actions-url' => url('admin/config/system/actions'), '@triggers-url' => url('admin/structure/trigger/trigger_example')));
       return "<p>$explanation</p>";
+
     case 'admin/structure/trigger/system':
       return t('you can assign actions to run everytime an email is sent by Drupal');
+
     case 'admin/structure/trigger/trigger_example':
       $explanation = t(
-      "A trigger is a system event. For the trigger example, it's just a button-press.
-      To demonstrate the trigger example, choose to associate the 'display a message to the user'
-      action with the 'after the triggersomething button is pressed' trigger.");
+        "A trigger is a system event. For the trigger example, it's just a button-press.
+        To demonstrate the trigger example, choose to associate the 'display a message to the user'
+        action with the 'after the triggersomething button is pressed' trigger."
+      );
       return "<p>$explanation</p>";
   }
 }
@@ -304,10 +308,6 @@ function trigger_example_form_submit($form, $form_state) {
  * and should only be used when you need to alter current existing triggers. In
  * this example implementation a little change is done to the existing trigger
  * provided by core: 'cron'
- *
- * @param $triggers
- *   Array of trigger information returned by hook_trigger_info()
- *   implementations.
  *
  * @see hook_trigger_info()
  */

@@ -160,8 +160,10 @@ function theming_example_page() {
 }
 
 /**
- * An example page where the output is supplied as an array which
- * is themed into a list and styled with css.
+ * The list page callback.
+ *
+ * An example page where the output is supplied as an array which is themed
+ * into a list and styled with css.
  *
  * In this case we'll use the core-provided theme_item_list as a #theme_wrapper.
  * Any theme need only override theme_item_list to change the behavior.
@@ -186,7 +188,7 @@ function theming_example_list_page() {
     '#attached' => array('css' => array(drupal_get_path('module', 'theming_example') . '/theming_example.css')),
     '#title' => $title,
     '#items' => $items,
-    '#attributes' => array('class' => array('render-version-list'))
+    '#attributes' => array('class' => array('render-version-list')),
   );
 
   // Now we'll create a render array which uses our own list formatter,
@@ -227,6 +229,15 @@ function theming_example_select_form($form, &$form_state) {
   );
   return $form;
 }
+
+/**
+ * Submit handler for the select form.
+ *
+ * @param array $form
+ *   Form API form array.
+ * @param array $form_state
+ *   Form API form state array.
+ */
 function theming_example_select_form_submit($form, &$form_state) {
   drupal_set_message(t('You chose %input', array('%input' => $form_state['values']['choice'])));
 }
@@ -249,6 +260,15 @@ function theming_example_text_form($form, &$form_state) {
   );
   return $form;
 }
+
+/**
+ * Submit handler for the text form.
+ *
+ * @param array $form
+ *   Form API form array.
+ * @param array $form_state
+ *   Form API form state array.
+ */
 function theming_example_text_form_submit($form, &$form_state) {
   drupal_set_message(t('You entered %input', array('%input' => $form_state['values']['text'])));
 }
@@ -263,8 +283,8 @@ function theming_example_text_form_submit($form, &$form_state) {
 function theme_theming_example_content_array($variables) {
   $element = $variables['element'];
   $output = '';
-  foreach (element_children($element) AS $count) {
-    if (! $count) {
+  foreach (element_children($element) as $count) {
+    if (!$count) {
       // The first paragraph is bolded.
       $output .= '<p><strong>' . $element[$count] . '</strong></p>';
     }
@@ -292,7 +312,6 @@ function theme_theming_example_list($variables) {
   // state the list type. This defaults to 'ul'.
   // Add a css class so that you can modify the list styling.
   // We'll just call theme('item_list') to render.
-
   $variables = array(
     'items' => $items,
     'title' => $title,
@@ -326,8 +345,10 @@ function theme_theming_example_select_form($variables) {
 }
 
 /**
- * Implements template_preprocess() to prepare variables for use inside the
- * theming-example-text-form.tpl.php template file.
+ * Implements template_preprocess().
+ *
+ * We prepare variables for use inside the theming-example-text-form.tpl.php
+ * template file.
  *
  * In this example, we create a couple new variables, 'text_form' and
  * 'text_form_content', that clean up the form output.  Drupal will turn the

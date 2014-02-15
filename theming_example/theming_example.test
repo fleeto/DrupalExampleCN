@@ -11,6 +11,9 @@
  */
 class ThemingExampleTestCase extends DrupalWebTestCase {
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'Theming Example',
@@ -19,7 +22,10 @@ class ThemingExampleTestCase extends DrupalWebTestCase {
     );
   }
 
-  function setUp() {
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
     // Enable the module.
     parent::setUp('theming_example');
   }
@@ -27,9 +33,10 @@ class ThemingExampleTestCase extends DrupalWebTestCase {
   /**
    * Verify the functionality of the example module.
    */
-  function testThemingPage() {
-    // no need to login for this test
-    // Check that the main page has been themed (first line with <b>) and has content.
+  public function testThemingPage() {
+    // No need to login for this test.
+    // Check that the main page has been themed (first line with <b>) and has
+    // content.
     $this->drupalGet('examples/theming_example');
     $this->assertRaw('<strong>Some examples of pages');
     $this->assertRaw('examples/theming_example/theming_example_select_form">Simple form 1</a>');
@@ -53,6 +60,7 @@ class ThemingExampleTestCase extends DrupalWebTestCase {
     // Visit the text form page and do spot checks.
     $this->drupalGet('examples/theming_example/theming_example_text_form');
     $this->assertText('Please input something!');
-    $this->assertPattern('%</div>\s*<input +type="submit"%');   // If it were themed normally there would be a div wrapper here
+    // If it were themed normally there would be a div wrapper in our pattern.
+    $this->assertPattern('%</div>\s*<input +type="submit"%');
   }
 }

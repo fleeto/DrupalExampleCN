@@ -12,8 +12,11 @@
  */
 class TokenExampleTestCase extends DrupalWebTestCase {
 
-  protected $web_user;
+  protected $webUser;
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'Token example functionality',
@@ -22,15 +25,21 @@ class TokenExampleTestCase extends DrupalWebTestCase {
     );
   }
 
-  function setUp() {
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
     parent::setUp('token_example');
-    $this->web_user = $this->drupalCreateUser();
-    $this->drupalLogin($this->web_user);
+    $this->webUser = $this->drupalCreateUser();
+    $this->drupalLogin($this->webUser);
   }
 
-  function testInterface() {
+  /**
+   * Test interface.
+   */
+  public function testInterface() {
     $filtered_id = db_query("SELECT format FROM {filter_format} WHERE name = 'Filtered HTML'")->fetchField();
-    $default_format_id = filter_default_format($this->web_user);
+    $default_format_id = filter_default_format($this->webUser);
 
     $this->drupalGet('examples/token');
     $this->assertNoFieldByName('node');
@@ -40,7 +49,7 @@ class TokenExampleTestCase extends DrupalWebTestCase {
       'text' => 'User [current-user:name] is trying the token example!',
     );
     $this->drupalPost(NULL, $edit, t('Submit'));
-    $this->assertText('User ' . $this->web_user->name . ' is trying the token example!');
+    $this->assertText('User ' . $this->webUser->name . ' is trying the token example!');
 
     // Create a node and then make the 'Plain text' text format the default.
     $node = $this->drupalCreateNode(array('title' => 'Example node', 'status' => NODE_PUBLISHED));

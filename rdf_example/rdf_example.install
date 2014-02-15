@@ -22,7 +22,7 @@
  * @ingroup rdf_example
  */
 function rdf_example_install() {
-  // use get_t() to get the name of our localization function for translation
+  // Use get_t() to get the name of our localization function for translation
   // during install, when t() is not available.
   $t = get_t();
 
