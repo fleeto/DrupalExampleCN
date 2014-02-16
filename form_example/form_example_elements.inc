@@ -173,10 +173,14 @@ function _form_example_element_info() {
  * builder is not processing the input.
  *
  * @param array $element
+ *   Form element.
  * @param array $input
- * @param $form_state
+ *   Input.
+ * @param array $form_state
+ *   Form state.
  *
  * @return array
+ *   The modified element.
  */
 function form_example_phonenumber_combined_value(&$element, $input = FALSE, $form_state = NULL) {
   if (!$form_state['process_input']) {
@@ -474,7 +478,7 @@ function form_example_element_demo_form($form, &$form_state) {
     '#type' => 'form_example_checkbox',
     '#title' => t('Form Example checkbox'),
     '#default_value' => variable_get('form_example_checkbox', FALSE),
-    '#description' => t('Nothing more than a regular checkbox but with a theme provided by this module.')
+    '#description' => t('Nothing more than a regular checkbox but with a theme provided by this module.'),
   );
 
   $form['a_form_example_element_discrete'] = array(

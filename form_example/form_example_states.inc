@@ -37,7 +37,9 @@
  * @code
  * '#states' => array(
  *   'action_to_take_on_this_form_element' => array(
- *     'jquery_selector_for_another_element' => array('condition_type' => value),
+ *     'jquery_selector_for_another_element' => array(
+ *       'condition_type' => value,
+ *     ),
  *   ),
  * ),
  * @endcode
@@ -47,7 +49,8 @@
  * 'country_writein' element below for an example.
  *
  * Note that the easiest way to select a textfield, checkbox, or select is with
- * the @link http://api.jquery.com/input-selector/ ':input' jquery shortcut @endlink,
+ * the
+ * @link http://api.jquery.com/input-selector/ ':input' jquery shortcut @endlink,
  * which selects any any of those.
  *
  * There are examples below of changing or hiding an element when a checkbox
@@ -55,7 +58,7 @@
  *
  * See drupal_process_states() for full documentation.
  *
- * See also @link http://api.drupal.org/api/drupal/developer--topics--forms_api_reference.html/7#states Form API Reference @endlink
+ * @see forms_api_reference.html
  */
 function form_example_states_form($form, &$form_state) {
   $form['student_type'] = array(

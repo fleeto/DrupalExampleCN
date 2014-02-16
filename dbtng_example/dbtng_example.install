@@ -12,14 +12,14 @@
  *
  * We will create a default entry in the database.
  *
+ * Outside of the .install file we would use drupal_write_record() to populate
+ * the database, but it cannot be used here, so we'll use db_insert().
+ *
  * @see hook_install()
+ *
  * @ingroup dbtng_example
  */
 function dbtng_example_install() {
-  // Outside of the .install file we would use drupal_write_record() to
-  // populate the database, but it cannot be used here, so we'll use
-  // db_insert().
-
   // Add a default entry.
   $fields = array(
     'name'    => 'John',
@@ -40,22 +40,7 @@ function dbtng_example_install() {
   db_insert('dbtng_example')
     ->fields($fields)
     ->execute();
-
 }
-
-/**
- * Implements hook_uninstall().
- *
- * As in hook_install, there is no need to uninstall schema, Drupal will do it
- * for us.
- *
- * @see hook_uninstall()
- * @ingroup dbtng_example
- */
-function dbtng_example_uninstall() {
-  // nothing.
-}
-
 
 /**
  * Implements hook_schema().
@@ -103,7 +88,7 @@ function dbtng_example_schema() {
         'default' => 0,
         'size' => 'tiny',
         'description' => 'The age of the person in years.',
-      )
+      ),
     ),
     'primary key' => array('pid'),
     'indexes' => array(

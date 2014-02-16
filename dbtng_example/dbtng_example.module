@@ -64,7 +64,7 @@
  * @see db_update()
  * @see db_delete()
  * @see drupal_write_record()
-*/
+ */
 
 /**
  * Save an entry in the database.
@@ -87,7 +87,7 @@
  * and terminate your application if the exception is not handled, it is best
  * to employ try/catch.
  *
- * @param $entry
+ * @param array $entry
  *   An array containing all the fields of the database record.
  *
  * @see db_insert()
@@ -123,7 +123,7 @@ function dbtng_example_entry_insert($entry) {
  *  );
  * @endcode
  *
- * @param $entry
+ * @param array $entry
  *   An array containing all the fields of the item to be updated.
  *
  * @see db_update()
@@ -152,7 +152,7 @@ function dbtng_example_entry_update($entry) {
  *  db_query("DELETE FROM {dbtng_example} WHERE pid = %d", $entry['pid]);
  * @endcode
  *
- * @param $entry
+ * @param array $entry
  *   An array containing at least the person identifier 'pid' element of the
  *   entry to delete.
  *
@@ -195,9 +195,9 @@ function dbtng_example_entry_delete($entry) {
  *   )->execute();
  * @endcode
  *
- * But for more dynamic queries, Drupal provides the db_select()
- * API method, so there are several ways to perform the same SQL query.
- * See the @link http://drupal.org/node/310075 handbook page on dynamic queries. @endlink
+ * But for more dynamic queries, Drupal provides the db_select() API method, so
+ * there are several ways to perform the same SQL query. See the
+ * @link http://drupal.org/node/310075 handbook page on dynamic queries. @endlink
  *
  * @code
  *   // SELECT * FROM {dbtng_example} WHERE uid = 0 AND name = 'John'
@@ -232,16 +232,16 @@ function dbtng_example_entry_delete($entry) {
  *     ->execute();
  * @endcode
  *
- * @param $entry
+ * @param array $entry
  *   An array containing all the fields used to search the entries in the table.
- * @return
+ *
+ * @return object
  *   An object containing the loaded entries if found.
  *
  * @see db_select()
  * @see db_query()
  * @see http://drupal.org/node/310072
  * @see http://drupal.org/node/310075
- *
  */
 function dbtng_example_entry_load($entry = array()) {
   // Read all fields from the dbtng_example table.
@@ -320,8 +320,6 @@ function dbtng_example_advanced_list() {
   return $output;
 }
 
-//// Helper functions ////
-
 /**
  * Implements hook_help().
  *
@@ -333,13 +331,16 @@ function dbtng_example_help($path) {
     case 'examples/dbtng':
       $output = t('Generate a list of all entries in the database. There is no filter in the query.');
       break;
+
     case 'examples/dbtng/advanced':
       $output  = t('A more complex list of entries in the database.') . ' ';
       $output .= t('Only the entries with name = "John" and age older than 18 years are shown, the username of the person who created the entry is also shown.');
       break;
+
     case 'examples/dbtng/update':
       $output = t('Demonstrates a database update operation.');
       break;
+
     case 'examples/dbtng/add':
       $output = t('Add an entry to the dbtng_example table.');
       break;
@@ -486,7 +487,14 @@ function dbtng_example_form_update($form, &$form_state) {
   }
 
   foreach ($entries as $entry) {
-    $options[$entry->pid] = t("@pid: @name @surname (@age)", array('@pid' => $entry->pid, '@name' => $entry->name, '@surname' => $entry->surname, '@age' => $entry->age));
+    $options[$entry->pid] = t("@pid: @name @surname (@age)",
+      array(
+        '@pid' => $entry->pid,
+        '@name' => $entry->name,
+        '@surname' => $entry->surname,
+        '@age' => $entry->age,
+      )
+    );
     $keyed_entries[$entry->pid] = $entry;
   }
   $default_entry = !empty($form_state['values']['pid']) ? $keyed_entries[$form_state['values']['pid']] : $entries[0];
@@ -563,7 +571,8 @@ function dbtng_example_form_update_submit($form, &$form_state) {
     'uid' => $user->uid,
   );
   $count = dbtng_example_entry_update($entry);
-  drupal_set_message(t("Updated entry @entry (@count row updated)", array('@count' => $count, '@entry' => print_r($entry, TRUE))));
+  drupal_set_message(t("Updated entry @entry (@count row updated)",
+    array('@count' => $count, '@entry' => print_r($entry, TRUE))));
 }
 /**
  * @} End of "defgroup dbtng_example".

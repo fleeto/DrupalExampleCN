@@ -19,7 +19,7 @@
  */
 
 /**
- * Implement hook_mail().
+ * Implements hook_mail().
  *
  * This hook defines a list of possible e-mail templates that this module can
  * send. Each e-mail is given a unique identifier, or 'key'.
@@ -55,7 +55,6 @@ function email_example_mail($key, &$message, $params) {
       // Note that the message body is an array, not a string.
       $message['body'][] = t('@name sent you the following message:', array('@name' => $user->name), $options);
       // Because this is just user-entered text, we do not need to translate it.
-
       // Since user-entered text may have unintentional HTML entities in it like
       // '<' or '>', we need to make sure these entities are properly escaped,
       // as the body will later be transformed from HTML to text, meaning
@@ -68,7 +67,7 @@ function email_example_mail($key, &$message, $params) {
 /**
  * Sends an e-mail.
  *
- * @param $form_values
+ * @param array $form_values
  *   An array of values from the contact form fields that were submitted.
  *   There are just two relevant items: $form_values['email'] and
  *   $form_values['message'].
@@ -89,12 +88,12 @@ function email_example_mail_send($form_values) {
   $params = $form_values;
 
   // The language of the e-mail. This will one of three values:
-  // * user_preferred_language(): Used for sending mail to a particular website
+  // - user_preferred_language(): Used for sending mail to a particular website
   //   user, so that the mail appears in their preferred language.
-  // * global $language: Used when sending a mail back to the user currently
+  // - global $language: Used when sending a mail back to the user currently
   //   viewing the site. This will send it in the language they're currently
   //   using.
-  // * language_default(): Used when sending mail to a pre-existing, 'neutral'
+  // - language_default(): Used when sending mail to a pre-existing, 'neutral'
   //   address, such as the system e-mail address, or when you're unsure of the
   //   language preferences of the intended recipient.
   //
@@ -121,7 +120,7 @@ function email_example_mail_send($form_values) {
 }
 
 /**
- * Implement hook_mail_alter().
+ * Implements hook_mail_alter().
  *
  * This function is not required to send an email using Drupal's mail system.
  *
@@ -142,15 +141,18 @@ function email_example_mail_alter(&$message) {
   if (is_array($message['body'])) {
     $message['body'][] = $signature;
   }
-  else {  // Some modules use the body as a string, erroneously.
+  else {
+    // Some modules use the body as a string, erroneously.
     $message['body'] .= $signature;
   }
 }
 
-///// Supporting functions ////
+/**
+ * Supporting functions.
+ */
 
 /**
- * Implement hook_menu().
+ * Implements hook_menu().
  *
  * Set up a page with an e-mail contact form on it.
  */

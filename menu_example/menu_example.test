@@ -11,8 +11,10 @@
  * @ingroup menu_example
  */
 class MenuExampleTestCase extends DrupalWebTestCase {
-  protected $web_user;
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'Menu example functionality',
@@ -31,11 +33,10 @@ class MenuExampleTestCase extends DrupalWebTestCase {
   /**
    * Test the various menus.
    */
-  function testMenuExample() {
+  public function testMenuExample() {
     $this->drupalGet('');
     $this->clickLink(t('Menu Example'));
     $this->assertText(t('This is the base page of the Menu Example'));
-
 
     $this->clickLink(t('Custom Access Example'));
     $this->assertText(t('Custom Access Example'));

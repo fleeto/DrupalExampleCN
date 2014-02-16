@@ -92,7 +92,7 @@ function filter_example_filter_info() {
   );
   $filters['filter_time'] = array(
     'title' => t('Time Tag (example)'),
-    'description' => t('Every instance of the special &lt;time /&gt; tag will be replaced with the current date and time in the user\'s specified time zone.'),
+    'description' => t("Every instance of the special &lt;time /&gt; tag will be replaced with the current date and time in the user's specified time zone."),
     'prepare callback' => '_filter_example_filter_time_prepare',
     'process callback' => '_filter_example_filter_time_process',
     'tips callback' => '_filter_example_filter_time_tips',

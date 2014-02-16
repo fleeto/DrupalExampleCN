@@ -545,9 +545,8 @@ function file_example_stream_wrappers() {
  * equivalent of session://foo/bar.txt, which will map into
  * $_SESSION as keys: $_SESSION['foo']['bar.txt']
  *
- * @param $path-elements
- *   The elements of the path will come from Menu API as the
- *   function arguments. See explanation above.
+ * Menu API will pass in additional path elements as function arguments. You
+ * can obtain these with func_get_args().
  *
  * @return string
  *   A message containing the contents of the session file.

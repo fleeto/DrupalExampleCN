@@ -166,13 +166,14 @@ function block_example_contents($which_block) {
       // Block content can be returned in two formats: renderable arrays
       // (as here) are preferred though a simple string will work as well.
       // Block content created through the UI defaults to a string.
-      return array(
+      $result = array(
         '#markup' => variable_get('block_example_string',
           t('A default value. This block was created at %time',
             array('%time' => date('c'))
           )
         ),
       );
+      return $result;
 
     case 'example_empty':
       // It is possible that a block not have any content, since it is

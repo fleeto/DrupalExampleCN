@@ -11,6 +11,9 @@
  */
 class DBTNGExampleUnitTestCase extends DrupalWebTestCase {
 
+  /**
+   * {@inheritdoc}
+   */
   public static function getInfo() {
     return array(
       'name' => 'DBTNG example unit and UI tests',
@@ -19,14 +22,17 @@ class DBTNGExampleUnitTestCase extends DrupalWebTestCase {
     );
   }
 
-  function setUp() {
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
     parent::setUp('dbtng_example');
   }
 
   /**
    * Test default module installation, two entries in the database table.
    */
-  function testInstall() {
+  public function testInstall() {
     $result = dbtng_example_entry_load();
     $this->assertEqual(
       count($result),
@@ -39,19 +45,24 @@ class DBTNGExampleUnitTestCase extends DrupalWebTestCase {
   /**
    * Test the UI.
    */
-  function testUI() {
+  public function testUI() {
     // Test the basic list.
     $this->drupalGet('examples/dbtng');
     $this->assertPattern("/John[td\/<>\w]+Doe/", "Text 'John Doe' found in table");
 
-    //Test the add tab.
+    // Test the add tab.
     // Add the new entry.
     $this->drupalPost('examples/dbtng/add',
-      array('name'  => 'Some', 'surname' => 'Anonymous', 'age' => 33), t('Add'));
+      array(
+        'name'  => 'Some',
+        'surname' => 'Anonymous',
+        'age' => 33,
+      ),
+      t('Add')
+    );
     // Now find the new entry.
     $this->drupalGet('examples/dbtng');
     $this->assertPattern("/Some[td\/<>\w]+Anonymous/", "Text 'Some Anonymous' found in table");
-
 
     // Try the update tab.
     // Find out the pid of our "anonymous" guy.
@@ -65,8 +76,7 @@ class DBTNGExampleUnitTestCase extends DrupalWebTestCase {
     $entry = $result[0];
     unset($entry->uid);
     $entry->name = 'NewFirstName';
-    $this->drupalPost('examples/dbtng/update',
-      (array)$entry, t('Update'));
+    $this->drupalPost('examples/dbtng/update', (array) $entry, t('Update'));
     // Now find the new entry.
     $this->drupalGet('examples/dbtng');
     $this->assertPattern("/NewFirstName[td\/<>\w]+Anonymous/", "Text 'NewFirstName Anonymous' found in table");
@@ -81,7 +91,7 @@ class DBTNGExampleUnitTestCase extends DrupalWebTestCase {
   /**
    * Test several combinations, adding entries, updating and deleting.
    */
-  function testAPIExamples() {
+  public function testAPIExamples() {
     // Create a new entry.
     $entry = array(
       'name' => 'James',
@@ -90,7 +100,7 @@ class DBTNGExampleUnitTestCase extends DrupalWebTestCase {
     );
     dbtng_example_entry_insert($entry);
 
-    // Save another entry
+    // Save another entry.
     $entry = array(
       'name' => 'Jane',
       'surname' => 'NotDoe',
@@ -98,7 +108,7 @@ class DBTNGExampleUnitTestCase extends DrupalWebTestCase {
     );
     dbtng_example_entry_insert($entry);
 
-    // Verify that 4 records are found in the database
+    // Verify that 4 records are found in the database.
     $result = dbtng_example_entry_load();
     $this->assertEqual(
       count($result),
@@ -106,7 +116,7 @@ class DBTNGExampleUnitTestCase extends DrupalWebTestCase {
       'Found a total of four entries in the table after creating two additional entries.'
     );
 
-    // Verify 2 of these records have 'Doe' as surname
+    // Verify 2 of these records have 'Doe' as surname.
     $result = dbtng_example_entry_load(array('surname' => 'Doe'));
     $this->assertEqual(
       count($result),
@@ -123,7 +133,7 @@ class DBTNGExampleUnitTestCase extends DrupalWebTestCase {
     // Our NotDoe will be changed to "NowDoe".
     $entry = $result[0];
     $entry->surname = "NowDoe";
-    dbtng_example_entry_update((array)$entry);
+    dbtng_example_entry_update((array) $entry);
 
     $result = dbtng_example_entry_load(array('surname' => 'NowDoe'));
     $this->assertEqual(
@@ -138,12 +148,12 @@ class DBTNGExampleUnitTestCase extends DrupalWebTestCase {
       1,
       'Found one entry for John Doe.'
     );
-    // Get the entry
+    // Get the entry.
     $entry = (array) end($result);
     // Change age to 45
     $entry['age'] = 45;
-    // Update entry in database
-    dbtng_example_entry_update((array)$entry);
+    // Update entry in database.
+    dbtng_example_entry_update((array) $entry);
 
     // Find entries with age = 45
     // Read only John Doe entry.
@@ -170,7 +180,7 @@ class DBTNGExampleUnitTestCase extends DrupalWebTestCase {
     // Delete the entry.
     dbtng_example_entry_delete($entry);
 
-    // Verify that now there are only 3 records
+    // Verify that now there are only 3 records.
     $result = dbtng_example_entry_load();
     $this->assertEqual(
       count($result),

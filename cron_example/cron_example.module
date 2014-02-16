@@ -43,12 +43,12 @@ function cron_example_form($form, &$form_state) {
     '#markup' => '<div>' . t('The cron example demonstrates hook_cron() and hook_cron_queue_info() processing. If you have administrative privileges you can run cron from this page and see the results.') . '</div>',
   );
   $form['status']['last'] = array(
-    '#markup' => '<div>' . t('cron_example_cron() will next execute the first time cron runs after %time (%seconds seconds from now)' . '</div>',
+    '#markup' => '<div>' . t('cron_example_cron() will next execute the first time cron runs after %time (%seconds seconds from now)',
       array(
         '%time' => date_iso8601(variable_get('cron_example_next_execution', time())),
         '%seconds' => variable_get('cron_example_next_execution', time()) - time(),
       )
-    ),
+    ) . '</div>',
   );
 
   if (user_access('administer site configuration')) {
@@ -110,12 +110,12 @@ function cron_example_form($form, &$form_state) {
     '#type' => 'select',
     '#title' => t('Cron interval'),
     '#description' => t('Time after which cron_example_cron will respond to a processing request.'),
-    '#default_value' => variable_get('cron_example_interval', 60*60),
+    '#default_value' => variable_get('cron_example_interval', 60 * 60),
     '#options' => array(
       60 => t('1 minute'),
       300 => t('5 minutes'),
       3600 => t('1 hour'),
-      60*60*24 => t('1 day'),
+      60 * 60 * 24 => t('1 day'),
     ),
   );
 
@@ -142,15 +142,14 @@ function cron_example_form_cron_run_submit($form, &$form_state) {
 }
 
 /**
- * #submit function used to add the items to the queue when signaled by
- * the form.
+ * Submit function used to add the items to the queue.
  */
 function cron_example_add_jobs_to_queue($form, &$form_state) {
   $queue = $form_state['values']['queue'];
   $num_items = $form_state['values']['num_items'];
 
   $queue = DrupalQueue::get($queue);
-  for ($i=1; $i <= $num_items; $i++) {
+  for ($i = 1; $i <= $num_items; $i++) {
     $item = new stdClass();
     $item->created = time();
     $item->sequence = $i;
@@ -171,10 +170,9 @@ function cron_example_add_jobs_to_queue($form, &$form_state) {
 function cron_example_cron() {
   // Default to an hourly interval. Of course, cron has to be running at least
   // hourly for this to work.
-  $interval = variable_get('cron_example_interval', 60*60);
+  $interval = variable_get('cron_example_interval', 60 * 60);
   // We usually don't want to act every time cron runs (which could be every
   // minute) so keep a time for the next run in a variable.
-
   if (time() >= variable_get('cron_example_next_execution', 0)) {
     // This is a silly example of a cron job.
     // It just makes it obvious that the job has run without
@@ -204,7 +202,8 @@ function cron_example_cron() {
 function cron_example_cron_queue_info() {
   $queues['cron_example_queue_1'] = array(
     'worker callback' => 'cron_example_queue_1_worker',
-    'time' => 1, // One second max runtime per cron run.
+    // One second max runtime per cron run.
+    'time' => 1,
   );
   $queues['cron_example_queue_2'] = array(
     'worker callback' => 'cron_example_queue_2_worker',
@@ -214,14 +213,21 @@ function cron_example_cron_queue_info() {
 }
 
 /**
- * Simple workers for the two queues.
+ * Simple worker for our queues.
  *
- * @param $item
+ * @param object $item
  *   Any object to be worked on.
  */
 function cron_example_queue_1_worker($item) {
   cron_example_queue_report_work(1, $item);
 }
+
+/**
+ * Simple worker for our queues.
+ *
+ * @param object $item
+ *   Any object to be worked on.
+ */
 function cron_example_queue_2_worker($item) {
   cron_example_queue_report_work(2, $item);
 }
@@ -229,16 +235,30 @@ function cron_example_queue_2_worker($item) {
 /**
  * Simple reporter for the workers.
  *
- * @param $worker
- *   (integer) worker number
- * @param $item
- *   (object) the $item which was stored in the cron queue.
+ * @param int $worker
+ *   Worker number.
+ * @param object $item
+ *   The $item which was stored in the cron queue.
  */
 function cron_example_queue_report_work($worker, $item) {
   if (!empty($GLOBALS['cron_example_show_status_message'])) {
-    drupal_set_message(t('Queue @worker worker processed item with sequence @sequence created at @time', array('@worker' => $worker, '@sequence' => $item->sequence, '@time' => date_iso8601($item->created))));
+    drupal_set_message(
+      t('Queue @worker worker processed item with sequence @sequence created at @time',
+        array(
+          '@worker' => $worker,
+          '@sequence' => $item->sequence,
+          '@time' => date_iso8601($item->created),
+        )
+      )
+    );
   }
-  watchdog('cron_example', 'Queue @worker worker processed item with sequence @sequence created at @time', array('@worker' => $worker, '@sequence' => $item->sequence, '@time' => date_iso8601($item->created)));
+  watchdog('cron_example', 'Queue @worker worker processed item with sequence @sequence created at @time',
+    array(
+      '@worker' => $worker,
+      '@sequence' => $item->sequence,
+      '@time' => date_iso8601($item->created),
+    )
+  );
 }
 
 /**
