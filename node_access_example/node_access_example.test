@@ -41,6 +41,11 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
    * - Test that each user cannot view the other user's private article.
    * - Test that each user finds only appropriate (non-private + own private)
    *   in search results.
+   * - Logout.
+   * - Test that anonymous user can't view, edit or delete private content which
+   *   has author.
+   * - Test that anonymous user can't view, edit or delete private content with
+   *   anonymous author.
    * - Create another user with 'view any private content'.
    * - Test that user 4 can view all content created above.
    * - Test that user 4 can search for all content created above.
@@ -145,6 +150,37 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
       }
     }
 
+    // Test cases for anonymus user.
+    $this->drupalLogout();
+
+    // Test that private nodes with authors are not accessible.
+    foreach ($private_nodes as $nid) {
+      if (($node = node_load($nid)) === FALSE) {
+        continue;
+      }
+      $this->checkNodeAccess($nid, FALSE, FALSE, FALSE);
+    }
+
+    // Test that private nodes that don't have author are not accessible.
+    foreach ($private_nodes as $nid) {
+      if (($node = node_load($nid)) === FALSE) {
+        continue;
+      }
+      $original_uid = $node->uid;
+
+      // Change node author to anonymus.
+      $node->uid = 0;
+      node_save($node);
+      $node = node_load($nid);
+      $this->assertEqual($node->uid, 0);
+
+      $this->checkNodeAccess($nid, FALSE, FALSE, FALSE);
+
+      // Change node to original author.
+      $node->uid = $original_uid;
+      node_save($node);
+    }
+
     // Now test that a user with 'access any private content' can view content.
     $access_user = $this->drupalCreateUser(
       array(
@@ -187,7 +223,7 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
       )
     );
     // Update the name of the user to 'foobar'.
-    $num_updated = db_update('users')
+    db_update('users')
       ->fields(array(
           'name' => 'foobar',
       ))
@@ -242,4 +278,61 @@ class NodeAccessExampleTestCase extends DrupalWebTestCase {
     $search_results = $this->xpath("//ol[contains(@class, 'search-results')]/li");
     $this->assertEqual(count($search_results), $expected_result_count, 'Found the expected number of search results');
   }
+
+  /**
+   * Helper function.
+   *
+   * Test if a node with the id $nid has expected access grants.
+   *
+   * @param int $nid
+   *   Node that will be checked.
+   *
+   * @return bool
+   *   Checker ran succesfully
+   */
+  protected function checkNodeAccess($nid, $grant_view, $grant_update, $grant_delete) {
+    // Test if node can be viewed.
+    if (!$this->checkResponse($grant_view, 'node/' . $nid)) {
+      return FALSE;
+    }
+
+    // Test if private node can be edited.
+    if (!$this->checkResponse($grant_update, 'node/' . $nid . '/edit')) {
+      return FALSE;
+    }
+
+    // Test if private node can be deleted.
+    if (!$this->checkResponse($grant_delete, 'node/' . $nid . '/delete')) {
+      return FALSE;
+    }
+
+    return TRUE;
+  }
+
+
+  /**
+   * Helper function.
+   *
+   * Test if there is access to an $url
+   *
+   * @param bool $grant
+   *   Access to the $url
+   *
+   * @param string $url
+   *   url to make the get call.
+   *
+   * @return bool
+   *   Get response
+   */
+  protected function checkResponse($grant, $url) {
+    $this->drupalGet($url);
+    if ($grant) {
+      $response = $this->assertResponse(200);
+    }
+    else {
+      $response = $this->assertResponse(403);
+    }
+    return $response;
+  }
+
 }

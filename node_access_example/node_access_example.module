@@ -273,8 +273,12 @@ define('NODE_ACCESS_EXAMPLE_GRANT_ALL', 23);
  * @see node_access_example_node_access_records()
  */
 function node_access_example_node_grants($account, $op) {
+  $grants = array();
   // First grant a grant to the author for own content.
-  $grants['node_access_example_author'] = array($account->uid);
+  // Do not grant to anonymous user else all anonymous users would be author.
+  if ($account->uid) {
+    $grants['node_access_example_author'] = array($account->uid);
+  }
 
   // Then, if "access any private content" is allowed to the account,
   // grant view, update, or delete as necessary.
@@ -350,14 +354,18 @@ function node_access_example_node_access_records($node) {
 
     // For the node_access_example_author realm, the grant ID (gid) is
     // equivalent to the node author's user ID (UID).
-    $grants[] = array(
-      'realm' => 'node_access_example_author',
-      'gid' => $node->uid,
-      'grant_view' => 1,
-      'grant_update' => 1,
-      'grant_delete' => 1,
-      'priority' => 0,
-    );
+    // We check the node UID so that we don't grant author priviledges for
+    // anonymous nodes to anonymous users.
+    if ($node->uid) {
+      $grants[] = array(
+        'realm' => 'node_access_example_author',
+        'gid' => $node->uid,
+        'grant_view' => 1,
+        'grant_update' => 1,
+        'grant_delete' => 1,
+        'priority' => 0,
+      );
+    }
     return $grants;
   }
   // Return nothing if the node has not been marked private.
@@ -466,6 +474,7 @@ function node_access_example_node_update($node) {
     node_access_example_node_insert($node);
     drupal_set_message(t('Inserted new node_access nid=@nid, private=@private', array('@nid' => $node->nid, '@private' => $node->private)));
   }
+
 }
 
 /**
