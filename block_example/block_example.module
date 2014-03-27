@@ -35,7 +35,7 @@ function block_example_menu() {
 function block_example_page() {
   $page = array(
     '#type' => 'markup',
-    '#markup' => t('The Block Example provides two sample blocks which demonstrate the various block APIs. To experiment with the blocks, enable and configure them on <a href="@url">the block admin page</a>.', array('@url' => url('admin/structure/block'))),
+    '#markup' => t('The Block Example provides three sample blocks which demonstrate the various block APIs. To experiment with the blocks, enable and configure them on <a href="@url">the block admin page</a>.', array('@url' => url('admin/structure/block'))),
   );
   return $page;
 }
