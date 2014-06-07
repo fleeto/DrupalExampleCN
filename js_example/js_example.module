@@ -56,7 +56,7 @@ function js_example_js_weights() {
     'black' => 5,
     'purple' => 60,
   );
-  drupal_add_js(array('js_weights' => $weights), array('type' => 'setting'));
+  drupal_add_js(array('jsWeights' => $weights), array('type' => 'setting'));
   drupal_add_js(drupal_get_path('module', 'js_example') . '/js/red.js', array('weight' => $weights['red']));
   drupal_add_js(drupal_get_path('module', 'js_example') . '/js/blue.js', array('weight' => $weights['blue']));
   drupal_add_js(drupal_get_path('module', 'js_example') . '/js/green.js', array('weight' => $weights['green']));
