@@ -241,6 +241,24 @@ function ajax_example_menu() {
     'type' => MENU_CALLBACK,
     'access arguments' => array('access content'),
   );
+  // This is the landing page for the progress bar example. It uses
+  // drupal_get_form() in order to build the form.
+  $items['examples/ajax_example/progressbar'] = array(
+    'title' => 'Progress bar example',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ajax_example_progressbar_form'),
+    'access arguments' => array('access content'),
+    'file' => 'ajax_example_progressbar.inc',
+  );
+  // This is the callback route for the AJAX-based progress bar.
+  $items['examples/ajax_example/progressbar/progress/%'] = array(
+    'title' => 'Progress bar progress',
+    'page callback' => 'ajax_example_progressbar_progress',
+    'page arguments' => array(4),
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('access content'),
+    'file' => 'ajax_example_progressbar.inc',
+  );
 
   return $items;
 }
