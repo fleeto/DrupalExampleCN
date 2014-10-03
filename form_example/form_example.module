@@ -129,10 +129,28 @@ function form_example_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('form_example_tutorial_10'),
     'access callback' => TRUE,
-    'description' => 'Tutorial 11: Form with file upload',
+    'description' => 'Tutorial 10: Form with file upload',
     'type' => MENU_LOCAL_TASK,
     'file' => 'form_example_tutorial.inc',
     'weight' => 10,
+  );
+  $items['examples/form_example/tutorial/11'] = array(
+    'title' => '#11',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_example_tutorial_11'),
+    'access callback' => TRUE,
+    'description' => 'Tutorial 11: generating a confirmation form',
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'form_example_tutorial.inc',
+    'weight' => 11,
+  );
+  $items['examples/form_example/tutorial/11/confirm/%'] = array(
+    'title' => 'Name Confirmation',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_example_tutorial_11_confirm_name', 5),
+    'access callback' => TRUE,
+    'description' => 'Confirmation form for tutorial 11.  Generated using the confirm_form function',
+    'file' => 'form_example_tutorial.inc',
   );
   $items['examples/form_example/states'] = array(
     'title' => '#states example',

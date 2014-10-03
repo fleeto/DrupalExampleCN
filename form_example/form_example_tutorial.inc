@@ -4,7 +4,7 @@
  * @file
  * This is the Form API Tutorial from the handbook.
  *
- * It goes through 10 form examples of increasing complexity to demonstrate
+ * It goes through several form examples of increasing complexity to demonstrate
  * Drupal 7 Form API.
  *
  * Links are provided inline for the related handbook pages.
@@ -29,7 +29,7 @@
  * @ingroup form_example
  */
 function form_example_tutorial() {
-  return t('This is a set of 10 form tutorials tied to the <a href="http://drupal.org/node/262422">Drupal handbook</a>.');
+  return t('This is a set of form tutorials tied to the <a href="http://drupal.org/node/262422">Drupal handbook</a>.');
 }
 
 /**
@@ -212,6 +212,8 @@ function form_example_tutorial_5($form, &$form_state) {
  *
  * From http://drupal.org/node/717736
  * @see form_example_tutorial_6_validate()
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_6($form, &$form_state) {
   $form['description'] = array(
@@ -270,6 +272,8 @@ function form_example_tutorial_6($form, &$form_state) {
  * in $form['#validate'].
  *
  * @see form_example_tutorial_6()
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_6_validate($form, &$form_state) {
   $year_of_birth = $form_state['values']['year_of_birth'];
@@ -286,6 +290,7 @@ function form_example_tutorial_6_validate($form, &$form_state) {
  *
  * @see form_example_tutorial_7_validate()
  * @see form_example_tutorial_7_submit()
+ *
  * @ingroup form_example
  */
 function form_example_tutorial_7($form, &$form_state) {
@@ -328,6 +333,8 @@ function form_example_tutorial_7($form, &$form_state) {
 
 /**
  * Validation function for form_example_tutorial_7().
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_7_validate($form, &$form_state) {
   $year_of_birth = $form_state['values']['year_of_birth'];
@@ -341,6 +348,8 @@ function form_example_tutorial_7_validate($form, &$form_state) {
  *
  * Adds a submit handler/function to our form to send a successful
  * completion message to the screen.
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_7_submit($form, &$form_state) {
   drupal_set_message(t('The form has been submitted. name="@first @last", year of birth=@year_of_birth',
@@ -370,6 +379,7 @@ function form_example_tutorial_7_submit($form, &$form_state) {
  * @see form_example_tutorial_8_page_two_submit()
  * @see form_example_tutorial_8_next_submit()
  * @see form_example_tutorial.inc
+ *
  * @ingroup form_example
  */
 function form_example_tutorial_8($form, &$form_state) {
@@ -418,6 +428,8 @@ function form_example_tutorial_8($form, &$form_state) {
 
 /**
  * Returns the form for the second page of form_example_tutorial_8().
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_8_page_two($form, &$form_state) {
   $form['description'] = array(
@@ -450,6 +462,8 @@ function form_example_tutorial_8_page_two($form, &$form_state) {
 
 /**
  * Validate handler for the next button on first page.
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_8_next_validate($form, &$form_state) {
   $year_of_birth = $form_state['values']['year_of_birth'];
@@ -463,6 +477,8 @@ function form_example_tutorial_8_next_validate($form, &$form_state) {
  *
  * Capture the values from page one and store them away so they can be used
  * at final submit time.
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_8_next_submit($form, &$form_state) {
 
@@ -485,6 +501,8 @@ function form_example_tutorial_8_next_submit($form, &$form_state) {
  *
  * Since #limit_validation_errors = array() is set, values from page 2
  * will be discarded. We load the page 1 values instead.
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_8_page_two_back($form, &$form_state) {
   $form_state['values'] = $form_state['page_values'][1];
@@ -497,6 +515,8 @@ function form_example_tutorial_8_page_two_back($form, &$form_state) {
  *
  * This is the final submit handler. Gather all the data together and output
  * it in a drupal_set_message().
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_8_page_two_submit($form, &$form_state) {
   // Normally, some code would go here to alter the database with the data
@@ -559,6 +579,7 @@ function form_example_tutorial_8_page_two_submit($form, &$form_state) {
  * @see form_example_tutorial_9_remove_name()
  * @see form_example_tutorial_9_submit()
  * @see form_example_tutorial_9_validate()
+ *
  * @ingroup form_example
  */
 function form_example_tutorial_9($form, &$form_state) {
@@ -640,6 +661,8 @@ function form_example_tutorial_9($form, &$form_state) {
  * All elements of $form_state are persisted, so there's no need to use a
  * particular key, like the old $form_state['storage']. We can just use
  * $form_state['num_names'].
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_9_add_name($form, &$form_state) {
   // Everything in $form_state is persistent, so we'll just use
@@ -652,6 +675,8 @@ function form_example_tutorial_9_add_name($form, &$form_state) {
 
 /**
  * Submit handler for "Remove name" button on form_example_tutorial_9().
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_9_remove_name($form, &$form_state) {
   if ($form_state['num_names'] > 1) {
@@ -667,6 +692,8 @@ function form_example_tutorial_9_remove_name($form, &$form_state) {
  *
  * Adds logic to validate the form to check the validity of the new fields,
  * if they exist.
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_9_validate($form, &$form_state) {
 
@@ -681,6 +708,8 @@ function form_example_tutorial_9_validate($form, &$form_state) {
 
 /**
  * Submit function for form_example_tutorial_9().
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_9_submit($form, &$form_state) {
   $output = t("Form 9 has been submitted.");
@@ -705,6 +734,7 @@ function form_example_tutorial_9_submit($form, &$form_state) {
  *
  * @see form_example_tutorial_10_submit()
  * @see form_example_tutorial_10_validate()
+ *
  * @ingroup form_example
  */
 function form_example_tutorial_10($form_state) {
@@ -727,6 +757,8 @@ function form_example_tutorial_10($form_state) {
 
 /**
  * Validate handler for form_example_tutorial_10().
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_10_validate($form, &$form_state) {
   $file = file_save_upload('file', array(
@@ -753,6 +785,8 @@ function form_example_tutorial_10_validate($form, &$form_state) {
 
 /**
  * Submit handler for form_example_tutorial_10().
+ *
+ * @ingroup form_example
  */
 function form_example_tutorial_10_submit($form, &$form_state) {
   $file = $form_state['storage']['file'];
@@ -764,4 +798,137 @@ function form_example_tutorial_10_submit($form, &$form_state) {
   file_save($file);
   // Set a response to the user.
   drupal_set_message(t('The form has been submitted and the image has been saved, filename: @filename.', array('@filename' => $file->filename)));
+}
+
+/**
+ * Example 11: adding a confirmation form.
+ *
+ * This example generates a simple form that, when submitted, directs
+ * the user to a confirmation form generated using the confirm_form function.
+ * It asks the user to verify that the name they input was correct
+ *
+ * @see form_example_tutorial_11_submit()
+ *
+ * @ingroup form_example
+ */
+function form_example_tutorial_11($form, &$form_state) {
+  // This form is identical to the one in example 2 except for one thing: We are
+  // adding an #action tag to direct the form submission to a confirmation page.
+  $form['description'] = array(
+    '#type' => 'item',
+    '#title' => t('A set of two forms that demonstrate the confirm_form function.  This form has an explicit action to direct the form to a confirmation page'),
+  );
+  $form['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Name'),
+    '#required' => TRUE,
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Submit',
+  );
+  return $form;
+}
+
+/**
+ * Submit function for form_example_tutorial_11().
+ *
+ * Adds a submit handler/function to our form to redirect
+ * the user to a confirmation page.
+ *
+ * @ingroup form_example
+ */
+function form_example_tutorial_11_submit($form, &$form_state) {
+  // Simple submit function that changes the redirect of the form based on the
+  // value of the name field.
+  $name = $form_state['values']['name'];
+  $form_state['redirect'] = 'examples/form_example/tutorial/11/confirm/' . urlencode($name);
+}
+
+/**
+ * Example 11: A form generated with confirm_form().
+ *
+ * This function generates the confirmation form using the confirm_form()
+ * function. If confirmed, it sets a drupal message to demonstrate it's success.
+ *
+ * @param string $name
+ *   The urlencoded name entered by the user.
+ *
+ * @see form_example_tutorial_11_confirm_name_submit()
+ *
+ * @ingroup form_example
+ */
+function form_example_tutorial_11_confirm_name($form, $form_state, $name) {
+  // confirm_form() returns a complete form array for confirming an action.
+  // It has 7 arguments: $form, $question, $path, $description, $yes, $no, and
+  // $name.
+  // - $form: Additional elements to add to the form that will be available in
+  //   the submit handler.
+  // - $question: What is the user confirming? This will be the title of the
+  //   page.
+  // - $path: Where should the page go if the user hits cancel?
+  // - $description = NULL: Additional text to display.
+  // - $yes = NULL: Anchor text for the confirmation button. Defaults to
+  //   t('Confirm').
+  // - $no = NULL: Anchor text for the cancel link. Defaults to t('Cancel').
+  // - $name = 'confirm': The internal name used to refer to the confirmation
+  //   item.
+
+
+
+  // First we make a textfield for our user's name. confirm_form() allows us to
+  // Add form elements to the confirmation form, so we'll take advangage of
+  // that.
+  $user_name_text_field = array(
+    'name' => array(
+      '#type' => 'textfield',
+      // We don't want the user to be able to edit their name here.
+      '#disabled' => TRUE,
+      '#title' => t('Your name:'),
+      '#value' => urldecode($name),
+    ),
+  );
+
+  // The question to ask the user.
+  $confirmation_question = t('Is this really your name?');
+
+  // If the user clicks 'no,' they're sent to this path.
+  $cancel_path = 'examples/form_example/tutorial/11';
+
+  // Some helpful descriptive text.
+  $description = t('Please verify whether or not you have input your name correctly. If you verify you will be sent back to the form and a message will be set. Otherwise you will be sent to the same page but with no message.');
+
+  // These are the text for our yes and no buttons.
+  $yes_button = t('This is my name');
+  $no_button = t('Nope, not my name');
+
+  // The name Form API will use to refer to our confirmation form.
+  $confirm_name = 'confirm_example';
+
+  // Finally, call confirm_form() with our information, and then return the form
+  // array it gives us.
+  return confirm_form(
+    $user_name_text_field,
+    $confirmation_question,
+    $cancel_path,
+    $description,
+    $yes_button,
+    $no_button,
+    $confirm_name
+  );
+}
+
+/**
+ * Submit function for form_example_tutorial_11_confirm_form().
+ *
+ * Adds a submit handler/function to the confirmation form
+ * if this point is reached the submission has been confirmed
+ * so we will set a message to demonstrate the success.
+ *
+ * @ingroup form_example
+ */
+function form_example_tutorial_11_confirm_name_submit($form, &$form_state) {
+  drupal_set_message(t("Confirmation form submission recieved. According to your submission your name is '@name'", array("@name" => $form_state['values']['name'])));
+  $form_state['redirect'] = 'examples/form_example/tutorial/11';
 }

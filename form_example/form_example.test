@@ -160,6 +160,31 @@ class FormExampleTestCase extends DrupalWebTestCase {
       $this->drupalPost($url, array('files[file]' => drupal_realpath($image->uri)), t('Submit'));
       $this->assertText(t('The form has been submitted and the image has been saved, filename: @filename.', array('@filename' => $image->filename)));
     }
+
+    // #11: Confirmation form.
+    // Try to submit without a name.
+    $url = 'examples/form_example/tutorial/11';
+    $this->drupalPost($url, array(), t('Submit'));
+    $this->assertText('Name field is required.');
+
+    // Verify that we can enter a name and get the confirmation form.
+    $this->drupalPost(
+      $url,
+      array('name' => t('name 1')), t('Submit')
+    );
+    $this->assertText(t('Is this really your name?'));
+    $this->assertFieldById('edit-name', 'name 1');
+
+    // Check the 'yes' button.
+    $confirmation_text = t("Confirmation form submission recieved. According to your submission your name is '@name'", array('@name' => 'name 1'));
+    $url = 'examples/form_example/tutorial/11/confirm/name%201';
+    $this->drupalPost($url, array(), t('This is my name'));
+    $this->assertText($confirmation_text);
+
+    // Check the 'no' button.
+    $this->drupalGet($url);
+    $this->clickLink(t('Nope, not my name'));
+    $this->assertNoText($confirmation_text);
   }
 
   /**
