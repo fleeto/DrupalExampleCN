@@ -315,7 +315,6 @@ function ajax_example_dynamic_sections_submit($form, &$form_state) {
       else {
         drupal_set_message(t('Sorry, your answer (@answer) is wrong', array('@answer' => $answer)));
       }
-      $form_state['rebuild'] = FALSE;
       return;
 
     // Any other form element will cause rebuild of the form and present
