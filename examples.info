@@ -1,4 +1,4 @@
-name = Examples For Developers
-description = A variety of example code for you to learn from and hack upon.
+name = 开发者示例
+description = 一系列的示例代码，用来学习和抄袭。
 package = Example modules
 core = 7.x

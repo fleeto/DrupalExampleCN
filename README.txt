@@ -3,60 +3,42 @@ Examples for Developers
 
 http://drupal.org/project/examples
 
-What Is This?
+这是什么?
 -------------
 
-This set of modules is intended to provide working examples of Drupal's
-features and APIs.  The modules strive to be simple, well documented and
-modification friendly, in order to help developers quickly learn their inner
-workings.
+这一系列模块尝试提供可用的Drupal特性和API的实例。我们力图使得模块代码简单、文档完善并且容易修改，以便开发者能够更快的学习到工作相关的深入内容。
 
-These examples are meant to teach you about code-level development for Drupal
-7. Some solutions might be better served using a contributed module, so that
-you don't end up having to re-invent the wheel in PHP.
+这些例子希望能教给用户在Drupal 7下代码级开发的内容。有些方案可能使用第三方模块能够更好的完成任务，所以不要总是尝试直接使用PHP造轮子。
 
-
-How To Use The Examples
+如何使用这些例子？
 -----------------------
 
-There are three main ways to interact with the examples in this project:
+有三种主要的方式来使用本项目中的模块：
 
-1. Enable the modules and use them within Drupal. Not all modules will have
-obvious things to see within Drupal. For instance, while the Page and Form API
-examples will show you forms, the Database API example will not show you much
-within Drupal itself.
+1. 在Drupal中启用和使用这些模块。不是所有的模块都有明显可见的效果。例如Page和Form API的例子会展示Form，数据库API的例子就不会显示什么东西。
 
-2. Read the code. Much effort has gone into making the example code readable,
-not only in terms of the code itself, but also the extensive inline comments
-and documentation blocks.
-
-3. Browse the code and documentation on the web. There are two main places to
-do this:
-
-* https://api.drupal.org/api/examples is the main API site for all of Drupal.
-It has all manner of cross-linked references between the example code and the
-APIs being demonstrated.
-
-* http://drupalcode.org/project/examples.git allows you to browse the git
-repository for the Examples project.
+2. 阅读代码。我们花费了巨大的精力用于提高代码自身、内部注释以及文档块的可读性
 
 
-How To Install The Modules
+3. 在Web上浏览代码和文档。主要有两个途径：
+
+* https://api.drupal.org/api/examples 是所有Drupal的主要API站点。这里能找到实例代码、相关API的所有交叉引用的各种资源。
+
+* http://drupalcode.org/project/examples.git 这里可以浏览Examples项目的GIT仓库。
+
+
+如何安装？
 --------------------------
 
-1. Install Examples for Developers (unpacking it to your Drupal
-/sites/all/modules directory if you're installing by hand, for example).
+1. 为开发者准备Examples(解压缩到Drupal下的sites/all/modules)  
 
-2. Enable any Example modules in Admin menu > Site building > Modules.
 
-3. Rebuild access permissions if you are prompted to.
+2. 在 Admin menu > Site building > Modules （url：admin/modules）菜单
 
-4. Profit!  The examples will appear in your Navigation menu (on the left
-sidebar by default; you'll need to reenable it if you removed it).
+3. 如果需要的话，重建访问权限。
 
-Now you can read the code and its comments and see the result, experiment with
-it, and hopefully quickly grasp how things work.
+4. 例子会显示在导航菜单上 (缺省在左边栏，如果禁用的话，需要重新启用).
 
-If you find a problem, incorrect comment, obsolete or improper code or such,
-please search for an issue about it at http://drupal.org/project/issues/examples
-If there isn't already an issue for it, please create a new one.
+现在你可以阅读代码和其中的注释，进行试验，并尽快掌握其中的原理。
+
+如果你发现了问题，不正确的注释，过时的或者淘汰的代码，以及其他一些不合适的情况，可以去http://drupal.org/project/issues/examples搜索有没有相关Issue，如果没有，请新建一个。

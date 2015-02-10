@@ -14,27 +14,27 @@
 /**
  * @defgroup examples Examples
  * @{
- * Well-documented API examples for a broad range of Drupal 7 core
- * functionality.
+ * 针对Drupal核心功能的，具有完善文档的示例。
  *
- * Developers can learn how to use a particular API quickly by experimenting
- * with the examples, and adapt them for their own use.
+ * 开发者能够通过试验模块的方式，能够快速的学习使用Drupal某一方面API。
  *
- * Download the Examples for Developers Project (and participate with
- * submissions, bug reports, patches, and documentation) at
+ * 从下面网址下载本模块（当然，还可以参与提交bug报告、补丁和文档）
+ *
  * http://drupal.org/project/examples
  */
 
 /**
  * Implements hook_help().
+ * @param $path String IDE语法检查强迫症
+ * @param $arg Array IDE语法检查强迫症
  */
 function examples_help($path, $arg) {
-  // re: http://drupal.org/node/767204
-  // 5. We need a master group (Examples) that will be in a main
-  // examples.module.
-  // The examples.module should be mostly doxy comments that point to the other
-  // examples.  It will also have a hook_help() explaining its purpose and how
-  // to access the other examples.
+  // 回复: http://drupal.org/node/767204
+  // 5. 我们需要一个主要组（Examples），存在于examples.module内。
+  // 这个examples.module应该主要是一些格式化的文档，指向其他模块。
+  // 他还有一个hook_help()，来解释这一模块的目标以及如何访问其他例子。
+
+
 }
 
 /**
