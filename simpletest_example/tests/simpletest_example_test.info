@@ -1,0 +1,6 @@
+name = "SimpleTest Example Mock Module"
+description = "Mock module for the SimpleTest Example module."
+package = Example modules
+core = 7.x
+hidden = TRUE
+dependencies[] = simpletest_example

@@ -1,0 +1,5 @@
+name = Form example
+description = Examples of using the Drupal Form API.
+package = Example modules
+core = 7.x
+files[] = form_example.test
