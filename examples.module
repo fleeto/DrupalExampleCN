@@ -25,8 +25,8 @@
 
 /**
  * Implements hook_help().
- * @param $path String IDE语法检查强迫症
- * @param $arg Array IDE语法检查强迫症
+ * @param string $path  IDE语法检查强迫症
+ * @param array $arg  IDE语法检查强迫症
  */
 function examples_help($path, $arg) {
   // 回复: http://drupal.org/node/767204
