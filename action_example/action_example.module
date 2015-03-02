@@ -9,60 +9,47 @@
  * @defgroup action_example Example: Action
  * @ingroup examples
  * @{
- * Creating actions in Drupal 7
+ * 在Drupal 7中创建动作
  *
- * Triggers and actions are a matched pair of Drupal features allowing some
- * Drupal programming without using PHP. Using the appropriate action in a
- * specific event, a site administrator can add new functionality.
+ * Drupal中Triggers（触发器）和Actions（动作）往往是搭配出现的，这对搭档可以脱离PHP来开发
+ * 一些Drupal功能。管理员只要为为特定的事件指派相应的动作，就可以为站点加入新功能。
  *
- * Examples are:
- *  - Send an email after a node is published or edited.
- *  - Display a message after a user has logged in.
- *  - Display a message and send an email after a node has been deleted.
+ * 例如：
+ *  - 当一个Node发布或者编辑后，发送一份邮件。
+ *  - 在用户登录之后，显示一条消息。
+ *  - 当一个Node被删除，显示信息并发送邮件。
  *
- * A trigger is a special function which can enqueue actions. The trigger module
- * provides the interface allowing us to associate certain actions with certain
- * triggers.
+ * 触发器是一种特别的函数，能够引发动作。触发器模块提供了接口，可以通过这些接口把动作和
+ * 触发器连接起来。
  *
- * Actions are the functions designed to be run by triggers.
+ * 动作的设计目的就是用来被触发器运行。
  *
- * A trigger should build the appropriate context for the action to be fired.
- * Actions are very often grouped by functionality: examples are 'user', 'node',
- * 'taxonomy'. When actions are grouped it is because they expect the same
- * arguments. This way, you can enqueue as many actions understanding the 'user'
- * object as you want.
+ * 触发器应当为将被触发的动作提供合适的上下文。动作一般是用功能进行分组，例如用户、
+ * Node、分类词等。一般来说，被分到同一组的动作，会对参数有同样的要求。这样，你可以随心所
+ * 欲的创建各种能够接受用户对象的动作。
  *
- * Not all actions can be used in all triggers because they require different
- * contexts. But some actions are generic enough that they do not require
- * special objects in their contexts, and so can be used on every available
- * trigger. This 'group' type is used by actions to be available for this
- * trigger.
  *
- * What are good candidates to be triggers? Any function can be a trigger, as
- * long as it has the code to call the enqueued actions, but to make Drupal
- * more extensible, you will find hooks (from Drupal and contributed modules)
- * very good candidates. A trigger should build the arguments, ask for enqueued
- * actions and run them. You may define a function being a trigger, and run it
- * through a button in the front page, or you may prepare a trigger for a hook,
- * and everytime that hook is fired, your trigger will be.
+ * 由上文也看得出，触发器所提供的上下文以及动作需要接受的上下文并不一定一致，因此这种搭配
+ * 也不是可以随意匹配的。不过有些动作通用性很强，他们的上下文不需要特定的对象类型，所以这
+ * 种动作可以被任何触发器触发。一般来说，特定类型的动作需要特定的触发器来触发。
  *
- * What are good candidates to be actions? any function is a possible action,
- * the only problem is finding a trigger able to run it.
+ * 什么样的函数比较合适作为触发器呢？所有的函数都可以，只要他实现了调用动作的代码。不过为
+ * 了扩展性，你会发现Drupal和第三方模块的Hook是个好选择。触发器需要为动作准备参数，查
+ * 找动作并运行。可以把一个函数定义为触发器，在首页添加一个按钮来触发这个函数，也可以为一个
+ * Hook准备一个触发器，每次这个Hook被调用，触发器也就开始执行。
  *
- * This module describes how to create actions for Drupal. In this
- * example we are providing three actions:
+ * 什么样的函数能作动作？任何函数都可以，只要能够找到合适的触发器来触发。
  *
- * - A generic action that can be used in any trigger, which is the most
- *   basic example of an action.
+ * 这个模块讲述了如何创建Drupal的动作。在这个例子中，我们提供了三个动作：
  *
- * - An action which which extends the capabilities of User triggers, even if
- *   associated with node or comment events.
+ * - 一个通用的动作，适用于所有触发器，这也是最基础的动作例子。
  *
- * - An action which extends the capabilities of node triggers, but limited
- *   to certain events only, and using a customizable option.
+ * - 一个扩展User触发器的动作。甚至能够通过Node或者Comment事件触发。
  *
- * @link http://drupal.org/node/172152 Writing Actions in Drupal 6 @endlink
- * @link http://drupal.org/node/199254 Triggers and Actions in Drupal 6 @endlink
+ * - 一个扩展Node触发器的动作，限制为某些事件，使用自定义的选项。
+ *
+ * @link http://drupal.org/node/172152 在Drupal 6中编写动作 @endlink
+ * @link http://drupal.org/node/199254 Drupal 6中的触发器和动作 @endlink
  *
  * @see trigger_example
  * @see hook_action_info()
@@ -71,73 +58,51 @@
 /**
  * Implements hook_action_info().
  *
- * We call hook_action_info when we are defining the actions we provide.
- * Actions are the actions fired by the associated triggers. In this example,
- * we are registering our three new actions, providing the unique name (using
- * Drupal's convention modulename_description_action), an easy to understand
- * description of what the action does, the 'object' expected by this action
- * (default options from core are node, user, comment and system, however other
- * trigger modules may declare new object types), which are the triggers allowed
- * to use these action, and if some customization is available. Please, note
- * that the function name is not required to finish as _action to be declared as
- * a Drupal action, and that only information provided by hook_trigger_info()
- * will be considered for valid actions creation.
+ * 我们调用hook_action_info来声明我们提供的动作。动作是用来被触发器调用的。在这个例
+ * 子中，我们会注册三个新的动作，为他们提供唯一的名字（使用Drupal惯例：
+ * 模块名称_描述_action），一段描述动作功能的文字，这一动作接受的'对象'（核心缺省的是
+ * Node, 用户，评论和系统，同时还有些其他的触发器模块可能会声明新的对象类型），对象类型也
+ * 是对触发器的限制，符合类型的触发器才能触发本动作。注意函数名并不一定是以_action结尾，
+ * 只有hook_trigger_info()中的信息才是必要的动作信息。
  *
- * These are the actions being provided in hook_action_info()
+ * 这些是hook_action_info()中提供的动作。
  *
- * - action_example_basic_action: this action is a dummy function which can be
- *   used by any trigger. The label describes that the action will do nothing,
- *   but is enough for a basic example. Type is set to system, so users will not
- *   be confused about the scope of this action (expecting a node, user, or any
- *   other object). This action is not configurable, and will appear as
- *   available in the list of action under the menu entry:
- *   'admin/config/system/actions.
- * - action_example_unblock_user_action: Unblocks a user.
- * - action_example_node_sticky_action: This action is a complex action that is
- *   only available to Node type triggers, and can only be associated with the
- *   events node presave, node insert and node update. The action does not
- *   exist by default and it has to be created by user configuration. This makes
- *   it an "advanced action" in Drupal, so-called because it requires
- *   configuration or customization.
- *   In this example action, the action will promote nodes and make them sticky
- *   during presave, insert, or update, but only for particular users. As an
- *   advanced action, it first needs to be created in the actions management
- *   page (admin/config/system/actions). At the bottom of that page a selection
- *   list shows a list of advanced actions that will includes the option
- *   'Promote to frontpage and sticky on top any content created by :'
- *   Selecting this option and clicking the 'Create' button, a configuration
- *   form will ask for an author name. When this action is associated to any
- *   of the possible Node trigger events, it will only be effective if the
- *   author of the content matches the author configured by the action.
+ * - action_example_basic_action: 这个动作是一个空壳函数，他能适配给任何触发器。他的
+ *   标签也表明这个动作什么都不做，不过用来做一个基本的例子是足够了。类型我们设置为
+ *   System，这个动作不能进行配置，会出现在下面的菜单位：admin/config/system/actions
  *
- * We return an associative array of action descriptions. The keys of the array
- * are the names of the action functions, and each corresponding value
- * is an associative array with the following key-value pairs:
+ * - action_example_unblock_user_action: 解除对用户的用户的锁定
+
+ * - action_example_node_sticky_action: 这个动作比较复杂，只响应Node类型的触发，只
+ *   能同node presave、insert以及update事件绑定。这个动作缺省是不存在的，必须由用户配
+ *   置生成。因为需要配置和定制，所以在Drupal中，会被称为高级动作。
+ *   在这个示例中，这个动作会在某个用户的presave、insert或者update的时候把Node提升为
+ *   置顶模式。作为一个高级动作，首先要在动作管理页面
+ *   （admin/config/system/actions）进行创建，在这个页面的底部，有一个选择列表，其中包含
+ *   'Promote to frontpage and sticky on top any content create by: '，选择这个
+ *   动作，点击"Create"按钮，会出现一个配置Form来输入作者名称，当这个动作同任何Node
+ *   操作绑定时，只会对指定作者的Node才会奏效。
  *
- * - 'type': The type of object this action acts upon. Core actions have types
- *   'node', 'user', 'comment', and 'system', but additional types can be
- *   used, as long as the trigger and action agree on them.
- * - 'label': The human-readable name of the action, which should be passed
- *   through the t() function for translation.
- * - 'configurable': If FALSE, then the action doesn't require any extra
- *   configuration. If TRUE, then your module must define a form function with
- *   the same name as the action function with '_form' appended (e.g., the
- *   form for 'node_assign_owner_action' is 'node_assign_owner_action_form'.)
- *   This function takes $context as its only parameter, and is paired with
- *   the usual _submit function, and possibly an _validate function.
- * - 'triggers': An array of the triggers that can trigger this
- *   action. For example: array('node_insert', 'user_update'). You can also
- *   declare support for any trigger by returning array('any') for this value.
- * - 'behavior': (optional) A machine-readable array of behaviors of this
- *   action, used to signal additionally required actions that may need to be
- *   triggered. Currently recognized behaviors by Trigger module:
- *   - 'changes_property': If an action with this behavior is assigned to a
- *     trigger other than a "presave" hook, any save actions also assigned to
- *     this trigger are moved later in the list. If no save action is present,
- *     one will be added.
- *     Modules that are processing actions (like Trigger module) should take
- *     special care in the "presave" hook, in which case a dependent "save"
- *     action should NOT be invoked.
+ * 我们返回一个描述动作的数组。这个数组的键是动作的函数，其中的值是下面的键-值对：
+ *
+ * - ‘type’: 这个动作针对的对象类型。核心动作包含`node`, 'user', 'comment'以及
+ *   'system'，不过只要触发器和动作一致，也有其他附加类型可用。
+ * - ‘label’: 动作的可读名称。可以利用t()函数进行翻译。
+ *
+ * - 'configurable': 如果“FALSE”，这个动作不需要任何额外的配置。如果“TRUE”，模块中必
+ *   须定义一个Form函数，这一函数的命名为动作名称后面加上_form后缀（例如
+ *   `node_assign_owner_action`对应的就是'node_assign_owner_action_form'。）这个
+ *   函数只接受一个$context函数，他也应该有对应的_submit函数，以及可能的_validate函数。
+ * - 'triggers': 一个能够触发这个动作的触发器的数组。例如：
+ *   array('node_insert', 'user_update')，可以通过声明一个array('any')来表达支持
+ *   所有触发器。
+ *
+ * - 'behavior'：（可选），一个机读的数组，其中包含了这个动作的行为，用于被触发的
+ *   动作需要的附加信息。当前由Trigger模块进行识别：
+ *   - 'changes_property': 如果一个具有这一行为的动作被指派给一个不是'presave' hook
+ *     触发的触发器，所有的保存动作也会被指派给这个触发器并移到列表的末尾，如果没有保存
+ *     动作，会新增一个。
+ *     像Trigger这样的处理动作的模块需要注意"presave" hook，防止意外触发保存动作.
  *
  * @see hook_action_info()
  */
@@ -168,7 +133,7 @@ function action_example_action_info() {
 /**
  * Implements hook_menu().
  *
- * Provides a menu entry which explains what the module does.
+ * 提供一个用于解释模块的菜单项
  */
 function action_example_menu() {
   $items['examples/action_example'] = array(
@@ -182,65 +147,60 @@ function action_example_menu() {
 
 
 /**
- * A simple page to explain to the developer what to do.
+ * 用一个简单页面来向开发者解释接下来的内容。
  */
 function _action_example_page() {
   return t("The Action Example provides three example actions which can be configured on the <a href='@actions_url'>Actions configuration page</a> and assigned to triggers on the <a href='@triggers_url'>Triggers configuration page</a>.", array('@actions_url' => url('admin/config/system/actions'), '@triggers_url' => url('admin/structure/trigger/node')));
 }
 
 /**
- * Action function for action_example_basic_action.
+ * action_example_basic_action的动作函数。
  *
- * This action is not expecting any type of entity object, and can be used with
- * any trigger type or any event.
+ * 这一动作没有指定任何的实体类型，可以用于任何事件或触发器类型。
  *
  * @param object $entity
- *   An optional entity object.
+ *   可选，Entity对象
  * @param array $context
  *   Array with parameters for this action: depends on the trigger.
+ *
+ *
  *
  * @see action_example_action_info()
  */
 function action_example_basic_action(&$entity, $context = array()) {
-  // In this case we are ignoring the entity and the context. This case of
-  // action is useful when your action does not depend on the context, and
-  // the function must do something regardless the scope of the trigger.
-  // Simply announces that the action was executed using a message.
+  //本例中，我们忽略了Entity和Context两个参数。这种动作不依赖于特定上下文，也无视Trigger
+  //内容。这里只是简单的提示一个信息来宣告执行。
   drupal_set_message(t('action_example_basic_action fired'));
   watchdog('action_example', 'action_example_basic_action fired.');
 }
 
 /**
- * Action function for action_example_unblock_user_action.
+ * action_example_unblock_user_action的动作函数
  *
- * This action is expecting an entity object user, node or comment. If none of
- * the above is provided (because it was not called from an user/node/comment
- * trigger event, then the action will be taken on the current logged in user.
+ * 这个动作需要一个user, node或者comment实体对象作为输入。如果该动作不是在
+ * user/node/comment触发器中触发，导致没有上面类型的输入，那么将会使用当前登录用户为参数。
  *
- * Unblock an user. This action can be fired from different trigger types:
- * - User trigger: this user will be unblocked.
- * - Node/Comment trigger: the author of the node or comment will be unblocked.
- * - Other: (including system or custom defined types), current user will be
- *   unblocked. (Yes, this seems like an incomprehensible use-case.)
+ * 解锁用户：这个动作能用不同类型的触发器触发：
+ * - User触发器：这一用户会被解锁。
+ * - Node/Comment触发器：Node或者Comment的作者会被解锁。
+ * - 其他：(包括系统或者自定义类型)，解锁当前用户。（好像是个莫名其妙的场景）
  *
  * @param object $entity
- *   An optional user object (could be a user, or an author if context is
- *   node or comment)
+ *   一个可选的user对象（可以是一个用户，如果上下文是一个node或者comment，则是作者）
  * @param array $context
- *   Array with parameters for this action: depends on the trigger. The context
- *   is not used in this example.
+ *   这一动作的参数数组：取决于触发器。这个例子中没有用到这一参数。
  */
 function action_example_unblock_user_action(&$entity, $context = array()) {
 
-  // First we check that entity is a user object. If this is the case, then this
-  // is a user-type trigger.
+  //首先检查这一Entity是不是User对象。如果是，这应该来源于一个User类型的触发器。
   if (isset($entity->uid)) {
     $uid = $entity->uid;
   }
+  //如果Entity没有uid成员，那么检查检查$context中是否包含uid键。
   elseif (isset($context['uid'])) {
     $uid = $context['uid'];
   }
-  // If neither of those are valid, then block the current user.
+  // 如果还是找不到，那么找全局变量。
   else {
     $uid = $GLOBALS['user']->uid;
   }
@@ -251,45 +211,48 @@ function action_example_unblock_user_action(&$entity, $context = array()) {
 }
 
 /**
- * Form function for action_example_node_sticky_action.
+ * action_example_node_sticky_action的form
  *
- * Since we defined action_example_node_sticky_action as 'configurable' => TRUE,
- * this action requires a configuration form to create/configure the action.
- * In this circumstance, Drupal will attempt to call a function named by
- * combining the action name (action_example_node_sticky_action) and _form, in
- * this case yielding action_example_node_sticky_action_form.
+ * 我们用'configurable' => TRUE把action_example_node_sticky_action定义为可配置动作，
+ * 所以接下来需要提供一个Form来创建和配置这个动作。
+ * 在这种情况下，Drupal会试着调用一个'[动作名称]_form'函数，这里就是
+ * action_example_node_sticky_action_form
  *
- * In Drupal, actions requiring creation and configuration are called 'advanced
- * actions', because they must be customized to define their functionality.
+ * 这种需要创建和配置的动作也称作“高级动作”，高级动作必须经过定制才能工作。
  *
  * The 'action_example_node_sticky_action' allows creating rules to promote and
  * set sticky content created by selected users on certain events. A form is
  * used to configure which user is affected by this action, and this form
  * includes the standard _validate and _submit hooks.
+ *
+ * action_example_node_sticky_action这个动作用来创建一个规则，在触发时，能把指定用户创
+ * 建的内容提升到首页并置顶。这里提供了一个包含校验和提交Hook的Form，用来选择该动作对应的
+ * 用户。
+ *
+ * action_example_node_sticky_action
+ *
  */
 
 
 /**
- * Generates settings form for action_example_node_sticky_action().
+ * 为函数action_example_node_sticky_action()生成一个Form用来进行相关设置。
  *
  * @param array $context
- *   An array of options of this action (in case it is being edited)
+ *
+ *   该动作的选项数组
  *
  * @return array
- *   Settings form as Form API array.
+ *   Form API格式的Form数组
  *
  * @see action_example_action_info()
  */
 function action_example_node_sticky_action_form($context) {
   /*
-  * We return a configuration form to set the requirements that will
-  * match this action before being executed. This is a regular Drupal form and
-  * may include any type of information you want, but all the fields of the
-  * form will be saved into the $context variable.
+  * 在动作被执行之前，需要对他的必要条件进行设置。这里做了一个普通的Form，这个Form你可以为
+  * 所欲为，所有字段都会被保存到$context变量中。
   *
-  * In this case we are promoting all content types submitted by this user, but
-  * it is possible to extend these conditions providing more options in the
-  * settings form.
+  * 本例中，我们会处理该用户创建的所有类型的内容，不过也可以尝试在本设置Form中进行扩展来提供
+  * 更多选项。
   */
   $form['author'] = array(
     '#title' => t('Author name'),
@@ -297,18 +260,17 @@ function action_example_node_sticky_action_form($context) {
     '#description' => t('Any content created, presaved or updated by this user will be promoted to front page and set as sticky.'),
     '#default_value' => isset($context['author']) ? $context['author'] : '',
   );
-  // Verify user permissions and provide an easier way to fill this field.
+  // 技巧：检查用户授权，如果通过，提供一个简单方式来填充这一字段。
   if (user_access('access user profiles')) {
     $form['author']['#autocomplete_path'] = 'user/autocomplete';
   }
-  // No more options, return the form.
+  // 就是这些选项，返回Form
   return $form;
 }
 
 /**
- * Validates settings form for action_example_node_sticky_action().
- *
- * Verifies that user exists before continuing.
+ * 为action_example_node_sticky_action()的设置Form进行验证。
+ * 在继续下面的内容之前首先要验证用户是否存在。
  */
 function action_example_node_sticky_action_validate($form, $form_state) {
   if (!$account = user_load_by_name($form_state['values']['author'])) {
@@ -317,37 +279,33 @@ function action_example_node_sticky_action_validate($form, $form_state) {
 }
 
 /**
- * Submit handler for action_example_node_sticky_action.
+ * 处理action_example_node_sticky_action的提交。
  *
- * Returns an associative array of values which will be available in the
- * $context when an action is executed.
+ * 返回一个数组，其中包含了动作执行时候需要的$context内容。
  */
 function action_example_node_sticky_action_submit($form, $form_state) {
   return array('author' => $form_state['values']['author']);
 }
 
 /**
- * Action function for action_example_node_sticky_action.
+ * action_example_node_sticky_action的动作函数.
  *
- * Promote and set sticky flag. This is the special action that has been
- * customized using the configuration form, validated with the validation
- * function, and submitted with the submit function.
+ * 提升到首页并设置置顶标记。这是个用配置Form进行定制的特别动作。
  *
  * @param object $node
- *   A node object provided by the associated trigger.
+ *   由触发器提供的Node对象
  * @param array $context
- *   Array with the following elements:
- *   - 'author': username of the author's content this function will promote and
- *     set as sticky.
+ *   一个具备下列元素的数组：
+ *   - 'aucthor'：作者的用户名。该作者的内容会被放置到首页并置顶。
  */
 function action_example_node_sticky_action($node, $context) {
   if (function_exists('dsm')) {
     dsm($node, 'action_example_node_sticky_action is firing. Here is the $node');
     dsm($context, 'action_example_node_sticky_action is firing. Here is the $context');
   }
-  // Get the user configured for this special action.
+  // 为这个特别的动作获取用户配置
   $account = user_load_by_name($context['author']);
-  // Is the node created by this user? then promote and set as sticky.
+  // 判断是否由该用户创建，如果是，则进行后续动作。
   if ($account->uid == $node->uid) {
     $node->promote = NODE_PROMOTED;
     $node->sticky  = NODE_STICKY;
