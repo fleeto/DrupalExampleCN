@@ -1,0 +1,98 @@
+# $Id$
+#
+# Chinese, Simplified translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  action_example.module: n/a
+#  action_example.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: action example\n"
+"POT-Creation-Date: 2015-02-21 11:29+0800\n"
+"PO-Revision-Date: 2015-03-02 23:21+0800\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: dustise <drupal@fleeto.us>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Language: zh_CN\n"
+"X-Generator: Poedit 1.7.4\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: action_example.module:147
+msgid "Action Example: A basic example action that does nothing"
+msgstr "动作示范：一个无所事事的动作"
+
+#: action_example.module:153
+msgid "Action Example: Unblock a user"
+msgstr "动作示范：解封用户"
+
+#: action_example.module:160
+msgid "Action Example: Promote to frontpage and sticky on top any content created by :"
+msgstr "动作示范：把指定用户创建的内容提到首页并置顶"
+
+#: action_example.module:188
+msgid "The Action Example provides three example actions which can be configured on the <a href='@actions_url'>Actions configuration page</a> and assigned to triggers on the <a href='@triggers_url'>Triggers configuration page</a>."
+msgstr "动作示例提供了三个示范动作，可以在<a href='@actions_url'>动作配置页</a>进行配置，并在 <a href='@triggers_url'>触发器配置页</a>把动作指派给触发器。"
+
+#: action_example.module:209
+msgid "action_example_basic_action fired"
+msgstr "action_example_basic_action被触发"
+
+#: action_example.module:250
+msgid "Unblocked user %name"
+msgstr "解锁用户%name"
+
+#: action_example.module:295
+msgid "Author name"
+msgstr "作者名称"
+
+#: action_example.module:297
+msgid "Any content created, presaved or updated by this user will be promoted to front page and set as sticky."
+msgstr "所有该用户创建、保存或更新的内容都会被提到主页并置顶。"
+
+#: action_example.module:315
+msgid "Please, provide a valid username"
+msgstr "请提供一个有效的用户名"
+
+#: action_example.module:363;354
+msgid "Set @type %title to sticky and promoted by special action for user %username."
+msgstr "为用户%username设置@type %title为置顶并放入首页。"
+
+#: action_example.module:210;249
+msgid "action_example"
+msgstr "action_example"
+
+#: action_example.module:210
+msgid "action_example_basic_action fired."
+msgstr "action_example_basic_action被触发。"
+
+#: action_example.module:249
+msgid "Unblocked user %name."
+msgstr "解锁用户%name"
+
+#: action_example.module:354
+msgid "action"
+msgstr "动作"
+
+#: action_example.module:175
+msgid "Action Example"
+msgstr "动作示范"
+
+#: action_example.module:176
+msgid "Provides a basic information page."
+msgstr "提供一个基础信息页面"
+
+#: action_example.info:0
+msgid "Action example"
+msgstr "动作示范"
+
+#: action_example.info:0
+msgid "Demonstrates providing actions that can be associated to triggers."
+msgstr "演示"
+
+#: action_example.info:0
+msgid "Example modules"
+msgstr "Example模块"

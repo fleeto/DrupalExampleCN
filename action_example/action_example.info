@@ -1,5 +1,5 @@
-name = Action example
-description = Demonstrates providing actions that can be associated to triggers.
+name = 动作示例
+description = 演示：提供一个能够和触发器合作的动作。
 package = Example modules
 core = 7.x
 dependencies[] = trigger

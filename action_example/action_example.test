@@ -6,8 +6,7 @@
  */
 
 /**
- * Default test case for the action_example module.
- *
+ * action_example模块的缺省测试用例。
  * @ingroup action_example
  */
 class ActionExampleTestCase extends TriggerWebTestCase {
@@ -18,7 +17,7 @@ class ActionExampleTestCase extends TriggerWebTestCase {
   public static function getInfo() {
     return array(
       'name' => 'Action example',
-      'description' => 'Perform various tests on action_example module.' ,
+      'description' => '对action_example模块进行多种测试。' ,
       'group' => 'Examples',
     );
   }
@@ -31,18 +30,15 @@ class ActionExampleTestCase extends TriggerWebTestCase {
   }
 
   /**
-   * Test Action Example.
+   * 测试动作.
    *
-   * 1. action_example_basic_action: Configure a action_example_basic_action to
-   *    happen when user logs in.
-   * 2. action_example_unblock_user_action: When a user's profile is being
-   *    viewed, unblock that user.
-   * 3. action_example_node_sticky_action: Create a user, configure that user
-   *    to always be stickied using advanced configuration. Have the user
-   *    create content; verify that it gets stickied.
+   * 1. action_example_basic_action: 配置用户登录时触发该动作
+   * 2. action_example_unblock_user_action: 当查看一个用户信息的时候，解锁该用户
+   * 3. action_example_node_sticky_action: 创建一个用户，配置该用户创建的内容置顶，
+   *    用该用户生成内容，然后查看该内容是否置顶。
    */
   public function testActionExample() {
-    // Create an administrative user.
+    // 创建一个管理用户
     $admin_user = $this->drupalCreateUser(
       array(
         'administer actions',
@@ -57,8 +53,7 @@ class ActionExampleTestCase extends TriggerWebTestCase {
     );
     $this->drupalLogin($admin_user);
 
-    // 1. Assign basic action; then logout and login user and see if it puts
-    // the message on the screen.
+    // 1. 指派基础动作; 然后登出并登录用户，查看是否显示信息。
     $hash = drupal_hash_base64('action_example_basic_action');
     $edit = array('aid' => $hash);
     $this->drupalPost('admin/structure/trigger/user', $edit, t('Assign'), array(), array(), 'trigger-user-login-assign-form');
@@ -67,7 +62,7 @@ class ActionExampleTestCase extends TriggerWebTestCase {
     $this->drupalLogin($admin_user);
     $this->assertText(t('action_example_basic_action fired'));
 
-    // 2. Unblock: When a user's profile is being viewed, unblock.
+    // 2. 解锁: 当查看用户信息时，解锁该用户
     $normal_user = $this->drupalCreateUser();
     // Create blocked user.
     user_save($normal_user, array('status' => 0));
@@ -83,7 +78,7 @@ class ActionExampleTestCase extends TriggerWebTestCase {
     $this->assertTrue($normal_user->status, 'Normal user status has been set to unblocked');
     $this->assertRaw(t('Unblocked user %name', array('%name' => $normal_user->name)));
 
-    // 3. Create a user whose posts are always to be stickied.
+    // 3. 建立一个用户，该用户发布的内容会置顶。
     $sticky_user = $this->drupalCreateUser(
       array(
         'access comments',
@@ -102,10 +97,10 @@ class ActionExampleTestCase extends TriggerWebTestCase {
     $aid = $this->configureAdvancedAction('action_example_node_sticky_action', $edit);
     $edit = array('aid' => drupal_hash_base64($aid));
     $this->drupalPost('admin/structure/trigger/node', $edit, t('Assign'), array(), array(), 'trigger-node-insert-assign-form');
-    // Now create a node and verify that it gets stickied.
+    // 现在创建一个Node，查看是否置顶。
     $this->drupalLogout();
     $this->drupalLogin($sticky_user);
     $node = $this->drupalCreateNode();
-    $this->assertTrue($node->sticky, 'Node was set to sticky on creation');
+    $this->assertTrue($node->sticky, 'Node在被创建后会被置顶');
   }
 }

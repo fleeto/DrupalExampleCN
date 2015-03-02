@@ -2,13 +2,12 @@
 
 /**
  * @file
- * This file serves as a stub file for the many Examples modules in the
+ * 本文件作为
  * @link http://drupal.org/project/examples Examples for Developers Project @endlink
- * which you can download and experiment with.
- *
- * One might say that examples.module is an example of documentation. However,
- * note that the example submodules define many doxygen groups, which may or
- * may not be a good strategy for other modules.
+ * 的众多示例模块的替身存在，可以在这里下载和测试。
+ * 
+ * 有的人可能说这个模块是个文档例子。然而，注意本模块定义了很多组来区分这些子模块，这种行为
+ * 对其他模块来说可能并不合适。
  */
 
 /**
