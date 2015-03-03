@@ -11,9 +11,10 @@
  * @ingroup token_example
  */
 function token_example_token_info() {
-  // Add two different token types. The first is the generic text format. The
-  // second is the user's default text format, which is itself a 'format' token
-  // type so it can be used directly.
+  //加入两种不同的Token类型：
+  //  - 第一个是通用的文本格式；
+  //  - 第二种是用户的缺省文本格式，这种是一个“格式”Token，可以直接使用
+
   $info['types']['format'] = array(
     'name' => t('Text formats'),
     'description' => t('Tokens related to text formats.'),
@@ -26,6 +27,7 @@ function token_example_token_info() {
   );
 
   // Tokens for the text format token type.
+  // 文本格式Token。
   $info['tokens']['format']['id'] = array(
     'name' => t('ID'),
     'description' => t("The unique ID of the text format."),
@@ -35,14 +37,14 @@ function token_example_token_info() {
     'description' => t("The name of the text format."),
   );
 
-  // Node tokens.
+  // Node Token。
   $info['tokens']['node']['body-format'] = array(
     'name' => t('Body text format'),
     'description' => t("The name of the text format used on the node's body field."),
     'type' => 'format',
   );
 
-  // Comment tokens.
+  // 评论 Token。
   if (module_exists('comment')) {
     $info['tokens']['comment']['body-format'] = array(
       'name' => t('Body text format'),
@@ -63,7 +65,7 @@ function token_example_tokens($type, $tokens, array $data = array(), array $opti
   $replacements = array();
   $sanitize = !empty($options['sanitize']);
 
-  // Text format tokens.
+  // 文本格式Token。
   if ($type == 'format' && !empty($data['format'])) {
     $format = $data['format'];
 
@@ -83,14 +85,14 @@ function token_example_tokens($type, $tokens, array $data = array(), array $opti
     }
   }
 
-  // Default format tokens.
+  // 缺省格式Token。
   if ($type == 'default-format') {
     $default_id = filter_default_format();
     $default_format = filter_format_load($default_id);
     $replacements += token_generate('format', $tokens, array('format' => $default_format), $options);
   }
 
-  // Node tokens.
+  // Node Token。
   if ($type == 'node' && !empty($data['node'])) {
     $node = $data['node'];
 
@@ -106,6 +108,7 @@ function token_example_tokens($type, $tokens, array $data = array(), array $opti
     }
 
     // Chained token relationships.
+    //todo:链式Token关系
     if ($format_tokens = token_find_with_prefix($tokens, 'body-format')) {
       if ($items = field_get_items('node', $node, 'body')) {
         $body_format = filter_format_load($items[0]['format']);
@@ -114,7 +117,7 @@ function token_example_tokens($type, $tokens, array $data = array(), array $opti
     }
   }
 
-  // Comment tokens.
+  // 评论Token。
   if ($type == 'comment' && !empty($data['comment'])) {
     $comment = $data['comment'];
 
@@ -130,6 +133,7 @@ function token_example_tokens($type, $tokens, array $data = array(), array $opti
     }
 
     // Chained token relationships.
+    //todo:链式Token关系
     if ($format_tokens = token_find_with_prefix($tokens, 'body-format')) {
       if ($items = field_get_items('comment', $comment, 'comment_body')) {
         $body_format = filter_format_load($items[0]['format']);

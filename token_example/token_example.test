@@ -6,7 +6,7 @@
  */
 
 /**
- * Functional tests for the Token Example module.
+ * Token Example模块功能测试
  *
  * @ingroup token_example
  */
@@ -20,7 +20,7 @@ class TokenExampleTestCase extends DrupalWebTestCase {
   public static function getInfo() {
     return array(
       'name' => 'Token example functionality',
-      'description' => 'Verify the token example interface.',
+      'description' => '校验Token Example接口',
       'group' => 'Examples',
     );
   }
@@ -46,13 +46,13 @@ class TokenExampleTestCase extends DrupalWebTestCase {
     $this->assertNoFieldByName('user');
 
     $edit = array(
-      'text' => 'User [current-user:name] is trying the token example!',
+      'text' => '用户 [current-user:name] 正在测试Token Example接口！',
     );
     $this->drupalPost(NULL, $edit, t('Submit'));
-    $this->assertText('User ' . $this->webUser->name . ' is trying the token example!');
+    $this->assertText('用户 ' . $this->webUser->name . ' 正在测试Token Example接口！');
 
     // Create a node and then make the 'Plain text' text format the default.
-    $node = $this->drupalCreateNode(array('title' => 'Example node', 'status' => NODE_PUBLISHED));
+    $node = $this->drupalCreateNode(array('title' => '演示Node', 'status' => NODE_PUBLISHED));
     db_update('filter_format')
       ->fields(array('weight' => -10))
       ->condition('name', 'Plain text')
@@ -61,16 +61,17 @@ class TokenExampleTestCase extends DrupalWebTestCase {
     $this->drupalGet('examples/token');
 
     $edit = array(
-      'text' => 'Would you like to view the [node:type-name] [node:title] with text format [node:body-format] (ID [node:body-format:id])?',
+      'text' => '你希望使用[node:body-format] (ID [node:body-format:id])格式来查看[node:type-name][node:title]么？',
       'node' => $node->nid,
     );
     $this->drupalPost(NULL, $edit, t('Submit'));
-    $this->assertText('Would you like to view the Basic page Example node with text format Filtered HTML (ID ' . $filtered_id . ')?');
+    $this->assertText('你希望使用Filtered HTML (ID '. $filtered_id .')格式来查看Basic page演示Node么？');
+
 
     $edit = array(
-      'text' => 'Your default text format is [default-format:name] (ID [default-format:id]).',
+      'text' => '你的缺省文本格式是 [default-format:name] (ID [default-format:id]).',
     );
     $this->drupalPost(NULL, $edit, t('Submit'));
-    $this->assertText('Your default text format is Filtered HTML (ID ' . $default_format_id . ')');
+    $this->assertText('你的缺省文本格式是 Filtered HTML (ID ' . $default_format_id . ')');
   }
 }

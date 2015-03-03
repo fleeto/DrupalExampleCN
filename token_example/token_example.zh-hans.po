@@ -1,0 +1,88 @@
+# $Id$
+#
+# Chinese, Simplified translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  token_example.tokens.inc: n/a
+#  token_example.module: n/a
+#  token_example.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2015-03-03 23:57+0800\n"
+"PO-Revision-Date: 2015-03-04 00:36+0800\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Chinese, Simplified <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.7.4\n"
+"Language: zh_CN\n"
+
+#: token_example.tokens.inc:23
+msgid "Text formats"
+msgstr "文本格式"
+
+#: token_example.tokens.inc:24
+msgid "Tokens related to text formats."
+msgstr "文本格式相关的Token"
+
+#: token_example.tokens.inc:28
+msgid "Default text format"
+msgstr "缺省文本格式"
+
+#: token_example.tokens.inc:29
+msgid "Tokens related to the currently logged in user's default text format."
+msgstr "当前用户缺省文本格式相关的Token"
+
+#: token_example.tokens.inc:36
+msgid "ID"
+msgstr "ID"
+
+#: token_example.tokens.inc:37
+msgid "The unique ID of the text format."
+msgstr "文本格式的唯一ID"
+
+#: token_example.tokens.inc:40
+msgid "Name"
+msgstr "名称"
+
+#: token_example.tokens.inc:41
+msgid "The name of the text format."
+msgstr "文本格式的名称"
+
+#: token_example.tokens.inc:46;54
+msgid "Body text format"
+msgstr "Body文本格式"
+
+#: token_example.tokens.inc:47
+msgid "The name of the text format used on the node's body field."
+msgstr "Node的Body字段所使用的文本格式名称。"
+
+#: token_example.tokens.inc:55
+msgid "The name of the text format used on the comment's body field."
+msgstr "评论的Body字段所使用的文本格式名称。"
+
+#: token_example.module:73
+msgid "Not selected"
+msgstr "请选择"
+
+#: token_example.module:87
+msgid "Enter your text here"
+msgstr "此处输入文本"
+
+#: token_example.module:108
+msgid "Result"
+msgstr "结果"
+
+#: token_example.module:115
+msgid "Submit"
+msgstr "提交"
+
+#: token_example.module:126
+msgid ""
+"Enable the <a href=\"@drupal-token\">Token module</a> to view the available "
+"token browser."
+msgstr "启用 <a href=\"@drupal-token\">Token 模块</a> 来查看可用的Token。"

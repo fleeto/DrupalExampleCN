@@ -1,5 +1,5 @@
 name = Token example
-description = An example module showing how to define and use tokens.
+description = 示范如何定义和使用Token
 package = Example modules
 core = 7.x
 dependencies[] = token

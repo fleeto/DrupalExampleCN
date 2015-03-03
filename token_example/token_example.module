@@ -13,20 +13,19 @@
  * @defgroup token_example Example: Token API
  * @ingroup examples
  * @{
- * Examples using the Token API.
+ * 示例：使用Token API。
  *
- * The Token module provides an API for providing tokens to other modules.
- * Tokens are small bits of text that can be placed into larger documents
- * via simple placeholders, like %site-name or [user].
+ * Token模块具有一组API，用于为其他模块提供Token。Token是一小段文本，可以使用简单的占位符
+ * 嵌入到大文档中，例如 %site-name 或者 [user]
  *
- * Drupal 7 documentation on Token can be found here:
+ * Drupal 7的Token文档可以在下面网址找到：
  * http://drupal.org/documentation/modules/token
  *
- * A list of existing tokens can be found here:
+ * 下面网址列出了现有的Token：
  * http://drupal.org/node/390482#drupal7tokenslist
  *
- * This example is part of the Examples for Developers Project which you can
- * download and experiment with here: http://drupal.org/project/examples
+ * 这个示例是Example项目的一部分，你可以在下面网址下载和体验：
+ * http://drupal.org/project/examples
  */
 
 /**
@@ -34,8 +33,8 @@
  */
 function token_example_menu() {
   $items['examples/token'] = array(
-    'title' => 'Token example',
-    'description' => 'Test replacement tokens in real time.',
+    'title' => 'Token示范',
+    'description' => '演示Token替换。',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('token_example_example_form'),
     'access callback' => TRUE,
@@ -46,8 +45,7 @@ function token_example_menu() {
 /**
  * Implements hook_entity_info_alter().
  *
- * @todo Remove this when the testbot can properly pick up dependencies
- * for contrib modules.
+ * @todo 如果testbot能够正确的处理第三方模块的依赖，可以去掉这一部分
  */
 function token_example_entity_info_alter(&$info) {
   if (isset($info['taxonomy_term'])) {
@@ -59,13 +57,13 @@ function token_example_entity_info_alter(&$info) {
 }
 
 /**
- * Form builder; display lists of supported token entities and text to tokenize.
+ * 生成Form, 其中是一个包含了支持token的实体和文字的列表
  */
 function token_example_example_form($form, &$form_state) {
   $entities = entity_get_info();
   $token_types = array();
 
-  // Scan through the list of entities for supported token entities.
+  //扫描实体列表，查找支持Token的实体。
   foreach ($entities as $entity => $info) {
     $object_callback = "_token_example_get_{$entity}";
     if (function_exists($object_callback) && $objects = $object_callback()) {
@@ -77,7 +75,7 @@ function token_example_example_form($form, &$form_state) {
         '#access' => !empty($objects),
       );
 
-      // Build a list of supported token types based on the available entites.
+      //在可用实体的基础上，建立一个被支持的Token类型列表
       if ($form[$entity]['#access']) {
         $token_types[$entity] = !empty($info['token type']) ? $info['token type'] : $entity;
       }
@@ -87,10 +85,10 @@ function token_example_example_form($form, &$form_state) {
   $form['text'] = array(
     '#type' => 'textarea',
     '#title' => t('Enter your text here'),
-    '#default_value' => 'Hello [current-user:name]!',
+    '#default_value' => '[current-user:name] 你好!',
   );
 
-  // Display the results of tokenized text.
+  // 展示Token替换后的文本。
   if (!empty($form_state['storage']['text'])) {
     $form['text']['#default_value'] = $form_state['storage']['text'];
 
@@ -104,7 +102,7 @@ function token_example_example_form($form, &$form_state) {
       }
     }
 
-    // Display the tokenized text.
+    // 显示替换后文本
     $form['text_tokenized'] = array(
       '#type' => 'item',
       '#title' => t('Result'),
@@ -133,7 +131,7 @@ function token_example_example_form($form, &$form_state) {
 }
 
 /**
- * Submit callback; store the submitted values into storage.
+ * 提交和保存。
  */
 function token_example_example_form_submit($form, &$form_state) {
   $form_state['storage'] = $form_state['values'];
@@ -141,7 +139,7 @@ function token_example_example_form_submit($form, &$form_state) {
 }
 
 /**
- * Builds a list of available content.
+ * 创建一个可用内容列表。
  */
 function _token_example_get_node() {
   if (!user_access('access content') && !user_access('bypass node access')) {
@@ -160,7 +158,7 @@ function _token_example_get_node() {
 }
 
 /**
- * Builds a list of available comments.
+ * 创建一个可用评论的列表。
  */
 function _token_example_get_comment() {
   if (!module_exists('comment') || (!user_access('access comments') && !user_access('administer comments'))) {
@@ -181,7 +179,7 @@ function _token_example_get_comment() {
 }
 
 /**
- * Builds a list of available user accounts.
+ * 创建一个可用账号的列表。
  */
 function _token_example_get_user() {
   if (!user_access('access user profiles') &&
@@ -200,7 +198,7 @@ function _token_example_get_user() {
 }
 
 /**
- * Builds a list of available taxonomy terms.
+ * 创建一个可用的分类词汇列表。
  */
 function _token_example_get_taxonomy_term() {
   $term_query = db_select('taxonomy_term_data', 'ttd');
@@ -213,7 +211,7 @@ function _token_example_get_taxonomy_term() {
 }
 
 /**
- * Builds a list of available files.
+ * 创建一个可用文件的列表
  */
 function _token_example_get_file() {
   $file_query = db_select('file_managed', 'f');
