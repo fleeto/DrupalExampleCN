@@ -1,0 +1,145 @@
+# $Id$
+#
+# Chinese, Simplified translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  entity_example.module: n/a
+#  entity_example.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Entity Example \n"
+"POT-Creation-Date: 2015-03-10 20:09+0800\n"
+"PO-Revision-Date: 2015-03-10 21:30+0800\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Chinese, Simplified <drupal@fleeto.us>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Language: zh_CN\n"
+"X-Generator: Poedit 1.7.4\n"
+
+#: entity_example.module:37
+msgid "Example Basic Entity"
+msgstr "Example Basic Entity"
+
+#: entity_example.module:70
+msgid "First example bundle"
+msgstr "首个示范Bundle"
+
+#: entity_example.module:84
+msgid "Tweaky"
+msgstr "Tweaky"
+
+#: entity_example.module:146 entity_example.info:0
+msgid "Entity Example"
+msgstr "Entity示例"
+
+#: entity_example.module:154
+msgid "Administer entity_example_basic entity type"
+msgstr "管理entity_example_basic实体类型"
+
+#: entity_example.module:161;200
+msgid "Add an Entity Example Basic Entity"
+msgstr "添加一个Entity Example Basic实体"
+
+#: entity_example.module:214
+msgid "The entity example provides a simple example entity."
+msgstr "实体示例模块提供了一个简单的实体类型。"
+
+#: entity_example.module:217
+msgid "You can administer these and add fields and change the view !link."
+msgstr "你可以在 !link管理、添加字段和变更视图。"
+
+#: entity_example.module:218
+msgid "here"
+msgstr "这里"
+
+#: entity_example.module:232
+msgid "Administer entity_example_basic entities"
+msgstr "管理 entity_example_basic entities"
+
+#: entity_example.module:235
+msgid "View any Entity Example Basic entity"
+msgstr "查看任何的Entity Example Basic实体"
+
+#: entity_example.module:238
+msgid "Edit any Entity Example Basic entity"
+msgstr "编辑Entity Example Basic实体"
+
+#: entity_example.module:241
+msgid "Create Entity Example Basic Entities"
+msgstr "创建Entity Example Basic实体"
+
+#: entity_example.module:277
+msgid "ID"
+msgstr "ID"
+
+#: entity_example.module:277;335;363;373;403
+msgid "Item Description"
+msgstr "项目描述"
+
+#: entity_example.module:277
+msgid "Bundle"
+msgstr "Bundle"
+
+#: entity_example.module:284
+msgid "No entity_example_basic entities currently exist."
+msgstr "目前没有entity_example_basic实体存在。"
+
+#: entity_example.module:294
+msgid "Entity Example Basic (item_description=@item_description)"
+msgstr "Entity Example Basic (item_description=@item_description)"
+
+#: entity_example.module:330
+msgid "Created date"
+msgstr "创建日期"
+
+#: entity_example.module:364
+msgid "Item Description (an extra form field)"
+msgstr "项目描述（一个额外的Form字段）"
+
+#: entity_example.module:368
+msgid "Creation date"
+msgstr "创建日期"
+
+#: entity_example.module:369
+msgid "Creation date (an extra display field)"
+msgstr "创建日期（一个额外的显示字段）"
+
+#: entity_example.module:374
+msgid "Just like title, but trying to point out that it is a separate property"
+msgstr "跟标题类似，不过"
+
+#: entity_example.module:417
+msgid "Save"
+msgstr "保存"
+
+#: entity_example.module:422
+msgid "Delete"
+msgstr "删除"
+
+#: entity_example.module:459
+msgid "The entity %item_description (ID %id) has been deleted"
+msgstr "实体 %item_description (ID %id) 已经被删除。"
+
+#: entity_example.module:169
+msgid "List"
+msgstr "列表"
+
+#: entity_example.module:184
+msgid "View"
+msgstr "查看"
+
+#: entity_example.module:191
+msgid "Edit"
+msgstr "编辑"
+
+#: entity_example.info:0
+msgid "一个简单的Entity例子，用于展示设置自己的Entity的主要步骤。"
+msgstr ""
+
+#: entity_example.info:0
+msgid "Example modules"
+msgstr "Example modules"

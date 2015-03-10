@@ -1,5 +1,5 @@
 name = Entity Example
-description = A simple entity example showing the main steps required to set up your own entity.
+description = 一个简单的Entity例子，用于展示设置自己的Entity的主要步骤。
 core = 7.x
 package = Example modules
 dependencies[] = field

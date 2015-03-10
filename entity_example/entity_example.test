@@ -8,7 +8,7 @@
  */
 
 /**
- * Functionality tests for enitity example module.
+ * Entity实例模块的功能测试。
  *
  * @ingroup entity_example
  */
@@ -19,8 +19,8 @@ class EntityExampleTestCase extends DrupalWebTestCase {
    */
   public static function getInfo() {
     return array(
-      'name' => 'Entity example',
-      'description' => 'Basic entity example tests',
+      'name' => t('Entity example'),
+      'description' => t('Basic entity example tests'),
       'group' => 'Examples',
     );
   }
@@ -29,10 +29,10 @@ class EntityExampleTestCase extends DrupalWebTestCase {
    * {@inheritdoc}
    */
   public function setUp() {
-    // Enable the module.
+    // 启用模块。
     parent::setUp('entity_example');
 
-    // Create and login user with access.
+    // 创建有权限的用户并登录。
     $permissions = array(
       'access content',
       'view any entity_example_basic entity',
@@ -60,16 +60,16 @@ class EntityExampleTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Test Entity Example features.
+   * 测试实体Example模块的特性
    *
-   * - CRUD
-   * - Table display
-   * - User access
-   * - Field management
-   * - Display management
+   * - 增删改查
+   * - 表格显示
+   * - 访问控制
+   * - 字段管理
+   * - 显示管理
    */
   public function testEntityExampleBasic() {
-    // Create 10 entities.
+    // 创建10个实体.
     for ($i = 1; $i <= 10; $i++) {
       $edit[$i]['item_description'] = $this->randomName();
       $edit[$i]['entity_example_test_text[und][0][value]'] = $this->randomName(32);
@@ -82,13 +82,13 @@ class EntityExampleTestCase extends DrupalWebTestCase {
       $this->assertText($edit[$i]['entity_example_test_text[und][0][value]']);
     }
 
-    // Delete entity 5.
+    // 删除主键为5的实体.
     $this->drupalPost('examples/entity_example/basic/5/edit', $edit[5], 'Delete');
     $this->drupalGet('examples/entity_example/basic/5');
     $this->assertResponse(404, 'Deleted entity 5 no longer exists');
     unset($edit[5]);
 
-    // Update entity 2 and verify the update.
+    // 更新主键为2的实体，并进行验证。
     $edit[2] = array(
       'item_description' => 'updated entity 2 ',
       'entity_example_test_text[und][0][value]' => 'updated entity 2 test text',
@@ -97,15 +97,14 @@ class EntityExampleTestCase extends DrupalWebTestCase {
     $this->assertText('item_description=' . $edit[2]['item_description']);
     $this->assertText('updated entity 2 test text');
 
-    // View the entity list page  and verify that the items which still exist
-    // are there, and that the deleted #5 no longer is there.
+    // 查看实体列表页面，并验证剩下的实体是否存在，并确认删掉的主键为5的实体已经消失。
     $this->drupalGet('admin/structure/entity_example_basic/manage');
     foreach ($edit as $id => $item) {
       $this->assertRaw('examples/entity_example/basic/' . $id . '">' . $item['item_description'] . '</a>');
     }
     $this->assertNoRaw('examples/entity_example/basic/5">');
 
-    // Add a field through the field UI and verify that it behaves correctly.
+    // 利用Field UI添加一个字段，并检查其行为是否正确。
     $field_edit = array(
       'fields[_add_new_field][label]' => 'New junk field',
       'fields[_add_new_field][field_name]' => 'new_junk_field',
@@ -117,14 +116,14 @@ class EntityExampleTestCase extends DrupalWebTestCase {
     $this->drupalPost(NULL, array(), t('Save settings'));
     $this->assertResponse(200);
 
-    // Now verify that we can edit and view this entity with fields.
+    // 验证我们是否能够编辑和查看这个带着字段的实体。
     $edit[10]['field_new_junk_field[und][0][value]'] = $this->randomName();
     $this->drupalPost('examples/entity_example/basic/10/edit', $edit[10], 'Save');
     $this->assertResponse(200);
     $this->assertText('item_description=' . $edit[10]['item_description']);
     $this->assertText($edit[10]['field_new_junk_field[und][0][value]'], 'Custom field updated successfully');
 
-    // Create and login user without view access.
+    // 创建并登录没有权限的用户。
     $account = $this->drupalCreateUser(array('access content'));
     $this->drupalLogin($account);
     $this->drupalGet('admin/structure/entity_example_basic/manage');
@@ -132,7 +131,7 @@ class EntityExampleTestCase extends DrupalWebTestCase {
     $this->drupalGet('examples/entity_example/basic/2');
     $this->assertResponse(403, 'User does not have permission to view entity');
 
-    // Create and login user with view access but no edit access.
+    // 创建并登录一个能够查看但是不能编辑的用户。
     $account = $this->drupalCreateUser(array('access content', 'view any entity_example_basic entity'));
     $this->drupalLogin($account);
     $this->drupalGet('admin/structure/entity_example_basic/manage');
@@ -142,7 +141,7 @@ class EntityExampleTestCase extends DrupalWebTestCase {
     $this->drupalGet('examples/entity_example/basic/2/edit');
     $this->assertResponse(403, 'User is denied edit privileges');
 
-    // Create and login user with view and edit but no manage privs.
+    // 创建并登录一个能查看，能编辑，但是不能管理的用户。
     $account = $this->drupalCreateUser(
       array(
         'access content',

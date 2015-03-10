@@ -14,9 +14,7 @@
  */
 function entity_example_schema() {
   $schema = array();
-
-  // The name of the table can be any name we choose. However, namespacing the
-  // table with the module name is best practice.
+  // 表名称可以很随意，不过推荐使用模块名称作为前缀，便于使用。
   $schema['entity_example_basic'] = array(
     'description' => 'The base table for our basic entity.',
     'fields' => array(
@@ -26,17 +24,16 @@ function entity_example_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
-      // If we allow multiple bundles, then the schema must handle that;
-      // We'll put it in the 'bundle_type' field to avoid confusion with the
-      // entity type.
+      // 如果允许多种Bundle，那么表结构必须有这个能力。
+      // 我们把字段命名为'bundle_type'，避免跟实体类型混淆。
+
       'bundle_type' => array(
         'description' => 'The bundle type',
         'type' => 'text',
         'size' => 'medium',
         'not null' => TRUE,
       ),
-      // Additional properties are just things that are common to all
-      // entities and don't require field storage.
+      // 附加属性对所有实体都一样，不需要Field存储。
       'item_description' => array(
         'description' => 'A description of the item',
         'type' => 'varchar',
@@ -61,8 +58,7 @@ function entity_example_schema() {
 /**
  * Implements hook_uninstall().
  *
- * At uninstall time we'll notify field.module that the entity was deleted
- * so that attached fields can be cleaned up.
+ * 在删除时，我们会通知field.module，实体已经被删除，需要清理附着其上的Field
  *
  * @ingroup entity_example
  */
