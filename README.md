@@ -16,3 +16,5 @@
 * Action Example
 
 * Token Example
+
+* Entity Example
