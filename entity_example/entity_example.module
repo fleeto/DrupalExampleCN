@@ -247,7 +247,7 @@ function entity_example_permission() {
 /**
  * 返回一个包含所有entity_example_basic类型实体的渲染数组。
  *
- * 这只是哥基本的例子，所以不会做很多的实体。
+ * 这只是个基本的例子，所以不会做很多的实体。
  * 所以我们只要简单的全部载入即可。
  * 在pager_example.module中示范了如何编写分页器。
  * 多数的实现可能会用Entity API模块、或者用Views模块来实现。
