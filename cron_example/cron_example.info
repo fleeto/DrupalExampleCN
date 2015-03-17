@@ -1,5 +1,5 @@
 name = Cron example
-description = Demonstrates hook_cron() and related features
+description = 演示 hook_cron() 以及相关特性。
 package = Example modules
 core = 7.x
 files[] = cron_example.test

@@ -1,0 +1,151 @@
+# $Id$
+#
+# Chinese, Simplified translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  cron_example.module: n/a
+#  cron_example.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2015-03-16 13:58+0000\n"
+"PO-Revision-Date: 2015-03-17 16:44+0800\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Chinese, Simplified <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.7.5\n"
+"Language: zh_CN\n"
+
+#: cron_example.module:38
+msgid "Cron status information"
+msgstr "Cron状态信息"
+
+#: cron_example.module:41
+msgid ""
+"The cron example demonstrates hook_cron() and hook_cron_queue_info() "
+"processing. If you have administrative privileges you can run cron from this "
+"page and see the results."
+msgstr ""
+"这里演示了hook_cron()以及hook_cron_queue_info()的处理。如果你有管理权限，可以"
+"从该页面运行Cron并查看结果。"
+
+#: cron_example.module:44
+msgid ""
+"cron_example_cron() will next execute the first time cron runs after %time "
+"(%seconds seconds from now)"
+msgstr "cron_example_cron()会在%time后首次执行（%seconds 秒钟后）"
+
+#: cron_example.module:55
+msgid "Run cron manually"
+msgstr "手动运行Cron"
+
+#: cron_example.module:59
+msgid "Run cron_example's cron regardless of whether interval has expired."
+msgstr "不论是否达到设置的间隔时间，都运行cron_example的cron。"
+
+#: cron_example.module:64
+msgid "Run cron now"
+msgstr "现在运行Cron"
+
+#: cron_example.module:71
+msgid "Cron queue setup (for hook_cron_queue_info(), etc.)"
+msgstr "Cron队列设置（hook_cron_queue_info()等）。"
+
+#: cron_example.module:76
+msgid ""
+"There are currently %queue_1 items in queue 1 and %queue_2 items in queue 2"
+msgstr "当前在队列1中有 %queue_1 个项目，队列2中有 %queue_2 个项目。"
+
+#: cron_example.module:84
+msgid "Number of items to add to queue"
+msgstr "要加入队列的项目数量"
+
+#: cron_example.module:90
+msgid "Queue to add items to"
+msgstr "要将项目加入到"
+
+#: cron_example.module:92
+msgid "Queue 1"
+msgstr "队列1"
+
+#: cron_example.module:93
+msgid "Queue 2"
+msgstr "队列2"
+
+#: cron_example.module:99
+msgid "Add jobs to queue"
+msgstr "把作业添加到队列"
+
+#: cron_example.module:105
+msgid "Configuration of cron_example_cron()"
+msgstr "cron_example_cron()设置"
+
+#: cron_example.module:109
+msgid "Cron interval"
+msgstr "Cron间隔"
+
+#: cron_example.module:110
+msgid ""
+"Time after which cron_example_cron will respond to a processing request."
+msgstr "多久之后，cron_example_cron会处理一个请求。"
+
+#: cron_example.module:113
+msgid "1 minute"
+msgstr "1分钟"
+
+#: cron_example.module:114
+msgid "5 minutes"
+msgstr "5分钟"
+
+#: cron_example.module:115
+msgid "1 hour"
+msgstr "1小时"
+
+#: cron_example.module:116
+msgid "1 day"
+msgstr "1天"
+
+#: cron_example.module:135
+msgid "Cron ran successfully."
+msgstr "Cron成功运行。"
+
+#: cron_example.module:138
+msgid "Cron run failed."
+msgstr "Cron运行失败。"
+
+#: cron_example.module:172
+msgid "cron_example executed at %time"
+msgstr "cron_example在 %time 执行"
+
+#: cron_example.module:234;243
+msgid ""
+"Queue @worker worker processed item with sequence @sequence created at @time"
+msgstr "队列 @worker 处理了创建于 @time 的第 @sequence 个项目"
+
+#: cron_example.module:170
+msgid "cron_example"
+msgstr "cron_example"
+
+#: cron_example.module:170
+msgid "cron_example ran"
+msgstr "cron_example 运行了"
+
+#: cron_example.module:23
+msgid "Cron Example"
+msgstr "Cron Example"
+
+#: cron_example.info:0
+msgid "Cron example"
+msgstr "Cron（定时任务）示例"
+
+#: cron_example.info:0
+msgid "Demonstrates hook_cron() and related features"
+msgstr "演示 hook_cron() 以及相关特性。"
+
+#: cron_example.info:0
+msgid "Example modules"
+msgstr "Example modules"

@@ -9,11 +9,9 @@
  * @defgroup cron_example Example: Cron
  * @ingroup examples
  * @{
- * Example using Cron API, including hook_cron() and hook_cron_queue_info().
+ * 示范Cron API的使用，其中包含了hook_cron()以及hook_cron_queue_info()
  *
- * This example is part of the Examples for Developers Project
- * which you can download and experiment with at
- * http://drupal.org/project/examples
+ * 本示例是Example项目(http://drupal.org/project/examples)的一部分
  */
 
 /**
@@ -32,7 +30,7 @@ function cron_example_menu() {
 }
 
 /**
- * The form to provide a link to cron.php.
+ * 这一Form提供了到cron.php的链接。
  */
 function cron_example_form($form, &$form_state) {
   $form['status'] = array(
@@ -44,11 +42,11 @@ function cron_example_form($form, &$form_state) {
   );
   $form['status']['last'] = array(
     '#markup' => '<div>' . t('cron_example_cron() will next execute the first time cron runs after %time (%seconds seconds from now)',
-      array(
-        '%time' => date_iso8601(variable_get('cron_example_next_execution', time())),
-        '%seconds' => variable_get('cron_example_next_execution', time()) - time(),
-      )
-    ) . '</div>',
+        array(
+          '%time' => date_iso8601(variable_get('cron_example_next_execution', time())),
+          '%seconds' => variable_get('cron_example_next_execution', time()) - time(),
+        )
+      ) . '</div>',
   );
 
   if (user_access('administer site configuration')) {
@@ -64,7 +62,7 @@ function cron_example_form($form, &$form_state) {
     $form['cron_run']['cron_trigger'] = array(
       '#type' => 'submit',
       '#value' => t('Run cron now'),
-      '#submit' => array('cron_example_form_cron_run_submit'),
+      '#submit' => array('cron_example_form_run_submit'),
     );
   }
 
@@ -76,10 +74,10 @@ function cron_example_form($form, &$form_state) {
   $queue_2 = DrupalQueue::get('cron_example_queue_2');
   $form['cron_queue_setup']['current_cron_queue_status'] = array(
     '#markup' => '<div>' . t('There are currently %queue_1 items in queue 1 and %queue_2 items in queue 2',
-      array(
-        '%queue_1' => $queue_1->numberOfItems(),
-        '%queue_2' => $queue_2->numberOfItems(),
-      )) . '</div>',
+        array(
+          '%queue_1' => $queue_1->numberOfItems(),
+          '%queue_2' => $queue_2->numberOfItems(),
+        )) . '</div>',
   );
   $form['cron_queue_setup']['num_items'] = array(
     '#type' => 'select',
@@ -123,26 +121,25 @@ function cron_example_form($form, &$form_state) {
 }
 
 /**
- * Allow user to directly execute cron, optionally forcing it.
+ * 让用户可以直接执行Cron，可以选择强制执行
  */
-function cron_example_form_cron_run_submit($form, &$form_state) {
+function cron_example_form_run_submit($form, &$form_state) {
   if (!empty($form_state['values']['cron_reset'])) {
     variable_set('cron_example_next_execution', 0);
   }
 
-  // We don't usually use globals in this way. This is used here only to
-  // make it easy to tell if cron was run by this form.
+  // 一般不会这样使用全局变量。这里使用这种用法来简化说明该CRON是否由这一Form运行的。
+
   $GLOBALS['cron_example_show_status_message'] = TRUE;
   if (drupal_cron_run()) {
     drupal_set_message(t('Cron ran successfully.'));
-  }
-  else {
+  } else {
     drupal_set_message(t('Cron run failed.'), 'error');
   }
 }
 
 /**
- * Submit function used to add the items to the queue.
+ * 提交，添加条目到队列中。
  */
 function cron_example_add_jobs_to_queue($form, &$form_state) {
   $queue = $form_state['values']['queue'];
@@ -155,28 +152,25 @@ function cron_example_add_jobs_to_queue($form, &$form_state) {
     $item->sequence = $i;
     $queue->createItem($item);
   }
+
 }
+
 /**
  * Implements hook_cron().
  *
- * hook_cron() is the traditional (pre-Drupal 7) hook for doing "background"
- * processing. It gets called every time the Drupal cron runs and must decide
- * what it will do.
+ * hook_cron() 是Drupal 7之前的陈旧Hook，用于进行“后台”处理。他在每次Drupal Cron的时候运行，而且必须确定其中的内容
  *
- * In this example, it does a watchdog() call after the time named in
- * the variable 'cron_example_next_execution' has arrived, and then it
- * resets that variable to a time in the future.
+ * 在这个例子中，在变量'cron_example_next_execution'中记录了一个时间，如果到了这个时间，则会运行一次watchdog()，然后会复位这个变量。
  */
 function cron_example_cron() {
-  // Default to an hourly interval. Of course, cron has to be running at least
-  // hourly for this to work.
+  // 缺省是一个小时的间隔。当然，这要求cron一个小时内至少运行一次，才能满足这一要求。
   $interval = variable_get('cron_example_interval', 60 * 60);
-  // We usually don't want to act every time cron runs (which could be every
-  // minute) so keep a time for the next run in a variable.
+  watchdog('cron_example', 'cron_example fired!');
+
+  // 我们通常不想要每次Cron一运行，就运行这段代码。所以我们在变量中保存一个下次运行的时间。
   if (time() >= variable_get('cron_example_next_execution', 0)) {
-    // This is a silly example of a cron job.
-    // It just makes it obvious that the job has run without
-    // making any changes to your database.
+
+    // 这是一个关于CRON的蠢例子。只是为了在不改变数据库的情况下证明作业的运行。
     watchdog('cron_example', 'cron_example ran');
     if (!empty($GLOBALS['cron_example_show_status_message'])) {
       drupal_set_message(t('cron_example executed at %time', array('%time' => date_iso8601(time(0)))));
@@ -185,24 +179,20 @@ function cron_example_cron() {
   }
 }
 
-
 /**
  * Implements hook_cron_queue_info().
  *
- * hook_cron_queue_info() and family are new since Drupal 7, and allow any
- * process to add work to the queue to be acted on when cron runs. Queues are
- * described and worker callbacks are provided, and then only the worker
- * callback needs to be implemented.
+ * hook_cron_queue_info() 以及相关的一系列Hook是从Drupal 7开始出现的，进程通过这些Hook可以向CRON运行时处理的队列中加入作业。
+ * 这里进行了Queue的描述以及作业回调的定义，作业回调函数需要进行实现。
  *
- * All the details of queue use are done by the cron_queue implementation, so
- * one doesn't need to know much about DrupalQueue().
+ * 所有队列细节都由cron_queue的实现完成，所以一般不需要对DrupalQueue()进行深入了解。
  *
  * @see queue_example.module
  */
 function cron_example_cron_queue_info() {
   $queues['cron_example_queue_1'] = array(
     'worker callback' => 'cron_example_queue_1_worker',
-    // One second max runtime per cron run.
+    // 每次cron的时候最多占用1秒钟执行这一队列
     'time' => 1,
   );
   $queues['cron_example_queue_2'] = array(
@@ -213,32 +203,32 @@ function cron_example_cron_queue_info() {
 }
 
 /**
- * Simple worker for our queues.
+ * 队列中的简单作业。
  *
  * @param object $item
- *   Any object to be worked on.
+ *   任何工作目标。
  */
 function cron_example_queue_1_worker($item) {
   cron_example_queue_report_work(1, $item);
 }
 
 /**
- * Simple worker for our queues.
+ * 队列中的简单作业。
  *
  * @param object $item
- *   Any object to be worked on.
+ *  任何工作目标。
  */
 function cron_example_queue_2_worker($item) {
   cron_example_queue_report_work(2, $item);
 }
 
 /**
- * Simple reporter for the workers.
+ * 作业的简单报告。
  *
  * @param int $worker
- *   Worker number.
+ *   作业编号。
  * @param object $item
- *   The $item which was stored in the cron queue.
+ *   保存在cron队列中的条目。
  */
 function cron_example_queue_report_work($worker, $item) {
   if (!empty($GLOBALS['cron_example_show_status_message'])) {
@@ -252,7 +242,7 @@ function cron_example_queue_report_work($worker, $item) {
       )
     );
   }
-  watchdog('cron_example', 'Queue @worker worker processed item with sequence @sequence created at @time',
+  watchdog('cron_example', t('Queue @worker worker processed item with sequence @sequence created at @time'),
     array(
       '@worker' => $worker,
       '@sequence' => $item->sequence,

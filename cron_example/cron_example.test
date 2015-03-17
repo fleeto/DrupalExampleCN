@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Test case for testing the cron example module.
+ * Cron实例模块的测试用例。
  */
 
 /**
@@ -17,43 +17,42 @@ class CronExampleTestCase extends DrupalWebTestCase {
    */
   public static function getInfo() {
     return array(
-      'name' => 'Cron example functionality',
-      'description' => 'Test the functionality of the Cron Example.',
+      'name' => t('Cron example functionality'),
+      'description' => t('Test the functionality of the Cron Example.'),
       'group' => 'Examples',
     );
   }
 
   /**
-   * Enable modules and create user with specific permissions.
+   * 启用模块，并创建具有指定权限的用户。
    */
   public function setUp() {
     parent::setUp('cron_example');
-    // Create user. Search content permission granted for the search block to
-    // be shown.
+    // 创建用户，具有搜索内容的权限，以便展示搜索Block。
     $this->webUser = $this->drupalCreateUser(array('administer site configuration'));
     $this->drupalLogin($this->webUser);
   }
 
   /**
-   * Test running cron through the user interface.
+   * 测试：从用户界面运行Cron。
    */
   public function testCronExampleBasic() {
-    // Pretend that cron has never been run (even though simpletest seems to
-    // run it once...)
+
+    // 伪装成为Cron没有运行的样子（即使这样，simpletest看起来还是运行了一次...）。
     variable_set('cron_example_next_execution', 0);
     $this->drupalGet('examples/cron_example');
 
-    // Initial run should cause cron_example_cron() to fire.
+    // 初始化运行会导致cron_example_cron()被触发。
     $post = array();
     $this->drupalPost('examples/cron_example', $post, t('Run cron now'));
     $this->assertText(t('cron_example executed at'));
 
-    // Forcing should also cause cron_example_cron() to fire.
+    // 这一选项同样会触发cron_example_cron()。
     $post['cron_reset'] = TRUE;
     $this->drupalPost(NULL, $post, t('Run cron now'));
     $this->assertText(t('cron_example executed at'));
 
-    // But if followed immediately and not forced, it should not fire.
+    // 但是如果接下来不打开强制选项的话，就不会触发。
     $post['cron_reset'] = FALSE;
     $this->drupalPost(NULL, $post, t('Run cron now'));
     $this->assertNoText(t('cron_example executed at'));
@@ -64,18 +63,18 @@ class CronExampleTestCase extends DrupalWebTestCase {
       'queue' => 'cron_example_queue_1',
     );
     $this->drupalPost(NULL, $post, t('Add jobs to queue'));
-    $this->assertText('There are currently 5 items in queue 1 and 0 items in queue 2');
+    $this->assertText(t('There are currently 5 items in queue 1 and 0 items in queue 2'));
     $post = array(
       'num_items' => 100,
       'queue' => 'cron_example_queue_2',
     );
     $this->drupalPost(NULL, $post, t('Add jobs to queue'));
-    $this->assertText('There are currently 5 items in queue 1 and 100 items in queue 2');
+    $this->assertText(t('There are currently 5 items in queue 1 and 100 items in queue 2'));
 
     $post = array();
     $this->drupalPost('examples/cron_example', $post, t('Run cron now'));
-    $this->assertPattern('/Queue 1 worker processed item with sequence 5 /');
-    $this->assertPattern('/Queue 2 worker processed item with sequence 100 /');
+    $this->assertPattern(t('/Queue 1 worker processed item with sequence 5 /'));
+    $this->assertPattern(t('/Queue 2 worker processed item with sequence 100 /'));
   }
 }
 
