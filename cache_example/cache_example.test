@@ -5,7 +5,7 @@
  */
 
 /**
- * Functional tests for the Cache Example module.
+ * 缓存示例模块的测试用例
  *
  * @ingroup cache_example
  */
@@ -30,51 +30,52 @@ class CacheExampleTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Functional tests for cache_example.
+   * cache_example功能测试。
    *
    * Load cache example page and test if displaying uncached version. Reload
    * once again and test if displaying cached version. Find reload link and
    * click on it. Clear cache at the end and test if displaying uncached
    * version again.
+   * 载入缓存示例页面，测试非缓存版本的显示。重新载入一次，测试是否显示的是缓存版本。
+   * 查找重新载入的连接并点击。最后清除缓存，测试是否重新显示未缓存版本。
    */
   public function testCacheExampleBasic() {
-    // We need administrative privileges to clear the cache.
+    // 清除缓存需要管理权限。
     $admin_user = $this->drupalCreateUser(array('administer site configuration'));
     $this->drupalLogin($admin_user);
 
-    // Get uncached output of cache example page and assert some things to be
-    // sure.
+    // 获取非缓存的页面，用输出页面内容进行判断。
     $this->drupalGet('examples/cache_example');
     $this->assertText('Source: actual file search');
-    // Reload the page; the number should be cached.
+    // 重新载入页面，测试是否输出了缓存内容。
     $this->drupalGet('examples/cache_example');
     $this->assertText('Source: cached');
 
-    // Now push the button to remove the count.
+    // 点击按钮，清除文件数量的缓存。
     $this->drupalPost('examples/cache_example', array(), t('Explicitly remove cached file count'));
     $this->assertText('Source: actual file search');
 
-    // Create a cached item. First make sure it doesn't already exist.
+    // 创建一个缓存项。首先确认他是不是存在。
     $this->assertText('Cache item does not exist');
     $this->drupalPost('examples/cache_example', array('expiration' => -10), t('Create a cache item with this expiration'));
-    // We should now have an already-expired item.
+    // 我们现在应该有了个过期的缓存项。
     $this->assertText('Cache item exists and is set to expire');
-    // Now do the expiration operation.
+    // 进行过期操作。
     $this->drupalPost('examples/cache_example', array('cache_clear_type' => 'expire'), t('Clear or expire cache'));
-    // And verify that it was removed.
+    // 校验是否被清除。
     $this->assertText('Cache item does not exist');
 
-    // Create a cached item. This time we'll make it not expire.
+    // 创建一个缓存项，这里我们把时间设置成不会过期。
     $this->drupalPost('examples/cache_example', array('expiration' => 'never_remove'), t('Create a cache item with this expiration'));
-    // We should now have an never-remove item.
+    // 现在我们有了一个不会被过期的项目。
     $this->assertText('Cache item exists and is set to expire at Never expires');
-    // Now do the expiration operation.
+    // 进行过期操作。
     $this->drupalPost('examples/cache_example', array('cache_clear_type' => 'expire'), t('Clear or expire cache'));
-    // And verify that it was not removed.
+    // 这里应该没有被清除。
     $this->assertText('Cache item exists and is set to expire at Never expires');
-    // Now do full removal.
+    // 接下来进行轻质清除。
     $this->drupalPost('examples/cache_example', array('cache_clear_type' => 'remove_wildcard'), t('Clear or expire cache'));
-    // And verify that it was removed.
+    // 检查他是否被清除。
     $this->assertText('Cache item does not exist');
   }
 

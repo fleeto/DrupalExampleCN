@@ -11,16 +11,12 @@
  * @defgroup cache_example Example: Cache API
  * @ingroup examples
  * @{
- * Outlines how a module can use the Cache API.
+ * 简单演示模块如何使用缓存API
  *
- * Cache API allows us to cache data that is heavy to calculate. As this can
- * significantly speed up the Drupal site, it is recommended to use cache
- * mechanism when it is appropriate.
+ * 缓存API让我们能够把经过复杂运算得出的数据进行缓存，能够显著提高站点速度。
  *
- * Cache in Drupal is very easy to use. This example will search entire Drupal
- * folder and display all files. Since this operation includes filesystem it can
- * take a while. This list will not change much on production
- * websites, so we decide to cache it.
+ * Drupal的缓存是很容易使用的，这个例子会搜索整个Drupal
+ * 目录并展示所有文件。因为操作中涉及文件系统，因此会消耗较多时间。在生产环境中，这个列表不会频繁变更，所以我们决定使用缓存。
  *
  * @see cache_get()
  * @see cache_set()
@@ -44,44 +40,42 @@ function cache_example_menu() {
 }
 
 /**
- * Main page for cache_example.
+ * cache_example主页面。
  *
- * Displays a page/form which outlines how Drupal's cache works.
+ * 显示一个页面/Form来演示Drupal的缓存。
  */
 function cache_example_page_form($form, &$form_state) {
-  // Log execution time.
+  // 执行时间
   $start_time = microtime(TRUE);
 
-  // Try to load the files count from cache. This function will accept two
-  // arguments:
-  // - cache object name (cid)
-  // - cache bin, the (optional) cache bin (most often a database table) where
-  //   the object is to be saved.
-  //
-  // cache_get() returns the cached object or FALSE if object does not exist.
+
+  // 尝试从缓存中获取文件数量。这个函数有两个参数：
+  // - 缓存对象名称（cid）
+  // - 缓存区，可选，可以指定从对象所在的缓存区（通常是一个数据表）读取缓存。
+  // cache_get() 会返回缓存对象，如果缓存项不存在，返回FALSE
   if ($cache = cache_get('cache_example_files_count')) {
     /*
-     * Get cached data. Complex data types will be unserialized automatically.
+     * 获取缓存数据，复杂类型的数据会自动进行反序列化。
      */
     $files_count = $cache->data;
   }
   else {
-    // If there was no cached data available we have to search filesystem.
-    // Recursively get all files from Drupal's folder.
+    // 如果没有可用的缓存数据，那就只能搜索文件系统了。
+    // 从Drupal目录中递归列出文件。
     $files_count = count(file_scan_directory('.', '/.*/'));
 
-    // Since we have recalculated, we now need to store the new data into cache.
-    // Complex data types will be automatically serialized before being saved
-    // into cache.
-    // Here we use the default setting and create an unexpiring cache item.
-    // See below for an example that creates an expiring cache item.
+    // 既然重新获取了列表，那么我们需要把新获取的数据进行缓存。
+    // 复杂数据类型会在保存前进行自动序列化。
+    // 这里我们用了缺省的不会过期的缓存方式。
+    // 下面有一个过期缓存的例子。
+
     cache_set('cache_example_files_count', $files_count);
   }
 
   $end_time = microtime(TRUE);
   $duration = $end_time - $start_time;
 
-  // Format intro message.
+  // 格式化说明文字
   $intro_message = '<p>' . t('This example will search the entire drupal folder and display a count of the files in it.') . ' ';
   $intro_message .= t('This can take a while, since there are a lot of files to be searched.') . ' ';
   $intro_message .= t('We will search filesystem just once and save output to the cache. We will use cached data for later requests.') . '</p>';
@@ -167,7 +161,8 @@ function cache_example_page_form($form, &$form_state) {
     ),
     '#default_value' => 'expire',
   );
-  // Submit button to clear cached data.
+
+  // 用于清除缓存数据的提交按钮。
   $form['cache_clearing']['clear_expired'] = array(
     '#type' => 'submit',
     '#value' => t('Clear or expire cache'),
@@ -181,16 +176,18 @@ function cache_example_page_form($form, &$form_state) {
  * Submit handler that explicitly clears cache_example_files_count from cache.
  */
 function cache_example_form_expire_files($form, &$form_state) {
-  // Clear cached data. This function will delete cached object from cache bin.
-  //
+
+  // 清空缓存数据。这个函数会从指定缓存区清除缓存数据。
   // The first argument is cache id to be deleted. Since we've provided it
   // explicitly, it will be removed whether or not it has an associated
   // expiration time. The second argument (required here) is the cache bin.
   // Using cache_clear_all() explicitly in this way
   // forces removal of the cached item.
+  // 第一个参数是将要删除的缓存ID，这是显示调用的删除，不论对应的缓存数据是否有指定过期时间，都会被删除。
+  // 这里第二个参数是必选的，指定缓存区。用这种方式调用cache_clear_all()会显示的删除缓存项。
   cache_clear_all('cache_example_files_count', 'cache');
 
-  // Display message to the user.
+  // 向用户展示信息。
   drupal_set_message(t('Cached data key "cache_example_files_count" was cleared.'), 'status');
 }
 
@@ -207,34 +204,33 @@ function cache_example_form_create_expiring_item($form, &$form_state) {
     $expiration = time() + $interval;
     $expiration_friendly = format_date($expiration);
   }
-  // Set the expiration to the actual Unix timestamp of the end of the required
-  // interval.
+
+  // 设置缓存有效期为指定间隔之后的时间的Unix时间戳形式。
   cache_set('cache_example_expiring_item', $expiration_friendly, 'cache', $expiration);
   drupal_set_message(t('cache_example_expiring_item was set to expire at %time', array('%time' => $expiration_friendly)));
 }
 
 /**
- * Submit handler to demonstrate the various uses of cache_clear_all().
+ * cache_clear_all()演示窗体的提交处理。
  */
 function cache_example_form_cache_clearing($form, &$form_state) {
   switch ($form_state['values']['cache_clear_type']) {
     case 'expire':
-      // Here we'll remove all cache keys in the 'cache' bin that have expired.
+      // 删除这一缓存区中所有过期的缓存
       cache_clear_all(NULL, 'cache');
       drupal_set_message(t('cache_clear_all(NULL, "cache") was called, removing any expired cache items.'));
       break;
 
     case 'remove_all':
-      // This removes all keys in a bin using a super-wildcard. This
-      // has nothing to do with expiration. It's just brute-force removal.
+      // 用通配符删除一个缓存区中所有的缓存项目。
+      // 强行删除，跟是否过期无关。
       cache_clear_all('*', 'cache', TRUE);
       drupal_set_message(t('ALL entries in the "cache" bin were removed with cache_clear_all("*", "cache", TRUE).'));
       break;
 
     case 'remove_wildcard':
-      // We can also explicitly remove all cache items whose cid begins with
-      // 'cache_example' by using a wildcard. This again is brute-force
-      // removal, not expiration.
+      // 我们还可以通过通配符，显式的删除所有用'cache_example'开头的cid所对应的缓存项。
+      // 这也是无视是否过期的强制删除。
       cache_clear_all('cache_example', 'cache', TRUE);
       drupal_set_message(t('Cache entries whose cid began with "cache_example" in the "cache" bin were removed with cache_clear_all("cache_example", "cache", TRUE).'));
       break;

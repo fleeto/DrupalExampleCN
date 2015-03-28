@@ -14,8 +14,10 @@
 ##已完成部分：
 
 * Action Example
+* Cache Example
 * Cron Example
 * Entity Example
 * Token Example
+
 
 

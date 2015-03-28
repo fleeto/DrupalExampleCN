@@ -1,0 +1,193 @@
+# $Id$
+#
+# Chinese, Simplified translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  cache_example.module: n/a
+#  cache_example.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cache Example\n"
+"POT-Creation-Date: 2015-03-27 16:03+0000\n"
+"PO-Revision-Date: 2015-03-28 23:06+0800\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Chinese, Simplified <git@fleeto.us>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Language: zh_CN\n"
+"X-Generator: Poedit 1.7.5\n"
+
+#: cache_example.module:81
+msgid "This example will search the entire drupal folder and display a count of the files in it."
+msgstr "这个例子会搜索整个Drupal目录，显示一个文件数。"
+
+#: cache_example.module:82
+msgid "This can take a while, since there are a lot of files to be searched."
+msgstr "因为有很多文件要搜索，所以这个操作会花些时间。"
+
+#: cache_example.module:83
+msgid "We will search filesystem just once and save output to the cache. We will use cached data for later requests."
+msgstr "我们只会搜索一次文件系统，然后把输出内容保存到缓存。在后续请求中，我们就会使用缓存内容来处理后续的输出。"
+
+#: cache_example.module:84
+msgid "<a href=\"@url\">Reload this page</a> to see cache in action."
+msgstr "<a href=\"@url\">重新载入页面</a> 观察缓存情况。"
+
+#: cache_example.module:85
+msgid "You can use the button below to remove cached data."
+msgstr "可以使用下面的按钮来移除缓存数据。"
+
+#: cache_example.module:89
+msgid "File search caching"
+msgstr "文件搜索缓存中"
+
+#: cache_example.module:96
+msgid "calculated by traversing the filesystem"
+msgstr "通过文件系统的遍历进行计数"
+
+#: cache_example.module:96
+msgid "retrieved from cache"
+msgstr "从缓存中获取"
+
+#: cache_example.module:100
+msgid "%count files exist in this Drupal installation; @retrieval in @time ms. <br/>(Source: <span style=\"color:@color;\">@source</span>)"
+msgstr "在Drupal目录有 %count 个文件； @retrieval 消耗时间 @time 毫秒. <br/>(来源: <span style=\"color:@color;\">@source</span>)"
+
+#: cache_example.module:106
+msgid "actual file search"
+msgstr "实际的文件搜索"
+
+#: cache_example.module:106
+msgid "cached"
+msgstr "被缓存"
+
+#: cache_example.module:113
+msgid "Explicitly remove cached file count"
+msgstr "强制移除缓存的文件数量"
+
+#: cache_example.module:118
+msgid "Cache expiration settings"
+msgstr "缓存过期设置"
+
+#: cache_example.module:121
+msgid "A cache item can be set as CACHE_PERMANENT, meaning that it will only be removed when explicitly cleared, or it can have an expiration time (a Unix timestamp)."
+msgstr "一个缓存项目被设置为CACHE_PERMANENT，意味着他只能被强制清除。不想这样的话，就应该设置一个过期时间（一个Unix时间戳）。"
+
+#: cache_example.module:125
+msgid "Cache item exists and is set to expire at %time"
+msgstr "存在缓存项目，过期时间为 %time"
+
+#: cache_example.module:126
+msgid "Cache item does not exist"
+msgstr "缓存项目不存在"
+
+#: cache_example.module:129
+msgid "Current status of cache item \"cache_example_expiring_item\""
+msgstr "缓存项\"cache_example_expiring_item\"的当前状态"
+
+#: cache_example.module:134
+msgid "Time before cache expiration"
+msgstr "过期时间"
+
+#: cache_example.module:136
+msgid "CACHE_PERMANENT"
+msgstr "CACHE_PERMANENT"
+
+#: cache_example.module:137
+msgid "Immediate expiration"
+msgstr "马上过期"
+
+#: cache_example.module:138
+msgid "10 seconds from form submission"
+msgstr "提交后10秒钟"
+
+#: cache_example.module:139
+msgid "1 minute from form submission"
+msgstr "提交后一分钟"
+
+#: cache_example.module:140
+msgid "5 minutes from form submission"
+msgstr "提交后五分钟"
+
+#: cache_example.module:143
+msgid "Any cache item can be set to only expire when explicitly cleared, or to expire at a given time."
+msgstr "所有的缓存项目都可以设置为仅在强制清除时过期，也可以设置一个指定的过期时间。"
+
+#: cache_example.module:147
+msgid "Create a cache item with this expiration"
+msgstr "创建一个指定过期时间的缓存项"
+
+#: cache_example.module:153
+msgid "Expire and remove options"
+msgstr "过期和清除选项"
+
+#: cache_example.module:154
+msgid "We have APIs to expire cached items and also to just remove them. Unfortunately, they're all the same API, cache_clear_all"
+msgstr "我们能够让缓存过期，也能直接进行清除。不幸的是，这都是通过同一个cache_clear_all完成的"
+
+#: cache_example.module:158
+msgid "Type of cache clearing to do"
+msgstr "清除缓存的方式"
+
+#: cache_example.module:160
+msgid "Remove items from the \"cache\" bin that have expired"
+msgstr "清除 \"cache\" 缓存区中的过期缓存"
+
+#: cache_example.module:161
+msgid "Remove all items from the \"cache\" bin regardless of expiration (super-wildcard)"
+msgstr "无视过期时间，用通配符清除所有 \"cache\" 缓存区中的项目"
+
+#: cache_example.module:162
+msgid "Remove all items from the \"cache\" bin that match the pattern \"cache_example\""
+msgstr "用通配符清除所有 \"cache\" 缓存区中的 \"cache_example\"开头的缓存项 "
+
+#: cache_example.module:169
+msgid "Clear or expire cache"
+msgstr "清除或过期缓存"
+
+#: cache_example.module:190
+msgid "Cached data key \"cache_example_files_count\" was cleared."
+msgstr " \"cache_example_files_count\"键对应的缓存数据已经被清除。"
+
+#: cache_example.module:200
+msgid "Never expires"
+msgstr "永不过期"
+
+#: cache_example.module:209
+msgid "cache_example_expiring_item was set to expire at %time"
+msgstr "cache_example_expiring_item设置为%time过期"
+
+#: cache_example.module:220
+msgid "cache_clear_all(NULL, \"cache\") was called, removing any expired cache items."
+msgstr "调用了cache_clear_all(NULL, \"cache\") , 清除所有过期缓存。"
+
+#: cache_example.module:227
+msgid "ALL entries in the \"cache\" bin were removed with cache_clear_all(\"*\", \"cache\", TRUE)."
+msgstr "\"cache\"缓存区中的所有项目都被cache_clear_all(\"*\", \"cache\", TRUE)清除。"
+
+#: cache_example.module:235
+msgid "Cache entries whose cid began with \"cache_example\" in the \"cache\" bin were removed with cache_clear_all(\"cache_example\", \"cache\", TRUE)."
+msgstr "\"cache\"缓存区中，cid以\"cache_example\" 开头的项目被 cache_clear_all(\"cache_example\", \"cache\", TRUE)调用所清除。"
+
+#: cache_example.module:32
+msgid "Cache example"
+msgstr "缓存示例"
+
+#: cache_example.module:33
+msgid "Example of Drupal Cache API"
+msgstr "Drupal缓存API示例"
+
+#: cache_example.info:0
+msgid "Cache Example"
+msgstr "缓存示例"
+
+#: cache_example.info:0
+msgid "An example outlining how to use Cache API."
+msgstr "一个演示如何使用缓存API的例子。"
+
+#: cache_example.info:0
+msgid "Example modules"
+msgstr "Example modules"
