@@ -1,0 +1,106 @@
+# $Id$
+#
+# Chinese, Simplified translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  batch_example.module: n/a
+#  batch_example.info: n/a
+#  batch_example.install: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2015-04-08 08:06+0000\n"
+"PO-Revision-Date: 2015-04-08 16:52+0800\n"
+"Last-Translator: dustise <drupal@fleeto.us>\n"
+"Language-Team: Chinese, Simplified <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Language: zh_CN\n"
+"X-Generator: Poedit 1.7.5\n"
+
+#: batch_example.module:52
+msgid "This example offers two different batches. The first does 1000 identical operations, each completed in on run; the second does 20 operations, but each takes more than one run to operate if there are more than 5 nodes."
+msgstr "本模块提供了两个不同的批处理。第一个重复了1000次同样的操作，每次操作都在一次运行中完成；第二个执行20个操作，不过同上一个不同，如果超过5个Node，每个都会需要多次运行才能完成操作。"
+
+#: batch_example.module:58
+msgid "batch 1 - 1000 operations, each loading the same node"
+msgstr "批处理 1 - 1000个操作，每次都载入同一个Node"
+
+#: batch_example.module:59
+msgid "batch 2 - 20 operations. each one loads all nodes 5 at a time"
+msgstr "批处理 2 - 20个操作。每次操作都以5个一组的方式载入所有Node"
+
+#: batch_example.module:71
+msgid "You don't currently have any nodes, and this example requires a node to work with. As a result, this form is disabled."
+msgstr "当前没有Node，本例需要Node进行工作。所以，本Form无法工作。"
+
+#: batch_example.module:108
+msgid "Creating an array of @num operations"
+msgstr "创建包含 @num 个操作的数组"
+
+#: batch_example.module:125;182
+msgid "(Operation @operation)"
+msgstr "（操作 @operation）"
+
+#: batch_example.module:154
+msgid "Loading node \"@title\""
+msgstr "载入标题为 \"@title\" 的Node"
+
+#: batch_example.module:168
+msgid "There are @node_count nodes so each of the @num operations will require @count HTTP requests."
+msgstr "共有 @node_count 个Node，所以需要 @num 个操作，以 @count HTTP 个请求完成。"
+
+#: batch_example.module:196
+msgid "Processing batch 2"
+msgstr "正在处理第二批作业"
+
+#: batch_example.module:197
+msgid "Batch 2 is starting."
+msgstr "批处理 2 正在启动。"
+
+#: batch_example.module:198
+msgid "Processed @current out of @total."
+msgstr "已经处理了 @total 中的 @current。"
+
+#: batch_example.module:199
+msgid "Batch 2 has encountered an error."
+msgstr "批处理 2 出错了。"
+
+#: batch_example.module:278
+msgid "@count results processed in @requests HTTP requests."
+msgstr "在 @requests 个HTTP请求中处理了 @count 个结果。"
+
+#: batch_example.module:279
+msgid "The final result was \"%final\""
+msgstr "最终结果是  \"%final\""
+
+#: batch_example.module:287
+msgid "An error occurred while processing @operation with arguments : @args"
+msgstr "在传递 @args 参数给 @operation 进行处理的过程中出现了错误。"
+
+#: batch_example.module:36 batch_example.info:0
+msgid "Batch example"
+msgstr "批处理示例"
+
+#: batch_example.module:37
+msgid "Example of Drupal batch processing"
+msgstr "Drupal批处理示例"
+
+#: batch_example.install:74
+msgid "$sandbox="
+msgstr "$sandbox="
+
+#: batch_example.install:79
+msgid "The batch_example demonstration update did what it was supposed to do: @message"
+msgstr "batch_example 演示了如何更新下一步操作的过程：@message"
+
+#: batch_example.info:0
+msgid "An example outlining how a module can define batch operations."
+msgstr "模块如何定义批处理的演示。"
+
+#: batch_example.info:0
+msgid "Example modules"
+msgstr "Example modules"

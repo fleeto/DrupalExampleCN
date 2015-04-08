@@ -14,6 +14,7 @@
 ##已完成部分：
 
 * Action Example
+* Batch Example
 * Cache Example
 * Cron Example
 * Entity Example
