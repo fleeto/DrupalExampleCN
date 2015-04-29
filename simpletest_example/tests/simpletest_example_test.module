@@ -6,10 +6,9 @@
  */
 
 /**
- * The mock module for SimpleTest Example.
+ * SimpleTest示例的Mock模块
  *
- * This module exists so that we can enable it and use it to
- * test elements of simpletest_module.
+ * 我们可以启用这个模块并利用它测试simpletest_module。
  *
  * @ingroup simpletest_example
  */
@@ -17,7 +16,7 @@
 /**
  * Implements hook_node_view().
  *
- * We'll just add some content to nodes of the type we like.
+ * 这里将会为指定类型的Node添加一些内容。
  *
  * @ingroup simpletest_example
  */

@@ -7,14 +7,12 @@
  */
 
 /**
- * The SimpleTestExampleTestCase is a functional test case, meaning that it
- * actually exercises a particular sequence of actions through the web UI.
- * The majority of core test cases are done this way, but the SimpleTest suite
- * also provides unit tests as demonstrated in the unit test case example later
- * in this file.
  *
- * Functional test cases are far slower to execute than unit test cases because
- * they require a complete Drupal install to be done for each test.
+ * SimpleTestExampleTestCase是一个功能测试用例，他会通过Web UI实际执行一系列的任务。
+ * 多数核心测试用例都是通过这一方式完成的，不过SimpleTest套件也提供了单元测试功能，后面也会
+ * 给出这类实例。
+ *
+ * 功能测试用例比单元测试要慢得多，这是因为功能测试需要完整的Drupal支持才能完成每个测试。
  *
  * @see DrupalWebTestCase
  * @see SimpleTestUnitTestExampleTestCase
@@ -26,12 +24,12 @@ class SimpleTestExampleTestCase extends DrupalWebTestCase {
   protected $privilegedUser;
 
   /**
-   * Give display information to the SimpleTest system.
+   * 为SimpleTest系统提供显示信息。
    *
-   * getInfo() returns a keyed array of information for SimpleTest to show.
+   * getInfo()返回一个信息数组，SimpleTest用这一数组进行显示。
    *
-   * It's a good idea to organize your tests consistently using the 'group'
-   * key.
+   * 用'group'关键字来组织测试用例是个好方法。
+   *
    */
   public static function getInfo() {
     return array(
@@ -42,32 +40,33 @@ class SimpleTestExampleTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Set up the test environment.
    *
-   * This method is called once per test method, before the test is executed.
-   * It gives you a chance to control the setup of the test environment.
+   * 设置测试环境。
    *
-   * If you need a different test environment, then you should create another
-   * test class which overloads DrupalWebTestCase::setUp() differently.
+   * 这个方法会在测试执行之前被调用一次，因此我们可以在这里对测试环境进行配置。
+   *
+   *
+   * 如果需要一个不同的测试环境，那么应该创建另外一个测试类，并重载
+   * DrupalWebTestCase::setUp()
    *
    * @see DrupalWebTestCase::setUp()
    */
   public function setUp() {
-    // We call parent::setUp() with the list of modules we want to enable.
-    // This can be an array or just a list of arguments.
+    // 我们提供一个列表，其中包含我们需要启用的模块，以这一列表为参数调用parent::setUp()
+    // 这里可以使用一个数组，或者简单的罗列参数也是可以的。
     parent::setUp('simpletest_example');
-    // Create and log in our user. The user has the arbitrary privilege
-    // 'extra special edit any simpletest_example' which is provided by
-    // our module to grant access.
+
+    // 创建一个用户并以其身份进行登陆。我们给用户授予了模块提供的
+    // 'extra special edit any simpletest_example'权限。
     $this->privilegedUser = $this->drupalCreateUser(array('create simpletest_example content', 'extra special edit any simpletest_example'));
     $this->drupalLogin($this->privilegedUser);
   }
 
   /**
-   * Create a simpletest_example node using the node form.
+   * 利用 Node Form 创建一个 simpletest_example 类型的 node。
    */
   public function testSimpleTestExampleCreate() {
-    // Create node to edit.
+    // 创建Node并编辑
     $edit = array();
     $edit['title'] = $this->randomName(8);
     $edit["body[und][0][value]"] = $this->randomName(16);
@@ -76,7 +75,7 @@ class SimpleTestExampleTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Create a simpletest_example node and then see if our user can edit it.
+   * 创建一个 simpletest_example 类型的Node，看看用户是否可以编辑。
    */
   public function testSimpleTestExampleEdit() {
     $settings = array(
@@ -86,35 +85,40 @@ class SimpleTestExampleTestCase extends DrupalWebTestCase {
     );
     $node = $this->drupalCreateNode($settings);
 
-    // For debugging, we might output the node structure with $this->verbose()
-    // It would only be output if the testing settings had 'verbose' set.
+    // 为了便于除错，我们可以用$this->verbose()来输出Node结构。
+    // 只有在测试设置了'verbose'的情况下，才会输出这些内容。
     $this->verbose('Node created: ' . var_export($node, TRUE));
 
-    // We'll run this test normally, but not on the testbot, as it would
-    // indicate that the examples module was failing tests.
+
+    // 我们会正常运行这个测试，因为testbot会指出example模块测试失败，所以不使用
+    //  testbot进行测试。
     if (!$this->runningOnTestbot()) {
-      // The debug() statement will output information into the test results.
-      // It can also be used in Drupal 7 anywhere in code and will come out
-      // as a drupal_set_message().
+
+      // debug()语句会把信息输出到测试结果中。也可以在Drupal 7中使用这个语句，他会输出
+      // 为drupal_set_message()。
       debug('We are not running on the PIFR testing server, so will go ahead and catch the failure.');
       $this->drupalGet("node/{$node->nid}/edit");
-      // Make sure we don't get a 401 unauthorized response:
+
+      // 确定我们得到的响应不是401
       $this->assertResponse(200, 'User is allowed to edit the content.');
 
-      // Looking for title text in the page to determine whether we were
-      // successful opening edit form.
+      // 查找页面的标题，来确认我们是否成功的打开了编辑Form。
       $this->assertText(t("@title", array('@title' => $settings['title'])), "Found title in edit form");
     }
   }
 
   /**
    * Detect if we're running on PIFR testbot.
+   * 检查我们是否运行在PIFR testbot中。
    *
    * Skip intentional failure in that case. It happens that on the testbot the
    * site under test is in a directory named 'checkout' or 'site_under_test'.
    *
+   * 跳过案例中的有意错误。之所以能跳过，是因为在testbot环境中，被测试的站点会存在于
+   * 'checkout'或者'site_under_test'目录下。
+   *
    * @return bool
-   *   TRUE if running on testbot.
+   *   如果在testbot中，返回TRUE。
    */
   public function runningOnTestbot() {
     return (file_exists("../checkout") || file_exists("../site_under_test"));
@@ -123,11 +127,10 @@ class SimpleTestExampleTestCase extends DrupalWebTestCase {
 
 
 /**
- * Although most core test cases are based on DrupalWebTestCase and are
- * functional tests (exercising the web UI) we also have DrupalUnitTestCase,
- * which executes much faster because a Drupal install does not have to be
- * one. No environment is provided to a test case based on DrupalUnitTestCase;
- * it must be entirely self-contained.
+ *
+ * 虽说大多数核心测试用例都是基于DrupalWebTestCase，都是功能测试（通过web UI执行）。
+ * 我们也有提供DrupalUnitTestCase，相对来说他的执行会更快，原因是他没有要求完整的Drupal
+ * 安装。DrupalUnitTestCase无需环境设置，他必须是完全自治的。
  *
  * @see DrupalUnitTestCase
  *
@@ -147,14 +150,12 @@ class SimpleTestUnitTestExampleTestCase extends DrupalUnitTestCase {
   }
 
   /**
-   * Set up the test environment.
+   * 设置测试环境
    *
-   * Note that we use drupal_load() instead of passing our module dependency
-   * to parent::setUp(). That's because we're using DrupalUnitTestCase, and
-   * thus we don't want to install the module, only load it's code.
+   * 注意我们是欧诺个drupal_load()而不是把模块依赖列表发给parent::setUp()。这是因为我们
+   * 要做的是DrupalUnitTestCase，我们不需要安装模块，我们只想要载入他的代码。
    *
-   * Also, DrupalUnitTestCase can't actually install modules. This is by
-   * design.
+   * 而且，DrupalUnitTestCase也没有安装模块的能力。
    */
   public function setUp() {
     drupal_load('module', 'simpletest_example');
@@ -162,15 +163,15 @@ class SimpleTestUnitTestExampleTestCase extends DrupalUnitTestCase {
   }
 
   /**
-   * Test simpletest_example_empty_mysql_date().
+   * 测试 simpletest_example_empty_mysql_date().
    *
-   * Note that no environment is provided; we're just testing the correct
-   * behavior of a function when passed specific arguments.
+   * 注意这里没有提供环境；我们只是测试一个函数在输入特定参数后是否执行了符合期待的行为。
+   *
    */
   public function testSimpleTestUnitTestExampleFunction() {
     $result = simpletest_example_empty_mysql_date(NULL);
-    // Note that test assertion messages should never be translated, so
-    // this string is not wrapped in t().
+
+    // 注意测试断言信息不要翻译，所以没有用t()函数处理。
     $message = 'A NULL value should return TRUE.';
     $this->assertTrue($result, $message);
 
@@ -189,17 +190,15 @@ class SimpleTestUnitTestExampleTestCase extends DrupalUnitTestCase {
 }
 
 /**
- * SimpleTestExampleMockModuleTestCase allows us to demonstrate how you can
- * use a mock module to aid in functional testing in Drupal.
+ * SimpleTestExampleMockModuleTestCase 用来演示如何使用一个mock模块来辅助
+ * Drupal中的功能测试。
  *
- * If you have some functionality that's not intrinsic to the code under test,
- * you can add a special mock module that only gets installed during test
- * time. This allows you to implement APIs created by your module, or otherwise
- * exercise the code in question.
  *
- * This test case class is very similar to SimpleTestExampleTestCase. The main
- * difference is that we enable the simpletest_example_test module in the
- * setUp() method. Then we can test for behaviors provided by that module.
+ * 有些需要测试的功能并不是正在测试的代码所提供的。可以添加一个特殊的Mock模块。
+ * 这些模块只会在测试期间安装。这样就可以实现模块中声明的API，或者执行一些待排查代码。
+ **
+ * 这个测试案例的类跟SimpleTestExampleTestCase非常像。主要区别是我们在setUp()方法中
+ * 启用simpletest_example_test模块。接下来我们就可以测试这个模块的行为了。
  *
  * @see SimpleTestExampleTestCase
  *
@@ -208,12 +207,13 @@ class SimpleTestUnitTestExampleTestCase extends DrupalUnitTestCase {
 class SimpleTestExampleMockModuleTestCase extends DrupalWebTestCase {
 
   /**
-   * Give display information to the SimpleTest system.
    *
-   * getInfo() returns a keyed array of information for SimpleTest to show.
+   * 给SimpleTest系统提供显示信息。
    *
-   * It's a good idea to organize your tests consistently using the 'group'
-   * key.
+   * getInfo()返回一个键值数组，提供给SimpleTest进行展示。
+   *
+   * 用'group'键来组织测试案例是个好方法。
+   *
    */
   public static function getInfo() {
     return array(
@@ -224,38 +224,37 @@ class SimpleTestExampleMockModuleTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Set up the test environment.
+   * 设置测试环境。
    *
-   * Note that we're enabling both the simpletest_example and
-   * simpletest_example_test modules.
+   * 注意我们启用了simpletest_example和simpletest_example_test两个模块
    */
   public function setUp() {
-    // We call parent::setUp() with the list of modules we want to enable.
+    // 把模块列表传递给parent::setUp()方法。
     parent::setUp('simpletest_example', 'simpletest_example_test');
   }
 
   /**
-   * Test modifications made by our mock module.
+   * 测试Mock模块做出的变更。
    *
-   * We create a simpletest_example node and then see if our submodule
-   * operated on it.
+   *
+   * 我们创建了一个simpletest_example Node，然后看看我们的子模块对他的操作。
    */
   public function testSimpleTestExampleMockModule() {
-    // Create a user.
+    // 创建一个用户。
     $test_user = $this->drupalCreateUser(array('access content'));
-    // Log them in.
+    // 登录。
     $this->drupalLogin($test_user);
-    // Set up some content.
+    // 写入一些内容。
     $settings = array(
       'type' => 'simpletest_example',
       'title' => $this->randomName(32),
       'body' => array(LANGUAGE_NONE => array(array($this->randomName(64)))),
     );
-    // Create the content node.
+    // 创建Node。
     $node = $this->drupalCreateNode($settings);
-    // View the node.
+    // 查看Node.
     $this->drupalGet("node/{$node->nid}");
-    // Check that our module did it's thing.
+    // 检查我们的模块是否做了什么。
     $this->assertText(t('The test module did its thing.'), "Found evidence of test module.");
   }
 

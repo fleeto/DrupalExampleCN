@@ -18,6 +18,7 @@
 * Cache Example
 * Cron Example
 * Entity Example
+* Simpletest Example
 * Token Example
 
 

@@ -9,11 +9,10 @@
  * @defgroup simpletest_example Example: Simpletest
  * @ingroup examples
  * @{
- * An example of simpletest tests to accompany the tutorial at
- * http://drupal.org/node/890654.
+ * 一个针对 http://drupal.org/node/890654 教程的simpletest测试的例子。
  *
- * This module creates a new node type called 'SimpleTest Example Node Type,'
- * so that we can test it.
+ * 这个模块创建一个新的node type，名为'SimpleTest Example Node Type'，我们的测试将围
+ * 绕这一内容类型进行。
  */
 
 /**
@@ -32,8 +31,7 @@ function simpletest_example_node_info() {
 /**
  * Implements hook_permission().
  *
- * In this case we're adding an addition permission that does the same
- * as the one the node module offers, just to demonstrate this error.
+ * 在这个例子中，我们添加了一个附加的权限，跟Node模块提供的权限类似，仅是为了演示使用。
  */
 function simpletest_example_permission() {
   $perms = array();
@@ -44,24 +42,27 @@ function simpletest_example_permission() {
 /**
  * Implements hook_node_access().
  *
- * Demonstrates a bug that we'll find in our test.
+ * 在这里演示一个BUG，我们将在测试中找到这一BUG。
  *
  * If this is running on the testbot, we don't want the error to show so will
  * work around it by testing to see if we're in the 'checkout' directory.
+ *
+ *
  */
 function simpletest_example_node_access($node, $op, $account) {
-  // Don't get involved if this isn't a simpletest_example node, etc.
+  // 如果不是simple test example类型的node，就不要继续进行。
+
   $type = is_string($node) ? $node : $node->type;
   if ($type != 'simpletest_example' || ($op != 'update' && $op != 'delete')) {
     return NODE_ACCESS_IGNORE;
   }
 
-  // This code has a BUG that we'll find in testing.
+  // 这段代码包含一个即将被我们的测试发现的BUG。
+  // 我们将会用一个错误的版本，来演示测试失败的情况。
+  // 正确的版本应该是 ($op == 'update' || $op == 'delete')。
   //
-  // This is the incorrect version we'll use to demonstrate test failure.
-  // The correct version should have ($op == 'update' || $op == 'delete').
-  // The author had mistakenly always tested with User 1 so it always
-  // allowed access and the bug wasn't noticed!
+  // 出现这个错误的原因是作者一直用1号用户进行测试，所以他一直能通过访问检测而不会出错。
+
   if (($op == 'delete')  && (user_access('extra special edit any simpletest_example', $account) && ($account->uid == $node->uid))) {
     return NODE_ACCESS_ALLOW;
   }
@@ -72,7 +73,7 @@ function simpletest_example_node_access($node, $op, $account) {
 /**
  * Implements hook_form().
  *
- * Form for the node type.
+ * 这一Node Type对应的Form
  */
 function simpletest_example_form($node, $form_state) {
   $type = node_type_get_type($node);
@@ -93,7 +94,7 @@ function simpletest_example_form($node, $form_state) {
 /**
  * Implements hook_menu().
  *
- * Provides an explanation.
+ * 提供一个说明。
  */
 function simpletest_example_menu() {
   $items['examples/simpletest_example'] = array(
@@ -106,7 +107,7 @@ function simpletest_example_menu() {
 }
 
 /**
- * Returns an explanation of this module.
+ * 返回关于这个模块的说明。
  */
 function _simpletest_example_explanation() {
 
@@ -116,7 +117,7 @@ function _simpletest_example_explanation() {
 }
 
 /**
- * A simple self-contained function used to demonstrate unit tests.
+ * 一个独立的函数用于演示单元测试。
  *
  * @see SimpletestUnitTestExampleTestCase
  */
