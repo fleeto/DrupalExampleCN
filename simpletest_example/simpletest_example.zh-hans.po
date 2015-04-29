@@ -1,0 +1,61 @@
+# $Id$
+#
+# Chinese, Simplified translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  simpletest_example.module: n/a
+#  simpletest_example.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Example Module\n"
+"POT-Creation-Date: 2015-04-29 15:14+0000\n"
+"PO-Revision-Date: 2015-04-30 00:39+0800\n"
+"Last-Translator: dustise <drupal@fleeto.us>\n"
+"Language-Team: Chinese, Simplified <drupal@fleeto.us>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Generator: Poedit 1.7.6\n"
+"Language: zh_CN\n"
+
+#: simpletest_example.module:24
+msgid "SimpleTest Example Node Type"
+msgstr "SimpleTest Example的Node类型"
+
+#: simpletest_example.module:26
+msgid "simpletest_example page node type."
+msgstr "simpletest_example页面的Node类型。"
+
+#: simpletest_example.module:38;38
+msgid "Extra special edit any SimpleTest Example"
+msgstr "编辑任意SimpleTest Example"
+
+#: simpletest_example.module:114
+msgid ""
+"This Simpletest Example is designed to give an introductory tutorial to writing\n"
+"    a simpletest test. Please see the <a href='http://drupal.org/node/890654'>associated tutorial</a>."
+msgstr ""
+"Simpletest的例子用来给出一个介绍性的教程，来指导编写\n"
+"    一个simpletest的测试用例。请参看 <a href='http://drupal.org/node/890654'>相关教程。</a>."
+
+#: simpletest_example.module:101
+msgid "Simpletest Example"
+msgstr "Simpletest Example"
+
+#: simpletest_example.module:102
+msgid "Explain the simpletest example and allow the error logic to be executed."
+msgstr "对simpletest的例子进行解释，并允许执行错误的逻辑用于测试。"
+
+#: simpletest_example.info:0
+msgid "SimpleTest Example"
+msgstr "SimpleTest Example"
+
+#: simpletest_example.info:0
+msgid "Provides simpletest_example page node type."
+msgstr "提供simpletest_example 页面的Node类型。"
+
+#: simpletest_example.info:0
+msgid "Example modules"
+msgstr "Example modules"
