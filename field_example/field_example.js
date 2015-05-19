@@ -1,10 +1,10 @@
 /**
  * @file
- * Javascript for Field Example.
+ * 字段示例的Javascript
  */
 
 /**
- * Provides a farbtastic colorpicker for the fancier widget.
+ * 给微件提供一个farbtastic颜色拾取器。
  */
 (function ($) {
   Drupal.behaviors.field_example_colorpicker = {
@@ -12,8 +12,8 @@
       $(".edit-field-example-colorpicker").live("focus", function(event) {
         var edit_field = this;
         var picker = $(this).closest('div').parent().find(".field-example-colorpicker");
-        
-        // Hide all color pickers except this one.
+
+        // 隐藏所有其他的颜色拾取器。
         $(".field-example-colorpicker").hide();
         $(picker).show();
         $.farbtastic(picker, function(color) {

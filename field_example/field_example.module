@@ -8,56 +8,60 @@
  * @defgroup field_example Example: Field Types API
  * @ingroup examples
  * @{
- * Examples using Field Types API.
+ * 使用Field Type API的例子
  *
- * This is updated from Barry Jaspan's presentation at Drupalcon Paris,
- * @link http://acquia.com/community/resources/acquia-tv/intro-field-api-module-developers Video Presentation @endlink
+ * 这一内容来源于Barry Jaspan在巴黎Drupalcon上的演示材料
+ * @link http://acquia.com/community/resources/acquia-tv/intro-field-api-module-developers 演示视频 @endlink
  *
- * Providing a field requires:
- * - Defining a field:
+ *
+ * 提供一个Field需要：
+ * - 定义field：
  *   - hook_field_info()
  *   - hook_field_schema()
  *   - hook_field_validate()
- *   - hook_field_is_empty()
+ *   - hook_field_is_empty() *
  *
- * - Defining a formatter for the field (the portion that outputs the field for
- *   display):
+ *
+ * - 定义Field的格式化器（这部分内容用于输出和显示Field）：
  *   - hook_field_formatter_info()
  *   - hook_field_formatter_view()
  *
- * - Defining a widget for the edit form:
+ * - 为编辑Form定义微件(Widget)：
  *   - hook_field_widget_info()
  *   - hook_field_widget_form()
  *
- * Our module defines the field in field_example_field_info(),
- * field_example_field_validate() and field_example_field_is_empty().
- * field_example_field_schema() is implemented in field_example.install.
+ *
+ * 我们的模块用field_example_field_info(),
+ * field_example_field_validate() 以及field_example_field_is_empty()定义了字段。
+ * 在field_example.install中实现了field_example_field_schema()。
  *
  * Our module sets up a formatter in field_example_field_formatter_info() and
  * field_example_field_formatter_view(). These are the API hooks that present
  * formatted and themed output to the user.
  *
- * And finally, our module defines the widet in
- * field_example_field_widget_info() and field_example_field_widget_form().
- * The widget is the form element used to receive input from the user
- * when the field is being populated.
+ * 模块中利用field_example_field_formatter_info() 和
+ * field_example_field_formatter_view()设置了一个格式化器。
+ *
+ *
+ * 最后，模块在field_example_field_widget_info()和field_example_field_widget_form()中定义了一个微件，这个微件是一个Form元素，
+ * 用于接收用户的输入
  *
  * @see field_types
  * @see field
  */
 
 /***************************************************************
- * Field Type API hooks
+ * 字段类型 API 钩子。
  ***************************************************************/
 
 /**
- * Implements hook_field_info().
+ * 实现 hook_field_info().
  *
- * Provides the description of the field.
+ * 提供字段的描述。
  */
 function field_example_field_info() {
   return array(
-    // We name our field as the associative name of the array.
+    // 字段的名字就是返回数组的键名，
     'field_example_rgb' => array(
       'label' => t('Example Color RGB'),
       'description' => t('Demonstrates a field composed of an RGB color.'),
@@ -68,7 +72,7 @@ function field_example_field_info() {
 }
 
 /**
- * Implements hook_field_validate().
+ * 实现 hook_field_validate().
  *
  * This hook gives us a chance to validate content that's in our
  * field. We're really only interested in the $items parameter, since
@@ -76,6 +80,9 @@ function field_example_field_info() {
  * We want to verify that the items only contain RGB hex values like
  * this: #RRGGBB. If the item validates, we do nothing. If it doesn't
  * validate, we add our own error notification to the $errors parameter.
+ *
+ * 这个钩子让我们有了一个校验字段中内容的机会。我们只是对$item这一参数有兴趣，那是因为其中保存的数组包含了我们定义的字段的内容。
+ * 我们想要验证，这其中只包含了形如#RRGGBB的RGB十六进制值。如果校验失败，我们可以通过$errors参数返回错误信息。
  *
  * @see field_example_field_widget_error()
  */
@@ -94,33 +101,31 @@ function field_example_field_validate($entity_type, $entity, $field, $instance, 
 
 
 /**
- * Implements hook_field_is_empty().
+ * 实现 hook_field_is_empty().
  *
- * hook_field_is_emtpy() is where Drupal asks us if this field is empty.
- * Return TRUE if it does not contain data, FALSE if it does. This lets
- * the form API flag an error when required fields are empty.
+ * Drupal使用hook_field_is_emtpy()来获知该字段是否为空。
+ * 如果没有包含数据，则返回TRUE。这一判断能够辅助Form API的必须字段为空的校验过程。
+ *
  */
 function field_example_field_is_empty($item, $field) {
   return empty($item['rgb']);
 }
 
 /**
- * Implements hook_field_formatter_info().
+ * 实现 hook_field_formatter_info().
  *
- * We need to tell Drupal that we have two different types of formatters
- * for this field. One will change the text color, and the other will
- * change the background color.
+ * 我们在这里告知Drupal，这个字段存在两种格式器。一个能够改变文本颜色，一个能够改变背景色。
  *
  * @see field_example_field_formatter_view()
  */
 function field_example_field_formatter_info() {
   return array(
-    // This formatter just displays the hex value in the color indicated.
+    // 这个格式器只是以指定颜色显示十六进制值。
     'field_example_simple_text' => array(
       'label' => t('Simple text-based formatter'),
       'field types' => array('field_example_rgb'),
     ),
-    // This formatter changes the background color of the content region.
+    // 这个格式器改变content区域的背景色
     'field_example_color_background' => array(
       'label' => t('Change the background of the output text'),
       'field types' => array('field_example_rgb'),
@@ -129,27 +134,25 @@ function field_example_field_formatter_info() {
 }
 
 /**
- * Implements hook_field_formatter_view().
+ * 实现 hook_field_formatter_view().
  *
- * Two formatters are implemented.
- * - field_example_simple_text just outputs markup indicating the color that
- *   was entered and uses an inline style to set the text color to that value.
- * - field_example_color_background does the same but also changes the
- *   background color of div.region-content.
  *
+ * 实现两个格式器：
+ *  - field_example_simple_text，输出一个标记，来标识我们输入的颜色，并且利用一个行内样式把文本的颜色设置为这个值。
+ *  - field_example_color_background，目的差不多，不过还会改变div.region-content的背景色。
  * @see field_example_field_formatter_info()
  */
 function field_example_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
 
   switch ($display['type']) {
-    // This formatter simply outputs the field as text and with a color.
+    // 这一格式器简单的把字段输出为文本，并设置他的颜色。
     case 'field_example_simple_text':
       foreach ($items as $delta => $item) {
         $element[$delta] = array(
-          // We create a render array to produce the desired markup,
+          // 我们创建了一个渲染数组来生成需要的标记，
           // "<p style="color: #hexcolor">The color code ... #hexcolor</p>".
-          // See theme_html_tag().
+          // 参看 theme_html_tag()。
           '#type' => 'html_tag',
           '#tag' => 'p',
           '#attributes' => array(
@@ -160,8 +163,7 @@ function field_example_field_formatter_view($entity_type, $entity, $field, $inst
       }
       break;
 
-    // This formatter adds css to the page changing the '.region-content' area's
-    // background color. If there are many fields, the last one will win.
+    // 这个格式器给页面增加了一段css，改变了'.region-content'区域的背景色。如果设置为多值，则以最后一个值为准。
     case 'field_example_color_background':
       foreach ($items as $delta => $item) {
         $element[$delta] = array(
@@ -185,16 +187,15 @@ function field_example_field_formatter_view($entity_type, $entity, $field, $inst
 }
 
 /**
- * Implements hook_field_widget_info().
+ * 实现 hook_field_widget_info().
  *
- * Three widgets are provided.
- * - A simple text-only widget where the user enters the '#ffffff'.
- * - A 3-textfield widget that gathers the red, green, and blue values
- *   separately.
- * - A farbtastic colorpicker widget that chooses the value graphically.
+ * 提供了三个微件：
  *
- * These widget types will eventually show up in hook_field_widget_form,
- * where we will have to flesh them out.
+ * - 一个简单的文本微件，用户可以输入'#ffffff'。
+ * - 三个文本框绑定在一起，可以分别输入红绿蓝值。
+ * - 一个farbtastic颜色拾取器提供图形化的界面来选择颜色。
+ *
+ * 这些微件类型最终会显示在hook_field_widget_form。
  *
  * @see field_example_field_widget_form()
  */
@@ -214,25 +215,20 @@ function field_example_field_widget_info() {
     ),
   );
 }
-
 /**
- * Implements hook_field_widget_form().
+ * 实现 hook_field_widget_form().
  *
- * hook_widget_form() is where Drupal tells us to create form elements for
- * our field's widget.
+ * hook_widget_form() ， Drupal用这个钩子来通知字段，为字段微件创建Form元素。
  *
- * We provide one of three different forms, depending on the widget type of
- * the Form API item provided.
  *
- * The 'field_example_colorpicker' and 'field_example_text' are essentially
- * the same, but field_example_colorpicker adds a javascript colorpicker
- * helper.
+ * 我们根据Form API提供的微件类型，来确定提供哪一种微件Form。
  *
- * field_example_3text displays three text fields, one each for red, green,
- * and blue. However, the field type defines a single text column,
- * rgb, which needs an HTML color spec. Define an element validate
- * handler that converts our r, g, and b fields into a simulated single
- * 'rgb' form element.
+ * 'field_example_colorpicker' 和 'field_example_text'基本是一样的，不过field_example_colorpicker添加了一段颜色拾取器的
+ * javascript助手代码。
+ *
+ *
+ * 显示三个文本字段，分别对应红绿蓝色。然而，这一字段类型只有一个文本列：rgp，用于存储HTML颜色。这里定义了一个元素校验器，会把r, g, b
+ * 三个字段合并为一个单独的'rgb' form 元素
  */
 function field_example_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
   $value = isset($items[$delta]['rgb']) ? $items[$delta]['rgb'] : '';
@@ -247,29 +243,29 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
         '#suffix' => '<div class="field-example-colorpicker"></div>',
         '#attributes' => array('class' => array('edit-field-example-colorpicker')),
         '#attached' => array(
-          // Add Farbtastic color picker.
+          // 添加 Farbtastic颜色拾取器.
           'library' => array(
             array('system', 'farbtastic'),
           ),
-          // Add javascript to trigger the colorpicker.
+          // 添加javascript用于触发颜色拾取器
           'js' => array(drupal_get_path('module', 'field_example') . '/field_example.js'),
         ),
       );
-      // DELIBERATE fall-through: From here on the field_example_text and
-      // field_example_colorpicker are exactly the same.
+
+    // 这里没有break，是因为下面的代码对于field_example_text以及field_example_colorpicker都是相同的。
     case 'field_example_text':
       $widget += array(
         '#type' => 'textfield',
         '#default_value' => $value,
-        // Allow a slightly larger size that the field length to allow for some
-        // configurations where all characters won't fit in input field.
+        // 把长度配置得稍大于值的长度，防止在某些配置下长度不足（胡翻的。不懂）
         '#size' => 7,
         '#maxlength' => 7,
       );
       break;
 
     case 'field_example_3text':
-      // Convert rgb value into r, g, and b for #default_value.
+      // 把RGB值转换为红绿蓝，赋给$default_value
+      // preg_match_all里面的表达式代表“匹配两个字符”
       if (!empty($value)) {
         preg_match_all('@..@', substr($value, 1), $match);
       }
@@ -277,14 +273,14 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
         $match = array(array());
       }
 
-      // Make this a fieldset with the three text fields.
+      // 创建一个包含三个文本字段的字段集。
       $widget += array(
         '#type' => 'fieldset',
         '#element_validate' => array('field_example_3text_validate'),
 
-        // #delta is set so that the validation function will be able
-        // to access external value information which otherwise would be
-        // unavailable.
+
+        // 设置#delta，让验证函数可以访问外部的值的信息。
+
         '#delta' => $delta,
 
         '#attached' => array(
@@ -292,7 +288,7 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
         ),
       );
 
-      // Create a textfield for saturation values for Red, Green, and Blue.
+      // 创建文本控件，分别用于存储红绿蓝值。
       foreach (array('r' => t('Red'), 'g' => t('Green'), 'b' => t('Blue')) as $key => $title) {
         $widget[$key] = array(
           '#type' => 'textfield',
@@ -302,8 +298,8 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
           '#attributes' => array('class' => array('rgb-entry')),
           '#description' => t('The 2-digit hexadecimal representation of @color saturation, like "a1" or "ff"', array('@color' => $title)),
         );
-        // Since Form API doesn't allow a fieldset to be required, we
-        // have to require each field element individually.
+
+        // Form API不允许设置字段集为必要项，所以只能逐个设置必要性
         if ($instance['required'] == 1) {
           $widget[$key]['#required'] = 1;
         }
@@ -317,11 +313,12 @@ function field_example_field_widget_form(&$form, &$form_state, $field, $instance
 }
 
 
+
 /**
- * Validate the individual fields and then convert to RGB string.
+ * 校验各个字段，并转换为RGB字符串
  */
 function field_example_3text_validate($element, &$form_state) {
-  // @todo: Isn't there a better way to find out which element?
+  // @todo: 有没有更好的办法来找出各个元素？
   $delta = $element['#delta'];
   $field = $form_state['field'][$element['#field_name']][$element['#language']]['field'];
   $field_name = $field['field_name'];
@@ -329,12 +326,12 @@ function field_example_3text_validate($element, &$form_state) {
     $values = $form_state['values'][$field_name][$element['#language']][$delta]['rgb'];
     foreach (array('r', 'g', 'b') as $colorfield) {
       $colorfield_value = hexdec($values[$colorfield]);
-      // If they left any empty, we'll set the value empty and quit.
+      // 如果有任何空值，就设置值为空并退出。
       if (strlen($values[$colorfield]) == 0) {
         form_set_value($element, '', $form_state);
         return;
       }
-      // If they gave us anything that's not hex, reject it.
+      // 如果给出任何不是16进制的值，设置验证结果为失败。
       if ((strlen($values[$colorfield]) != 2) || $colorfield_value < 0 || $colorfield_value > 255) {
         form_error($element[$colorfield], t("Saturation value must be a 2-digit hexadecimal value between 00 and ff."));
       }
@@ -346,11 +343,11 @@ function field_example_3text_validate($element, &$form_state) {
 }
 
 /**
- * Implements hook_field_widget_error().
+ * 实现 hook_field_widget_error().
  *
- * hook_field_widget_error() lets us figure out what to do with errors
- * we might have generated in hook_field_validate(). Generally, we'll just
- * call form_error().
+ *
+ * hook_field_validate()可能生成错误，hook_field_widget_error() 用于指示错误发生时的处理方法。
+ * 一般来说，我们只是调用form_error()。
  *
  * @see field_example_field_validate()
  * @see form_error()
@@ -365,9 +362,9 @@ function field_example_field_widget_error($element, $error, $form, &$form_state)
 
 
 /**
- * Implements hook_menu().
+ * 实现 hook_menu().
  *
- * Provides a simple user interface that tells the developer where to go.
+ * 提供一个简单界面，用于通知开发者接下来的工作。
  */
 function field_example_menu() {
   $items['examples/field_example'] = array(
@@ -379,7 +376,7 @@ function field_example_menu() {
 }
 
 /**
- * A simple page to explain to the developer what to do.
+ * 解释如何使用的页面。
  */
 function _field_example_page() {
   return t("The Field Example provides a field composed of an HTML RGB value, like #ff00ff. To use it, add the field to a content type.");

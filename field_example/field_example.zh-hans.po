@@ -1,0 +1,97 @@
+# $Id$
+#
+# Chinese, Simplified translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  field_example.module: n/a
+#  field_example.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Examples\n"
+"POT-Creation-Date: 2015-05-19 03:14+0000\n"
+"PO-Revision-Date: 2015-05-19 12:17+0800\n"
+"Last-Translator: Vincent <drupal@fleeto.us>\n"
+"Language-Team: Chinese, Simplified <drupal@fleeto.us>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: zh_CN\n"
+"X-Generator: Poedit 1.7.4\n"
+
+#: field_example.module:66
+msgid "Example Color RGB"
+msgstr "RGB颜色字段示例"
+
+#: field_example.module:67
+msgid "Demonstrates a field composed of an RGB color."
+msgstr "演示一个RGB颜色字段"
+
+#: field_example.module:95
+msgid "Color must be in the HTML format #abcdef."
+msgstr "颜色必须以形如#abcdef的HTML格式表达。"
+
+#: field_example.module:125
+msgid "Simple text-based formatter"
+msgstr "简单的文本格式器。"
+
+#: field_example.module:130
+msgid "Change the background of the output text"
+msgstr "修改输出文字的背景"
+
+#: field_example.module:161
+msgid "The color code in this field is @code"
+msgstr "这一字段的颜色代码是 @code"
+
+#: field_example.module:172
+msgid "The content area color has been changed to @code"
+msgstr "内容区域的颜色被修改为 @code"
+
+#: field_example.module:205
+msgid "RGB value as #ffffff"
+msgstr "#ffffff形式的RGB值"
+
+#: field_example.module:209
+msgid "RGB text field"
+msgstr "RGB文本字段"
+
+#: field_example.module:213
+msgid "Color Picker"
+msgstr "颜色拾取器"
+
+#: field_example.module:292
+msgid "Red"
+msgstr "红色"
+
+#: field_example.module:292
+msgid "Green"
+msgstr "绿色"
+
+#: field_example.module:292
+msgid "Blue"
+msgstr "蓝色"
+
+#: field_example.module:299
+msgid "The 2-digit hexadecimal representation of @color saturation, like \"a1\" or \"ff\""
+msgstr "两位十六进制表示的 @color 饱和度，例如 \"a1\" 或者  \"ff\""
+
+#: field_example.module:336
+msgid "Saturation value must be a 2-digit hexadecimal value between 00 and ff."
+msgstr "饱和度必须是两位十六进制数值，在00和ff之间。"
+
+#: field_example.module:382
+msgid "The Field Example provides a field composed of an HTML RGB value, like #ff00ff. To use it, add the field to a content type."
+msgstr "字段示例提供了一个字段，用于表达一个RGB的颜色值，例如#ff00ff。可以把这个字段添加到内容类型中进行使用。"
+
+#: field_example.module:371 field_example.info:0
+msgid "Field Example"
+msgstr "字段示例"
+
+#: field_example.info:0
+msgid "An implementation of a field to show the Field API"
+msgstr "实现一个字段，以此展示字段API的使用"
+
+#: field_example.info:0
+msgid "Example modules"
+msgstr "示例模块"

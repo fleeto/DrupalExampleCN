@@ -5,7 +5,7 @@
  */
 
 /**
- * Functional tests for the Field Example module.
+ * 字段示例模块的功能测试。
  *
  * @ingroup field_example
  */
@@ -26,32 +26,31 @@ class FieldExampleTest extends DrupalWebTestCase {
    * {@inheritdoc}
    */
   public function setUp() {
-    // Enable the email_example module.
+    // 启用email_example模块
     parent::setUp(array('field_ui', 'field_example'));
   }
 
   /**
-   * Test basic functionality of the example field.
-   *
-   * - Creates a content type.
-   * - Adds a single-valued field_example_rgb to it.
-   * - Adds a multivalued field_example_rgb to it.
-   * - Creates a node of the new type.
-   * - Populates the single-valued field.
-   * - Populates the multivalued field with two items.
-   * - Tests the result.
+   * 字段实例的基本功能测试：
+   * - 创建一个内容类型。
+   * - 添加一个单值field_example_rgb字段到新的内容类型。
+   * - 添加一个多值field_example_rgb字段到新的内容类型。
+   * - 创建一个这种类型的新Node。
+   * - 填写单值字段。
+   * - 在多值字段填写两项。
+   * - 测试结果。
    */
   public function testExampleFieldBasic() {
     $content_type_machine = strtolower($this->randomName(10));
     $title = $this->randomName(20);
 
-    // Create and login user.
+    // 创建一个登录用户。
     $account = $this->drupalCreateUser(array('administer content types'));
     $this->drupalLogin($account);
 
     $this->drupalGet('admin/structure/types');
 
-    // Create the content type.
+    // 创建内容类型。
     $this->clickLink(t('Add content type'));
 
     $edit = array(
@@ -67,6 +66,7 @@ class FieldExampleTest extends DrupalWebTestCase {
     $multivalue_3text_field = strtolower($this->randomName(10));
 
     // Description of fields to be created;
+    //
     $fields[$single_text_field] = array(
       'widget' => 'field_example_text',
       'cardinality' => '1',
@@ -88,25 +88,23 @@ class FieldExampleTest extends DrupalWebTestCase {
       $this->createField($fieldname, $details['widget'], $details['cardinality']);
     }
 
-    // Somehow clicking "save" isn't enough, and we have to do a
-    // node_types_rebuild().
+    // 有时候只是点击"保存"是不够的，我们必须还要执行node_types_rebuild()
     node_types_rebuild();
     menu_rebuild();
     $type_exists = db_query('SELECT 1 FROM {node_type} WHERE type = :type', array(':type' => $content_type_machine))->fetchField();
     $this->assertTrue($type_exists, 'The new content type has been created in the database.');
 
     $permission = 'create ' . $content_type_machine . ' content';
-    // Reset the permissions cache.
+    // 重建授权缓存。
     $this->checkPermissions(array($permission), TRUE);
 
-    // Now that we have a new content type, create a user that has privileges
-    // on the content type.
+    // 现在我们有了一个新的内容类型，创建一个有权操作这种内容类型的用户。
     $account = $this->drupalCreateUser(array($permission));
     $this->drupalLogin($account);
 
     $this->drupalGet('node/add/' . $content_type_machine);
 
-    // Add a node.
+    // 添加一个Node。
     $edit = array(
       'title' => $title,
       'field_' . $single_text_field . '[und][0][rgb]' => '#000001',
@@ -121,7 +119,8 @@ class FieldExampleTest extends DrupalWebTestCase {
       'field_' . $multivalue_3text_field . '[und][0][rgb][b]' => '04',
 
     );
-    // We want to add a 2nd item to the multivalue field, so hit "add another".
+
+    // 我们想添加第二个项，所以点击“添加另一个”。
     $this->drupalPost(NULL, $edit, t('Add another item'));
 
     $edit = array(
@@ -129,7 +128,8 @@ class FieldExampleTest extends DrupalWebTestCase {
       'field_' . $multivalue_3text_field . '[und][1][rgb][g]' => '00',
       'field_' . $multivalue_3text_field . '[und][1][rgb][b]' => '05',
     );
-    // Now we can fill in the second item in the multivalue field and save.
+
+    // 现在我们可以填写第二个项，赋予多个值，并保存。
     $this->drupalPost(NULL, $edit, t('Save'));
     $this->assertText(t('@content_type_machine @title has been created', array('@content_type_machine' => $content_type_machine, '@title' => $title)));
 
@@ -143,17 +143,17 @@ class FieldExampleTest extends DrupalWebTestCase {
   }
 
   /**
-   * Utility function to create fields on a content type.
+   * 工具函数，用于在一个内容类型上创建字段。
    *
    * @param string $field_name
-   *   Name of the field, like field_something
+   *   字段名称， 例如field_something
    * @param string $widget_type
-   *   Widget type, like field_example_3text
+   *   微件类型，例如field_example_3text
    * @param int $cardinality
    *   Cardinality
    */
   protected function createField($field_name, $widget_type, $cardinality) {
-    // Add a singleton field_example_text field.
+    // 添加一个单值的field_example_text字段
     $edit = array(
       'fields[_add_new_field][label]' => $field_name,
       'fields[_add_new_field][field_name]' => $field_name,
@@ -163,12 +163,12 @@ class FieldExampleTest extends DrupalWebTestCase {
     );
     $this->drupalPost(NULL, $edit, t('Save'));
 
-    // There are no settings for this, so just press the button.
+    // 没有需要设置的项目，所以只是按一下按钮。
     $this->drupalPost(NULL, array(), t('Save field settings'));
 
     $edit = array('field[cardinality]' => (string) $cardinality);
 
-    // Using all the default settings, so press the button.
+    // 使用所有的缺省设置，所以按按钮就可以了。
     $this->drupalPost(NULL, $edit, t('Save settings'));
     debug(
       t('Saved settings for field %field_name with widget %widget_type and cardinality %cardinality',

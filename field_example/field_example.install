@@ -7,14 +7,15 @@
 /**
  * Implements hook_field_schema().
  *
- * Defines the database schema of the field, using the format used by the
- * Schema API.
+ * 利用Schema API来定义字段的数据库结构。
  *
  * The data we will store here is just one 7-character element, even
  * though the widget presents the three portions separately.
  *
- * All implementations of hook_field_schema() must be in the module's
- * .install file.
+ * 我们要保存的数据只是个包含七个字符的简单元素，我们的Widget把内容分为三个不同的部分进行
+ * 显示。
+ *
+ * 所有的 hook_field_schema 必须在 .install 文件中实现。
  *
  * @see http://drupal.org/node/146939
  * @see schemaapi
