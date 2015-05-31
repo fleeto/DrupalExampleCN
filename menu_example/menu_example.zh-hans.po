@@ -1,0 +1,232 @@
+# $Id$
+#
+# Chinese, Simplified translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  menu_example.module: n/a
+#  menu_example.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2015-05-30 18:50+0000\n"
+"PO-Revision-Date: 2015-05-31 03:51+0800\n"
+"Last-Translator: Vincent <drupal@fleeto.us>\n"
+"Language-Team: Chinese, Simplified <drupal@fleeto.us>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: zh_CN\n"
+"X-Generator: Poedit 1.7.4\n"
+
+#: menu_example.module:51
+msgid "This page is displayed by the simplest (and base) menu example. Note that the title of the page is the same as the link title. You can also <a href=\"!link\">visit a similar page with no menu link</a>. Also, note that there is a hook_menu_alter() example that has changed the path of one of the menu items."
+msgstr "这一页面由最基础的、最简单的菜单实例生成。注意，这个页面的标题和菜单链接标题是一致的。你可以可以<a href=\"!link\">浏览一个类似的没有菜单链接的页面</a>。另外，hook_menu_alter()例子已经修改了这里一个菜单项的路径。"
+
+#: menu_example.module:78
+msgid "This will be in the Primary Links menu instead of the default Navigation menu"
+msgstr "这是主菜单链接，而不是缺省的导航菜单。"
+
+#: menu_example.module:88
+msgid "A menu item that requires the \"access protected menu example\" permission is at <a href=\"!link\">examples/menu_example/permissioned/controlled</a>"
+msgstr "菜单项  <a href=\"!link\">examples/menu_example/permissioned/controlled</a> 需要 \"access protected menu example\"  这一权限"
+
+#: menu_example.module:100
+msgid "This menu entry will not show and the page will not be accessible without the \"access protected menu example\" permission."
+msgstr "如果没有  \"access protected menu example\" 权限，这个菜单项就不会显示，对应的页面也无法访问。"
+
+#: menu_example.module:121
+msgid "A menu item that requires the user to posess a role of \"authenticated user\" is at <a href=\"!link\">examples/menu_example/custom_access/page</a>"
+msgstr "位于 <a href=\"!link\">examples/menu_example/custom_access/page</a> 菜单项需要用户具有  \"authenticated user\" 角色。"
+
+#: menu_example.module:131
+msgid "This menu entry will not be visible and access will result in a 403 error unless the user has the \"authenticated user\" role. This is accomplished with a custom access callback."
+msgstr "除非用户具有  \"authenticated user\"  这一角色，否则这个菜单项不可见，如果访问该菜单项，将会返回403错误。这一功能是由一个定制的 access callback 完成的。"
+
+#: menu_example.module:145
+msgid "A menu entry with no menu link (MENU_CALLBACK) is at <a href=\"!link\">!link</a>"
+msgstr "<a href=\"!link\">!link</a>  没有提供链接的菜单项 (MENU_CALLBACK) "
+
+#: menu_example.module:161
+msgid "The menu entry for this page is of type MENU_CALLBACK, so it provides only a path but not a link in the menu links, but it is the same in every other way to the simplest example."
+msgstr "这个菜单项是 MENU_CALLBACK 类型的，所以他只提供功能，但是不提供菜单链接，不过他其他方面的功能是一样的。"
+
+#: menu_example.module:176
+msgid "This is the \"tabs\" menu entry."
+msgstr "这是  \"tabs\"  菜单项。"
+
+#: menu_example.module:189;208
+msgid "second"
+msgstr "第二个"
+
+#: menu_example.module:189;208
+msgid "third"
+msgstr "第三个"
+
+#: menu_example.module:189
+msgid "fourth"
+msgstr "第四个"
+
+#: menu_example.module:194
+msgid "This is the tab \"@tabname\" in the \"basic tabs\" example"
+msgstr " \"basic tabs\"  例子中的 \"@tabname\" Tab"
+
+#: menu_example.module:213
+msgid "This is the secondary tab \"@tabname\" in the \"basic tabs\" example \"default\" tab"
+msgstr "这是 \"basic tabs\" 例子中 \"default\" tab 的第二个Tab   \"@tabname\" "
+
+#: menu_example.module:225
+msgid "This page demonstrates using arguments in the path (portions of the path after \"menu_example/url_arguments\". For example, access it with <a href=\"!link1\">!link1</a> or <a href=\"!link2\">!link2</a>)."
+msgstr "本页演示在路径中如何使用参数  (路径中 \"menu_example/url_arguments\" 之后的部分。 例如, 通过 <a href=\"!link1\">!link1</a> or <a href=\"!link2\">!link2</a> 来访问) 。"
+
+#: menu_example.module:236
+msgid "Dynamic title: username="
+msgstr "动态标题：用户名为："
+
+#: menu_example.module:239
+msgid "The menu title is dynamically changed by the title callback"
+msgstr "这个菜单标题是通过 Title callback 动态变化的"
+
+#: menu_example.module:254
+msgid "Demonstrate placeholders by visiting <a href=\"!link\">examples/menu_example/placeholder_argument/3343/display</a>"
+msgstr "利用  <a href=\"!link\">examples/menu_example/placeholder_argument/3343/display</a> 演示占位符。"
+
+#: menu_example.module:290
+msgid "This menu item was created strictly to allow the hook_menu_alter() function to have something to operate on. hook_menu defined the path as examples/menu_example/menu_original_path. The hook_menu_alter() changes it to examples/menu_example/menu_altered_path. You can try navigating to both paths and see what happens!"
+msgstr "菜单项可以通过 hook_menu_alter() 函数来进行变更。 hook_menu 定义了路径 examples/menu_example/menu_original_path。hook_menu_alter() 把它变更为 examples/menu_example/menu_altered_path。可以尝试分别访问这两个路径，看看会发生什么。"
+
+#: menu_example.module:305
+msgid ""
+"This is the base page of the Menu Example. There are a number of examples\n"
+"  here, from the most basic (like this one) to extravagant mappings of loaded\n"
+"  placeholder arguments. Enjoy!"
+msgstr "这是Menu示例的基础页面，这里有一系列的实例，从最基础的（本页就是）到复杂的占位符演示一应俱全。"
+
+#: menu_example.module:331
+msgid "Argument 1=%arg"
+msgstr "参数 1 = %arg"
+
+#: menu_example.module:334
+msgid "Argument 2=%arg"
+msgstr "参数 2 = %arg"
+
+#: menu_example.module:347
+msgid "Access the protected menu example"
+msgstr "访问被保护菜单的实例"
+
+#: menu_example.module:409;504
+msgid "Loaded value was %loaded"
+msgstr "载入的值是 %loaded"
+
+#: menu_example.module:412;507
+msgid "Sorry, the id %id was not found to be loaded"
+msgstr "很遗憾， id %id 不存在，无法载入"
+
+#: menu_example.module:458
+msgid "anonymous"
+msgstr "匿名"
+
+#: menu_example.module:469
+msgid "@name's account"
+msgstr "@name's 的账号"
+
+#: menu_example.module:42
+msgid "Menu Example"
+msgstr "菜单实例"
+
+#: menu_example.module:45
+msgid "Simplest possible menu type, and the parent menu entry for others"
+msgstr "最简单的菜单类型，其他菜单的父菜单"
+
+#: menu_example.module:72
+msgid "Menu Example: Menu in alternate menu"
+msgstr "菜单实例：菜单的变更"
+
+#: menu_example.module:86
+msgid "Permissioned Example"
+msgstr "授权实例"
+
+#: menu_example.module:97
+msgid "Permissioned Menu Item"
+msgstr "授权的菜单项"
+
+#: menu_example.module:98
+msgid "This menu entry will not appear and the page will not be accessible without the \"access protected menu example\" permission."
+msgstr "如果没有  \"access protected menu example\"  权限，这个菜单项不会显示，并且这个页面也无法访问。"
+
+#: menu_example.module:119
+msgid "Custom Access Example"
+msgstr "自定义 Access callback 示例"
+
+#: menu_example.module:128
+msgid "Custom Access Menu Item"
+msgstr "自定义 Access callback 菜单项"
+
+#: menu_example.module:129
+msgid "This menu entry will not show and the page will not be accessible without the user being an \"authenticated user\"."
+msgstr "如果不具备 \"authenticated user\" 这一角色，该菜单项不会显示，对应的页面也无法访问。"
+
+#: menu_example.module:143
+msgid "MENU_CALLBACK example"
+msgstr "MENU_CALLBACK 示例"
+
+#: menu_example.module:158
+msgid "Callback Only"
+msgstr "仅有回调"
+
+#: menu_example.module:173
+msgid "Tabs"
+msgstr "标签"
+
+#: menu_example.module:174
+msgid "Shows how to create primary and secondary tabs"
+msgstr "如何创建第一和第二Tab"
+
+#: menu_example.module:185
+msgid "Default primary tab"
+msgstr "缺省的第一Tab"
+
+#: menu_example.module:206
+msgid "Default secondary tab"
+msgstr "缺省的第二Tab"
+
+#: menu_example.module:222
+msgid "Extra Arguments"
+msgstr "额外的参数"
+
+#: menu_example.module:223
+msgid "The page callback can use the arguments provided after the path used as key"
+msgstr "page callback 可以用路径中提供的键作为参数"
+
+#: menu_example.module:237
+msgid "The title of this menu item is dynamically generated"
+msgstr "这个菜单项的标题是动态生成的"
+
+#: menu_example.module:252;261
+msgid "Placeholder Arguments"
+msgstr "占位符参数"
+
+#: menu_example.module:279
+msgid "Processed Placeholder Arguments"
+msgstr "处理之后的占位符参数"
+
+#: menu_example.module:288
+msgid "Menu path that will be altered by hook_menu_alter()"
+msgstr "将会被 hook_menu_alter() 变更的菜单路径"
+
+#: menu_example.module:437
+msgid "Menu item altered by hook_menu_alter()"
+msgstr "已经被 hook_menu_alter() 变更的菜单路径"
+
+#: menu_example.info:0
+msgid "Menu example"
+msgstr "菜单实例"
+
+#: menu_example.info:0
+msgid "An example of advanced uses of the menu APIs."
+msgstr "一个关于菜单 API 高级应用的例子。"
+
+#: menu_example.info:0
+msgid "Example modules"
+msgstr "示例模块"

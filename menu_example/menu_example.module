@@ -9,10 +9,10 @@
  * @defgroup menu_example Example: Menu
  * @ingroup examples
  * @{
- * Demonstrates uses of the Menu APIs in Drupal.
  *
- * The Page Example module also talks about the menu system, as well
- * as how to use menu arguments to generate pages.
+ * 演示Drupal中的Menu API
+ *
+ * 这个示例模块讲解了菜单系统，并演示了使用菜单参数生成页面的过程。
  *
  * @see hook_menu()
  * @see hook_menu_alter()
@@ -24,56 +24,54 @@
 /**
  * Implements hook_menu().
  *
- * A simple example which defines a page callback and a menu entry.
+ * 一个简单的例子，定义了一个页面回调以及一个菜单入口。
  */
 function menu_example_menu() {
-  // Menu items are defined by placing them in an $items array. The array key
-  // (in this case 'menu_example') is the path that defines the menu router
-  // entry, so the page will be accessible from the URL
-  // example.com/examples/menu_example.
+
+  // 菜单项的定义是通过$item数组完成的。这个数组的键 (本例中是menu_example)是菜单路由的入口.
+  // 所以这个页面可以用URL：example.com/examples/menu_example来访问。
+
   $items['examples/menu_example'] = array(
-    // We are using the default menu type, so this can be omitted.
+
     // 'type' => MENU_NORMAL_ITEM,
-    //
-    // The menu title. Do NOT use t() which is called by default. You can
-    // override the use of t() by defining a 'title callback'. This is explained
-    // in the 'menu_example/title_callbacks' example below.
+    // 我们使用的是缺省的菜单类型，所以可以省略。
+
+    // 菜单标题。因为缺省就会调用t()函数，所以此处不需要使用这一函数。
+    // 也可以定义一个 'title callback' 来覆盖对t()函数的缺省调用。
+    // 下面的 'menu_example/title_callbacks' 例子讲解了这一用法。
     'title' => 'Menu Example',
 
-    // Description (hover flyover for menu link). Does NOT use t(), which is
-    // called automatically.
+    // 描述 (鼠标悬停时显示)。不要使用t()，这里也是自动调用的。
     'description' => 'Simplest possible menu type, and the parent menu entry for others',
 
-    // Function to be called when this path is accessed.
+    // 访问这一路径时，被调用的函数。
     'page callback' => '_menu_example_basic_instructions',
 
-    // Arguments to the page callback. Here's we'll use them just to provide
-    // content for our page.
+    // 页面回调函数的参数。这里我们只用来为我们的页面提供内容。
     'page arguments' => array(t('This page is displayed by the simplest (and base) menu example. Note that the title of the page is the same as the link title. You can also <a href="!link">visit a similar page with no menu link</a>. Also, note that there is a hook_menu_alter() example that has changed the path of one of the menu items.', array('!link' => url('examples/menu_example/path_only')))),
 
-    // If the page is meant to be accessible to all users, you can set 'access
-    // callback' to TRUE. This bypasses all access checks. For an explanation on
-    // how to use the permissions system to restrict access for certain users,
-    // see the example 'examples/menu_example/permissioned/controlled' below.
+
+    // 如果想要这一页面被所有用户访问，可以设置 'access callback' 为 TRUE。这种设置会忽略所有的访问检查。
+    // 如果希望了解权限系统如何限制指定用户的访问，可以参考下面的 'examples/menu_example/permissioned/controlled'。
     'access callback' => TRUE,
 
-    // If the page callback is located in another file, specify it here and
-    // that file will be automatically loaded when needed.
+    //
+    // 如果一个页面回调的定义是在其他文件中，这里就可以进行声明，菜单系统会根据这一取值载入相关文件。
     // 'file' => 'menu_example.module',
     //
-    // We can choose which menu gets the link. The default is 'navigation'.
-    // 'menu_name' => 'navigation',
-    //
-    // Show the menu link as expanded.
+    // 我们可以选择这一链接所处的菜单，缺省为 'navigation'（导航）。
+
+    // 以展开的形式显示这一菜单链接。
     'expanded' => TRUE,
   );
 
-  // Show a menu link in a menu other than the default "Navigation" menu.
-  // The menu must already exist.
+
+  // 这里示范如何把一个链接放在缺省的导航菜单之外。
+  // 前提是这一菜单已经存在。
   $items['examples/menu_example_alternate_menu'] = array(
     'title' => 'Menu Example: Menu in alternate menu',
 
-    // Machine name of the menu in which the link should appear.
+    // 目标菜单的机读名称。
     'menu_name' => 'primary-links',
 
     'page callback' => '_menu_example_menu_page',
@@ -81,10 +79,9 @@ function menu_example_menu() {
     'access callback' => TRUE,
   );
 
-  // A menu entry with simple permissions using user_access().
-  //
-  // First, provide a courtesy menu item that mentions the existence of the
-  // permissioned item.
+  // 一个带有user_access()访问控制的菜单项。
+  // 首先提供一个菜单项，其中提示了下面会有带权限的菜单。
+
   $items['examples/menu_example/permissioned'] = array(
     'title' => 'Permissioned Example',
     'page callback' => '_menu_example_menu_page',
@@ -93,36 +90,30 @@ function menu_example_menu() {
     'expanded' => TRUE,
   );
 
-  // Now provide the actual permissioned menu item.
+  // 这里是真正的受权限控制的菜单项。
   $items['examples/menu_example/permissioned/controlled'] = array(
 
-    // The title - do NOT use t() as t() is called automatically.
+    // 标题 - 自动调用 t()， 所以无需显式调用。
     'title' => 'Permissioned Menu Item',
     'description' => 'This menu entry will not appear and the page will not be accessible without the "access protected menu example" permission.',
     'page callback' => '_menu_example_menu_page',
     'page arguments' => array(t('This menu entry will not show and the page will not be accessible without the "access protected menu example" permission.')),
 
-    // For a permissioned menu entry, we provide an access callback which
-    // determines whether the current user should have access. The default is
-    // user_access(), which we'll use in this case. Since it's the default,
-    // we don't even have to enter it.
-    // 'access callback' => 'user_access',
-    //
-    // The 'access arguments' are passed to the 'access callback' to help it
-    // do its job. In the case of user_access(), we need to pass a permission
-    // as the first argument.
+
+    // 这是一个有权限控制的菜单项，这里我们要提供一个 'access callback' 来确定当前用户是否可以访问。
+    // 缺省情况下会使用 user_access()，这里我们就是用缺省值，因此无需输入 'access callback' => 'user_access',
+
+    // 'access arguments' 传递给 'access callback' 的参数，我们需要用这个参数传递一个权限给 user_access函数。
     'access arguments' => array('access protected menu example'),
 
-    // The optional weight element tells how to order the submenu items.
-    // Higher weights are "heavier", dropping to the bottom of the menu.
+    // 权重元素用于表达菜单项的排序，数字越大，排序越后。
     'weight' => 10,
   );
 
   /*
-   * We will define our own "access callback" function. We'll use
-   * menu_example_custom_access() rather than the default user_access().
+   * 我们可以定义自己的 'access callback' 函数。这里我们实现一个 menu_example_custom_access()来替换user_access()。
    *
-   * The function takes a "role" of the user as an argument.
+   * 这个函数使用 'role' （用户角色）为参数
    */
   $items['examples/menu_example/custom_access'] = array(
     'title' => 'Custom Access Example',
@@ -142,13 +133,12 @@ function menu_example_menu() {
     'access arguments' => array('authenticated user'),
   );
 
-  // A menu router entry with no menu link. This could be used any time we
-  // don't want the user to see a link in the menu. Otherwise, it's the same
-  // as the "simplest" entry above. MENU_CALLBACK is used for all menu items
-  // which don't need a visible menu link, including services and other pages
-  // that may be linked to but are not intended to be accessed directly.
   //
-  // First, provide a courtesy link in the menu so people can find this.
+  // 一个没有提供菜单链接的菜单项。这种情况用于我们不希望用户看到链接的情况。其他方面则跟
+  // 上面的 'simpletest' 项类似。 MENU_CALLBACK 类型就是用于提供隐藏的菜单项，例如服务和
+  // 一些不希望被直接访问的地址。
+
+  // 首先，提供一个友好的连接，让用户能够看到
   $items['examples/menu_example/path_only'] = array(
     'title' => 'MENU_CALLBACK example',
     'page callback' => '_menu_example_menu_page',
@@ -158,12 +148,13 @@ function menu_example_menu() {
   );
   $items['examples/menu_example/path_only/callback'] = array(
 
-    // A type of MENU_CALLBACK means leave the path completely out of the menu
-    // links.
+
+    // MENU_CALLBACK 意味着这个不会出现菜单链接。
     'type' => MENU_CALLBACK,
 
     // The title is still used for the page title, even though it's not used
     // for the menu link text, since there's no menu link.
+    // 因为没有了菜单连接，所以 title 不作为菜单链接文字出现了，但是还会用作页面标题。
     'title' => 'Callback Only',
 
     'page callback' => '_menu_example_menu_page',
@@ -171,15 +162,14 @@ function menu_example_menu() {
     'access callback' => TRUE,
   );
 
-  // A menu entry with tabs.
-  // For tabs we need at least 3 things:
-  // 1) A parent MENU_NORMAL_ITEM menu item (examples/menu_example/tabs in this
-  // example.)
-  // 2) A primary tab (the one that is active when we land on the base menu).
-  // This tab is of type MENU_DEFAULT_LOCAL_TASK.
-  // 3) Some other menu entries for the other tabs, of type MENU_LOCAL_TASK.
+
+  // 一个带tab的菜单项。
+  // 要使用tab要具备三个条件。
+  // 1) 一个MENU_NORMAL_ITEM类型的父菜单项。(本例中是examples/menu_example/tabs)
+  // 2) 一个缺省Tab (当我们打开跟菜单时的显示)，这个TAB的类型是MENU_DEFAULT_LOCAL_TASK。
+  // 3) 其他Tab的其他菜单项，类型是MENU_LOCAL_TASK。
   $items['examples/menu_example/tabs'] = array(
-    // 'type' => MENU_NORMAL_ITEM,  // Not necessary since this is the default.
+    // 'type' => MENU_NORMAL_ITEM,  // 缺省内容，所以不需要了
     'title' => 'Tabs',
     'description' => 'Shows how to create primary and secondary tabs',
     'page callback' => '_menu_example_menu_page',
@@ -188,14 +178,14 @@ function menu_example_menu() {
     'weight' => 30,
   );
 
-  // For the default local task, we need very little configuration, as the
-  // callback and other conditions are handled by the parent callback.
+
+  // 这种类型只许很少的配置。这是因为回调和其他的条件都是由父回调处理的。
   $items['examples/menu_example/tabs/default'] = array(
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'title' => 'Default primary tab',
     'weight' => 1,
   );
-  // Now add the rest of the tab entries.
+  // 其他的Tab项
   foreach (array(t('second') => 2, t('third') => 3, t('fourth') => 4) as $tabname => $weight) {
     $items["examples/menu_example/tabs/$tabname"] = array(
       'type' => MENU_LOCAL_TASK,
@@ -204,20 +194,16 @@ function menu_example_menu() {
       'page arguments' => array(t('This is the tab "@tabname" in the "basic tabs" example', array('@tabname' => $tabname))),
       'access callback' => TRUE,
 
-    // The weight property overrides the default alphabetic ordering of menu
-    // entries, allowing us to get our tabs in the order we want.
+      // 权重属性覆盖了缺省的字母排序，让我们可以按需排列。
       'weight' => $weight,
     );
   }
 
-  // Finally, we'll add secondary tabs to the default tab of the tabs entry.
-  //
-  // The default local task needs very little information.
+
+  // 最后，我们会加入第二个Tab
   $items['examples/menu_example/tabs/default/first'] = array(
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'title' => 'Default secondary tab',
-    // The additional page callback and related items are handled by the
-    // parent menu item.
   );
   foreach (array(t('second'), t('third')) as $tabname) {
     $items["examples/menu_example/tabs/default/$tabname"] = array(
@@ -229,22 +215,30 @@ function menu_example_menu() {
     );
   }
 
-  // All the portions of the URL after the base menu are passed to the page
-  // callback as separate arguments, and can be captured by the page callback
-  // in its argument list. Our _menu_example_menu_page() function captures
-  // arguments in its function signature and can output them.
+
+  // 一个URL，去除基础菜单路径之外的所有部分，都会作为多个参数被传递给页面回调，我们的
+  // _menu_example_menu_page() 函数就会获取这些参数并进行输出。
   $items['examples/menu_example/use_url_arguments'] = array(
     'title' => 'Extra Arguments',
     'description' => 'The page callback can use the arguments provided after the path used as key',
     'page callback' => '_menu_example_menu_page',
-    'page arguments' => array(t('This page demonstrates using arguments in the path (portions of the path after "menu_example/url_arguments". For example, access it with <a href="!link1">!link1</a> or <a href="!link2">!link2</a>).', array('!link1' => url('examples/menu_example/use_url_arguments/one/two'), '!link2' => url('examples/menu_example/use_url_arguments/firstarg/secondarg')))),
+    'page arguments' => array(
+      t(
+        'This page demonstrates using arguments in the path (portions of the path after "menu_example/url_arguments". For example, access it with <a href="!link1">!link1</a> or <a href="!link2">!link2</a>).',
+        array(
+          '!link1' => url('examples/menu_example/use_url_arguments/one/two'),
+          '!link2' => url('examples/menu_example/use_url_arguments/firstarg/secondarg')
+        )
+      )
+    ),
     'access callback' => TRUE,
     'weight' => 40,
   );
 
-  // The menu title can be dynamically created by using the 'title callback'
-  // which by default is t(). Here we provide a title callback which adjusts
-  // the menu title based on the current user's username.
+
+  // 菜单标题可以用 'title callback' 定义的回调函数来动态产生，这个回调的缺省值是t()。
+  // 这里我们做了一个新的回调，根据用户的用户名来显示标题。
+
   $items['examples/menu_example/title_callbacks'] = array(
     'title callback' => '_menu_example_simple_title_callback',
     'title arguments' => array(t('Dynamic title: username=')),
@@ -255,17 +249,13 @@ function menu_example_menu() {
     'weight' => 50,
   );
 
-  // Sometimes we need to capture a specific argument within the menu path,
-  // as with the menu entry
-  // 'example/menu_example/placeholder_argument/3333/display', where we need to
-  // capture the "3333". In that case, we use a placeholder in the path provided
-  // in the menu entry. The (odd) way this is done is by using
-  // array(numeric_position_value) as the value for 'page arguments'. The
-  // numeric_position_value is the zero-based index of the portion of the URL
-  // which should be passed to the 'page callback'.
+  // 有时我们要在菜单URL中获取某个指定的参数。比如我们想在URL
+  // 'example/menu_example/placeholder_argument/3333/display' 中获取 '3333'这一段。这里
+  // 我们可以在菜单定义中使用一个占位符。
+  // 这里用了一种（奇葩的）方式来定义传递给回调函数的参数：用一个位置编号的数组来定义函数参数的传递。
+  // 位置编号从0开始，代表了URL的第X段字符串。
   //
-  // First we provide a courtesy link with information on how to access
-  // an item with a placeholder.
+  // 首先我们提供一个友好的连接，告知用户如何访问这个带占位符的菜单项。
   $items['examples/menu_example/placeholder_argument'] = array(
     'title' => 'Placeholder Arguments',
     'page callback' => '_menu_example_menu_page',
@@ -274,28 +264,25 @@ function menu_example_menu() {
     'weight' => 60,
   );
 
-  // Now the actual entry.
+  // 真正的入口
   $items['examples/menu_example/placeholder_argument/%/display'] = array(
     'title' => 'Placeholder Arguments',
     'page callback' => '_menu_example_menu_page',
 
-    // Pass the value of '%', which is zero-based argument 3, to the
-    // 'page callback'. So if the URL is
-    // 'examples/menu_example/placeholder_argument/333/display' then the value
-    // 333 will be passed into the 'page callback'.
+    // '%'的位置编号是3（以0开始的位置编号的第四个），也就是把这个%的值传给 'page callback'。
+    // 如果网址是 'examples/menu_example/placeholder_argument/333/display'，那么传递给
+    // 'page callback' 的参数的就是333。
     'page arguments' => array(3),
     'access callback' => TRUE,
   );
 
-  // Drupal provides magic placeholder processing as well, so if the placeholder
-  // is '%menu_example_arg_optional', the function
-  // menu_example_arg_optional_load($arg) will be called to translate the path
-  // argument to a more substantial object. $arg will be the value of the
-  // placeholder. Then the return value of menu_example_id_load($arg) will be
-  // passed to the 'page callback'.
-  // In addition, if (in this case) menu_example_arg_optional_to_arg() exists,
-  // then a menu link can be created using the results of that function as a
-  // default for %menu_example_arg_optional.
+
+  // Drupal进一步提供了更高级的用法，如果一个占位符是 '%menu_example_arg_optional' ，
+  // 那么会调用函数menu_example_arg_optional_load($arg)，来对路径参数进行翻译。
+  // $arg参数就是占位符的值。接下来这个函数的返回值，就会传递给 'page callback'。
+  // 另外，如果存在menu_example_arg_optional_to_arg()，那么这一函数的返回值会替换掉
+  // 网址中的的这一占位符.
+
   $items['examples/menu_example/default_arg/%menu_example_arg_optional'] = array(
     'title' => 'Processed Placeholder Arguments',
     'page callback' => '_menu_example_menu_page',
@@ -316,14 +303,15 @@ function menu_example_menu() {
 }
 
 /**
- * Page callback for the simplest introduction menu entry.
+ * 最简单的菜单入口的 Page Callback
  *
  * @param string $content
- *   Some content passed in.
+ *    传入的内容
+ * @return string
  */
 function _menu_example_basic_instructions($content = NULL) {
   $base_content = t(
-  'This is the base page of the Menu Example. There are a number of examples
+    'This is the base page of the Menu Example. There are a number of examples
   here, from the most basic (like this one) to extravagant mappings of loaded
   placeholder arguments. Enjoy!');
   return '<div>' . $base_content . '</div><br /><div>' . $content . '</div>';
@@ -332,16 +320,26 @@ function _menu_example_basic_instructions($content = NULL) {
 /**
  * Page callback for use with most of the menu entries.
  *
- * The arguments it receives determine what it outputs.
+ * 本例中多数菜单入口的Page Callback
+ *
+ * 输入参数决定了输出内容（屁话）。
  *
  * @param string $content
- *   The base content to output.
+ *   待输出的基本内容。
  * @param string $arg1
- *   First additional argument from the path used to access the menu
+ *   来自于路径的第一个附加参数。
  * @param string $arg2
- *   Second additional argument.
+ *   第二个附加参数。
+ * @return string
  */
 function _menu_example_menu_page($content = NULL, $arg1 = NULL, $arg2 = NULL) {
+//  $content =       t(
+//    'This page demonstrates using arguments in the path (portions of the path after "menu_example/url_arguments". For example, access it with <a href="!link1">!link1</a> or <a href="!link2">!link2</a>).',
+//    array(
+//      '!link1' => url('examples/menu_example/use_url_arguments/one/two'),
+//      '!link2' => url('examples/menu_example/use_url_arguments/firstarg/secondarg')
+//    )
+//  );
   $output = '<div>' . $content . '</div>';
 
   if (!empty($arg1)) {
@@ -356,7 +354,7 @@ function _menu_example_menu_page($content = NULL, $arg1 = NULL, $arg2 = NULL) {
 /**
  * Implements hook_permission().
  *
- * Provides a demonstration access string.
+ * 提供演示权限。
  */
 function menu_example_permission() {
   return array(
@@ -368,13 +366,13 @@ function menu_example_permission() {
 }
 
 /**
- * Determine whether the current user has the role specified.
+ * 确定当前用户是否具备指定角色。
  *
  * @param string $role_name
- *   The role required for access
+ *    要求的角色。
  *
  * @return bool
- *   True if the acting user has the role specified.
+ *   如果当前用户具备该角色，则返回真。
  */
 function menu_example_custom_access($role_name) {
   $access_granted = in_array($role_name, $GLOBALS['user']->roles);
@@ -382,16 +380,15 @@ function menu_example_custom_access($role_name) {
 }
 
 /**
- * Utility function to provide mappings from integers to some strings.
+ * 工具函数，用来提供从整数到一些字符串的映射。
  *
- * This would normally be some database lookup to get an object or array from
- * a key.
+ * 一般是一些数据库查询：根据键获取对象或者数组内容。
  *
  * @param int $id
- *   The integer key.
+ *   整数键。
  *
  * @return string
- *   The string to which the integer key mapped, or NULL if it did not map.
+ *   对应的字符串，如果没有对应的串，返回空。
  */
 function _menu_example_mappings($id) {
   $mapped_value = NULL;
@@ -408,26 +405,24 @@ function _menu_example_mappings($id) {
 }
 
 /**
- * The special _load function to load menu_example.
+ * menu_example 中的特别的 _load 函数。
  *
- * Given an integer $id, load the string that should be associated with it.
- * Normally this load function would return an array or object with more
- * information.
+ * 提供一个整数的 $id，获取到相关的字符串。
+ * 正常情况下这个载入函数会返回一个对象或者数组，用于承载更多信息。
  *
  * @param int $id
- *   The integer to load.
+ *   整数ID
  *
  * @return string
- *   A string loaded from the integer.
+ *   根据ID获取到的字符串。
  */
 function menu_example_id_load($id) {
-  // Just map a magic value here. Normally this would load some more complex
-  // object from the database or other context.
+
+  // 只是个例子，映射到一个魔术值。通常情况下会从数据库和上下文载入一些更复杂的对象。
   $mapped_value = _menu_example_mappings($id);
   if (!empty($mapped_value)) {
     return t('Loaded value was %loaded', array('%loaded' => $mapped_value));
-  }
-  else {
+  } else {
     return t('Sorry, the id %id was not found to be loaded', array('%id' => $id));
   }
 }
@@ -435,21 +430,20 @@ function menu_example_id_load($id) {
 /**
  * Implements hook_menu_alter().
  *
- * Changes the path 'examples/menu_example/menu_original_path' to
- * 'examples/menu_example/menu_altered_path'.
- * Changes the title callback of the 'user/UID' menu item.
+ * 把 'examples/menu_example/menu_original_path' 变更为
+ * 'examples/menu_example/menu_altered_path'，
+ * 并修改菜单项 'user/UID' 的 title callback。
  *
- * Change the path 'examples/menu_example/menu_original_path' to
- * 'examples/menu_example/menu_altered_path'. This change will prevent the
- * page from appearing at the original path (since the item is being unset).
- * You will need to go to examples/menu_example/menu_altered_path manually to
- * see the page.
+ * 把 'examples/menu_example/menu_original_path' 变更为
+ * 'examples/menu_example/menu_altered_path'。
+ * 这一变化会阻止原路径显示页面（因为这个菜单项已经没有了）。 只能手动前往
+ * ' examples/menu_example/menu_altered_path'。
  *
- * Remember that hook_menu_alter() only runs at menu_rebuild() time, not every
- * time the page is built, so this typically happens only at cache clear time.
+ * 记住 hook_menu_alter() 只会在 menu_rebuild() 的时候运行，不是每次都会发生，
+ * 通常在缓存清空时会被触发。
  *
- * The $items argument is the complete list of menu router items ready to be
- * written to the menu_router table.
+ *
+ * $items参数是一个完整的菜单路由项，将被写入menu_router表。
  */
 function menu_example_menu_alter(&$items) {
   if (!empty($items['examples/menu_example/menu_original_path'])) {
@@ -460,16 +454,18 @@ function menu_example_menu_alter(&$items) {
 
   // Here we will change the title callback to our own function, changing the
   // 'user' link from the traditional to always being "username's account".
+  // 这里我们把 title callback 设置为我们自己的函数，把 'user' 变为 "某某某'的账号"
   if (!empty($items['user/%user'])) {
     $items['user/%user']['title callback'] = 'menu_example_user_page_title';
   }
 }
 
 /**
- * Title callback to rewrite the '/user' menu link.
+ * 用于变更 '/user' 菜单的 Title callback。
  *
  * @param string $base_string
- *   string to be prepended to current user's name.
+ *   在当前用户的名字之前加入的字符串。
+ * @return string
  */
 function _menu_example_simple_title_callback($base_string) {
   global $user;
@@ -478,10 +474,10 @@ function _menu_example_simple_title_callback($base_string) {
 }
 
 /**
- * Title callback to rename the title dynamically, based on user_page_title().
- *
+ * 一个 Title callback，基于 user_page_title()， 用来动态的修改标题。
  * @param object $account
- *   User account related to the visited page.
+ *   访问页面的用户账号
+ * @return string
  */
 function menu_example_user_page_title($account) {
   return is_object($account) ? t("@name's account", array('@name' => format_username($account))) : '';
@@ -493,52 +489,53 @@ function menu_example_user_page_title($account) {
  * This code will get the chance to alter a menu link when it is being saved
  * in the menu interface at admin/build/menu. Whatever we do here overrides
  * anything the user/administrator might have been trying to do.
+ *
+ * 这段代码会在 admin/build/menu 保存菜单的时候执行。
+ * 这里的行为会覆盖用户尝试进行的修改。
+ *
+ * @param $item
+ * @param $menu
  */
 function menu_example_menu_link_alter(&$item, $menu) {
-  // Force the link title to remain 'Clear Cache' no matter what the admin
-  // does with the web interface.
+
+  // 不管管理员在web界面做了什么。都把连接的标题保持为 'Clear cache'，
   if ($item['link_path'] == 'devel/cache/clear') {
     $item['link_title'] = 'Clear Cache';
   };
 }
 
 /**
- * Loads an item based on its $id.
+ * 根据 $id 获取内容。
  *
- * In this case we're just creating a more extensive string. In a real example
- * we would load or create some type of object.
+ * 这里只不过是创建一个字符串。在真实情况下，可能会返回复杂类型的数据。
  *
  * @param int $id
- *   Id of the item.
+ *   数据项的ID
+ * @return null|string
  */
 function menu_example_arg_optional_load($id) {
   $mapped_value = _menu_example_mappings($id);
   if (!empty($mapped_value)) {
     return t('Loaded value was %loaded', array('%loaded' => $mapped_value));
-  }
-  else {
+  } else {
     return t('Sorry, the id %id was not found to be loaded', array('%id' => $id));
   }
 }
 
 /**
- * Utility function to provide default argument for wildcard.
+ * 工具函数，用于为通配符提供缺省参数。
  *
- * A to_arg() function is used to provide a default for the arg in the
- * wildcard. The purpose is to provide a menu link that will function if no
- * argument is given. For example, in the case of the menu item
- * 'examples/menu_example/default_arg/%menu_example_arg_optional' the third argument
- * is required, and the menu system cannot make a menu link using this path
- * since it contains a placeholder. However, when the to_arg() function is
- * provided, the menu system will create a menu link pointing to the path
- * which would be created with the to_arg() function filling in the
- * %menu_example_arg_optional.
+ * to_arg() 函数用于为通配符提供一个缺省的参数。用于在没有提供参数的时候提供一个参数。
+ * 例如，在 'examples/menu_example/default_arg/%menu_example_arg_optional'菜单中，第三个参数
+ * 是必要的，因为其中存在占位符，菜单系统也无法为其提供一个链接。然而如果提供了 to_arg() 函数的话，
+ * 这一函数会填充 %menu_example_arg_optional，菜单系统就可以为其建立链接。
  *
  * @param string $arg
  *   The arg (URL fragment) to be tested.
+ * @return int|string
  */
 function menu_example_arg_optional_to_arg($arg) {
-  // If our argument is not provided, give a default of 99.
+  // 如果没有提供参数，则返回99.
   return (empty($arg) || $arg == '%') ? 99 : $arg;
 }
 /**
