@@ -19,6 +19,7 @@
 * Cron Example
 * Entity Example
 * Field Example
+* Menu Example
 * Simpletest Example
 * Token Example
 
