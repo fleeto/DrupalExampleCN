@@ -2,11 +2,11 @@
 
 /**
  * @file
- * Test file for form_example module.
+ * form_example 模块的测试文件。
  */
 
 /**
- * Default test case for the form_example module.
+ * form_example 的缺省测试用例。
  *
  * @ingroup form_example
  */
@@ -24,17 +24,17 @@ class FormExampleTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Enable modules.
+   * 启用模块。
    */
   public function setUp() {
     parent::setUp('form_example');
   }
 
   /**
-   * Test each tutorial.
+   * 逐个测试教程内容。
    */
   public function testTutorials() {
-    // Tutorial #1
+    // 教程 #1
     $this->drupalGet('examples/form_example/tutorial');
     $this->assertText(t('#9'));
 
@@ -101,7 +101,7 @@ class FormExampleTestCase extends DrupalWebTestCase {
 
     $this->assertText(t('Enter a year between 1900 and 2000'));
 
-    // Test tutorial #8.
+    // 测试教程 #8.
     $this->drupalPost(
       'examples/form_example/tutorial/8',
       array(
@@ -137,7 +137,7 @@ class FormExampleTestCase extends DrupalWebTestCase {
       $this->assertText(t('Name #@num', array('@num' => $i + 1)));
     }
 
-    // Now remove the last name added (#5).
+    // 删掉之前输入的姓（ #5 ）。
     $this->drupalPost(NULL, array(), t('Remove latest name'));
     $this->assertNoText("Name #5");
 
@@ -154,20 +154,20 @@ class FormExampleTestCase extends DrupalWebTestCase {
     $this->drupalPost($url, array(), t('Submit'));
     $this->assertText(t('No file was uploaded.'));
 
-    // Get sample images.
+    // 获取示例图像。
     $images = $this->drupalGetTestFiles('image');
     foreach ($images as $image) {
       $this->drupalPost($url, array('files[file]' => drupal_realpath($image->uri)), t('Submit'));
       $this->assertText(t('The form has been submitted and the image has been saved, filename: @filename.', array('@filename' => $image->filename)));
     }
 
-    // #11: Confirmation form.
-    // Try to submit without a name.
+    // #11: 确认 Form
+    // 尝试在缺少名字的情况下进行提交。
     $url = 'examples/form_example/tutorial/11';
     $this->drupalPost($url, array(), t('Submit'));
     $this->assertText('Name field is required.');
 
-    // Verify that we can enter a name and get the confirmation form.
+    // 我们是否能够输入名字，并获得确认信息。
     $this->drupalPost(
       $url,
       array('name' => t('name 1')), t('Submit')
@@ -175,25 +175,25 @@ class FormExampleTestCase extends DrupalWebTestCase {
     $this->assertText(t('Is this really your name?'));
     $this->assertFieldById('edit-name', 'name 1');
 
-    // Check the 'yes' button.
+    // 检查 'yes' 按钮。
     $confirmation_text = t("Confirmation form submission recieved. According to your submission your name is '@name'", array('@name' => 'name 1'));
     $url = 'examples/form_example/tutorial/11/confirm/name%201';
     $this->drupalPost($url, array(), t('This is my name'));
     $this->assertText($confirmation_text);
 
-    // Check the 'no' button.
+    // 检查 'no' 按钮。
     $this->drupalGet($url);
     $this->clickLink(t('Nope, not my name'));
     $this->assertNoText($confirmation_text);
   }
 
   /**
-   * Test Wizard tutorial.
+   * 测试向导教程。
    *
-   * @TODO improve this using drupal_form_submit
+   * @TODO 利用 drupal_form_submit 增强
    */
   public function testWizard() {
-    // Check if the wizard is there.
+    // 检查是否存在向导示例。
     $this->drupalGet('examples/form_example/wizard');
     $this->assertText(t('Extensible wizard example'));
 
@@ -202,37 +202,37 @@ class FormExampleTestCase extends DrupalWebTestCase {
     $city = $this->randomName(8);
     $aunts_name = $this->randomName(8);
 
-    // Submit the first step of the wizard.
+    // 提交向导的第一步。
     $options = array(
       'first_name' => $first_name,
       'last_name'  => $last_name,
     );
     $this->drupalPost('examples/form_example/wizard', $options, t('Next'));
 
-    // A label city is created, and two buttons appear, Preivous and Next.
+    // 创建了一个城市标签，还有两个按钮：上一步和下一步。
     $this->assertText(t('Hint: Do not enter "San Francisco", and do not leave this out.'));
 
-    // Go back to the beginning and verify that the value is there.
+    // 退回上一步，检查是否保存了刚输入的值。
     $this->drupalPost(NULL, array(), t('Previous'));
     $this->assertFieldByName('first_name', $first_name);
     $this->assertFieldByName('last_name', $last_name);
 
-    // Go next. We should keep our values.
+    // 下一步，这里我们应该回到我们之前的输入。
     $this->drupalPost(NULL, array(), t('Next'));
     $this->assertText(t('Hint: Do not enter "San Francisco", and do not leave this out.'));
 
-    // Try "San Francisco".
+    // 试试 "San Francisco" 。
     $this->drupalPost(NULL, array('city' => 'San Francisco'), t('Next'));
     $this->assertText(t('You were warned not to enter "San Francisco"'));
 
-    // Try the real city.
+    // 试试真正的城市
     $this->drupalPost(NULL, array('city' => $city), t('Next'));
 
-    // Enter the Aunt's name, but then the previous button.
+    // 输入阿姨的名字，然后上一步。
     $this->drupalPost(NULL, array('aunts_name' => $aunts_name), t('Previous'));
     $this->assertFieldByName('city', $city);
 
-    // Now go forward and then press finish; check for correct values.
+    // 下一步，然后点击结束，检查结果。
     $this->drupalPost(NULL, array(), t('Next'));
     $this->drupalPost(NULL, array('aunts_name' => $aunts_name), t('Finish'));
 
@@ -244,10 +244,11 @@ class FormExampleTestCase extends DrupalWebTestCase {
 
 
   /**
-   * Test the element_example form for correct behavior.
+   * 测试 element_example
    */
   public function testElementExample() {
     // Make one basic POST with a set of values and check for correct responses.
+    // 做一个基础的 POST，其中包含一系列的值，并检查返回内容。
     $edit = array(
       'a_form_example_textfield' => $this->randomName(),
       'a_form_example_checkbox' => TRUE,
@@ -267,7 +268,7 @@ class FormExampleTestCase extends DrupalWebTestCase {
 
     $this->assertText(t('a_form_example_element_combined has value @value', array('@value' => $edit['a_form_example_element_combined[areacode]'] . $edit['a_form_example_element_combined[prefix]'] . $edit['a_form_example_element_combined[extension]'])));
 
-    // Now flip the checkbox and check for correct behavior.
+    // 反选 checkbox， 检查响应。
     $edit['a_form_example_checkbox'] = FALSE;
     $this->drupalPost('examples/form_example/element_example', $edit, t('Submit'));
     $this->assertText(t('a_form_example_checkbox has value 0'));

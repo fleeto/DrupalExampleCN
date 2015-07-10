@@ -1,0 +1,585 @@
+# $Id$
+#
+# Chinese, Simplified translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  form_example_elements.inc: n/a
+#  form_example_tutorial.inc: n/a
+#  form_example_states.inc: n/a
+#  form_example_wizard.inc: n/a
+#  form_example.module: n/a
+#  form_example.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Form Example\n"
+"POT-Creation-Date: 2015-07-10 22:33+0800\n"
+"PO-Revision-Date: 2015-07-11 00:44+0800\n"
+"Last-Translator: Vincent <drupal@fleeto.us>\n"
+"Language-Team: Chinese, Simplified <drupal@fleeto.us>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Language: zh_CN\n"
+"X-Generator: Poedit 1.7.4\n"
+
+#: form_example_elements.inc:247
+msgid "The area code is invalid."
+msgstr "区号无效。"
+
+#: form_example_elements.inc:252
+msgid "The prefix is invalid."
+msgstr "前缀无效。"
+
+#: form_example_elements.inc:257
+msgid "The extension is invalid."
+msgstr "分机号码无效。"
+
+#: form_example_elements.inc:327
+msgid "@member is invalid"
+msgstr "@member 无效"
+
+#: form_example_elements.inc:438
+msgid "Form Example textfield"
+msgstr "Form 示例文本字段"
+
+#: form_example_elements.inc:440
+msgid "form_example_textfield is a new type, but it is actually uses the system-provided functions of textfield"
+msgstr "form_example_textfield 是一个新类型，实际上用了系统为文本字段提供的支持函数"
+
+#: form_example_elements.inc:445
+msgid "Form Example checkbox"
+msgstr "Form 示例 Checkbox"
+
+#: form_example_elements.inc:447
+msgid "Nothing more than a regular checkbox but with a theme provided by this module."
+msgstr "只是个普通的 Checkbox，但是他的主题支持是由本模块自行提供的。"
+
+#: form_example_elements.inc:452
+msgid "Discrete phone number"
+msgstr "分隔的电话号码"
+
+#: form_example_elements.inc:461
+msgid "A phone number : areacode (XXX), prefix (XXX) and extension (XXXX). This one uses a \"discrete\" element type, one which stores the three parts of the telephone number separately."
+msgstr "一个电话号码：区号（XXX），前缀（XXX）以及分机号（XXXX）。这里用了一个“分隔”的元素类型，这个元素类型用三个不同的部分来存储电话号码。"
+
+#: form_example_elements.inc:466
+msgid "Combined phone number"
+msgstr "合并的电话号码"
+
+#: form_example_elements.inc:468
+msgid "form_example_element_combined one uses a \"combined\" element type, one with a single 10-digit value which is broken apart when needed."
+msgstr "form_example_element_combined 使用一种 \"合并\" 的元素类型，它使用一个10位的字符串来存储电话号码，需要各部分的时候再进行拆分。"
+
+#: form_example_elements.inc:473 form_example_tutorial.inc:462;763
+msgid "Submit"
+msgstr "提交"
+
+#: form_example_elements.inc:489
+msgid "%name has value %value"
+msgstr "%name 的值是 %value"
+
+#: form_example_states.inc:68
+msgid "High School"
+msgstr "高中"
+
+#: form_example_states.inc:69
+msgid "Undergraduate"
+msgstr "本科生"
+
+#: form_example_states.inc:70
+msgid "Graduate"
+msgstr "研究生"
+
+#: form_example_states.inc:72
+msgid "What type of student are you?"
+msgstr "你是哪一种学生？"
+
+#: form_example_states.inc:76
+msgid "High School Information"
+msgstr "高中信息"
+
+#: form_example_states.inc:89
+msgid "SAT"
+msgstr "SAT"
+
+#: form_example_states.inc:89
+msgid "ACT"
+msgstr "ACT"
+
+#: form_example_states.inc:90
+msgid "What standardized tests did you take?"
+msgstr "你参加的是哪个考试？"
+
+#: form_example_states.inc:106
+msgid "Your SAT score:"
+msgstr "你的 SAT 分数："
+
+#: form_example_states.inc:119
+msgid "Your ACT score:"
+msgstr "你的 ACT 分数："
+
+#: form_example_states.inc:134
+msgid "Undergraduate Information"
+msgstr "本科信息"
+
+#: form_example_states.inc:146
+msgid "How many years have you completed?"
+msgstr "你完成了几年学业？"
+
+#: form_example_states.inc:149
+msgid "One"
+msgstr "一年"
+
+#: form_example_states.inc:150
+msgid "Two"
+msgstr "两年"
+
+#: form_example_states.inc:151
+msgid "Three"
+msgstr "三年"
+
+#: form_example_states.inc:152
+msgid "Four"
+msgstr "四年"
+
+#: form_example_states.inc:153
+msgid "Lots"
+msgstr "很多年"
+
+#: form_example_states.inc:159
+msgid "Wow, that's a long time."
+msgstr "卧槽，好长时间啊。"
+
+#: form_example_states.inc:170
+msgid "Your college or university:"
+msgstr "你就读的大学："
+
+#: form_example_states.inc:174
+msgid "UK"
+msgstr "英国"
+
+#: form_example_states.inc:174;186;197;208
+msgid "Other"
+msgstr "其他"
+
+#: form_example_states.inc:175
+msgid "In what country is your college or university located?"
+msgstr "你的大学在哪个国家？"
+
+#: form_example_states.inc:180
+msgid "Please enter the name of the country where your college or university is located."
+msgstr "请输入你大学所在国家的名字。"
+
+#: form_example_states.inc:193
+msgid "Thanks for providing both your school and your country."
+msgstr "感谢你输入了学校和国家名字。"
+
+#: form_example_states.inc:204
+msgid "Done with form"
+msgstr "完成 Form"
+
+#: form_example_states.inc:217
+msgid "Graduate School Information"
+msgstr "研究生学校信息"
+
+#: form_example_states.inc:228
+msgid "Please describe your graduate studies"
+msgstr "请描述你研究生阶段的研究"
+
+#: form_example_states.inc:233
+msgid "Check here if you have provided information above"
+msgstr "请复查你所输入的信息。"
+
+#: form_example_states.inc:245
+msgid "Enter your average"
+msgstr "输入你的平均分"
+
+#: form_example_states.inc:260
+msgid "Check here if you want to add more information."
+msgstr "检查一下，看看你是否需要加入更多信息。"
+
+#: form_example_states.inc:264
+msgid "Additional Information"
+msgstr "额外信息"
+
+#: form_example_states.inc:277
+msgid "What do you have to say?"
+msgstr "你有什么想说的？"
+
+#: form_example_states.inc:282
+msgid "Submit your information"
+msgstr "提交你的信息"
+
+#: form_example_states.inc:292
+msgid "Submitting values: @values"
+msgstr "正在提交： @values"
+
+#: form_example_tutorial.inc:32
+msgid "This is a set of form tutorials tied to the <a href=\"http://drupal.org/node/262422\">Drupal handbook</a>."
+msgstr "这是针对 <a href=\"http://drupal.org/node/262422\">Drupal handbook</a> 的一系列教程。"
+
+#: form_example_tutorial.inc:53
+msgid "A form with nothing but a textfield"
+msgstr "只有一个文本字段的 Form"
+
+#: form_example_tutorial.inc:58;77;110;141;186;229;310;834
+msgid "Name"
+msgstr "姓名"
+
+#: form_example_tutorial.inc:72
+msgid "A simple form with a submit button"
+msgstr "有提交按钮的简单 Form"
+
+#: form_example_tutorial.inc:105
+msgid "A form with a fieldset"
+msgstr "有字段集的 Form"
+
+#: form_example_tutorial.inc:114;150;193;235;316;413;623
+msgid "First name"
+msgstr "名"
+
+#: form_example_tutorial.inc:118;155;202;244;325;422
+msgid "Last name"
+msgstr "姓"
+
+#: form_example_tutorial.inc:136
+msgid "A form with required fields"
+msgstr "带有必填字段的 Form"
+
+#: form_example_tutorial.inc:181
+msgid "A form with additional attributes"
+msgstr "带有附加属性的 Form"
+
+#: form_example_tutorial.inc:182
+msgid "This one adds #default_value and #description"
+msgstr "添加了 #default_value 和 #description"
+
+#: form_example_tutorial.inc:224
+msgid "A form with a validation handler"
+msgstr "带有校验器的 Form"
+
+#: form_example_tutorial.inc:287;349;487;714
+msgid "Enter a year between 1900 and 2000."
+msgstr "输入一个1900 到 2000 之间的年份。"
+
+#: form_example_tutorial.inc:306
+msgid "A form with a submit handler"
+msgstr "带有提交处理的 Form"
+
+#: form_example_tutorial.inc:363;541
+msgid "The form has been submitted. name=\"@first @last\", year of birth=@year_of_birth"
+msgstr "Form 已经被提交，姓名 = \"@first @last\"，出生年份 = @year_of_birth"
+
+#: form_example_tutorial.inc:408
+msgid "A basic multistep form (page 1)"
+msgstr "基础的多步骤 Form （第一页）"
+
+#: form_example_tutorial.inc:451
+msgid "A basic multistep form (page 2)"
+msgstr "基础的多步骤 Form （第二页）"
+
+#: form_example_tutorial.inc:456
+msgid "Favorite color"
+msgstr "喜欢的颜色"
+
+#: form_example_tutorial.inc:467
+msgid "<< Back"
+msgstr "<< 上一步"
+
+#: form_example_tutorial.inc:550
+msgid "Second name: name=\"@first @last\", year of birth=@year_of_birth"
+msgstr "第二个名字：姓名 = \"@first @last\"，出生年份 = @year_of_birth"
+
+#: form_example_tutorial.inc:558
+msgid "And the favorite color is @color"
+msgstr "最喜欢的颜色是 @color"
+
+#: form_example_tutorial.inc:605
+msgid "A form with dynamically added new fields"
+msgstr "一个带有动态添加字段的 Form"
+
+#: form_example_tutorial.inc:616
+msgid "Name #@num"
+msgstr "姓名 #@num"
+
+#: form_example_tutorial.inc:624
+msgid "Enter first name."
+msgstr "输入名。"
+
+#: form_example_tutorial.inc:631
+msgid "Enter Last name"
+msgstr "输入姓"
+
+#: form_example_tutorial.inc:636
+msgid "Year of birth"
+msgstr "出生年份"
+
+#: form_example_tutorial.inc:637
+msgid "Format is \"YYYY\""
+msgstr "格式是 \"YYYY\""
+
+#: form_example_tutorial.inc:648
+msgid "Add another name"
+msgstr "添加另一个姓名"
+
+#: form_example_tutorial.inc:657
+msgid "Remove latest name"
+msgstr "删除最后一个姓名"
+
+#: form_example_tutorial.inc:725
+msgid "Form 9 has been submitted."
+msgstr "提交了 Form 9 。"
+
+#: form_example_tutorial.inc:727
+msgid "@num: @first @last (@date)..."
+msgstr "@num: @first @last (@date)..."
+
+#: form_example_tutorial.inc:757
+msgid "Image"
+msgstr "图像"
+
+#: form_example_tutorial.inc:758
+msgid "Upload a file, allowed extensions: jpg, jpeg, png, gif"
+msgstr "上传一个文件，允许使用的扩展名包括：jpg, jpeg, png, gif"
+
+#: form_example_tutorial.inc:789
+msgid "Failed to write the uploaded file to the site's file folder."
+msgstr "尝试把上传文件写入网站文件夹时候出错。"
+
+#: form_example_tutorial.inc:793
+msgid "No file was uploaded."
+msgstr "没有文件完成上传。"
+
+#: form_example_tutorial.inc:811
+msgid "The form has been submitted and the image has been saved, filename: @filename."
+msgstr "Form 被提交，并且图像被保存，文件名是 @filename。"
+
+#: form_example_tutorial.inc:830
+msgid "A set of two forms that demonstrate the confirm_form function.  This form has an explicit action to direct the form to a confirmation page"
+msgstr "用两个 Form 演示 confirm_form() 函数。这个 Form 有个显示的动作，用来重定向到一个确认页面"
+
+#: form_example_tutorial.inc:892
+msgid "Your name:"
+msgstr "你的姓名："
+
+#: form_example_tutorial.inc:898
+msgid "Is this really your name?"
+msgstr "这就是你的姓名吗？"
+
+#: form_example_tutorial.inc:904
+msgid "Please verify whether or not you have input your name correctly. If you verify you will be sent back to the form and a message will be set. Otherwise you will be sent to the same page but with no message."
+msgstr "请检查你的名字是否输入正确。如果确认，你会被送回 Form ， 并设置一条消息。否则会被送到同一页面，但是没有消息。"
+
+#: form_example_tutorial.inc:907
+msgid "This is my name"
+msgstr "这是我的姓名"
+
+#: form_example_tutorial.inc:908
+msgid "Nope, not my name"
+msgstr "不，这不是我的姓名"
+
+#: form_example_tutorial.inc:933
+msgid "Confirmation form submission recieved. According to your submission your name is '@name'"
+msgstr "收到了 Form 提交的确认信息。根据你提交的数据，你的姓名是 @name"
+
+#: form_example_wizard.inc:83
+msgid "Extensible Wizard: Step @step"
+msgstr "可扩展的向导：步骤 @step"
+
+#: form_example_wizard.inc:95
+msgid "Previous"
+msgstr "上一步"
+
+#: form_example_wizard.inc:107
+msgid "Next"
+msgstr "下一步"
+
+#: form_example_wizard.inc:117
+msgid "Finish"
+msgstr "完成"
+
+#: form_example_wizard.inc:205
+msgid "First Name"
+msgstr "名"
+
+#: form_example_wizard.inc:210
+msgid "Last Name"
+msgstr "姓"
+
+#: form_example_wizard.inc:228
+msgid "City"
+msgstr "城市"
+
+#: form_example_wizard.inc:229
+msgid "Hint: Do not enter \"San Francisco\", and do not leave this out."
+msgstr "提示：不要输入  \"San Francisco\" ，也不要留空。"
+
+#: form_example_wizard.inc:246
+msgid "You were warned not to enter \"San Francisco\""
+msgstr "警告：不要输入  \"San Francisco\""
+
+#: form_example_wizard.inc:260
+msgid "Your first cousin's aunt's Social Security number"
+msgstr "你第一个表兄的阿姨的社会安全号码"
+
+#: form_example_wizard.inc:284
+msgid "This information was collected by this wizard:"
+msgstr "这是你输入到向导中的信息："
+
+#: form_example_wizard.inc:295
+msgid "Step @num collected the following values: <pre>@result</pre>"
+msgstr "步骤 @num 获取了这些内容： <pre>@result</pre>"
+
+#: form_example.module:184
+msgid "The form example module provides a tutorial, extensible multistep example, an element example, and a #states example"
+msgstr "Form 示例模块提供了一个教程——可扩展的多步骤例子，一个元素例子，以及一个 #states 例子"
+
+#: form_example.module:195
+msgid "This form example tutorial for Drupal 7 is the code from the <a href=\"http://drupal.org/node/262422\">Handbook 10-step tutorial</a>"
+msgstr "这个 Drupal 7 的 Form 示例教程中的代码来自于 <a href=\"http://drupal.org/node/262422\">Handbook 10-step tutorial</a>"
+
+#: form_example.module:199
+msgid "The Element Example shows how modules can provide their own Form API element types. Four different element types are demonstrated."
+msgstr "Element 示例，展示了模块中提供 Form API 元素类型的方法。其中提供了四种不同的元素类型。"
+
+#: form_example.module:28
+msgid "Form Example"
+msgstr "Form 示例"
+
+#: form_example.module:34
+msgid "Form Tutorial"
+msgstr "Form 教程"
+
+#: form_example.module:38
+msgid "A set of ten tutorials"
+msgstr "一个系列，十个教程"
+
+#: form_example.module:43
+msgid "#1"
+msgstr "#1"
+
+#: form_example.module:47
+msgid "Tutorial 1: Simplest form"
+msgstr "教程 1：最简单的 Form"
+
+#: form_example.module:52
+msgid "#2"
+msgstr "#2"
+
+#: form_example.module:56
+msgid "Tutorial 2: Form with a submit button"
+msgstr "教程 2：带有提交按钮的 Form"
+
+#: form_example.module:61
+msgid "#3"
+msgstr "#3"
+
+#: form_example.module:65
+msgid "Tutorial 3: Fieldsets"
+msgstr "教程 3：字段集和"
+
+#: form_example.module:70
+msgid "#4"
+msgstr "#4"
+
+#: form_example.module:74
+msgid "Tutorial 4: Required fields"
+msgstr "教程 4：必填字段"
+
+#: form_example.module:79
+msgid "#5"
+msgstr "#5"
+
+#: form_example.module:83
+msgid "Tutorial 5: More element attributes"
+msgstr "教程 5：更多的元素属性"
+
+#: form_example.module:88
+msgid "#6"
+msgstr "#6"
+
+#: form_example.module:92
+msgid "Tutorial 6: Form with a validate handler"
+msgstr "教程 6：带有校验过程的 Form"
+
+#: form_example.module:97
+msgid "#7"
+msgstr "#7"
+
+#: form_example.module:101
+msgid "Tutorial 7: Form with a submit handler"
+msgstr "教程 7：带有提交处理的 Form"
+
+#: form_example.module:106
+msgid "#8"
+msgstr "#8"
+
+#: form_example.module:110
+msgid "Tutorial 8: Basic multistep form"
+msgstr "教程 8：基础的多步骤 Form"
+
+#: form_example.module:115
+msgid "#9"
+msgstr "#9"
+
+#: form_example.module:119
+msgid "Tutorial 9: Form with dynamically added new fields"
+msgstr "教程 9：带有动态新增字段的 Form"
+
+#: form_example.module:125
+msgid "#10"
+msgstr "#10"
+
+#: form_example.module:129
+msgid "Tutorial 10: Form with file upload"
+msgstr "教程 10：带有文件上传的 Form"
+
+#: form_example.module:135
+msgid "#11"
+msgstr "#11"
+
+#: form_example.module:139
+msgid "Tutorial 11: generating a confirmation form"
+msgstr "教程 11：生成一个确认 Form"
+
+#: form_example.module:145
+msgid "Name Confirmation"
+msgstr "姓名确认"
+
+#: form_example.module:149
+msgid "Confirmation form for tutorial 11.  Generated using the confirm_form function"
+msgstr "教程 11 的确认 Form。由 confirm_form 函数生成"
+
+#: form_example.module:153
+msgid "#states example"
+msgstr "#states 示例"
+
+#: form_example.module:157
+msgid "How to use the #states attribute in FAPI"
+msgstr "如何使用FAPI的 #states 属性"
+
+#: form_example.module:161
+msgid "Extensible wizard example"
+msgstr "可扩展的向导示例"
+
+#: form_example.module:165
+msgid "A general approach to a wizard multistep form."
+msgstr "一个几乎标准的多步骤向导式窗体"
+
+#: form_example.module:169
+msgid "Element example"
+msgstr "元素示例"
+
+#: form_example.info:0
+msgid "Form example"
+msgstr "Form 示例"
+
+#: form_example.info:0
+msgid "Examples of using the Drupal Form API."
+msgstr "使用 Drupal Form API的例子。"
+
+#: form_example.info:0
+msgid "Example modules"
+msgstr "Example 模块"
