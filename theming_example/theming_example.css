@@ -1,10 +1,13 @@
 /*
- * style the list
- * for OL you can have
+ * 为列表提供样式
+ *
+ * OL 列表可以使用：
  * decimal | lower-roman | upper-roman | lower-alpha | upper-alpha
- * for UL you can have
+ *
+ * UL 列表可以使用：
  * disc | circle | square or an image eg url(x.png)
- * you can also have 'none'
+ * 
+ * 还可以使用 'none'
  */
 ol.theming-example-list {
   list-style-type: upper-alpha;

@@ -22,4 +22,5 @@
 * Field Example
 * Menu Example
 * Simpletest Example
+* Theming Example
 * Token Example

@@ -1,0 +1,133 @@
+# $Id$
+#
+# Chinese, Simplified translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  theming_example.module: n/a
+#  theming_example.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Drupal Example\n"
+"POT-Creation-Date: 2015-07-15 01:24+0800\n"
+"PO-Revision-Date: 2015-07-15 02:46+0800\n"
+"Last-Translator: Vincent <drupal@fleeto.us>\n"
+"Language-Team: Chinese, Simplified <drupal@fleeto.us>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Language: zh_CN\n"
+"X-Generator: Poedit 1.7.4\n"
+
+#: theming_example.module:134
+msgid "Some examples of pages and forms that are run through theme functions."
+msgstr "Some examples of pages and forms that are run through theme functions. 页面和 Form 的例子通过主题函数进行输出。(为通过测试保留一句英文)"
+
+#: theming_example.module:135
+msgid "Simple page with a list"
+msgstr "带有列表的简单页面"
+
+#: theming_example.module:136
+msgid "Simple form 1"
+msgstr "简单 Form 1"
+
+#: theming_example.module:137
+msgid "Simple form 2"
+msgstr "简单 Form 2"
+
+#: theming_example.module:152
+msgid "First item"
+msgstr "第一项"
+
+#: theming_example.module:153
+msgid "Second item"
+msgstr "第二项"
+
+#: theming_example.module:154
+msgid "Third item"
+msgstr "第三项"
+
+#: theming_example.module:155
+msgid "Fourth item"
+msgstr "第四项"
+
+#: theming_example.module:159
+msgid "A list returned to be rendered using theme('item_list')"
+msgstr "返回一个列表，使用 theme('item_list') 渲染"
+
+#: theming_example.module:177
+msgid "The same list rendered by theme('theming_example_list')"
+msgstr "用 theme('theming_example_list') 来渲染的同一个列表"
+
+#: theming_example.module:194
+msgid "Newest first"
+msgstr "最新的排最前"
+
+#: theming_example.module:195
+msgid "Newest last"
+msgstr "最新的排最后"
+
+#: theming_example.module:196
+msgid "Edited first"
+msgstr "编辑过的排最前"
+
+#: theming_example.module:197
+msgid "Edited last"
+msgstr "编辑过的排最后"
+
+#: theming_example.module:198
+msgid "By name"
+msgstr "根据名称"
+
+#: theming_example.module:203
+msgid "Choose which ordering you want"
+msgstr "选择排序方式"
+
+#: theming_example.module:207;238
+msgid "Go"
+msgstr "前往"
+
+#: theming_example.module:221
+msgid "You chose %input"
+msgstr "你选择了 %input"
+
+#: theming_example.module:233
+msgid "Please input something!"
+msgstr "请输入点什么！"
+
+#: theming_example.module:252
+msgid "You entered %input"
+msgstr "你输入了 %input"
+
+#: theming_example.module:62
+msgid "Theming Example"
+msgstr "主题示例"
+
+#: theming_example.module:63
+msgid "Some theming examples."
+msgstr "一些主题的例子"
+
+#: theming_example.module:69
+msgid "Theming a list"
+msgstr "渲染一个列表"
+
+#: theming_example.module:75
+msgid "Theming a form (select form)"
+msgstr "渲染一个 form (select form)"
+
+#: theming_example.module:82
+msgid "Theming a form (text form)"
+msgstr "渲染一个 form (text form)"
+
+#: theming_example.info:0
+msgid "Theming example"
+msgstr "主题示例"
+
+#: theming_example.info:0
+msgid "An example module showing how to use theming."
+msgstr "一个演示主题的示例模块"
+
+#: theming_example.info:0
+msgid "Example modules"
+msgstr "Example 模块"

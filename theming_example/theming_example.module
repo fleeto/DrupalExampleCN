@@ -2,74 +2,60 @@
 
 /**
  * @file
- * Explains how a module declares theme functions, preprocess functions, and
- * templates.
+ * 示范如何在模块中声明 Theme 函数、 preprocess 函数以及模板。
  *
- * The underlying approach is that a module should allow themes to do all
- * rendering, but provide default implementations where appropriate.
+ * 根本目标是让主题可以渲染模块的所有输出，但是模块也应该提供合适的基础/缺省实现。
  *
- * Modules are also expected to leave data as render arrays as long as possible,
- * leaving rendering to theme functions and templates.
+ * 模块应该尽量只是输出可渲染数组，让主题函数和模板来完成渲染。
  */
 
 /**
  * @defgroup theming_example Example: Theming
  * @ingroup examples
  * @{
- * Example of Drupal theming.
+ * Drupal 主题示例
  *
- * The theming_example module attempts to show how module developers can add
- * theme functions to their projects so that themes can modify output.
+ * Theming_example 模块展示了模块开发者应该如何在项目中添加主题函数，
+ * 并让主题可以修改输出。
  *
- * Module developers should to strive to avoid hard-wiring any HTML into the
- * output of their code, this should all be done in theme functions.
+ * 模块开发者应该坚决避免在代码中硬输出任何 HTML 代码 -- 这应该是主题函数的任务。
  *
- * Starting with the first example, function 'theming_example_page()':
- * the output is put into an array $content which is then fed to a theming
- * function 'theme_theming_example_page()' which loops over the content,
- * wrapping it in html in the process.
+ * 在即将开始的第一个例子中，函数 'theming_example_page()' 输出的是一个 $content
+ * 数组 ，而这个数组会传递给一个主题函数：'theme_theming_example_page()'，这个函数会
+ * 遍历这一数组，用 HTML 对其进行包装。
  *
- * In order to get function 'theme_theming_example_page()' recognized it needs
- * to be registered with the module theme register function of the
- * type 'hook_theme'.
+ * 为了让函数 'theme_theming_example_page()' 能够被正确识别，需要在模块的主题注册函数
+ * hook_theme 中进行注册。
  *
- * function 'theming_example_theme()' does this for this module.
- * for details of what can be done in this hook see the link to api.drupal.org
+ * 函数 'theming_example_theme()' 完成了这一任务。要获取这一钩子的详细信息，可以参考
+ * api.drupal.org。
  *
- * The functions 'theming_example_list_page()' and theming_example_order_form()
- * work in the same way.
+ * 函数 'theming_example_list_page()' 以及 theming_example_order_form() 也用同样的
+ * 方式生效。
  *
- * In 'theme_theming_example_list_page()' the content is themed as an
- * ordered list and given a class attribute 'theming_example_mylist' which
- * is defined in theming_example.css
+ * 在 'theme_theming_example_list_page()' 中，内容被主题输出为一个顺序列表，并使用了
+ * theming_example.css 中的类 'theming_example_mylist' 进行修饰。
  *
- * In function 'theme_theming_example_order_form()' the title is loaded into a
- * temporary variable '$title', deleted from the $form array and output
- * wrapped in html. The rest of the form is wrapped in a div using '#prefix'
- * and '#suffix'
+ * 在函数 'theme_theming_example_order_form()' 中，标题被装入一个临时变量 '$title'，
+ * 然后从 $form 数组中删除，并输出 html 的封装结果；然后使用 '#prefix' 和
+ * '#suffix' 的方式，将Form 的剩余内容包入一个 div 之中。
  *
- * The theming functions can be copied to a theme's template.php, renaming
- * appropriately, so if you theme is called 'mytheme' you would copy
- * function 'theme_theming_example_page()'
- * to
- * function 'mytheme_theming_example_page()' in template.php and it will be
- * used instead of the original.
+ * 主题函数可以被拷贝到一个主题的 template.php 中，进行相应的重命名进行使用。
+ * 加入你的主题叫做 'mytheme' ，函数 'theme_theming_example_page()' 拷贝到
+ * template.php 之后，就应该命名为 'mytheme_theming_example_page()' ，这样就可以代替
+ * 原来的函数进行工作了。
  *
- * The fourth example shows the use of a template file
- * 'theming_example_text_form.tpl.php'
- * This file can be copied to a theme's folder and it will be used instead.
+ * 第四个例子显示了应用主题文件 'theming_example_text_form.tpl.php' 的方法。
+ * 这个文件可以拷贝到主题文件夹中使用。
  *
- * This example also shows what can be done using Drupal's
- * template_preprocess_HOOK method. In this case it modifies the output so
- * that a themer can output the whole form or gain control over some of its
- * parts in the template file.
+ * 这个例子还展示了 template_preprocess_HOOK 这一钩子的功能。 本例中他修改了输出内容，
+ * 让主题开发者能够在主题文件中输出整个 form 或者在模板文件中控制其中某些部分。
  */
 
 /**
  * Implements hook_menu().
  *
- * The @link menu_example.module Menu Example @endlink provides extensive
- * examples for hook_menu().
+ *  @link menu_example.module Menu Example @endlink 提供了 Menu Hook 的更多信息。
  */
 function theming_example_menu() {
   $items['examples/theming_example'] = array(
@@ -107,18 +93,17 @@ function theming_example_menu() {
 /**
  * Implements hook_theme().
  *
- * Defines the theming capabilities provided by this module.
+ * 定义本模块的渲染能力
  */
 function theming_example_theme() {
   return array(
     'theming_example_content_array' => array(
-      // We use 'render element' when the item to be passed is a self-describing
-      // render array (it will have #theme_wrappers)
+      // 我们在这里用了 'render element' 的形式进行数据的传递，这是一个自描述的渲染数
+      //组（其中包含了 #theme_wrappers）。
       'render element' => 'element',
     ),
     'theming_example_list' => array(
-      // We use 'variables' when the item to be passed is an array whose
-      // structure must be described here.
+      // 这里我们用 'variables' 的方式进行数据传递，这一形式必须描述详细结构。
       'variables' => array(
         'title' => NULL,
         'items' => NULL,
@@ -129,28 +114,24 @@ function theming_example_theme() {
     ),
     'theming_example_text_form'  => array(
       'render element' => 'form',
-      // In this one the rendering will be done by a template file
-      // (theming-example-text-form.tpl.php) instead of being rendered by a
-      // function. Note the use of dashes to separate words in place of
-      // underscores. The template file's extension is also left out so that
-      // it may be determined automatically depending on the template engine
-      // the site is using.
+      // 在这里，不再使用函数，而是用一个模板文件（theming-example-text-form.tpl.php）
+      // 来进行渲染。注意这里用连字符替代了下划线。模板文件的扩展名也被去掉，模板系统会
+      // 根据当前引擎来决定合适的扩展名。
       'template' => 'theming-example-text-form',
     ),
   );
 }
 /**
- * Initial landing page explaining the use of the module.
+ * 模块的初始页面，介绍模块的使用。
  *
- * We create a render array and specify the theme to be used through the use
- * of #theme_wrappers. With all output, we aim to leave the content as a
- * render array just as long as possible, so that other modules (or the theme)
- * can alter it.
+ * 我们创建了一个渲染数组，并用 #theme_wrappers 指定了要使用的主题。建议所有的输出尽量
+ * 使用渲染数组的方式，这样其他的模块或者主题可以对其进行变更。
  *
  * @see render_example.module
  * @see form_example_elements.inc
  */
 function theming_example_page() {
+  $content['#children'] = array();
   $content[] = t('Some examples of pages and forms that are run through theme functions.');
   $content[] = l(t('Simple page with a list'), 'examples/theming_example/theming_example_list_page');
   $content[] = l(t('Simple form 1'), 'examples/theming_example/theming_example_select_form');
@@ -160,13 +141,12 @@ function theming_example_page() {
 }
 
 /**
- * The list page callback.
+ * 列表页面回调。
  *
- * An example page where the output is supplied as an array which is themed
- * into a list and styled with css.
+ * 这一页面用数组的方式进行输出，并被主题渲染为一个列表，并用 CSS 进行样式上的修饰。
  *
- * In this case we'll use the core-provided theme_item_list as a #theme_wrapper.
- * Any theme need only override theme_item_list to change the behavior.
+ * 在本例中，我们会用核心提供的 theme_item_list 作为 #theme_wrapper。所有的主题只需要
+ * 覆盖 theme_item_list 就可以改变其输出行为。
  */
 function theming_example_list_page() {
   $items = array(
@@ -176,22 +156,24 @@ function theming_example_list_page() {
     t('Fourth item'),
   );
 
-  // First we'll create a render array that simply uses theme_item_list.
+  // 首先我们要使用 theme_item_list 创建一个渲染数组。
   $title = t("A list returned to be rendered using theme('item_list')");
   $build['render_version'] = array(
-    // We use #theme here instead of #theme_wrappers because theme_item_list()
-    // is the classic type of theme function that does not just assume a
-    // render array, but instead has its own properties (#type, #title, #items).
+
+    // 这里使用 #theme 代替了 #theme_wrappers， 原因是 theme_item_list() 这一主题函
+    // 数，不仅需要输入一个渲染数组，而且还有自己的属性（#type, #title, #items）。
+    //
     '#theme' => 'item_list',
-    // '#type' => 'ul',  // The default type is 'ul'
+    // '#type' => 'ul',  // 缺省类型是 'ul'
     // We can easily make sure that a css or js file is present using #attached.
+    // 我们可以轻易的用 #attached 标识一个 css 或者 js 文件。
     '#attached' => array('css' => array(drupal_get_path('module', 'theming_example') . '/theming_example.css')),
     '#title' => $title,
     '#items' => $items,
     '#attributes' => array('class' => array('render-version-list')),
   );
 
-  // Now we'll create a render array which uses our own list formatter,
+  // 现在我们要利用我们自己的列表格式器来创建一个渲染数组——
   // theme('theming_example_list').
   $title = t("The same list rendered by theme('theming_example_list')");
   $build['our_theme_function'] = array(
@@ -205,10 +187,8 @@ function theming_example_list_page() {
 
 
 /**
- * A simple form that displays a select box and submit button.
- *
- * This form will be be themed by the 'theming_example_select_form' theme
- * handler.
+ * 一个简单的显示选择框和提交按钮的 Form。
+ * 这一 Form 会被 'theming_example_select_form' 渲染。
  */
 function theming_example_select_form($form, &$form_state) {
   $options = array(
@@ -231,22 +211,22 @@ function theming_example_select_form($form, &$form_state) {
 }
 
 /**
- * Submit handler for the select form.
+ * Select Form 的提交处理。
  *
  * @param array $form
- *   Form API form array.
+ *   Form API 的 Form 数组。
  * @param array $form_state
- *   Form API form state array.
+ *   Form API 的 Form State 数组。
  */
 function theming_example_select_form_submit($form, &$form_state) {
   drupal_set_message(t('You chose %input', array('%input' => $form_state['values']['choice'])));
 }
 
 /**
- * A simple form that displays a textfield and submit button.
+ * 一个简单的 Form，带有一个文本字段以及一个提交按钮。
  *
- * This form will be rendered by theme('form') (theme_form() by default)
- * because we do not provide a theme function for it here.
+ * 这个 Form 会被 theme('form') 渲染（缺省是 theme_form()），这是因为我们没有为他提
+ * 供主题函数。
  */
 function theming_example_text_form($form, &$form_state) {
   $form['text'] = array(
@@ -262,12 +242,12 @@ function theming_example_text_form($form, &$form_state) {
 }
 
 /**
- * Submit handler for the text form.
+ * Text Form 的提交处理。
  *
  * @param array $form
- *   Form API form array.
+ *   Form API 的 Form 数组。
  * @param array $form_state
- *   Form API form state array.
+ *   Form API 的 Form State 数组。
  */
 function theming_example_text_form_submit($form, &$form_state) {
   drupal_set_message(t('You entered %input', array('%input' => $form_state['values']['text'])));
@@ -275,21 +255,20 @@ function theming_example_text_form_submit($form, &$form_state) {
 
 
 /**
- * Theme a simple content array.
+ * 渲染一个简单的渲染数组。
  *
- * This theme function uses the newer recommended format where a single
- * render array is provided to the theme function.
+ * 这个主题函数使用一个新的推荐的格式，把渲染函数作为参数提供给主题函数。
  */
 function theme_theming_example_content_array($variables) {
   $element = $variables['element'];
   $output = '';
   foreach (element_children($element) as $count) {
     if (!$count) {
-      // The first paragraph is bolded.
+      // 第一段加粗。
       $output .= '<p><strong>' . $element[$count] . '</strong></p>';
     }
     else {
-      // Following paragraphs are just output as routine paragraphs.
+      // 其他的仅输出简单的段落。
       $output .= '<p>' . $element[$count] . '</p>';
     }
   }
@@ -297,10 +276,10 @@ function theme_theming_example_content_array($variables) {
 }
 
 /**
- * Theming a simple list.
+ * 渲染一个简单列表。
  *
- * This is just a simple wrapper around theme('item_list') but it's worth
- * showing how a custom theme function can be implemented.
+ * 这只是在 theme('item_list') 之外简单的包装。不过也很好的展示了如何实现一个定制的
+ * 主题函数。
  *
  * @see theme_item_list()
  */
@@ -308,10 +287,9 @@ function theme_theming_example_list($variables) {
   $title = $variables['title'];
   $items = $variables['items'];
 
-  // Add the title to the list theme and
-  // state the list type. This defaults to 'ul'.
-  // Add a css class so that you can modify the list styling.
-  // We'll just call theme('item_list') to render.
+  // 把标题添加到列表渲染结果，并指明列表类型，缺省类型是 'ul'。
+  // 添加一个 css 类，这样就可以修改列表的样式了。
+  // 我们只是调用 theme('item_list') 进行渲染。
   $variables = array(
     'items' => $items,
     'title' => $title,
@@ -323,15 +301,13 @@ function theme_theming_example_list($variables) {
 }
 
 /**
- * Theming a simple form.
+ * 渲染一个简单 Form。
  *
- * Since our form is named theming_example_select_form(), the default
- * #theme function applied to is will be 'theming_example_select_form'
- * if it exists. The form could also have specified a different
- * #theme.
+ * 由于我们的 Form 命名为 theming_example_select_form()，缺省的 #theme 函数
+ * 就是 theme_theming_example_select_form。 Form 也可以指定一个不同的 #theme。
  *
- * Here we collect the title, theme it manually and
- * empty the form title. We also wrap the form in a div.
+ * 这里我们选择标题，手动渲染，并去掉 Form 自己的 Title。
+ * 最后用 div 封装 Form 的其余部分。
  */
 function theme_theming_example_select_form($variables) {
   $form = $variables['form'];
@@ -347,14 +323,13 @@ function theme_theming_example_select_form($variables) {
 /**
  * Implements template_preprocess().
  *
- * We prepare variables for use inside the theming-example-text-form.tpl.php
- * template file.
+ * 我们准备了变量，用于 theming-example-text-form.tpl.php 这个模板文件。
  *
- * In this example, we create a couple new variables, 'text_form' and
- * 'text_form_content', that clean up the form output.  Drupal will turn the
- * array keys in the $variables array into variables for use in the template.
+ * 在这个例子中，我们创建了两个新变量，'text_form' 以及 'text_form_content'，他们
+ * 清空了 form 的输出。Drupal 会把 $variables 数组中的键转换为变量，以便在模板中使用。
  *
- * So $variables['text_form'] becomes available as $text_form in the template.
+ *
+ * 所以 $variables['text_form'] 在模板中就会以 $text_form 这一变量的身份出现。
  *
  * @see theming-example-text-form.tpl.php
  */
@@ -362,10 +337,9 @@ function template_preprocess_theming_example_text_form(&$variables) {
   $variables['text_form_content'] = array();
   $text_form_hidden = array();
 
-  // Each form element is rendered and saved as a key in $text_form_content, to
-  // give the themer the power to print each element independently in the
-  // template file.  Hidden form elements have no value in the theme, so they
-  // are grouped into a single element.
+  // 每个 Form 元素都被渲染并保存为 $text_form_content 中的一个键，
+  // 这样主题开发者就可以在模板文件中独立输出每一个元素。
+  // Hidden 元素没有值，所以被分组到一个单独的元素中。
   foreach (element_children($variables['form']) as $key) {
     $type = $variables['form'][$key]['#type'];
     if ($type == 'hidden' || $type == 'token') {
@@ -377,8 +351,7 @@ function template_preprocess_theming_example_text_form(&$variables) {
   }
   $variables['text_form_content']['hidden'] = implode($text_form_hidden);
 
-  // The entire form is then saved in the $text_form variable, to make it easy
-  // for the themer to print the whole form.
+  // 整个 Form 被保存在 $text_form 变量中，让主题开发者可以简单的输出整个 Form。
   $variables['text_form'] = implode($variables['text_form_content']);
 }
 /**

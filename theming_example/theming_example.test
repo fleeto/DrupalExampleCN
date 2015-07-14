@@ -1,11 +1,11 @@
 <?php
 /**
  * @file
- * Simpletest case for theming_example module.
+ * theming_example 模块的测试用例。
  */
 
 /**
- * Functional tests for the theming example module.
+ * theming example 模块的功能测试。
  *
  * @ingroup theming_example
  */
@@ -26,23 +26,22 @@ class ThemingExampleTestCase extends DrupalWebTestCase {
    * {@inheritdoc}
    */
   public function setUp() {
-    // Enable the module.
+    // 启用模块。
     parent::setUp('theming_example');
   }
 
   /**
-   * Verify the functionality of the example module.
+   * 检查示例模块的功能。
    */
   public function testThemingPage() {
-    // No need to login for this test.
-    // Check that the main page has been themed (first line with <b>) and has
-    // content.
+
+    // 这个测试无需登录。
+    // 检查主页是否被渲染（第一行有<b>），是否有内容。
     $this->drupalGet('examples/theming_example');
     $this->assertRaw('<strong>Some examples of pages');
     $this->assertRaw('examples/theming_example/theming_example_select_form">Simple form 1</a>');
 
-    // Visit the list demonstration page and check that css gets loaded
-    // and do some spot checks on how the two lists were themed.
+    // 浏览列表演示页面，检查 css 是否载入，做一些针对两个列表渲染的检查。
     $this->drupalGet('examples/theming_example/theming_example_list_page');
     $this->assertPattern('/@import.*theming_example.css/');
     $first_ul = $this->xpath('//ul[contains(@class,"render-version-list")]');
@@ -50,17 +49,17 @@ class ThemingExampleTestCase extends DrupalWebTestCase {
     $second_ul = $this->xpath('//ol[contains(@class,"theming-example-list")]');
     $this->assertTrue($second_ul[0]->li[1] == 'Second item');
 
-    // Visit the select form page to do spot checks.
+    // 浏览选择 Form 页面，做检查。
     $this->drupalGet('examples/theming_example/theming_example_select_form');
-    // We did explicit theming to accomplish the below...
+    // 我们的渲染应该能够通过下面的检查。
     $this->assertRaw('<strong>Choose which ordering you want</strong>');
     $this->assertRaw('<div class="container-inline"><div class="form-item form-type-select form-item-choice">');
     $this->assertNoPattern('/@import.*theming_example.css/');
 
-    // Visit the text form page and do spot checks.
+    // 浏览 文本 Form 页面，做检查。
     $this->drupalGet('examples/theming_example/theming_example_text_form');
     $this->assertText('Please input something!');
-    // If it were themed normally there would be a div wrapper in our pattern.
+    // 检查 div 包装的内容。
     $this->assertPattern('%</div>\s*<input +type="submit"%');
   }
 }
