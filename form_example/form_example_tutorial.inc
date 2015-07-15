@@ -33,7 +33,7 @@ function form_example_tutorial() {
 }
 
 /**
- * 实例1.
+ * 示例 1。
  *
  * 第一个Form例子来自于
  * @link Form教学手册。 http://drupal.org/node/717722  @endlink
@@ -61,7 +61,7 @@ function form_example_tutorial_1($form, &$form_state) {
 }
 
 /**
- * 第二个例子，一个带有提交按钮的基础窗体。
+ * 示例 2：一个带有提交按钮的基础窗体。
  *
  * @see http://drupal.org/node/717726
  * @ingroup form_example
@@ -87,12 +87,10 @@ function form_example_tutorial_2($form, &$form_state) {
 
 /**
  *
- * 第三个例子：一个带有字段集（fieldset）的基础窗体。
- *
+ * 示例 3：一个带有字段集（fieldset）的基础窗体。
  *
  * 我们声明了一个字段集元素，并把两个文本字段置入其中，其中一个是姓氏，一个是名字。
  * 字段集用于组织具有相关性的内容。
- *
  *
  * 下面的代码，你会注意到我们把姓氏和名字两个字段放到了$form['name']的下级。
  * 对Form API来说，这种赋值就意味着把这两个字段放入 $form['name'] 这个字段集中。
@@ -126,7 +124,7 @@ function form_example_tutorial_3($form, &$form_state) {
 }
 
 /**
- * Example 4: Basic form with required fields.
+ * 示例 4：带有必填字段的简单 Form。
  *
  * @ingroup form_example
  */
@@ -211,7 +209,7 @@ function form_example_tutorial_5($form, &$form_state) {
 
 /**
  *
- * 实例 6：一个带有校验处理的基础Form。
+ * 示例 6：一个带有校验处理的基础Form。
  *
  * 来自于 http://drupal.org/node/717736
  * @see form_example_tutorial_6_validate()
@@ -290,7 +288,7 @@ function form_example_tutorial_6_validate($form, &$form_state) {
 
 /**
  *
- * 第七个例子，提交处理。
+ * 示例 7：提交处理。
  *
  * 来自于手册：
  * http://drupal.org/node/717740
@@ -339,7 +337,7 @@ function form_example_tutorial_7($form, &$form_state) {
 
 
 /**
- * form_example_tutorial_7()的验证函数。
+ * form_example_tutorial_7() 的验证函数。
  *
  * @ingroup form_example
  */
@@ -352,9 +350,8 @@ function form_example_tutorial_7_validate($form, &$form_state) {
 
 /**
  *
- * form_example_tutorial_7()的提交函数。
+ * form_example_tutorial_7() 的提交函数。
  *
-
  * 为窗体添加一个提交处理函数，用来向屏幕输出一个成功结束的消息。
  *
  * @ingroup form_example
@@ -371,7 +368,7 @@ function form_example_tutorial_7_submit($form, &$form_state) {
 
 /**
  *
- * 第八个例子：一个简单的，带有前进和后退按钮的多步骤窗体。
+ * 示例 8：一个简单的，带有前进和后退按钮的多步骤窗体。
  *
  * 手册: http://drupal.org/node/717750.
  *
@@ -438,7 +435,7 @@ function form_example_tutorial_8($form, &$form_state) {
 }
 
 /**
- * form_example_tutorial_8()中的第二页.
+ * form_example_tutorial_8() 中的第二页.
  *
  * @ingroup form_example
  * @param $form
@@ -490,7 +487,7 @@ function form_example_tutorial_8_next_validate($form, &$form_state) {
 
 /**
  *
- * form_example_tutorial_8()的“下一步”按钮的提交处理。
+ * form_example_tutorial_8() 的“下一步”按钮的提交处理。
  *
  * 从第一页抓取内容并保存起来，以便最终提交时使用。
  *
@@ -665,8 +662,8 @@ function form_example_tutorial_9($form, &$form_state) {
 }
 
 /**
- * form_example_tutorial_9()中"加入一个名字"按钮的提交处理。
- * $form_state['num_names']会通知Form创建函数，需要创建多少个fieldset。
+ * form_example_tutorial_9() 中"加入一个名字"按钮的提交处理。
+ * $form_state['num_names'] 会通知Form创建函数，需要创建多少个fieldset。
  * 所以这里我们给他加一。
  *
  * 所有的$form_state元素都是持久的，所以不需要用什么特别的键，
@@ -737,7 +734,7 @@ function form_example_tutorial_9_submit($form, &$form_state) {
 }
 
 /**
- * 示例10，一个带有文件字段的Form。
+ * 示例10：一个带有文件字段的Form。
  *
  * 这个实例让用户可以上传一个文件到Drupal，文件会被存储到服务器，并在数据库中留下引用记录。
  *
@@ -795,7 +792,7 @@ function form_example_tutorial_10_validate($form, &$form_state) {
 }
 
 /**
- * form_example_tutorial_10的提交处理。
+ * form_example_tutorial_10 的提交处理。
  *
  * @ingroup form_example
  */
@@ -812,7 +809,7 @@ function form_example_tutorial_10_submit($form, &$form_state) {
 }
 
 /**
- * 实例11：添加一个确认Form。
+ * 示例11：添加一个确认Form。
  *
  * 这个例子生成一个简单的Form，当提交时，会把用户重定向到一个利用confirm_form函数
  * 生成的确认Form去。
@@ -843,7 +840,7 @@ function form_example_tutorial_11($form, &$form_state) {
 }
 
 /**
- * form_example_tutorial_11()的提交处理。
+ * form_example_tutorial_11() 的提交处理。
  *
  * 为这个Form添加一个提交处理，用来把用户重定向到确认页面。
  *
@@ -856,27 +853,26 @@ function form_example_tutorial_11_submit($form, &$form_state) {
 }
 
 /**
- * 示例11，一个confirm_form()生成的form。
- * 这个函数利用confirm_form()生成一个确认Form。如果确认则生成一个Drupal信息进行显示。
- *
+ * 示例11，一个 confirm_form() 生成的form。
+ * 这个函数利用 confirm_form() 生成一个确认 Form。
+ * 如果确认则生成一个 Drupal 信息进行显示。
  *
  * @param string $name
- *   用urlencode处理过的name。
+ *   用 urlencode 处理过的 name。
  *
  * @see form_example_tutorial_11_confirm_name_submit()
  *
  * @ingroup form_example
  */
 function form_example_tutorial_11_confirm_name($form, $form_state, $name) {
-  // confirm_form() returns a complete form array for confirming an action.
   // confirm_form() 返回一个完整的Form，用于确认一个动作。
   // 它具有7个参数：$form, $form, $question, $path, $description, $yes, $no, 以及
   // $name
-  // - $form: 要添加到Form中的额外元素，会在提交处理中用到。
+  // - $form: 要添加到 Form 中的额外元素，会在提交处理中用到。
   // - $question: 确认页标题，用于提示用户要确认的内容。
   // - $path: 如果用户选择取消，页面转向的目标。
   // - $description = NULL: 额外的显示信息。
-  // - $yes = NULL: 确认按钮的文本，缺省为t('Confirm')。
+  // - $yes = NULL: 确认按钮的文本，缺省为 t('Confirm')。
   // - $no = NULL: 取消按钮的文本，缺省为 t('Cancel')。
   // - $name = 'confirm': 用于引用确认项的内部名称。
 
@@ -923,7 +919,7 @@ function form_example_tutorial_11_confirm_name($form, $form_state, $name) {
 }
 
 /**
- * form_example_tutorial_11_confirm_form()的提交函数。
+ * form_example_tutorial_11_confirm_form() 的提交函数。
  *
  * 为确认form添加一个提交处理。如果得到了确认，我们将显示一个成功信息。
  *
