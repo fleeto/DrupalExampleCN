@@ -1,40 +1,32 @@
 <?php
 /**
  * @file
- * This is an example outlining how a module can make use of the new DBTNG
- * database API in Drupal 7.
+ * 这个实例用于简单介绍 Drupal 7 中新的 DBTNG 数据库 API。
  *
- * @todo Demonstrate transaction usage.
+ * @todo 演示事务.
  *
- * General documentation is available at
- * @link database Database abstraction layer documentation @endlink and
- * at @link http://drupal.org/node/310069 @endlink.
+ * 文档可以参看
+ * @link 数据抽象层 @endlink 以及
+ * @link http://drupal.org/node/310069 @endlink.
  */
 
 /**
  * @defgroup dbtng_example Example: Database (DBTNG)
  * @ingroup examples
  * @{
- * Database examples, including DBTNG.
+ * 包含 DBTNG 的数据库示例。
  *
- * 'DBTNG' means 'Database: The Next Generation.' Yes, Drupallers are nerds.
+ * 'DBTNG' 意思是 'Database: The Next Generation.' 下一代数据库。
  *
- * General documentation is available at
- * @link database.inc database abstraction layer documentation @endlink and
- * at @link http://drupal.org/node/310069 Database API @endlink.
+ * 这里的几个例子用来演示基本的数据库操作方法。
  *
- * The several examples here demonstrate basic database usage.
+ * 在 Drupal 6 中，更新或写入数据库记录推荐使用 drupal_write_record() 或 db_query()、
  *
- * In Drupal 6, the recommended method to save or update an entry in the
- * database was drupal_write_record() or db_query().
+ * Drupal 7 和以后的版本，INSERT, UPDATE 或者 DELETE 已经不再建议使用 db_query()，有
+ * 新的专用函数取而代之： db_insert()， db_update() 以及 db_delete()。（注意，
+ * drupal_write_record()也在淡出行列中）。
  *
- * In Drupal 7 and forward, the usage of db_query()
- * for INSERT, UPDATE, or DELETE is deprecated, because it is
- * database-dependent. Instead specific functions are provided to perform these
- * operations: db_insert(), db_update(), and db_delete() do the job now.
- * (Note that drupal_write_record() is also deprecated.)
- *
- * db_insert() example:
+ * db_insert() 实例:
  * @code
  *   // INSERT INTO {dbtng_example} (name, surname) VALUES('John, 'Doe')
  *   db_insert('dbtng_example')
@@ -42,7 +34,7 @@
  *     ->execute();
  * @endcode
  *
- * db_update() example:
+ * db_update() 实例:
  * @code
  *   // UPDATE {dbtng_example} SET name = 'Jane' WHERE name = 'John'
  *   db_update('dbtng_example')
@@ -51,7 +43,7 @@
  *     ->execute();
  * @endcode
  *
- * db_delete() example:
+ * db_delete() 实例:
  * @code
  *   // DELETE FROM {dbtng_example} WHERE name = 'Jane'
  *   db_delete('dbtng_example')
@@ -59,7 +51,7 @@
  *     ->execute();
  * @endcode
  *
- * See @link database Database Abstraction Layer @endlink
+ * See @link 数据抽象层 @endlink
  * @see db_insert()
  * @see db_update()
  * @see db_delete()
@@ -67,11 +59,11 @@
  */
 
 /**
- * Save an entry in the database.
+ * 在数据库中保存记录
  *
- * The underlying DBTNG function is db_insert().
+ * DBTNG 中使用 db_insert() 来完成这一操作。
  *
- * In Drupal 6, this would have been:
+ * Drupal 6 中会这样完成这一任务：
  * @code
  *   db_query(
  *     "INSERT INTO {dbtng_example} (name, surname, age)
@@ -82,13 +74,11 @@
  *   );
  * @endcode
  *
- * Exception handling is shown in this example. It could be simplified
- * without the try/catch blocks, but since an insert will throw an exception
- * and terminate your application if the exception is not handled, it is best
- * to employ try/catch.
+ * 例子中会演示异常处理的内容，虽然去掉 try/catch 块能让代码简单很多，但是插入过程如果抛
+ * 出未被捕获的异常，会中断应用的执行，所以最好还是使用 try/catch 来应对。
  *
  * @param array $entry
- *   An array containing all the fields of the database record.
+ *   一个包含所有字段的数组，用于表达数据库记录数据。
  *
  * @see db_insert()
  */
@@ -107,9 +97,9 @@ function dbtng_example_entry_insert($entry) {
 }
 
 /**
- * Update an entry in the database.
+ * 更新数库中的数据
  *
- * The former, deprecated techniques used db_query() or drupal_write_record():
+ * 以前使用的是 db_query() 或者 drupal_write_record()，这两种方式已经被弃用。
  * @code
  *  drupal_write_record('dbtng_example', $entry, $entry['pid']);
  * @endcode
@@ -124,13 +114,13 @@ function dbtng_example_entry_insert($entry) {
  * @endcode
  *
  * @param array $entry
- *   An array containing all the fields of the item to be updated.
+ *   一个包含被更新记录所有字段数据的数组。
  *
  * @see db_update()
  */
 function dbtng_example_entry_update($entry) {
   try {
-    // db_update()...->execute() returns the number of rows updated.
+    // db_update()...->execute() 会返回更新的数据条数。
     $count = db_update('dbtng_example')
               ->fields($entry)
               ->condition('pid', $entry['pid'])
@@ -144,17 +134,16 @@ function dbtng_example_entry_update($entry) {
 }
 
 /**
- * Delete an entry from the database.
+ * 从数据库中删除记录。
  *
- * The usage of db_query is deprecated except for static queries.
- * Formerly, a deletion might have been accomplished like this:
+ * db_query 已经不建议使用。
+ * 以前的数据库记录删除是这样的：
  * @code
  *  db_query("DELETE FROM {dbtng_example} WHERE pid = %d", $entry['pid]);
  * @endcode
  *
  * @param array $entry
- *   An array containing at least the person identifier 'pid' element of the
- *   entry to delete.
+ *   一个包含数据库条目的数组，其中的值至少要包含 pid 这一主键。
  *
  * @see db_delete()
  */
@@ -167,25 +156,22 @@ function dbtng_example_entry_delete($entry) {
 
 
 /**
- * Read from the database using a filter array.
+ * 利用一个过滤数组来从数据库中进行读取。
  *
- * In Drupal 6, the standard function to perform reads was db_query(), and
- * for static queries, it still is.
- *
- * db_query() used an SQL query with placeholders and arguments as parameters.
+ * 在 Drupal 6 中，标准的读函数以及静态查询函数都是使用 db_query()。
+ * db_query() 使用一个带有占位符和参数数组的 SQL 进行查询。
  *
  * @code
- *  // Old way
+ *  // 老式方法
  *  $query = "SELECT * FROM {dbtng_example} n WHERE n.uid = %d AND name = '%s'";
  *  $result = db_query($query, $uid, $name);
  * @endcode
  *
- * Drupal 7 DBTNG provides an abstracted interface that will work with a wide
- * variety of database engines.
+ * Drupal 7 DBTNG 提供了一个抽象接口，能够适应更多的数据库引擎。
  *
- * db_query() is deprecated except when doing a static query. The following is
- * perfectly acceptable in Drupal 7. See
- * @link http://drupal.org/node/310072 the handbook page on static queries @endlink
+
+ * db_query() 只建议使用在静态查询上。下面的情况在 Drupal 7 中是可以接受的：
+ * @link http://drupal.org/node/310072 关于静态查询的内容 @endlink
  *
  * @code
  *   // SELECT * FROM {dbtng_example} WHERE uid = 0 AND name = 'John'
@@ -195,9 +181,9 @@ function dbtng_example_entry_delete($entry) {
  *   )->execute();
  * @endcode
  *
- * But for more dynamic queries, Drupal provides the db_select() API method, so
- * there are several ways to perform the same SQL query. See the
- * @link http://drupal.org/node/310075 handbook page on dynamic queries. @endlink
+ * 不过对于动态查询来说， Drupal 提供了 db_select() 这一 API，所以同一个 SQL 查询可能
+ * 有多个不同的方法来完成。参见
+ * @link http://drupal.org/node/310075 手册中的动态查询部分内容 @endlink
  *
  * @code
  *   // SELECT * FROM {dbtng_example} WHERE uid = 0 AND name = 'John'
@@ -208,7 +194,7 @@ function dbtng_example_entry_delete($entry) {
  *     ->execute();
  * @endcode
  *
- * Here is db_select with named placeholders:
+ * 这里展示了 db_select 中具名占位符的用法。
  * @code
  *   // SELECT * FROM {dbtng_example} WHERE uid = 0 AND name = 'John'
  *   $arguments = array(':name' => 'John', ':uid' => 0);
@@ -218,12 +204,9 @@ function dbtng_example_entry_delete($entry) {
  *     ->execute();
  * @endcode
  *
- * Conditions are stacked and evaluated as AND and OR depending on the type of
- * query. For more information, read the conditional queries handbook page at:
- * http://drupal.org/node/310086
- *
- * The condition argument is an 'equal' evaluation by default, but this can be
- * altered:
+ * 查询条件是一个链式方法，采用 AND 还是 OR 连接，取决于生成 condition 的函数
+ * 详情可以参考条件查询手册：http://drupal.org/node/310086
+ * 缺省情况下的逻辑操作符是等于：
  * @code
  *   // SELECT * FROM {dbtng_example} WHERE age > 18
  *   db_select('dbtng_example')
@@ -233,10 +216,10 @@ function dbtng_example_entry_delete($entry) {
  * @endcode
  *
  * @param array $entry
- *   An array containing all the fields used to search the entries in the table.
+ *   用于搜索的所有字段组合起来的一个数组。
  *
  * @return object
- *   An object containing the loaded entries if found.
+ *   如果找到记录，则以对象的形式返回。
  *
  * @see db_select()
  * @see db_query()
@@ -244,27 +227,25 @@ function dbtng_example_entry_delete($entry) {
  * @see http://drupal.org/node/310075
  */
 function dbtng_example_entry_load($entry = array()) {
-  // Read all fields from the dbtng_example table.
+  // 从 dbtng_example 表中读取所有字段。
   $select = db_select('dbtng_example', 'example');
   $select->fields('example');
 
-  // Add each field and value as a condition to this query.
+  // 把每个字段和值作为一个条件
   foreach ($entry as $field => $value) {
     $select->condition($field, $value);
   }
-  // Return the result in object format.
+  // 用对象形式返回结果
   return $select->execute()->fetchAll();
 }
 
 /**
- * Render a filtered list of entries in the database.
+ * 渲染一个数据库中输出的过滤后的记录列表。
  *
- * DBTNG also helps processing queries that return several rows, providing the
- * found objects in the same query execution call.
+ * DBTNG 能够以对象的方式输出结果，以此协助处理返回多行记录的查询。
  *
- * This function queries the database using a JOIN between users table and the
- * example entries, to provide the username that created the entry, and creates
- * a table with the results, processing each row.
+ * 下面函数中的查询使用了一个 JOIN，用来连接 users 和 example 表，目的是返回一个带有用
+ * 户名的结果，并根据结果逐行以表格的形式进行输出。
  *
  * SELECT
  *  e.pid as pid, e.name as name, e.surname as surname, e.age as age
@@ -283,34 +264,32 @@ function dbtng_example_advanced_list() {
   $output = '';
 
   $select = db_select('dbtng_example', 'e');
-  // Join the users table, so we can get the entry creator's username.
+
+  // 连接用户表，以便获取创建者的用户名。
   $select->join('users', 'u', 'e.uid = u.uid');
-  // Select these specific fields for the output.
+  // 选择需要输出的字段。
   $select->addField('e', 'pid');
   $select->addField('u', 'name', 'username');
   $select->addField('e', 'name');
   $select->addField('e', 'surname');
   $select->addField('e', 'age');
-  // Filter only persons named "John".
+  // 只要用户名是 John 的记录。
   $select->condition('e.name', 'John');
-  // Filter only persons older than 18 years.
+  // 只要18岁以上的。
   $select->condition('e.age', 18, '>');
-  // Make sure we only get items 0-49, for scalability reasons.
+  // 只获取 0-49 条记录。
   $select->range(0, 50);
 
-  // Now, loop all these entries and show them in a table. Note that there is no
-  // db_fetch_* object or array function being called here. Also note that the
-  // following line could have been written as
-  // $entries = $select->execute()->fetchAll() which would return each selected
-  // record as an object instead of an array.
+  // 现在开始循环所有记录，并展示在一个表格中。注意这里没有使用 db_fetch_*。另外
+  // 后面的  $entries = $select->execute()->fetchAll() 返回的是对象而不是数组。
   $entries = $select->execute()->fetchAll(PDO::FETCH_ASSOC);
   if (!empty($entries)) {
     $rows = array();
     foreach ($entries as $entry) {
-      // Sanitize the data before handing it off to the theme layer.
+      // 在提交给主题层进行展示之前，首先清理数据。
       $rows[] = array_map('check_plain', $entry);
     }
-    // Make a table for them.
+    // 输出表格。
     $header = array(t('Id'), t('Created by'), t('Name'), t('Surname'), t('Age'));
     $output .= theme('table', array('header' => $header, 'rows' => $rows));
   }
@@ -323,7 +302,7 @@ function dbtng_example_advanced_list() {
 /**
  * Implements hook_help().
  *
- * Show some help on each form provided by this module.
+ * 为本模块输出的 Form 提供一些帮助说明。
  */
 function dbtng_example_help($path) {
   $output = '';
@@ -351,7 +330,6 @@ function dbtng_example_help($path) {
 /**
  * Implements hook_menu().
  *
- * Set up calls to drupal_get_form() for all our example cases.
  */
 function dbtng_example_menu() {
   $items = array();
@@ -393,19 +371,19 @@ function dbtng_example_menu() {
 }
 
 /**
- * Render a list of entries in the database.
+ * 把数据库记录渲染为列表
  */
 function dbtng_example_list() {
   $output = '';
 
-  // Get all entries in the dbtng_example table.
+  // 获取 dbtng_example 数据表中的全部内容。
   if ($entries = dbtng_example_entry_load()) {
     $rows = array();
     foreach ($entries as $entry) {
-      // Sanitize the data before handing it off to the theme layer.
+      // 在提交给主题层进行展示之前，首先清理数据。
       $rows[] = array_map('check_plain', (array) $entry);
     }
-    // Make a table for them.
+    // 输出 table。
     $header = array(t('Id'), t('uid'), t('Name'), t('Surname'), t('Age'));
     $output .= theme('table', array('header' => $header, 'rows' => $rows));
   }
@@ -416,7 +394,7 @@ function dbtng_example_list() {
 }
 
 /**
- * Prepare a simple form to add an entry, with all the interesting fields.
+ * 一个用于新增记录的 Form。
  */
 function dbtng_example_form_add($form, &$form_state) {
   $form = array();
@@ -450,7 +428,7 @@ function dbtng_example_form_add($form, &$form_state) {
 }
 
 /**
- * Submit handler for 'add entry' form.
+ * 新建记录 Form 的提交处理。
  */
 function dbtng_example_form_add_submit($form, &$form_state) {
   global $user;
@@ -469,7 +447,7 @@ function dbtng_example_form_add_submit($form, &$form_state) {
 }
 
 /**
- * Sample UI to update a record.
+ * 跟新记录的界面。
  */
 function dbtng_example_form_update($form, &$form_state) {
   $form = array(
@@ -541,15 +519,14 @@ function dbtng_example_form_update($form, &$form_state) {
 }
 
 /**
- * AJAX callback handler for the pid select.
+ * pid 选择的 AJAX 回调。
  *
- * When the pid changes, populates the defaults from the database in the form.
+ * 在 pid 发生变化的时候，从数据库获取缺省值设置到 Form 里。
  */
 function dbtng_example_form_update_callback($form, $form_state) {
   $entry = $form_state['entries'][$form_state['values']['pid']];
-  // Setting the #value of items is the only way I was able to figure out
-  // to get replaced defaults on these items. #default_value will not do it
-  // and shouldn't.
+
+  // 设置 #value 是这个场景下唯一一个替换缺省值的方法。 #default_value 是无效的。
   foreach (array('name', 'surname', 'age') as $item) {
     $form[$item]['#value'] = $entry->$item;
   }
@@ -557,12 +534,12 @@ function dbtng_example_form_update_callback($form, $form_state) {
 }
 
 /**
- * Submit handler for 'update entry' form.
+ * 更新数据 Form 的提交处理。
  */
 function dbtng_example_form_update_submit($form, &$form_state) {
   global $user;
 
-  // Save the submitted entry.
+  // 保存提交的数据
   $entry = array(
     'pid' => $form_state['values']['pid'],
     'name' => $form_state['values']['name'],

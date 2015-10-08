@@ -7,20 +7,20 @@
 /**
  * Implements hook_install().
  *
- * In Drupal 7, there is no need to install schema using this hook, the schema
- * is already installed before this hook is called.
+ * 在 Drupal 7 中，不需要使用这个 hook 来安装 schema 了，在这个 hook 执行之前，这个
+ * schema 就已经安装了。
  *
- * We will create a default entry in the database.
+ * 我们将在数据库中创建一个缺省的值。
  *
- * Outside of the .install file we would use drupal_write_record() to populate
- * the database, but it cannot be used here, so we'll use db_insert().
+ * 在 .install 文件之外，我们要使用 drupal_write_record() 来操作数据库，但是这个函数不
+ * 能在这里使用，所以我们使用了 db_insert()。
  *
  * @see hook_install()
  *
  * @ingroup dbtng_example
  */
 function dbtng_example_install() {
-  // Add a default entry.
+  // 添加缺省值
   $fields = array(
     'name'    => 'John',
     'surname' => 'Doe',
@@ -30,7 +30,7 @@ function dbtng_example_install() {
     ->fields($fields)
     ->execute();
 
-  // Add another entry.
+  // 再添加一个
   $fields = array(
     'name'    => 'John',
     'surname' => 'Roe',
@@ -45,10 +45,9 @@ function dbtng_example_install() {
 /**
  * Implements hook_schema().
  *
- * Defines the database tables used by this module.
- * Remember that the easiest way to create the code for hook_schema is with
- * the @link http://drupal.org/project/schema schema module @endlink
- *
+ * 定义模块中使用的数据表。
+ * 最简单的创建 hook_schema 的方式就是使用 @link http://drupal.org/project/schema
+ * schema 模块 @endlink
  * @see hook_schema()
  * @ingroup dbtng_example
  */

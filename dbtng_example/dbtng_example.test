@@ -1,11 +1,11 @@
 <?php
 /**
  * @file
- * SimpleTests for dbtng_example module.
+ * dbtng_example 模块的测试案例。
  */
 
 /**
- * Default test case for the dbtng_example module.
+ * dbtng_example 模块的缺省测试案例。
  *
  * @ingroup dbtng_example
  */

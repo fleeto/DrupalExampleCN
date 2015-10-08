@@ -1,0 +1,175 @@
+# $Id$
+#
+# Chinese, Simplified translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  dbtng_example.module: n/a
+#  dbtng_example.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2015-10-08 20:01+0800\n"
+"PO-Revision-Date: 2015-10-08 21:11+0800\n"
+"Language-Team: Chinese, Simplified <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.8.5\n"
+"Last-Translator: \n"
+"Language: zh_CN\n"
+
+#: dbtng_example.module:93
+msgid "db_insert failed. Message = %message, query= %query"
+msgstr "db_insert 失败。 信息：%message，语句：%query"
+
+#: dbtng_example.module:130
+msgid "db_update failed. Message = %message, query= %query"
+msgstr "db_update 失败。 信息：%message，语句：%query"
+
+#: dbtng_example.module:293;387
+msgid "Id"
+msgstr "Id"
+
+#: dbtng_example.module:293
+msgid "Created by"
+msgstr "创建人"
+
+#: dbtng_example.module:293;387;408
+msgid "Name"
+msgstr "名字"
+
+#: dbtng_example.module:293;387;413
+msgid "Surname"
+msgstr "姓"
+
+#: dbtng_example.module:293;387;418
+msgid "Age"
+msgstr "年龄"
+
+#: dbtng_example.module:297
+msgid "No entries meet the filter criteria (Name = \"John\" and Age > 18)."
+msgstr "没有符合筛选条件的记录（ Name = “John” 且 Age > 18）。"
+
+#: dbtng_example.module:311
+msgid ""
+"Generate a list of all entries in the database. There is no filter in the "
+"query."
+msgstr "从数据库记录生成一个列表，这个查询没有过滤。"
+
+#: dbtng_example.module:315
+msgid "A more complex list of entries in the database."
+msgstr "一个复杂一些的数据库记录列表。"
+
+#: dbtng_example.module:316
+msgid ""
+"Only the entries with name = \"John\" and age older than 18 years are shown, "
+"the username of the person who created the entry is also shown."
+msgstr ""
+"只有名字是 “John” 并且年纪大于18岁的记录才会显示，并且会显示创建记录的用户"
+"名。"
+
+#: dbtng_example.module:320
+msgid "Demonstrates a database update operation."
+msgstr "演示数据库更新操作。"
+
+#: dbtng_example.module:324
+msgid "Add an entry to the dbtng_example table."
+msgstr "向 dbtng_example 表新增记录。"
+
+#: dbtng_example.module:387
+msgid "uid"
+msgstr "uid"
+
+#: dbtng_example.module:391
+msgid "No entries have been added yet."
+msgstr "没有增加任何记录。"
+
+#: dbtng_example.module:404
+msgid "Add a person entry"
+msgstr "增加一个人员记录"
+
+#: dbtng_example.module:420
+msgid ""
+"Values greater than 127 will cause an exception. Try it - it's a great "
+"example why exception handling is needed with DTBNG."
+msgstr ""
+"大于127的值会引发异常。可以尝试一下，这也是为什么在 DBTNG 中需要进行异常处理"
+"的原因。"
+
+#: dbtng_example.module:424
+msgid "Add"
+msgstr "新增"
+
+#: dbtng_example.module:445
+msgid "Created entry @entry"
+msgstr "新建记录 @entry"
+
+#: dbtng_example.module:462
+msgid "No entries exist in the table dbtng_example table."
+msgstr "在 dbtng_example 表中没有记录。"
+
+#: dbtng_example.module:468
+msgid "@pid: @name @surname (@age)"
+msgstr "@pid: @name @surname (@age)"
+
+#: dbtng_example.module:485
+msgid "Choose entry to update"
+msgstr "选择要编辑的记录"
+
+#: dbtng_example.module:495
+msgid "Updated first name"
+msgstr "更新名字"
+
+#: dbtng_example.module:502
+msgid "Updated last name"
+msgstr "更新姓氏"
+
+#: dbtng_example.module:508
+msgid "Updated age"
+msgstr "更新年龄"
+
+#: dbtng_example.module:511
+msgid "Values greater than 127 will cause an exception"
+msgstr "大于127的值会引发异常"
+
+#: dbtng_example.module:516
+msgid "Update"
+msgstr "更新"
+
+#: dbtng_example.module:551
+msgid "Updated entry @entry (@count row updated)"
+msgstr "更新记录 @entry （@count 行被更新）"
+
+#: dbtng_example.module:338
+msgid "DBTNG Example"
+msgstr "DBTNG 实例"
+
+#: dbtng_example.module:343
+msgid "List"
+msgstr "列表"
+
+#: dbtng_example.module:348
+msgid "Add entry"
+msgstr "新建记录"
+
+#: dbtng_example.module:356
+msgid "Update entry"
+msgstr "更新记录"
+
+#: dbtng_example.module:364
+msgid "Advanced list"
+msgstr "高级列表"
+
+#: dbtng_example.info:0
+msgid "DBTNG example"
+msgstr "DBTNG 实例"
+
+#: dbtng_example.info:0
+msgid "An example module showing how use the database API: DBTNG."
+msgstr "数据库 API：DBTNG 的示例模块。"
+
+#: dbtng_example.info:0
+msgid "Example modules"
+msgstr "Example 模块"
