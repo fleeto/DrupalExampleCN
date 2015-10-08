@@ -17,6 +17,7 @@
 * Batch Example
 * Cache Example
 * Cron Example
+* DBTNG Example
 * Entity Example
 * Form Example
 * Field Example
