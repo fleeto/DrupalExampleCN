@@ -1,45 +1,34 @@
 <?php
 /**
  * @file
- * Provides a demonstration session:// streamwrapper.
+ * 实例：用于处理 session:// 模式的 Stream Wrapper。
  *
- * This example is nearly fully functional, but has no known
- * practical use. It's an example and demonstration only.
+ * 这个例子是一个接近完整的实现，不过只是一个例子，还没有实际的应用。
  */
 
 /**
- * Example stream wrapper class to handle session:// streams.
+ * 实例：用于处理 session:// 模式的 Stream Wrapper。
  *
- * This is just an example, as it could have horrible results if much
- * information were placed in the $_SESSION variable. However, it does
- * demonstrate both the read and write implementation of a stream wrapper.
+ * 这是一个例子，如果在 $_SESSION 变量中存储太多东西，可能导致严重后果。这里用于演示
+ * 使用 Stream Wrapper 进行读写的实现。
  *
- * A "stream" is an important Unix concept for the reading and writing of
- * files and other devices. Reading or writing a "stream" just means that you
- * open some device, file, internet site, or whatever, and you don't have to
- * know at all what it is. All the functions that deal with it are the same.
- * You can read/write more from/to the stream, seek a position in the stream,
- * or anything else without the code that does it even knowing what kind
- * of device it is talking to. This Unix idea is extended into PHP's
- * mindset.
+ * “Stream” 是 Unix 世界中的一个重要概念，用于读写文件以及其他设备。对流进行读写，意味着
+ * 打开某些设备、文件、网站或者其他什么东西，而不需要知道具体实现细节。所有的相关函数都是
+ * 类似的，可以对流进行读写，在流中进行定位，以及其他一些操作，而无需得知其中的细节，甚至
+ * 不用知道具体的目标设备。现在这一概念也在 PHP 中得到了实现。
+ * "Stream Wrapper" 的用意是可任意扩展。经典案例就是PHP内置的 http:// 模式，可以用
+ * file_get_contents("http://drupal.org/projects") 这样类似文件操作的方式来访问
+ * 网站。而 Drupal 中添加了 public// 和 private:// 两个模式，还可以在模块中自行实现
+ * 其他模式。本例中就加入了 session:// 模式，用这一模式可以用文件的方式来读写
+ * $_SESSION['file_example']。
  *
- * The idea of "stream wrapper" is that this can be extended indefinitely.
- * The classic example is HTTP: With PHP you can do a
- * file_get_contents("http://drupal.org/projects") as if it were a file,
- * because the scheme "http" is supported natively in PHP. So Drupal adds
- * the public:// and private:// schemes, and contrib modules can add any
- * scheme they want to. This example adds the session:// scheme, which allows
- * reading and writing the $_SESSION['file_example'] key as if it were a file.
- *
- * Note that because this implementation uses simple PHP arrays ($_SESSION)
- * it is limited to string values, so binary files will not work correctly.
- * Only text files can be used.
- *
+ * 注意这个例子中的实现用的是简单的 PHP 数组，因此有个限制就是只能使用字符串的值，
+ * 二进制内容无法正常工作。
  * @ingroup file_example
  */
 class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
-   * Stream context resource.
+   * Stream 上下文。
    *
    * @var Resource
    */
@@ -47,40 +36,39 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
 
 
   /**
-   * Instance URI (stream).
+   * 实例的 URI (stream).
    *
-   * These streams will be references as 'session://example_target'
+   * 这个 Stream 使用 "session://example_target" 的模式来引用。
    *
    * @var String
    */
   protected $uri;
 
   /**
-   * The content of the stream.
+   * Stream 的内容
    *
-   * Since this trivial example just uses the $_SESSION variable, this is
-   * simply a reference to the contents of the related part of
-   * $_SESSION['file_example'].
+   * 例子中只是用了 $_SESSION 变量，这只是一个简单的对 $_SESSION['file_example']
+   * 的相关部分的引用。
    */
   protected $sessionContent;
 
   /**
-   * Pointer to where we are in a directory read.
+   * 一个用于指示当前目录的指针。
    */
   protected $directoryPointer;
 
   /**
-   * List of keys in a given directory.
+   * 指定目录中的键列表。
    */
   protected $directoryKeys;
 
   /**
-   * The pointer to the next read or write within the session variable.
+   * 指向 Session 中下一个读写目标的指针。
    */
   protected $streamPointer;
 
   /**
-   * Constructor method.
+   * 构造方法。
    */
   public function __construct() {
     $_SESSION['file_example']['.isadir.txt'] = TRUE;
@@ -103,8 +91,8 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * Implements getTarget().
    *
-   * The "target" is the portion of the URI to the right of the scheme.
-   * So in session://example/test.txt, the target is 'example/test.txt'.
+   * "target" 是 URI 中 scheme 的右边的部分，比如 session://example/test.txt中，
+   * target 就是 'example/test.txt'。
    */
   public function getTarget($uri = NULL) {
     if (!isset($uri)) {
@@ -113,8 +101,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
 
     list($scheme, $target) = explode('://', $uri, 2);
 
-    // Remove erroneous leading or trailing, forward-slashes and backslashes.
-    // In the session:// scheme, there is never a leading slash on the target.
+    // 从 session:// 模式中删除错误的斜线。
     return trim($target, '\/');
   }
 
@@ -123,8 +110,8 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
    */
   public static function getMimeType($uri, $mapping = NULL) {
     if (!isset($mapping)) {
-      // The default file map, defined in file.mimetypes.inc is quite big.
-      // We only load it when necessary.
+
+      // file.mimetypes.inc 中定义的缺省文件映射比较大，我们只在必要的时候载入。
       include_once DRUPAL_ROOT . '/includes/file.mimetypes.inc';
       $mapping = file_mimetype_mapping();
     }
@@ -132,13 +119,13 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
     $extension = '';
     $file_parts = explode('.', basename($uri));
 
-    // Remove the first part: a full filename should not match an extension.
+    // 移除文件名的第一段：主文件名不会是扩展名。
     array_shift($file_parts);
 
-    // Iterate over the file parts, trying to find a match.
-    // For my.awesome.image.jpeg, we try:
+    // 遍历文件名的每个部分来进行匹配：
+    // 例如 my.awesome.image.jpeg，我们会尝试：
     // - jpeg
-    // - image.jpeg, and
+    // - image.jpeg
     // - awesome.image.jpeg
     while ($additional_part = array_pop($file_parts)) {
       $extension = drupal_strtolower($additional_part . ($extension ? '.' . $extension : ''));
@@ -153,7 +140,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * Implements getDirectoryPath().
    *
-   * In this case there is no directory string, so return an empty string.
+   * 这里没有目录，所以返回空。
    */
   public function getDirectoryPath() {
     return '';
@@ -162,8 +149,8 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   /**
    * Overrides getExternalUrl().
    *
-   * We have set up a helper function and menu entry to provide access to this
-   * key via HTTP; normally it would be accessible some other way.
+   * 我们设置了一个辅助函数和菜单入口，通过 HTTP 进行访问；一般情况下应该提供一些其他途径
+   * 来访问。
    */
   public function getExternalUrl() {
     $path = $this->getLocalPath();
@@ -172,7 +159,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * We have no concept of chmod, so just return TRUE.
+   * 这个例子中没有权限，所以直接返回 TRUE。
    */
   public function chmod($mode) {
     return TRUE;
@@ -186,17 +173,14 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Returns the local path.
+   * 返回本地路径
    *
-   * Here we aren't doing anything but stashing the "file" in a key in the
-   * $_SESSION variable, so there's not much to do but to create a "path"
-   * which is really just a key in the $_SESSION variable. So something
-   * like 'session://one/two/three.txt' becomes
-   * $_SESSION['file_example']['one']['two']['three.txt'] and the actual path
-   * is "one/two/three.txt".
+   * 这里我们只是把 "file" 作为键保存在 $_SESSION 变量中，所以只需要创建一个虚拟的路径
+   * 这个路径实际上是 $_SESSION 变量的一个键。'session://one/two/three.txt' 会转换为
+   * $_SESSION['file_example']['one']['two']['three.txt'] 。
    *
    * @param string $uri
-   *   Optional URI, supplied when doing a move or rename.
+   *   URI，可选，用于移动或者重命名。
    */
   protected function getLocalPath($uri = NULL) {
     if (!isset($uri)) {
@@ -209,68 +193,70 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Opens a stream, as for fopen(), file_get_contents(), file_put_contents().
+   * 打开一个 Stream，为 fopen()，file_get_contents()，file_put_contents() 工作。
    *
    * @param string $uri
-   *   A string containing the URI to the file to open.
+   *   URI，其中包含了需要打开的文件描述。
    * @param string $mode
-   *   The file mode ("r", "wb" etc.).
+   *   打开方式 （"r", "wb" 之类）。
    * @param int $options
-   *   A bit mask of STREAM_USE_PATH and STREAM_REPORT_ERRORS.
+   *   STREAM_USE_PATH 和 STREAM_REPORT_ERRORS 组成的胃掩码。
    * @param string &$opened_path
-   *   A string containing the path actually opened.
+   *   实际打开的路径。
    *
    * @return bool
-   *   Returns TRUE if file was opened successfully. (Always returns TRUE).
+   *   如果成功打开，则返回 TRUE（这里总是 TRUE ）。
    *
    * @see http://php.net/manual/en/streamwrapper.stream-open.php
    */
   public function stream_open($uri, $mode, $options, &$opened_path) {
     $this->uri = $uri;
-    // We make $session_content a reference to the appropriate key in the
-    // $_SESSION variable. So if the local path were
-    // /example/test.txt it $session_content would now be a
-    // reference to $_SESSION['file_example']['example']['test.txt'].
+
+    // 我们把 $session_content 作为一个到 $_SESSION 变量的值的引用。
+    // 例如 /example/test.txt 就是
+    // $_SESSION['file_example']['example']['test.txt']的引用。
     $this->sessionContent = &$this->uri_to_session_key($uri);
 
-    // Reset the stream pointer since this is an open.
+    // 复位指针。
     $this->streamPointer = 0;
     return TRUE;
   }
 
   /**
-   * Return a reference to the correct $_SESSION key.
+   * 返回一个到正确的 $_SESSION 键的引用。
    *
    * @param string $uri
-   *   The uri: session://something
+   *    uri，例如 session://something
    * @param bool $create
-   *   If TRUE, create the key
+   *   如果是 TRUE 就创建这个键。
    *
    * @return array|bool
-   *   A reference to the array at the end of the key-path, or
-   *   FALSE if the path doesn't map to a key-path (and $create is FALSE).
+   *   一个到键路径最后一节的引用。如果该路径找不到对应的键路径，并且 $create 参数为
+   *   FALSE, 则返回 FALSE。
    */
   protected function &uri_to_session_key($uri, $create = TRUE) {
-    // Since our uri_to_session_key() method returns a reference, we
-    // have to set up a failure flag variable.
+    // 因为 uri_to_session_key() 方法返回的是一个引用，我们必须设置一个失败标记变量。
     $fail = FALSE;
     $path = $this->getLocalPath($uri);
-    $path_components = explode('/', $path);
-    // Set up a reference to the root session:// 'directory.'
+    if (strlen($path) == 0 )
+      $path_components = array();
+    else
+      $path_components = explode('/', $path);
+    // 设置一个到 session:// '根目录' 的引用。
     $var = &$_SESSION['file_example'];
-    // Handle case of just session://.
+    // 处理仅是一个 session:// 的情况
     if (count($path_components) < 1) {
       return $var;
     }
-    // Walk through the path components and create keys in $_SESSION,
-    // unless we're told not to create them.
+
+    // 除非说明不允许新建。
+    // 否则会遍历路径的各个部分，并在 $_SESSION 中创建相应的键。
     foreach ($path_components as $component) {
       if ($create || isset($var[$component])) {
         $var = &$var[$component];
       }
       else {
-        // This path doesn't exist as keys, either because the
-        // key doesn't exist, or because we're told not to create it.
+        // 不能存在该路径对应的键，也不允许创建。
         return $fail;
       }
     }
@@ -278,20 +264,19 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Support for flock().
+   * flock() 的支持
    *
-   * The $_SESSION variable has no locking capability, so return TRUE.
+   * $_SESSION 变量没有锁定机制，所以返回 TRUE。
    *
    * @param int $operation
-   *   One of the following:
-   *   - LOCK_SH to acquire a shared lock (reader).
-   *   - LOCK_EX to acquire an exclusive lock (writer).
-   *   - LOCK_UN to release a lock (shared or exclusive).
-   *   - LOCK_NB if you don't want flock() to block while locking (not
-   *     supported on Windows).
+   *   下面的某一个值：
+   *   - LOCK_SH 申请一个共享锁（读）。
+   *   - LOCK_EX 申请一个独占锁（写）。
+   *   - LOCK_UN 释放一个锁。
+   *   - LOCK_NB 以非阻塞方式执行（Windows 不支持）。
    *
    * @return bool
-   *   Always returns TRUE at the present time. (no support)
+   *   目前只会返回 TRUE （不支持锁操作）
    *
    * @see http://php.net/manual/en/streamwrapper.stream-lock.php
    */
@@ -300,13 +285,13 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Support for fread(), file_get_contents() etc.
+   * fread()，file_get_contents() 等的支持
    *
    * @param int $count
-   *   Maximum number of bytes to be read.
+   *   要读入的最大字节数。
    *
    * @return string
-   *   The string that was read, or FALSE in case of an error.
+   *   如果错误则返回 FALSE。
    *
    * @see http://php.net/manual/en/streamwrapper.stream-read.php
    */
@@ -324,19 +309,18 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Support for fwrite(), file_put_contents() etc.
+   * 对 fwrite(), file_put_contents() 等的支持.
    *
    * @param string $data
-   *   The string to be written.
+   *   要写入的内容。
    *
    * @return int
-   *   The number of bytes written (integer).
+   *   要写入的字节数。
    *
    * @see http://php.net/manual/en/streamwrapper.stream-write.php
    */
   public function stream_write($data) {
-    // Sanitize the data in a simple way since we're putting it into the
-    // session variable.
+    // 因为这些数据要写入会话变量，因此这里需要对内容进行一些简单的清理。
     $data = check_plain($data);
     $this->sessionContent = substr_replace($this->sessionContent, $data, $this->streamPointer);
     $this->streamPointer += drupal_strlen($data);
@@ -344,10 +328,10 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Support for feof().
+   * feof() 的支持。
    *
    * @return bool
-   *   TRUE if end-of-file has been reached.
+   *   如果到达尾端，则返回 TRUE。
    *
    * @see http://php.net/manual/en/streamwrapper.stream-eof.php
    */
@@ -356,15 +340,15 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Support for fseek().
+   * fseek() 支持.
    *
    * @param int $offset
-   *   The byte offset to got to.
+   *   前往的字节偏移量。
    * @param int $whence
-   *   SEEK_SET, SEEK_CUR, or SEEK_END.
+   *   SEEK_SET， SEEK_CUR， 或者 SEEK_END。
    *
    * @return bool
-   *   TRUE on success.
+   *   成功则返回 TRUE。
    *
    * @see http://php.net/manual/en/streamwrapper.stream-seek.php
    */
@@ -377,12 +361,12 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Support for fflush().
+   * fflush() 支持。
    *
    * @return bool
-   *   TRUE if data was successfully stored (or there was no data to store).
-   *   This always returns TRUE, as this example provides and needs no
-   *   flush support.
+
+   *   如果数据成功存储（或者没有需要存储的数据），则返回 TRUE。因为没有提供缓存支持，
+   *   这里只会返回 TRUE。
    *
    * @see http://php.net/manual/en/streamwrapper.stream-flush.php
    */
@@ -391,10 +375,10 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Support for ftell().
+   * ftell() 支持。
    *
    * @return int
-   *   The current offset in bytes from the beginning of file.
+   *   从头部开始计算的当前的字节偏移量。
    *
    * @see http://php.net/manual/en/streamwrapper.stream-tell.php
    */
@@ -403,11 +387,10 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Support for fstat().
+   * fstat() 支持。
    *
    * @return array
-   *   An array with file status, or FALSE in case of an error - see fstat()
-   *   for a description of this array.
+   *   一个包含文件状态的数组，如果出错则返回 FALSE，可参考 fstat() 函数来了解数组描述。
    *
    * @see http://php.net/manual/en/streamwrapper.stream-stat.php
    */
@@ -418,28 +401,28 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Support for fclose().
+   * fclose() 支持。
    *
    * @return bool
-   *   TRUE if stream was successfully closed.
+   *   如果成功关闭则返回 TRUE。
    *
    * @see http://php.net/manual/en/streamwrapper.stream-close.php
    */
   public function stream_close() {
     $this->streamPointer = 0;
-    // Unassign the reference.
+    // 清空引用。
     unset($this->sessionContent);
     return TRUE;
   }
 
   /**
-   * Support for unlink().
+   * unlink() 支持。
    *
    * @param string $uri
-   *   A string containing the uri to the resource to delete.
+   *   一个包含要删除 URI 的字符串。
    *
    * @return bool
-   *   TRUE if resource was successfully deleted.
+   *   如果成功删除则返回 TRUE。
    *
    * @see http://php.net/manual/en/streamwrapper.unlink.php
    */
@@ -451,23 +434,23 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
     foreach ($path_components as $component) {
       $unset .= '[\'' . $component . '\']';
     }
-    // TODO: Is there a better way to delete from an array?
-    // drupal_array_get_nested_value() doesn't work because it only returns
-    // a reference; unsetting a reference only unsets the reference.
+    // TODO: 有没有更好的从数组删除的方法？
+    // drupal_array_get_nested_value() 没用，是因为他返回的是引用，unset 引用只是
+    // 删除引用本身。
     eval("unset($unset);");
     return TRUE;
   }
 
   /**
-   * Support for rename().
+   * rename() 支持。
    *
    * @param string $from_uri
-   *   The uri to the file to rename.
+   *   要重命名的 URI
    * @param string $to_uri
-   *   The new uri for file.
+   *   新的 URI
    *
    * @return bool
-   *   TRUE if file was successfully renamed.
+   *   如果成功重命名，则返回 TRUE 。
    *
    * @see http://php.net/manual/en/streamwrapper.rename.php
    */
@@ -483,13 +466,13 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Gets the name of the directory from a given path.
+   * 从给定路径中获取目录名
    *
    * @param string $uri
-   *   A URI.
+   *   URI.
    *
    * @return string
-   *   A string containing the directory name.
+   *   目录名称的字符串。
    *
    * @see drupal_dirname()
    */
@@ -506,45 +489,45 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Support for mkdir().
+   * mkdir() 支持。
    *
    * @param string $uri
-   *   A string containing the URI to the directory to create.
+   *   一个代表将要创建目录的 URI.
    * @param int $mode
-   *   Permission flags - see mkdir().
+   *   权限标志 - 参看 mkdir()。
    * @param int $options
-   *   A bit mask of STREAM_REPORT_ERRORS and STREAM_MKDIR_RECURSIVE.
+   *   位掩码，STREAM_REPORT_ERRORS 以及 STREAM_MKDIR_RECURSIVE.
    *
    * @return bool
-   *   TRUE if directory was successfully created.
+   *   如果成功建立目录则返回 TRUE。
    *
    * @see http://php.net/manual/en/streamwrapper.mkdir.php
    */
   public function mkdir($uri, $mode, $options) {
-    // If this already exists, then we can't mkdir.
+    // 如果已经存在，则无法完成新建。
     if (is_dir($uri) || is_file($uri)) {
       return FALSE;
     }
 
-    // Create the key in $_SESSION;
+    // 在 $_SESSION 创建这个键；
     $this->uri_to_session_key($uri, TRUE);
 
-    // Place a magic file inside it to differentiate this from an empty file.
+    // 在目录中放置一个魔术文件，以跟空文件进行区分。
     $marker_uri = $uri . '/.isadir.txt';
     $this->uri_to_session_key($marker_uri, TRUE);
     return TRUE;
   }
 
   /**
-   * Support for rmdir().
+   * rmdir() 支持。
    *
    * @param string $uri
-   *   A string containing the URI to the directory to delete.
+   *   包含待删除目录的 URI。
    * @param int $options
-   *   A bit mask of STREAM_REPORT_ERRORS.
+   *   位掩码，STREAM_REPORT_ERRORS。
    *
    * @return bool
-   *   TRUE if directory was successfully removed.
+   *   如果成功删除，则返回 TRUE。
    *
    * @see http://php.net/manual/en/streamwrapper.rmdir.php
    */
@@ -556,7 +539,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
     foreach ($path_components as $component) {
       $unset .= '[\'' . $component . '\']';
     }
-    // TODO: I really don't like this eval.
+    // TODO: 我真的不喜欢 eval
     debug($unset, 'array element to be unset');
     eval("unset($unset);");
 
@@ -564,41 +547,43 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Support for stat().
+   * stat() 支持。
    *
-   * This important function goes back to the Unix way of doing things.
-   * In this example almost the entire stat array is irrelevant, but the
-   * mode is very important. It tells PHP whether we have a file or a
-   * directory and what the permissions are. All that is packed up in a
-   * bitmask. This is not normal PHP fodder.
+   * 这个函数在使用 Unix 方式的工作中非常重要。这个例子中的 stat 数组很古怪，但是 mode
+   * 是非常重要的。他用来告诉 PHP，是否存在某个文件或者目录，他有什么权限。跟 PHP 通常
+   * 的做法不太一样，这里所有的返回都是位掩码的方式。
    *
    * @param string $uri
-   *   A string containing the URI to get information about.
+   *   包含我们要获取信息的目标 URI
    * @param int $flags
-   *   A bit mask of STREAM_URL_STAT_LINK and STREAM_URL_STAT_QUIET.
+   *  位掩码，包括 STREAM_URL_STAT_LINK 和 STREAM_URL_STAT_QUIET.
    *
    * @return array|bool
-   *   An array with file status, or FALSE in case of an error - see fstat()
-   *   for a description of this array.
+   *   文件状态数组，如果出错则返回 FALSE - 在 fstat() 中可以看到这个数组的描述。
+   *
    *
    * @see http://php.net/manual/en/streamwrapper.url-stat.php
    */
   public function url_stat($uri, $flags) {
-    // Get a reference to the $_SESSION key for this URI.
+
+    // 根据 URI 获取 $_SESSION 键的引用。
     $key = $this->uri_to_session_key($uri, FALSE);
-    // Default to fail.
+
+
+    // 缺省设置失败。
     $return = FALSE;
     $mode = 0;
 
-    // We will call an array a directory and the root is always an array.
+    // 如果是一个数组，那么我们当他是个目录，根就是目录。
     if (is_array($key) && array_key_exists('.isadir.txt', $key)) {
-      // S_IFDIR means it's a directory.
+      // S_IFDIR 代表这是个目录。
       $mode = 0040000;
     }
     elseif ($key !== FALSE) {
-      // S_IFREG, means it's a file.
+      // S_IFREG 说明这是个文件。
       $mode = 0100000;
     }
+
 
     if ($mode) {
       $size = 0;
@@ -606,7 +591,7 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
         $size = drupal_strlen($key);
       }
 
-      // There are no protections on this, so all writable.
+      // 这里没什么写保护，所以是全部可写。
       $mode |= 0777;
       $return = array(
         'dev' => 0,
@@ -628,15 +613,15 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Support for opendir().
+   * opendir() 的支持。
    *
    * @param string $uri
-   *   A string containing the URI to the directory to open.
+   *   代表目标目录的 URI。
    * @param int $options
-   *   Whether or not to enforce safe_mode (0x04).
+   *   是否使用 safe_mode (0x04).
    *
    * @return bool
-   *   TRUE on success.
+   *   成功则返回 TRUE。
    *
    * @see http://php.net/manual/en/streamwrapper.dir-opendir.php
    */
@@ -646,8 +631,8 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
       return FALSE;
     }
 
-    // We grab the list of key names, flip it so that .isadir.txt can easily
-    // be removed, then flip it back so we can easily walk it as a list.
+    // 我们获取一个键名列表，然后用 array_flip 做反转，来移除 .isadir.txt。
+    // 然后就能够获取到列表了。
     $this->directoryKeys = array_flip(array_keys($var));
     unset($this->directoryKeys['.isadir.txt']);
     $this->directoryKeys = array_keys($this->directoryKeys);
@@ -656,10 +641,10 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Support for readdir().
+   * readdir() 支持。
    *
    * @return string|bool
-   *   The next filename, or FALSE if there are no more files in the directory.
+   *   下一个文件名, 如果没有下一个，则返回 FALSE。
    *
    * @see http://php.net/manual/en/streamwrapper.dir-readdir.php
    */
@@ -673,10 +658,10 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Support for rewinddir().
+   * rewinddir() 支持。
    *
    * @return bool
-   *   TRUE on success.
+   *   成功则返回 TRUE。
    *
    * @see http://php.net/manual/en/streamwrapper.dir-rewinddir.php
    */
@@ -685,10 +670,10 @@ class FileExampleSessionStreamWrapper implements DrupalStreamWrapperInterface {
   }
 
   /**
-   * Support for closedir().
+   * closedir() 支持。
    *
    * @return bool
-   *   TRUE on success.
+   *   成功则返回 TRUE。
    *
    * @see http://php.net/manual/en/streamwrapper.dir-closedir.php
    */

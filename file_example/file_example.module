@@ -1,29 +1,21 @@
 <?php
 /**
  * @file
- * Examples demonstrating the Drupal File API (and Stream Wrappers).
+ * 演示 Drupal 的文件 API，以及 Stream Wrappers。
  */
 
 /**
  * @defgroup file_example Example: Files
  * @ingroup examples
  * @{
- * Examples demonstrating the Drupal File API (and Stream Wrappers).
+ * 演示 Drupal 的文件 API，以及 Stream Wrappers。
  *
- * The File Example module is a part of the Examples for Developers Project
- * and provides various Drupal File API Examples. You can download and
- * experiment with this code at the
- * @link http://drupal.org/project/examples Examples for Developers project page. @endlink
- *
- * See @link http://drupal.org/node/555118 Drupal File API @endlink for handbook
- * documentation on the File API and
- * @link file File summary on api.drupal.org @endlink for the function summary.
  */
 
 /**
  * Implements hook_menu().
  *
- * Set up the URLs (menu entries) for the file examples.
+ * 为文件示例设置 URL 也就是 Menu 项。
  */
 function file_example_menu() {
   $items = array();
@@ -60,17 +52,16 @@ function file_example_permission() {
 }
 
 /**
- * A simple introduction to the workings of this module.
+ * 模块功能简介
  */
 function file_example_intro() {
   $markup = t('The file example module provides a form and code to demonstrate the Drupal 7 file api. Experiment with the form, and then look at the submit handlers in the code to understand the file api.');
   return array('#markup' => $markup);
 }
 /**
- * Form builder function.
+ * 创建 Form
  *
- * A simple form that allows creation of a file, managed or unmanaged. It
- * also allows reading/deleting a file and creation of a directory.
+ * 一个用于创建（受管理或非管理）文件的 Form。还能够读取/删除文件，以及创建目录。
  */
 function file_example_readwrite($form, &$form_state) {
   if (empty($_SESSION['file_example_default_file'])) {
@@ -182,23 +173,21 @@ function file_example_readwrite($form, &$form_state) {
 }
 
 /**
- * Submit handler to write a managed file.
+ * 写入受管理文件的 Form 提交处理
  *
- * The key functions used here are:
- * - file_save_data(), which takes a buffer and saves it to a named file and
- *   also creates a tracking record in the database and returns a file object.
- *   In this function we use FILE_EXISTS_RENAME (the default) as the argument,
- *   which means that if there's an existing file, create a new non-colliding
- *   filename and use it.
- * - file_create_url(), which converts a URI in the form public://junk.txt or
- *   private://something/test.txt into a URL like
- *   http://example.com/sites/default/files/junk.txt.
+ * 这里使用的关键函数：
+ * - file_save_data()，该函数申请一个缓冲区并保存其中的数据到一个文件中，同时在数据库
+ *   创建一条跟踪记录，并返回一个文件对象。这个函数中我们使用缺省的 FILE_EXISTS_RENAME
+ *   作为参数，这意味着如果文件已经存在，就会使用一个新的文件名。
+ * - file_create_url(), 从 Drupal URI 例如 public://junk.txt 或者
+ *   private://something/test.txt 转换成为一个形如
+ *   http://example.com/sites/default/files/junk.txt 网址。
  */
 function file_example_managed_write_submit($form, &$form_state) {
   $data = $form_state['values']['write_contents'];
   $uri = !empty($form_state['values']['destination']) ? $form_state['values']['destination'] : NULL;
 
-  // Managed operations work with a file object.
+  // 文件对象的受管理操作。
   $file_object = file_save_data($data, $uri, FILE_EXISTS_RENAME);
   if (!empty($file_object)) {
     $url = file_create_url($file_object->uri);
@@ -219,22 +208,21 @@ function file_example_managed_write_submit($form, &$form_state) {
 }
 
 /**
- * Submit handler to write an unmanaged file.
+ * 写入非管理文件的提交处理
  *
- * The key functions used here are:
- * - file_unmanaged_save_data(), which takes a buffer and saves it to a named
- *   file, but does not create any kind of tracking record in the database.
- *   This example uses FILE_EXISTS_REPLACE for the third argument, meaning
- *   that if there's an existing file at this location, it should be replaced.
- * - file_create_url(), which converts a URI in the form public://junk.txt or
- *   private://something/test.txt into a URL like
- *   http://example.com/sites/default/files/junk.txt.
+ * 这里使用的关键函数：
+ * - file_unmanaged_save_data(), 这里也是利用缓冲区保存到一个文件，但是不同的是不会进行
+ *   数据库记录。这个函数中我们使用缺省的 FILE_EXISTS_RENAME作为参数，这意味着如果文件已
+ *   经存在，就会使用一个新的文件名。
+ * - file_create_url(), 从 Drupal URI 例如 public://junk.txt 或者
+ *   private://something/test.txt 转换成为一个形如
+ *   http://example.com/sites/default/files/junk.txt 网址。
  */
 function file_example_unmanaged_write_submit($form, &$form_state) {
   $data = $form_state['values']['write_contents'];
   $destination = !empty($form_state['values']['destination']) ? $form_state['values']['destination'] : NULL;
 
-  // With the unmanaged file we just get a filename back.
+  // 对于非管理文件，我们只返回文件名。
   $filename = file_unmanaged_save_data($data, $destination, FILE_EXISTS_REPLACE);
   if ($filename) {
     $url = file_create_url($filename);
@@ -255,33 +243,27 @@ function file_example_unmanaged_write_submit($form, &$form_state) {
 }
 
 /**
- * Submit handler to write an unmanaged file using plain PHP functions.
- *
- * The key functions used here are:
- * - file_unmanaged_save_data(), which takes a buffer and saves it to a named
- *   file, but does not create any kind of tracking record in the database.
- * - file_create_url(), which converts a URI in the form public://junk.txt or
- *   private://something/test.txt into a URL like
- *   http://example.com/sites/default/files/junk.txt.
- * - drupal_tempnam() generates a temporary filename for use.
+ * 利用 PHP 原生函数生成非管理文件的提交处理。
+ * 这里使用的关键函数：
+ * - file_create_url(), 从 Drupal URI 例如 public://junk.txt 或者
+ *   private://something/test.txt 转换成为一个形如
+ *   http://example.com/sites/default/files/junk.txt 网址。
+ * - drupal_tempnam() 生成一个临时文件名。
  */
 function file_example_unmanaged_php_submit($form, &$form_state) {
   $data = $form_state['values']['write_contents'];
   $destination = !empty($form_state['values']['destination']) ? $form_state['values']['destination'] : NULL;
 
   if (empty($destination)) {
-    // If no destination has been provided, use a generated name.
+    // 如果没有提供目标，则生成一个临时名称。
     $destination = drupal_tempnam('public://', 'file');
   }
 
-  // With all traditional PHP functions we can use the stream wrapper notation
-  // for a file as well.
+  // 利用原生 PHP 函数生成文件。
   $fp = fopen($destination, 'w');
 
-  // To demonstrate the fact that everything is based on streams, we'll do
-  // multiple 5-character writes to put this to the file. We could easily
-  // (and far more conveniently) write it in a single statement with
-  // fwrite($fp, $data).
+  // 这个例子展示了流操作，我们会以五个字节为单位来逐次写入文件。
+  // 当然我么还可以用一行语句来完成这个任务： fwrite($fp, $data)
   $length = strlen($data);
   $write_size = 5;
   for ($i = 0; $i < $length; $i += $write_size) {
@@ -306,24 +288,20 @@ function file_example_unmanaged_php_submit($form, &$form_state) {
 }
 
 /**
- * Submit handler for reading a stream wrapper.
+ * 读取 Stream Wrapper (流封装？)的提交处理。
  *
- * Drupal now has full support for PHP's stream wrappers, which means that
- * instead of the traditional use of all the file functions
- * ($fp = fopen("/tmp/some_file.txt");) far more sophisticated and generalized
- * (and extensible) things can be opened as if they were files. Drupal itself
- * provides the public:// and private:// schemes for handling public and
- * private files. PHP provides file:// (the default) and http://, so that a
- * URL can be read or written (as in a POST) as if it were a file. In addition,
- * new schemes can be provided for custom applications, as will be demonstrated
- * below.
- *
+ * Drupal 为 PHP 的 Stream Wrapper 提供了全面的支持，这意味着，相对于旧式的文件函数
+ * （$fp = fopen("/tmp/some_file.txt");），可以以可扩展的方式支持更多更通用的文件之外
+ * 的内容的操作。 Drupal 提供了 public:// 和 private:// 两种模式，用于处理公有和私有
+ * 文件。 PHP 提供了 file://（缺省）和 http:// 两个模式，所以 URL 可以像文件一样被读或
+ * 或写 (POST) 。另外下面的例子还会讲到如何定制新的模式。
  * Here we take the stream wrapper provided in the form. We grab the
  * contents with file_get_contents(). Notice that's it's as simple as that:
  * file_get_contents("http://example.com") or
- * file_get_contents("public://somefile.txt") just works. Although it's
- * not necessary, we use file_unmanaged_save_data() to save this file locally
- * and then find a local URL for it by using file_create_url().
+ * 这里我们要处理的是 Form 提供的 Stream Wrapper。我们利用 file_get_contents() 进行读
+ * 取。这个操作很简单，例如 file_get_contents("http://example.com") 或者
+ * file_get_contents("public://somefile.txt")。我们用 file_unmanaged_save_data()
+ * 来把文件保存到本地，然后使用 file_create_url() 来生成一个 URL。
  */
 function file_example_read_submit($form, &$form_state) {
   $uri = $form_state['values']['fileops_file'];
@@ -333,9 +311,10 @@ function file_example_read_submit($form, &$form_state) {
     return;
   }
 
-  // Make a working filename to save this by stripping off the (possible)
-  // file portion of the streamwrapper. If it's an evil file extension,
-  // file_munge_filename() will neuter it.
+  // 从 Stream Wrapper 名字中除掉非法字符，用来生成一个文件名进行保存。
+  // 如果擴展名不合规，会被 file_munge_filename() 函数修改。
+
+
   $filename = file_munge_filename(preg_replace('@^.*/@', '', $uri), '', TRUE);
   $buffer = file_get_contents($uri);
 
@@ -358,24 +337,23 @@ function file_example_read_submit($form, &$form_state) {
     }
   }
   else {
-    // We failed to get the contents of the requested file.
+    // 内容获取失败。
     drupal_set_message(t('Failed to retrieve the file %file', array('%file' => $uri)));
   }
 }
 
 /**
- * Submit handler to delete a file.
+ * 删除文件的提交处理
  */
 function file_example_delete_submit($form, &$form_state) {
 
   $uri = $form_state['values']['fileops_file'];
 
-  // Since we don't know if the file is managed or not, look in the database
-  // to see. Normally, code would be working with either managed or unmanaged
-  // files, so this is not a typical situation.
+  // 对数据库进行查询来判断文件是否受管理。
+  // 一般来说只会为一种文件工作，这种做法并不常见。
   $file_object = file_example_get_managed_file($uri);
 
-  // If a managed file, use file_delete().
+  // 对受管文件使用 file_delete()。
   if (!empty($file_object)) {
     $result = file_delete($file_object);
     if ($result !== TRUE) {
@@ -391,7 +369,7 @@ function file_example_delete_submit($form, &$form_state) {
       $_SESSION['file_example_default_file'] = $uri;
     }
   }
-  // Else use file_unmanaged_delete().
+  // 否则使用 file_unmanaged_delete().
   else {
     $result = file_unmanaged_delete($uri);
     if ($result !== TRUE) {
@@ -405,7 +383,7 @@ function file_example_delete_submit($form, &$form_state) {
 }
 
 /**
- * Submit handler to check existence of a file.
+ * 检查文件是否存在的提交处理。
  */
 function file_example_file_check_exists_submit($form, &$form_state) {
   $uri = $form_state['values']['fileops_file'];
@@ -418,20 +396,15 @@ function file_example_file_check_exists_submit($form, &$form_state) {
 
 }
 /**
- * Submit handler for directory creation.
+ * 创建目录的提交处理。
  *
- * Here we create a directory and set proper permissions on it using
- * file_prepare_directory().
+ * 使用 file_prepare_directory() 创建一个目录，并设置权限。
  */
 function file_example_create_directory_submit($form, &$form_state) {
   $directory = $form_state['values']['directory_name'];
 
-  // The options passed to file_prepare_directory are a bitmask, so we can
-  // specify either FILE_MODIFY_PERMISSIONS (set permissions on the directory),
-  // FILE_CREATE_DIRECTORY, or both together:
-  // FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY.
-  // FILE_MODIFY_PERMISSIONS will set the permissions of the directory by
-  // by default to 0755, or to the value of the variable 'file_chmod_directory'.
+  // FILE_MODIFY_PERMISSIONS 缺省设置目录权限为 0755，也可以通过
+  // file_chmod_directory 来改变这一缺省值。
   if (!file_prepare_directory($directory, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY)) {
     drupal_set_message(t('Failed to create %directory.', array('%directory' => $directory)), 'error');
   }
@@ -443,7 +416,7 @@ function file_example_create_directory_submit($form, &$form_state) {
 }
 
 /**
- * Submit handler for directory deletion.
+ * 删除目录的提交处理。
  *
  * @see file_unmanaged_delete_recursive()
  */
@@ -461,9 +434,9 @@ function file_example_delete_directory_submit($form, &$form_state) {
 }
 
 /**
- * Submit handler to test directory existence.
+ * 检查目录是否存在的提交处理。
  *
- * This actually just checks to see if the directory is writable
+ * 这个实际是测试一个目录是否可写
  *
  * @param array $form
  *   FormAPI form.
@@ -482,7 +455,7 @@ function file_example_check_directory_submit($form, &$form_state) {
 }
 
 /**
- * Utility submit function to show the contents of $_SESSION.
+ * 用于显示 $_SESSION 的工具函数。
  */
 function file_example_show_session_contents_submit($form, &$form_state) {
   // If the devel module is installed, use it's nicer message format.
@@ -495,15 +468,12 @@ function file_example_show_session_contents_submit($form, &$form_state) {
 }
 
 /**
- * Utility function to check for and return a managed file.
+ * 用于检查和返回一个受管理文件的工具函数。
  *
- * In this demonstration code we don't necessarily know if a file is managed
- * or not, so often need to check to do the correct behavior. Normal code
- * would not have to do this, as it would be working with either managed or
- * unmanaged files.
+ * 这段代码用于检查一个 URI 是否受管文件。
  *
  * @param string $uri
- *   The URI of the file, like public://test.txt.
+ *   public://test.txt 格式的文件 URI。
  */
 function file_example_get_managed_file($uri) {
   $fid = db_query('SELECT fid FROM {file_managed} WHERE uri = :uri', array(':uri' => $uri))->fetchField();
@@ -517,11 +487,9 @@ function file_example_get_managed_file($uri) {
 /**
  * Implements hook_stream_wrappers().
  *
- * hook_stream_wrappers() is Drupal's way of exposing the class that PHP will
- * use to provide a new stream wrapper class. In this case, we'll expose the
- * 'session' scheme, so a file reference like "session://example/example.txt"
- * is readable and writable as a location in the $_SESSION variable.
- *
+ * hook_stream_wrappers() 用于提供一个类给 PHP， PHP 会用他来产生一个新的 Stream
+ * Wrapper 类。这里我们声明了一个 Session 模式，也就是利用
+ * "session://example/example.txt" 格式的 URI 来读写 $_SESSION 变量中的内容。
  * @see FileExampleSessionStreamWrapper
  */
 function file_example_stream_wrappers() {
@@ -536,20 +504,16 @@ function file_example_stream_wrappers() {
 }
 
 /**
- * Show the contents of a session file.
+ * 展示 Session 中的内容
  *
- * This page callback function is called by the Menu API for the path
- * examples/file_example/access_session. Any extra path elements
- * beyond this are considered to be the session path. E.g.:
- * examples/file_example/access_session/foo/bar.txt would be the
- * equivalent of session://foo/bar.txt, which will map into
- * $_SESSION as keys: $_SESSION['foo']['bar.txt']
- *
- * Menu API will pass in additional path elements as function arguments. You
- * can obtain these with func_get_args().
- *
+ * 这个页面回调函数会被 Menu API 以 examples/file_example/access_session 为入口进行
+ * 调用。其余的路径元素会被认作 Session 路径。比如说
+ * examples/file_example/access_session/foo/bar.txt 会访问 session://foo/bar.txt，
+ * 会映射为 Session 中的键：$_SESSION['foo']['bar.txt']
+
+ * Menu API 会把路径中的附加部分转换为函数参数，可以参考 func_get_args()。
  * @return string
- *   A message containing the contents of the session file.
+ *   从 Session 中获取到的指定内容。
  *
  * @see file_get_contents()
  */

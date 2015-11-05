@@ -1,0 +1,268 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  file_example.module: n/a
+#  file_example.info: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2015-11-03 14:03+0800\n"
+"PO-Revision-Date: 2015-11-04 10:58+0800\n"
+"Language-Team: EMAIL@ADDRESS\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.8.5\n"
+"Last-Translator: \n"
+"Language: zh_CN\n"
+
+#: file_example.module:49
+msgid "Use the examples in the File Example module"
+msgstr "使用 File Example 模块中的例子"
+
+#: file_example.module:58
+msgid ""
+"The file example module provides a form and code to demonstrate the Drupal 7 "
+"file api. Experiment with the form, and then look at the submit handlers in "
+"the code to understand the file api."
+msgstr ""
+"File Example 模块提供了一个 Form 以及代码，用来演示 Drupal 7 的文件 API。可以"
+"试着使用这个 Form，并浏览其后的提交处理代码，以理解文件 API 的相关知识。"
+
+#: file_example.module:78
+msgid "Write to a file"
+msgstr "写入一个文件"
+
+#: file_example.module:82
+msgid "Enter something you would like to write to a file"
+msgstr "输入你希望写入文件的内容（不支持中文）"
+
+#: file_example.module:83
+msgid "Put some text here or just use this text"
+msgstr "Put some text here or just use this text"
+
+#: file_example.module:89
+msgid "Optional: Enter the streamwrapper saying where it should be written"
+msgstr "可选：输入要写入的位置"
+
+#: file_example.module:90
+msgid ""
+"This may be public://some_dir/test_file.txt or private://another_dir/"
+"some_file.txt, for example. If you include a directory, it must already "
+"exist. The default is \"public://\". Since this example supports session://, "
+"you can also use something like session://somefile.txt."
+msgstr ""
+" 可以是 public://some_dir/test_file.txt 或者 private://another_dir/some_file."
+"txt，如果其中包含目录，则目录必须存在。缺省取值“public://”。例子中实现"
+"了“session://”，所以也可以使用”session://somefile.txt”。"
+
+#: file_example.module:95
+msgid "Write managed file"
+msgstr "写入受管理文件"
+
+#: file_example.module:100
+msgid "Write unmanaged file"
+msgstr "写入非受管文件"
+
+#: file_example.module:105
+msgid "Unmanaged using PHP"
+msgstr "PHP方式的非受管文件"
+
+#: file_example.module:111
+msgid "Read from a file"
+msgstr "读取文件"
+
+#: file_example.module:116
+msgid "Enter the URI of a file"
+msgstr "输入文件的 URI"
+
+#: file_example.module:117
+msgid ""
+"This must be a stream-type description like public://some_file.txt or http://"
+"drupal.org or private://another_file.txt or (for this example) session://"
+"yet_another_file.txt."
+msgstr ""
+"必须是流描述符，例如 public://some_file.txt 或者 http://drupal.org or "
+"private://another_file.txt 或者 （仅限于本例） session://yet_another_file."
+"txt。"
+
+#: file_example.module:121
+msgid "Read the file and store it locally"
+msgstr "读取文件并保存在本地"
+
+#: file_example.module:126
+msgid "Delete file"
+msgstr "删除文件"
+
+#: file_example.module:131
+msgid "Check to see if file exists"
+msgstr "检查文件是否存在"
+
+#: file_example.module:137
+msgid "Create or prepare a directory"
+msgstr "创建或者准备一个目录"
+
+#: file_example.module:142
+msgid "Directory to create/prepare/delete"
+msgstr "要创建/准备/删除的目录"
+
+#: file_example.module:144
+msgid ""
+"This is a directory as in public://some/directory or private://another/dir."
+msgstr " 一个目录例如 public://some/directory or private://another/dir。"
+
+#: file_example.module:148
+msgid "Create directory"
+msgstr "创建目录"
+
+#: file_example.module:153
+msgid "Delete directory"
+msgstr "删除目录"
+
+#: file_example.module:158
+msgid "Check to see if directory exists"
+msgstr "检查目录是否存在"
+
+#: file_example.module:164
+msgid "Debugging"
+msgstr "调试"
+
+#: file_example.module:168
+msgid "Show raw $_SESSION contents"
+msgstr "显示 $_SESSION 的原始内容"
+
+#: file_example.module:196
+msgid ""
+"Saved managed file: %file to destination %destination (accessible via !url, "
+"actual uri=<span id=\"uri\">@uri</span>)"
+msgstr ""
+"把受管文件 %file 保存到 %destination（可以用 !url 访问，实际 uri 是 <span id="
+"\"uri\">@uri</span>）"
+
+#: file_example.module:200;235;284
+msgid "this URL"
+msgstr "URL"
+
+#: file_example.module:206
+msgid "Failed to save the managed file"
+msgstr "保存受管文件失败"
+
+#: file_example.module:231;280
+msgid ""
+"Saved file as %filename (accessible via !url, uri=<span id=\"uri\">@uri</"
+"span>)"
+msgstr ""
+"用 %filename 保存文件（可以用 !url 访问，实际 uri 是 <span id=\"uri\">@uri</"
+"span>）"
+
+#: file_example.module:241;336
+msgid "Failed to save the file"
+msgstr "文件保存失败"
+
+#: file_example.module:272
+msgid "Failed writing to the file %file"
+msgstr "文件 %file 写入失败"
+
+#: file_example.module:310
+msgid "The file %uri does not exist"
+msgstr "文件 %uri 不存在"
+
+#: file_example.module:327
+msgid "The file was read and copied to %filename which is accessible at !url"
+msgstr "该文件已经被读取并拷贝到 %filename，可以用 !url 进行访问"
+
+#: file_example.module:341
+msgid "Failed to retrieve the file %file"
+msgstr "获取文件 %file 失败"
+
+#: file_example.module:360
+msgid "Failed deleting managed file %uri. Result was %result"
+msgstr "删除受管文件 %uri 失败。返回内容为 %result"
+
+#: file_example.module:368
+msgid "Successfully deleted managed file %uri"
+msgstr "受管文件 %uri 被成功删除"
+
+#: file_example.module:376
+msgid "Failed deleting unmanaged file %uri"
+msgstr "非受管文件 %uri 删除失败"
+
+#: file_example.module:379
+msgid "Successfully deleted unmanaged file %uri"
+msgstr "成功删除非受管文件 %uri"
+
+#: file_example.module:391
+msgid "The file %uri exists."
+msgstr "文件 %uri 存在。"
+
+#: file_example.module:394
+msgid "The file %uri does not exist."
+msgstr "文件 %uri 不存在。"
+
+#: file_example.module:409
+msgid "Failed to create %directory."
+msgstr "创建目录 %directory 失败"
+
+#: file_example.module:413
+msgid "Directory %directory is ready for use."
+msgstr "目录 %directory 已经就绪可以使用。"
+
+#: file_example.module:428
+msgid "Failed to delete %directory."
+msgstr "删除 %directory 失败。"
+
+#: file_example.module:431
+msgid "Recursively deleted directory %directory."
+msgstr "完成对目录 %directory 的递归删除。"
+
+#: file_example.module:450
+msgid "Directory %directory does not exist."
+msgstr "目录 %directory 不存在。"
+
+#: file_example.module:453
+msgid "Directory %directory exists."
+msgstr "目录 %directory 存在。"
+
+#: file_example.module:463
+msgid "Entire $_SESSION[\"file_example\"]"
+msgstr "整个 $_SESSION[“file_example”]"
+
+#: file_example.module:498
+msgid "Example: $_SESSION variable storage"
+msgstr "示例：$_SESSION 变量存储"
+
+#: file_example.module:500
+msgid "Store files in the $_SESSION variable as an example."
+msgstr "在 $_SESSION 变量中保存文件的示例。"
+
+#: file_example.module:525
+msgid "Contents of @path :"
+msgstr "@path 中的内容："
+
+#: file_example.module:529
+msgid "Unable to load contents of: @path"
+msgstr "无法载入 @path 中的内容"
+
+#: file_example.module:23
+msgid "File Example"
+msgstr "文件示例"
+
+#: file_example.module:29
+msgid "Use File API to read/write a file"
+msgstr "利用文件 API 读写文件"
+
+#: file_example.info:0
+msgid "File example"
+msgstr "文件示例"
+
+#: file_example.info:0
+msgid "Examples of using the Drupal File API and Stream Wrappers."
+msgstr "使用 Drupal 文件 API 和 Stream Wrapper 的示例。"
+
+#: file_example.info:0
+msgid "Example modules"
+msgstr "示例模块"

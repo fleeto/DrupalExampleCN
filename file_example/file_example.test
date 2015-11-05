@@ -1,11 +1,11 @@
 <?php
 /**
  * @file
- * Tests for File Example.
+ * 文件示例的测试用例。
  */
 
 /**
- * Functional tests for the File Example module.
+ * 文件示例模块的功能测试。
  *
  * @ingroup file_example
  */
@@ -34,10 +34,10 @@ class FileExampleTest extends DrupalWebTestCase {
   }
 
   /**
-   * Test the basic File Example UI.
+   * 测试基础的界面功能
    *
-   * - Create a directory to work with
-   * - Foreach scheme create and read files using each of the three methods.
+   * - 创建一个目录
+   * - 对每一种模式分别进行三种操作。
    */
   public function testFileExampleBasic() {
 
@@ -46,20 +46,20 @@ class FileExampleTest extends DrupalWebTestCase {
       t('Write unmanaged file') => t('Saved file as'),
       t('Unmanaged using PHP') => t('Saved file as'),
     );
-    // For each of the three buttons == three write types.
+    // 三个按钮分别是三种写入方法。
     $buttons = array(
       t('Write managed file'),
       t('Write unmanaged file'),
       t('Unmanaged using PHP'),
     );
     foreach ($buttons as $button) {
-      // For each scheme supported by Drupal + the session:// wrapper.
+      // 除去 Drupal 自带的几个模式之外，还加入了 session:// 模式。
       $schemes = array('public', 'private', 'temporary', 'session');
       foreach ($schemes as $scheme) {
-        // Create a directory for use.
+        // 创建一个目录
         $dirname = $scheme . '://' . $this->randomName(10);
 
-        // Directory does not yet exist; assert that.
+        // 验证创建结果。
         $edit = array(
           'directory_name' => $dirname,
         );
@@ -72,11 +72,11 @@ class FileExampleTest extends DrupalWebTestCase {
         $this->drupalPost('examples/file_example/fileapi', $edit, t('Check to see if directory exists'));
         $this->assertRaw(t('Directory %dirname exists', array('%dirname' => $dirname)), 'Verify that directory now does exist.');
 
-        // Create a file in the directory we created.
+        // 在新目录中创建文件
         $content = $this->randomName(30);
         $filename = $dirname . '/' . $this->randomName(30) . '.txt';
 
-        // Assert that the file we're about to create does not yet exist.
+        // 验证文件创建的结果。
         $edit = array(
           'fileops_file' => $filename,
         );
@@ -100,28 +100,25 @@ class FileExampleTest extends DrupalWebTestCase {
         $this->drupalPost('examples/file_example/fileapi', $edit, $button);
         $this->assertText($expected_text[$button]);
 
-        // Capture the name of the output file, as it might have changed due
-        // to file renaming.
+        // 因为文件可能被重新命名，因此要获取输出文件的名称。
         $element = $this->xpath('//span[@id="uri"]');
         $output_filename = (string) $element[0];
         debug($output_filename, 'Name of output file');
 
-        // Click the link provided that is an easy way to get the data for
-        // checking and make sure that the data we put in is what we get out.
+        // 点击链接是一个简单的方式来获取数据，检查是否跟我们输入的数据相符。
         if (!in_array($scheme, array('private', 'temporary'))) {
           $this->clickLink(t('this URL'));
           $this->assertText($content);
         }
 
-        // Verify that the file exists.
+        // 检查文件是否存在。
         $edit = array(
           'fileops_file' => $filename,
         );
         $this->drupalPost('examples/file_example/fileapi', $edit, t('Check to see if file exists'));
         $this->assertRaw(t('The file %filename exists', array('%filename' => $filename)), 'Verify that file now exists.');
 
-        // Now read the file that got written above and verify that we can use
-        // the writing tools.
+        // 读取上面写入的文件，并检查是否能够使用写入工具。
         $edit = array(
           'fileops_file' => $output_filename,
         );
